@@ -1,6 +1,8 @@
 CREATE DATABASE `swp301`;
 USE `swp301`;
 
+
+
 CREATE TABLE `Customer` (
   `id` BINARY(16),
   
@@ -57,6 +59,15 @@ CREATE TABLE `Account` (
   FOREIGN KEY (`id`) references `AirTrafficControl`(`id`),
   FOREIGN KEY (`adminID`) references `Administrator`(`id`)
 );
+
+INSERT INTO `Account` (`username`, `password`, `status`, `roleID`) 
+VALUES 
+    ('user1', 'password123', TRUE, 1),
+    ('user2', 'password456', TRUE, 2),
+    ('staff1', 'staffpass', TRUE, 3),
+    ('atc1', 'atcpass', TRUE, 4);
+
+
 
 -------------------------------------------------------------
 -------------------------------------------------------------
@@ -173,3 +184,4 @@ CREATE TABLE `Luggage` (
   foreign key (`customerID`) references `Customer`(`id`),
   foreign key (`orderID`) references `Order`(`id`)
 );
+
