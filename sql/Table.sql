@@ -1,6 +1,9 @@
 CREATE DATABASE `swp301`;
 USE `swp301`;
 
+DROP database `swp301`;
+
+
 CREATE TABLE `Customer` (
   `id` BINARY(16),
   
@@ -57,6 +60,27 @@ CREATE TABLE `Account` (
   FOREIGN KEY (`id`) references `AirTrafficControl`(`id`),
   FOREIGN KEY (`adminID`) references `Administrator`(`id`)
 );
+
+INSERT INTO Customer (id) 
+VALUES(UUID_TO_BIN(UUID())); 
+
+INSERT INTO Administrator (id, roleID) 
+VALUES(UUID_TO_BIN(UUID()), 1);
+
+select BIN_TO_UUID(`id`) as id from customer;
+
+INSERT INTO Account (username, password, roleID, id, citizenID, name, dob, phone, address, email, adminID)
+VALUES 
+('johndoe', 'password123', 2,UUID_TO_BIN('4aa13731-e62c-11ef-8179-739aa87d79e6'
+)
+, '123456789012', 'John Doe', '1990-01-01', '0123456789', '1234 Street, City', 'johndoe@example.com', UUID_TO_BIN('c85ccd2e-e632-11ef-8179-739aa87d79e6'
+));
+
+Select * from Customer;
+
+Select * from Administrator;
+
+select BIN_TO_UUID(`id`) as id from Administrator;
 
 -------------------------------------------------------------
 -------------------------------------------------------------
@@ -172,7 +196,7 @@ CREATE TABLE `Luggage` (
   PRIMARY KEY (`id`),
   foreign key (`customerID`) references `Customer`(`id`),
   foreign key (`orderID`) references `Order`(`id`)
-);
+)
 
 -- Insert data into Customer
 INSERT INTO `Customer` (`id`) VALUES 
@@ -356,4 +380,3 @@ INSERT INTO `Luggage` (`id`, `customerID`, `orderID`, `type`, `weight`) VALUES
   ('L009', 0x00000000000000000000000000000009, 'O009', 'Checked', 20.00),
   ('L010', 0x0000000000000000000000000000000A, 'O010', 'Carry-On', 7.00);
  
-
