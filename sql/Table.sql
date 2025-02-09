@@ -2,27 +2,28 @@ CREATE DATABASE `swp301`;
 USE `swp301`;
 
 CREATE TABLE `Customer` (
-  `id` BINARY(16),
+  `id` varchar(10),
   
   PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `Administrator` (
-  `id` BINARY(16),
+  `id` varchar(10),
   `roleID` INT,
   
   PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `Staff` (
-  `id` BINARY(16),
+  `id` varchar(10),
   `createdDate` DATETIME,
   
   PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `AirTrafficControl` (
-  `id` binary(16),
+  `id` varchar(10),
+  `createdDate` DATETIME,
   
   PRIMARY KEY (`id`)
 );
@@ -30,7 +31,7 @@ CREATE TABLE `AirTrafficControl` (
 CREATE TABLE `Role` (
   `id` INT AUTO_INCREMENT,
   `name` VARCHAR(50),
-  `adminID` binary(16),
+  `adminID` varchar(10),
 	
   PRIMARY KEY (`id`),
   foreign key (`adminID`) references `Administrator`(`id`)
@@ -41,20 +42,18 @@ CREATE TABLE `Account` (
   `password` VARCHAR(50) NOT NULL,
   `status` bool DEFAULT(TRUE),
   `roleID` INT,
-  `id` BINARY(16) UNIQUE,
+  `id` varchar(10) UNIQUE,
   `citizenID` VARCHAR(12),
   `name` VARCHAR(50),
   `dob` DATE,
   `phone` VARCHAR(10),
   `address` VARCHAR(255),
   `email` VARCHAR(255),
-  `adminID` binary(16),
+  `adminID` varchar(10),
   
   PRIMARY KEY (`username`),
   FOREIGN KEY (`roleID`) REFERENCES `Role`(`id`),
   FOREIGN KEY (`id`) references `Customer`(`id`),
-  FOREIGN KEY (`id`) references `Staff`(`id`),
-  FOREIGN KEY (`id`) references `AirTrafficControl`(`id`),
   FOREIGN KEY (`adminID`) references `Administrator`(`id`)
 );
 
@@ -76,7 +75,7 @@ CREATE TABLE `Airplane` (
   `statusID` int,
   `maintainanceTime` datetime,
   `usedTime` datetime,
-  `atcID` binary(16),
+  `atcID` varchar(10),
   
   PRIMARY KEY (`id`),
   foreign key (`statusID`) references `Status_Airplane`(`id`),
@@ -88,10 +87,10 @@ CREATE TABLE `Type` (
   `Name` varchar(50),
   `compartmentID` char,
   `manufacture` varchar(50),
-  `Length` decimal(10,2),
-  `Weight` decimal(10,2),
-  `Height` decimal(10,2),
-  `atcID` binary(16),
+  `length` decimal(10,2),
+  `weight` decimal(10,2),
+  `height` decimal(10,2),
+  `atcID` varchar(10),
   
   PRIMARY KEY (`id`),
   foreign key (`atcID`) references `AirTrafficControl`(`id`)
@@ -109,15 +108,15 @@ CREATE TABLE `Compartment` (
 
 CREATE TABLE `Flight` (
   `id` varchar(10),
-  `Name` varchar(50),
-  `Code` varchar(50),
+  `name` varchar(50),
+  `code` varchar(50),
   `airplaneID` varchar(10),
-  `Departure` varchar(255),
-  `Destination` varchar(255),
+  `departure` varchar(255),
+  `destination` varchar(255),
   `entryTime` datetime,
   `startingTime` datetime,
   `landingTime` datetime,
-  `atcID` binary(16),
+  `atcID` varchar(10),
   
   PRIMARY KEY (`id`),
   foreign key (`airplaneID`) references `Airplane`(`id`),
@@ -135,8 +134,8 @@ CREATE TABLE `Seat` (
 
 CREATE TABLE `Order` (
   `id` varchar(10),
-  `customerID` binary(16),
-  `staffID` binary(16),
+  `customerID` varchar(10),
+  `staffID` varchar(10),
   `status` varchar(50),
   `time` datetime,
   
@@ -147,11 +146,11 @@ CREATE TABLE `Order` (
 
 CREATE TABLE `Ticket` (
   `id` varchar(10),
-  `staffID` binary(16),
+  `staffID` varchar(10),
   `orderID` varchar(10),
   `flightID` varchar(10),
   `seatID` varchar(10),
-  `Type` varchar(30),
+  `type` varchar(30),
   `Price` decimal(10,2),
   `Status` varchar(20),
   
@@ -164,7 +163,7 @@ CREATE TABLE `Ticket` (
 
 CREATE TABLE `Luggage` (
   `id` varchar(10),
-  `customerID` binary(16),
+  `customerID` varchar(10),
   `orderID` varchar(10),
   `type` varchar(30),
   `weight` decimal(10,2),
@@ -173,3 +172,21 @@ CREATE TABLE `Luggage` (
   foreign key (`customerID`) references `Customer`(`id`),
   foreign key (`orderID`) references `Order`(`id`)
 );
+
+CREATE TABLE `Blog_Category` (
+	`id` int auto_increment,
+    `name` varchar(255),
+    
+    primary key (`id`)
+);
+
+CREATE TABLE `Blog` (
+	`id` varchar(10),
+    `title` varchar(255),
+    `categoryID` int,
+    `image` varchar(100),
+    `description` text,
+    
+    primary key (`id`),
+    foreign key (`categoryID`) references `Blog_Category`(`id`)
+)
