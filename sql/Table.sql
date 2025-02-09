@@ -1,6 +1,7 @@
 CREATE DATABASE `swp301`;
 USE `swp301`;
 
+DROP database `swp301`;
 
 
 CREATE TABLE `Customer` (
@@ -60,14 +61,26 @@ CREATE TABLE `Account` (
   FOREIGN KEY (`adminID`) references `Administrator`(`id`)
 );
 
-INSERT INTO `Account` (`username`, `password`, `status`, `roleID`) 
+INSERT INTO Customer (id) 
+VALUES(UUID_TO_BIN(UUID())); 
+
+INSERT INTO Administrator (id, roleID) 
+VALUES(UUID_TO_BIN(UUID()), 1);
+
+select BIN_TO_UUID(`id`) as id from customer;
+
+INSERT INTO Account (username, password, roleID, id, citizenID, name, dob, phone, address, email, adminID)
 VALUES 
-    ('user1', 'password123', TRUE, 1),
-    ('user2', 'password456', TRUE, 2),
-    ('staff1', 'staffpass', TRUE, 3),
-    ('atc1', 'atcpass', TRUE, 4);
+('johndoe', 'password123', 2,UUID_TO_BIN('4aa13731-e62c-11ef-8179-739aa87d79e6'
+)
+, '123456789012', 'John Doe', '1990-01-01', '0123456789', '1234 Street, City', 'johndoe@example.com', UUID_TO_BIN('c85ccd2e-e632-11ef-8179-739aa87d79e6'
+));
 
+Select * from Customer;
 
+Select * from Administrator;
+
+select BIN_TO_UUID(`id`) as id from Administrator;
 
 -------------------------------------------------------------
 -------------------------------------------------------------
