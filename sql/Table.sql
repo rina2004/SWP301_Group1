@@ -23,6 +23,7 @@ CREATE TABLE `Staff` (
 
 CREATE TABLE `AirTrafficControl` (
   `id` varchar(10),
+  `name` varchar(50),
   `createdDate` DATETIME,
   
   PRIMARY KEY (`id`)
@@ -61,31 +62,9 @@ CREATE TABLE `Account` (
 -------------------------------------------------------------
 -------------------------------------------------------------
 
-CREATE table `Status_Airplane` (
-	`id` INT auto_increment,
-    `name` varchar(50),
-    
-    primary key (`id`)
- );
- 
-CREATE TABLE `Airplane` (
-  `id` varchar(10),
-  `name` varchar(50),
-  `typeID` varchar(10),
-  `statusID` int,
-  `maintainanceTime` datetime,
-  `usedTime` datetime,
-  `atcID` varchar(10),
-  
-  PRIMARY KEY (`id`),
-  foreign key (`statusID`) references `Status_Airplane`(`id`),
-  foreign key (`atcID`) references `AirTrafficControl`(`id`)
-);
-
 CREATE TABLE `Type` (
   `id` varchar(10),
   `Name` varchar(50),
-  `compartmentID` char,
   `manufacture` varchar(50),
   `length` decimal(10,2),
   `weight` decimal(10,2),
@@ -104,6 +83,28 @@ CREATE TABLE `Compartment` (
   
   PRIMARY KEY (`id`),
   foreign key (`typeID`) references `Type`(`id`)
+);
+
+CREATE table `Airplane_Status` (
+	`id` INT auto_increment,
+    `name` varchar(50),
+    
+    primary key (`id`)
+ );
+ 
+CREATE TABLE `Airplane` (
+  `id` varchar(10),
+  `name` varchar(50),
+  `typeID` varchar(10),
+  `statusID` int,
+  `maintainanceTime` datetime,
+  `usedTime` datetime,
+  `atcID` varchar(10),
+  
+  PRIMARY KEY (`id`),
+  foreign key (`statusID`) references `Airplane_Status`(`id`),
+  foreign key (`typeID`) references `Type`(`id`),
+  foreign key (`atcID`) references `AirTrafficControl`(`id`)
 );
 
 CREATE TABLE `Flight` (

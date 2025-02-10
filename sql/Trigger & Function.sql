@@ -36,7 +36,7 @@ BEGIN
     DECLARE max_id INT;
     DECLARE new_id VARCHAR(10);
 
-    SELECT COALESCE(MAX(CAST(SUBSTRING(id, 2) AS UNSIGNED)), 0) INTO max_id FROM Staff;
+    SELECT COALESCE(MAX(CAST(SUBSTRING(id, 4) AS UNSIGNED)), 0) INTO max_id FROM AirTrafficControl;
 
     SET new_id = CONCAT('ATC', max_id + 1);
     SET NEW.id = new_id;
@@ -51,7 +51,7 @@ BEGIN
     DECLARE max_id INT;
     DECLARE new_id VARCHAR(10);
 
-    SELECT COALESCE(MAX(CAST(SUBSTRING(id, 2) AS UNSIGNED)), 0) INTO max_id FROM Staff;
+    SELECT COALESCE(MAX(CAST(SUBSTRING(id, 6) AS UNSIGNED)), 0) INTO max_id FROM Administrator;
 
     SET new_id = CONCAT('ADMIN', max_id + 1);
     SET NEW.id = new_id;
@@ -66,7 +66,7 @@ BEGIN
     DECLARE max_id INT;
     DECLARE new_id VARCHAR(10);
 
-    SELECT COALESCE(MAX(CAST(SUBSTRING(id, 2) AS UNSIGNED)), 0) INTO max_id FROM Staff;
+    SELECT COALESCE(MAX(CAST(SUBSTRING(id, 3) AS UNSIGNED)), 0) INTO max_id FROM Airplane;
 
     SET new_id = CONCAT('PL', max_id + 1);
     SET NEW.id = new_id;
@@ -81,7 +81,7 @@ BEGIN
     DECLARE max_id INT;
     DECLARE new_id VARCHAR(10);
 
-    SELECT COALESCE(MAX(CAST(SUBSTRING(id, 2) AS UNSIGNED)), 0) INTO max_id FROM Staff;
+    SELECT COALESCE(MAX(CAST(SUBSTRING(id, 2) AS UNSIGNED)), 0) INTO max_id FROM Flight;
 
     SET new_id = CONCAT('F', max_id + 1);
     SET NEW.id = new_id;
