@@ -189,4 +189,36 @@ CREATE TABLE `Blog` (
     
     primary key (`id`),
     foreign key (`categoryID`) references `Blog_Category`(`id`)
-)
+);
+
+INSERT INTO `Administrator` (`id`, `roleID`) VALUES 
+('ADMIN001', 1);
+
+INSERT INTO `Staff` (`id`, `createdDate`) VALUES 
+('STAFF001', '2023-01-01 10:00:00'),
+('STAFF002', '2023-02-15 14:30:00');
+
+INSERT INTO `AirTrafficControl` (`id`, `createdDate`) VALUES 
+('ATC001', '2022-05-20 09:00:00');
+
+INSERT INTO `Customer` (`id`) VALUES 
+('CUST001'),
+('CUST002');
+
+INSERT INTO `Role` (`name`, `adminID`) VALUES 
+('Administrator', 'ADMIN1'),
+('Staff', Null),
+('Customer', NULL),
+('AirTrafficControl', NULL);
+
+SELECT * FROM `Role`;
+
+INSERT INTO `Account` 
+(`username`, `password`, `status`, `roleID`, `id`, `citizenID`, `name`, `dob`, `phone`, `address`, `email`, `adminID`) 
+VALUES 
+
+('customer_user1', 'cust123', TRUE, 7, 'C1', '123456789012', 'Customer One', '2000-04-05', '0956789012', '202 Customer Ave', 'cust1@example.com', NULL),
+('customer_user2', 'cust456', FALSE, 7, 'C2', '987654321098', 'Customer Two', '1995-08-25', '0967890123', '303 Customer Blvd', 'cust2@example.com', NULL);
+
+SELECT * FROM Account WHERE RoleID <> 1
+
