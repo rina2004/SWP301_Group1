@@ -1,8 +1,6 @@
 CREATE DATABASE `swp301`;
 USE `swp301`;
 
-DROP DATABASE `swp301`;
-
 CREATE TABLE `Customer` (
   `id` varchar(10),
   
@@ -192,51 +190,4 @@ CREATE TABLE `Blog` (
     
     primary key (`id`),
     foreign key (`categoryID`) references `Blog_Category`(`id`)
-);
-
-INSERT INTO `Administrator` (`id`, `roleID`) VALUES 
-('ADMIN001', 1);
-
-INSERT INTO `Staff` (`id`, `createdDate`) VALUES 
-('STAFF001', '2023-01-01 10:00:00'),
-('STAFF002', '2023-02-15 14:30:00');
-
-INSERT INTO `AirTrafficControl` (`id`, `createdDate`) VALUES 
-('ATC001', '2022-05-20 09:00:00');
-
-INSERT INTO `Customer` (`id`) VALUES 
-('CUST001'),
-('CUST002'),
-('CUST003'),
-('CUST004');
-
-INSERT INTO `Role` (`name`, `adminID`) VALUES 
-('Administrator', 'ADMIN1'),
-('Staff', Null),
-('Customer', NULL),
-('AirTrafficControl', NULL);
-
-SELECT * FROM `Role`;
-
-SELECT * FROM `Administrator`;
-
-SELECT * FROM `Staff`;
-
-SELECT * FROM `Customer`;
-
-SELECT * FROM `AirTrafficControl`;
-
-SELECT * FROM `Account`;
-
-INSERT INTO `Account` 
-(`username`, `password`, `status`, `roleID`, `id`, `citizenID`, `name`, `dob`, `phone`, `address`, `email`, `adminID`) 
-VALUES 
-('customer_user1', 'cust123', TRUE, 3, 'C1', '123456789012', 'Customer One', '2000-04-05', '0956789012', '202 Customer Ave', 'cust1@example.com', NULL),
-('customer_user2', 'cust456', FALSE, 3, 'C2', '987654321098', 'Customer Two', '1995-08-25', '0967890123', '303 Customer Blvd', 'cust2@example.com', NULL),
-('customer_user3', 'cust456', FALSE, 3, 'C3', '987654321095', 'Customer Three', '1995-08-25', '0967890123', '304 Customer Blvd', 'cust3@example.com', NULL),
-('customer_user4', 'cust456', FALSE, 3, 'C4', '987654321096', 'Customer Four', '1995-08-25', '0967890123', '305 Customer Blvd', 'cust3@example.com', NULL);
-
-SELECT * FROM Account WHERE RoleID <> 1;
-
-DROP TABLE `Account`;
-UPDATE Account SET password = 123, roleID = 3, status = TRUE WHERE id = 'C1';
+)

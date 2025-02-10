@@ -53,7 +53,7 @@
                                     <c:choose>
                                         <c:when test="${user.roleID == 2}">Staff</c:when>
                                         <c:when test="${user.roleID == 3}">Customer</c:when>                                        
-                                        <c:when test="${user.roleID == 4}">Air Traffic Control</c:when>
+                                        <c:when test="${user.roleID == 4}">AirTrafficControl</c:when>
                                         <c:otherwise>Unknown</c:otherwise>
                                     </c:choose>
                                 </td>
