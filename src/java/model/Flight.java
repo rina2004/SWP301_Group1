@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
-import java.sql.*;
+import java.util.*;
 /**
  *
  * @author A A
@@ -16,7 +16,7 @@ public class Flight {
     private String airplaneId;
     private String departure;
     private String destination;
-    private Date entryTime; 
+    private Date entryTime;
     private Date startingTime;
     private Date landingTime;
     private byte[] atcId;
@@ -109,6 +109,7 @@ public class Flight {
         this.landingTime = landingTime;
     }
 
+    
     public byte[] getAtcId() {
         return atcId;
     }

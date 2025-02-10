@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
-        <servlet-name>AddFlightServlet</servlet-name>
-        <servlet-class>controller.AddFlightServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ListFlightServlet</servlet-name>
         <servlet-class>controller.ListFlightServlet</servlet-class>
     </servlet>
@@ -13,31 +9,43 @@
         <servlet-class>controller.ViewFlightServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DeleteFlightServlet</servlet-name>
-        <servlet-class>controller.DeleteFlightServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>UpdateFlightServlet</servlet-name>
         <servlet-class>controller.UpdateFlightServlet</servlet-class>
     </servlet>
-    <servlet-mapping>
+    <servlet>
+        <servlet-name>FilterFlightServlet</servlet-name>
+        <servlet-class>controller.FilterFlightServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateFlightServlet</servlet-name>
+        <servlet-class>controller.CreateFlightServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>AddFlightServlet</servlet-name>
-        <url-pattern>/add-flight</url-pattern>
-    </servlet-mapping>
+        <servlet-class>controller.AddFlightServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ListFlightServlet</servlet-name>
-        <url-pattern>/list-flight</url-pattern>
+        <url-pattern>/view/list-flight</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ViewFlightServlet</servlet-name>
-        <url-pattern>/view-flight</url-pattern>
+        <url-pattern>/view/view-flight</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>DeleteFlightServlet</servlet-name>
-        <url-pattern>/delete-flight</url-pattern>
+        <servlet-name>CreateFlightServlet</servlet-name>
+        <url-pattern>/view/create-flight</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddFlightServlet</servlet-name>
+        <url-pattern>/view/add-flight</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UpdateFlightServlet</servlet-name>
-        <url-pattern>/update-flight</url-pattern>
+        <url-pattern>/view/update-flight</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FilterFlightServlet</servlet-name>
+        <url-pattern>/view/filter-flights</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -47,7 +47,7 @@ public class UpdateFlightServlet extends HttpServlet {
             String airplaneId = request.getParameter("airplaneId");
             String departure = request.getParameter("departure");
             String destination = request.getParameter("destination");
-
+            
             // Convert datetime-local string to Date format YYYY-MM-DD
             String entryTimeStr = request.getParameter("entryTime").split("T")[0];
             String startingTimeStr = request.getParameter("startingTime").split("T")[0];

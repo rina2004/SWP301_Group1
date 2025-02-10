@@ -33,19 +33,19 @@
                             <h4>Basic Information</h4>
                             <div class="mb-3">
                                 <label for="name" class="form-label">Flight Name</label>
-                                <input type="text" class="form-control" id="name" name="name" 
+                                <input readonly type="text" class="form-control" id="name" name="name" 
                                        value="${flight.getName()}" required>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="code" class="form-label">Flight Code</label>
-                                <input type="text" class="form-control" id="code" name="code" 
+                                <input readonly type="text" class="form-control" id="code" name="code" 
                                        value="${flight.getCode()}" required>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="airplaneId" class="form-label">Airplane ID</label>
-                                <input type="text" class="form-control" id="airplaneId" name="airplaneId" 
+                                <input readonly type="text" class="form-control" id="airplaneId" name="airplaneId" 
                                        value="${flight.getAirplaneId()}" required>
                             </div>
                         </div>
@@ -65,19 +65,19 @@
                             </div>
                             
                             <div class="mb-3">
-                                <label for="entryTime" class="form-label">Entry Time</label>
+                                <label for="entryTime" class="form-label">Entry Date</label>
                                 <input type="date" class="form-control" id="entryTime" name="entryTime" 
                                        value="${flight.getEntryTime()}" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="startingTime" class="form-label">Starting Time</label>
+                                <label for="startingTime" class="form-label">Starting Date</label>
                                 <input type="date" class="form-control" id="startingTime" name="startingTime" 
                                        value="${flight.getStartingTime()}" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="landingTime" class="form-label">Landing Time</label>
+                                <label for="landingTime" class="form-label">Landing Date</label>
                                 <input type="date" class="form-control" id="landingTime" name="landingTime" 
                                        value="${flight.getLandingTime()}" required>
                             </div>

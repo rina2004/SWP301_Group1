@@ -22,7 +22,7 @@
                 <h3>${flight == null ? 'Add New Flight' : 'Edit Flight'}</h3>
             </div>
             <div class="card-body">
-                <form action="${flight == null ? 'add-flight' : 'update-flight'}" method="POST">
+                <form action="${pageContext.request.contextPath}/view/add-flight" method="POST">
                     <c:if test="${flight != null}">
                         <input type="hidden" name="id" value="${flight.id}">
                     </c:if>
@@ -71,17 +71,17 @@
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label class="form-label">Entry Time</label>
-                            <input type="datetime-local" class="form-control" name="entryTime" 
+                            <input type="date" class="form-control" name="entryTime" 
                                    value="${flight.entryTime}" required>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Starting Time</label>
-                            <input type="datetime-local" class="form-control" name="startingTime" 
+                            <input type="date" class="form-control" name="startingTime" 
                                    value="${flight.startingTime}" required>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Landing Time</label>
-                            <input type="datetime-local" class="form-control" name="landingTime" 
+                            <input type="date" class="form-control" name="landingTime" 
                                    value="${flight.landingTime}" required>
                         </div>
                     </div>

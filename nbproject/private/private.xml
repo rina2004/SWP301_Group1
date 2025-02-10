@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/New%20folder/New%20folder/SWP301_Group1/web/flight-list.jsp</file>
+            <file>file:/D:/New%20folder/New%20folder/SWP301_Group1/src/java/controller/AddFlightServlet.java</file>
+            <file>file:/D:/New%20folder/New%20folder/SWP301_Group1/web/WEB-INF/web.xml</file>
             <file>file:/D:/New%20folder/New%20folder/SWP301_Group1/src/java/dal/FlightDAO.java</file>
-            <file>file:/D:/New%20folder/New%20folder/SWP301_Group1/web/home.jsp</file>
-            <file>file:/D:/New%20folder/New%20folder/SWP301_Group1/src/java/controller/DeleteFlightServlet.java</file>
+            <file>file:/D:/New%20folder/New%20folder/SWP301_Group1/web/view/flight-form.jsp</file>
+            <file>file:/D:/New%20folder/New%20folder/SWP301_Group1/web/view/flight-list.jsp</file>
             <file>file:/D:/New%20folder/New%20folder/SWP301_Group1/src/java/model/Flight.java</file>
         </group>
     </open-files>
