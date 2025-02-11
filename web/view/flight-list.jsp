@@ -140,12 +140,9 @@
                     <img src="/api/placeholder/40/40" alt="Logo" class="me-2" style="height: 40px;">
                     <h2 class="mb-0">Flight Management</h2>
                 </div>
-                <%--a href="create-flight" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>Add New Flight
-                </a--%>
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <a href="add-flight" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Add New Flight
+                        <i class="fas fa-plus me-2"></i> Add New Flight
                     </a>
                 </div>
             </div>
@@ -187,29 +184,7 @@
                 </div>
             </div>
         </div>
-        <!-- demo tu day  -->
-        <div class="modal fade flight-details-modal" id="viewDetailsModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Flight Details</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="flight-info-details">
-                            <!-- Flight info will be populated here -->
-                        </div>
-                        <div class="assigned-airplanes">
-                            <h6>Assigned Airplanes</h6>
-                            <div id="airplanesList">
-                                <!-- Airplanes list will be populated here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- toi day  -->
+        
         <!-- Flights List -->
         <c:forEach items="${list}" var="flight">
             <div class="card flight-card">
@@ -218,9 +193,9 @@
                         <div>
                             <h5 class="card-title">${flight.getName()}</h5>
                         </div>
-                        <div class="text-end">
-                            <div class="price-display">₹12,000</div>
-                            <small class="text-muted">Economy Class</small>
+                        <div class="text-end" name="tID">
+                            <div class="price-display">120.00vnd${tPrice}</div>
+                            <small class="text-muted">Economy${tType}</small>
                         </div>
                     </div>
 
@@ -254,7 +229,6 @@
         </c:forEach>
     </div>
 
-    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -4,7 +4,6 @@
  */
 package dal;
 
-import com.mysql.cj.jdbc.PreparedStatementWrapper;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +43,10 @@ public class FlightDAO extends DBContext {
         } finally {
             try {
                 stm.close();
-                connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
         return list;
     }
 
@@ -78,7 +75,6 @@ public class FlightDAO extends DBContext {
         } finally {
             try {
                 stm.close();
-                connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -112,7 +108,6 @@ public class FlightDAO extends DBContext {
         } finally {
             try {
                 connection.setAutoCommit(true);
-                connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -141,9 +136,6 @@ public class FlightDAO extends DBContext {
             if (stm != null) {
                 stm.close();
             }
-            if (connection != null) {
-                connection.close();
-            }
         }
     }
 
@@ -170,7 +162,6 @@ public class FlightDAO extends DBContext {
         } finally {
             try {
                 connection.setAutoCommit(true);
-                connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -180,12 +171,9 @@ public class FlightDAO extends DBContext {
     public List<Flight> getFlightsByPriceRange(double minPrice, double maxPrice) {
         List<Flight> flights = new ArrayList<>();
         String sql = """
-            SELECT DISTINCT f.* 
-            FROM Flight f 
-            INNER JOIN Ticket t ON f.id = t.flightId 
+            SELECT f.* FROM Flight f INNER JOIN Ticket t ON f.id = t.flightId 
             WHERE t.price BETWEEN ? AND ?
-            ORDER BY t.price ASC
-        """;
+            ORDER BY t.price ASC""";
         PreparedStatement stm = null;
         try {
             stm = connection.prepareStatement(sql);
@@ -193,18 +181,16 @@ public class FlightDAO extends DBContext {
             stm.setDouble(2, maxPrice);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Flight f = new Flight();
-                f.setId(rs.getString("id"));
-                f.setName(rs.getString("name"));
-                f.setCode(rs.getString("code"));
-                f.setAirplaneId(rs.getString("airplaneId"));
-                f.setDeparture(rs.getString("departure"));
-                f.setDestination(rs.getString("destination"));
-                f.setEntryTime(rs.getDate("entryTime"));
-                f.setStartingTime(rs.getDate("startingTime"));
-                f.setLandingTime(rs.getDate("landingTime"));
-                f.setAtcId(rs.getBytes("atcId"));
-                flights.add(f);
+                flights.add(new Flight(rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("code"),
+                        rs.getString("airplaneID"),
+                        rs.getString("departure"),
+                        rs.getString("destination"),
+                        rs.getTimestamp("entryTime"),
+                        rs.getTimestamp("startingTime"),
+                        rs.getTimestamp("landingTime"),
+                        rs.getBytes("atcID")));
             }
             rs.close();
         } catch (SQLException ex) {
@@ -212,7 +198,6 @@ public class FlightDAO extends DBContext {
         } finally {
             try {
                 stm.close();
-                connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
