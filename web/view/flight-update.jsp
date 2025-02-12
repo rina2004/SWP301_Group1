@@ -20,9 +20,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h3>Update Flight</h3>
-                <a href="list-flight" class="btn btn-primary">
-                    <i class="fas fa-arrow-left"></i> Back to List
-                </a>
+                
             </div>
             <div class="card-body">
                 <form action="update-flight" method="POST">
@@ -66,19 +64,19 @@
                             
                             <div class="mb-3">
                                 <label for="entryTime" class="form-label">Entry Date</label>
-                                <input type="date" class="form-control" id="entryTime" name="entryTime" 
+                                <input type="datetime-local" class="form-control" id="entryTime" name="entryTime" 
                                        value="${flight.getEntryTime()}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="startingTime" class="form-label">Starting Date</label>
-                                <input type="date" class="form-control" id="startingTime" name="startingTime" 
+                                <input type="datetime-local" class="form-control" id="startingTime" name="startingTime" 
                                        value="${flight.getStartingTime()}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="landingTime" class="form-label">Landing Date</label>
-                                <input type="date" class="form-control" id="landingTime" name="landingTime" 
+                                <input type="datetime-local" class="form-control" id="landingTime" name="landingTime" 
                                        value="${flight.getLandingTime()}" required>
                             </div>
                         </div>

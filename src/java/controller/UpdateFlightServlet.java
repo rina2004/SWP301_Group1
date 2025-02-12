@@ -11,7 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Flight;
@@ -40,7 +40,6 @@ public class UpdateFlightServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         try {
-            // Get parameters from the form
             String id = request.getParameter("id");
             String name = request.getParameter("name");
             String code = request.getParameter("code");
@@ -48,14 +47,15 @@ public class UpdateFlightServlet extends HttpServlet {
             String departure = request.getParameter("departure");
             String destination = request.getParameter("destination");
             
-            // Convert datetime-local string to Date format YYYY-MM-DD
-            String entryTimeStr = request.getParameter("entryTime").split("T")[0];
-            String startingTimeStr = request.getParameter("startingTime").split("T")[0];
-            String landingTimeStr = request.getParameter("landingTime").split("T")[0];
-
-            Date entryTime = Date.valueOf(entryTimeStr);
-            Date startingTime = Date.valueOf(startingTimeStr);
-            Date landingTime = Date.valueOf(landingTimeStr);
+            //ban cu~
+//            // Convert datetime-local string to Date format YYYY-MM-DD
+//            String entryTimeStr = request.getParameter("entryTime").split("T")[0];
+//            String startingTimeStr = request.getParameter("startingTime").split("T")[0];
+//            String landingTimeStr = request.getParameter("landingTime").split("T")[0];
+//
+//            Date entryTime = Date.valueOf(entryTimeStr);
+//            Date startingTime = Date.valueOf(startingTimeStr);
+//            Date landingTime = Date.valueOf(landingTimeStr);
 
             Flight f = new Flight();
             f.setId(id);
@@ -64,9 +64,14 @@ public class UpdateFlightServlet extends HttpServlet {
             f.setAirplaneId(airplaneId);
             f.setDeparture(departure);
             f.setDestination(destination);
-            f.setEntryTime(entryTime);
-            f.setStartingTime(startingTime);
-            f.setLandingTime(landingTime);
+            
+            String entryTimeStr = request.getParameter("entryTime");
+            String startingTimeStr = request.getParameter("startingTime");
+            String landingTimeStr = request.getParameter("landingTime");
+            
+            f.setEntryTime(LocalDateTime.parse(entryTimeStr));
+            f.setStartingTime(LocalDateTime.parse(startingTimeStr));
+            f.setLandingTime(LocalDateTime.parse(landingTimeStr));
 
             FlightDAO dao = new FlightDAO();
             dao.updateFlight(f);

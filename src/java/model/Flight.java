@@ -3,7 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
-import java.util.*;
+
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author A A
@@ -16,15 +19,15 @@ public class Flight {
     private String airplaneId;
     private String departure;
     private String destination;
-    private Date entryTime;
-    private Date startingTime;
-    private Date landingTime;
+    private LocalDateTime entryTime;
+    private LocalDateTime startingTime;
+    private LocalDateTime landingTime;
     private byte[] atcId;
 
     public Flight() {
     }
 
-    public Flight(String id, String name, String code, String airplaneId, String departure, String destination, Date entryTime, Date startingTime, Date landingTime, byte[] atcId) {
+    public Flight(String id, String name, String code, String airplaneId, String departure, String destination, LocalDateTime entryTime, LocalDateTime startingTime, LocalDateTime landingTime, byte[] atcId) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -85,31 +88,30 @@ public class Flight {
         this.destination = destination;
     }
 
-    public Date getEntryTime() {
+    public LocalDateTime getEntryTime() {
         return entryTime;
     }
 
-    public void setEntryTime(Date entryTime) {
+    public void setEntryTime(LocalDateTime entryTime) {
         this.entryTime = entryTime;
     }
 
-    public Date getStartingTime() {
+    public LocalDateTime getStartingTime() {
         return startingTime;
     }
 
-    public void setStartingTime(Date startingTime) {
+    public void setStartingTime(LocalDateTime startingTime) {
         this.startingTime = startingTime;
     }
 
-    public Date getLandingTime() {
+    public LocalDateTime getLandingTime() {
         return landingTime;
     }
 
-    public void setLandingTime(Date landingTime) {
+    public void setLandingTime(LocalDateTime landingTime) {
         this.landingTime = landingTime;
     }
 
-    
     public byte[] getAtcId() {
         return atcId;
     }
@@ -117,4 +119,47 @@ public class Flight {
     public void setAtcId(byte[] atcId) {
         this.atcId = atcId;
     }
+
+    //12-2-25 new getset to take distinct date & time
+    public String getEntryDate() {
+        return entryTime != null ? startingTime.toLocalDate().toString() : "";
+    }
+
+    public String getEntryHour() {
+        return entryTime != null ? entryTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) : "";
+    }
+
+    public String getStartingDate() {
+        return startingTime != null ? startingTime.toLocalDate().toString() : "";
+    }
+
+    public String getStartingHour() {
+        return startingTime != null ? startingTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) : "";
+    }
+
+    public String getLandingDate() {
+        return landingTime != null ? landingTime.toLocalDate().toString() : "";
+    }
+
+    public String getLandingHour() {
+        return landingTime != null ? landingTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) : "";
+    }
+
+    //amount of time to the goal 
+    public String getDuration() {
+        if (startingTime != null && landingTime != null) {
+            Duration duration = Duration.between(startingTime, landingTime);
+            long days = duration.toDays();
+            long hours = duration.toHoursPart();
+            long minutes = duration.toMinutesPart();
+
+            if (days > 0) {
+                return String.format("%d day%s %dh %02dm", days, (days > 1 ? "s" : ""), hours, minutes);
+            } else {
+                return String.format("%dh %02dm", hours, minutes);
+            }
+        }
+        return "N/A";
+    }
+
 }

@@ -5,8 +5,8 @@
 package dal;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.time.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Flight;
@@ -17,8 +17,8 @@ import model.Flight;
  */
 public class FlightDAO extends DBContext {
 
-    public List<Flight> getAllFlight() {
-        List<Flight> list = new ArrayList<>();
+    public ArrayList<Flight> getAllFlight() {
+        ArrayList<Flight> list = new ArrayList<>();
         String sql = "SELECT * FROM swp301.flight";
         PreparedStatement stm = null;
         try {
@@ -32,9 +32,9 @@ public class FlightDAO extends DBContext {
                         rs.getString("airplaneID"),
                         rs.getString("departure"),
                         rs.getString("destination"),
-                        rs.getTimestamp("entryTime"),
-                        rs.getTimestamp("startingTime"),
-                        rs.getTimestamp("landingTime"),
+                        rs.getTimestamp("entryTime").toLocalDateTime(),
+                        rs.getTimestamp("startingTime").toLocalDateTime(),
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
                         rs.getBytes("atcID")
                 ));
             }
@@ -65,9 +65,71 @@ public class FlightDAO extends DBContext {
                         rs.getString("airplaneID"),
                         rs.getString("departure"),
                         rs.getString("destination"),
-                        rs.getTimestamp("entryTime"),
-                        rs.getTimestamp("startingTime"),
-                        rs.getTimestamp("landingTime"),
+                        rs.getTimestamp("entryTime").toLocalDateTime(),
+                        rs.getTimestamp("startingTime").toLocalDateTime(),
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getBytes("atcID"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                stm.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    public Flight getFlightByName(String name) throws Exception {
+        //encoding id
+        String sql = "SELECT * FROM Flight WHERE name = ?";
+        PreparedStatement stm = null;
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, name); //1 la ? thu 1 trong sql statement
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return new Flight(rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("code"),
+                        rs.getString("airplaneID"),
+                        rs.getString("departure"),
+                        rs.getString("destination"),
+                        rs.getTimestamp("entryTime").toLocalDateTime(),
+                        rs.getTimestamp("startingTime").toLocalDateTime(),
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getBytes("atcID"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                stm.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    public Flight getFlightByCode(String code) throws Exception {
+        //encoding id
+        String sql = "SELECT * FROM Flight WHERE code = ?";
+        PreparedStatement stm = null;
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, code); //1 la ? thu 1 trong sql statement
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return new Flight(rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("code"),
+                        rs.getString("airplaneID"),
+                        rs.getString("departure"),
+                        rs.getString("destination"),
+                        rs.getTimestamp("entryTime").toLocalDateTime(),
+                        rs.getTimestamp("startingTime").toLocalDateTime(),
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
                         rs.getBytes("atcID"));
             }
         } catch (SQLException ex) {
@@ -93,9 +155,9 @@ public class FlightDAO extends DBContext {
             stm.setString(4, flight.getAirplaneId());
             stm.setString(5, flight.getDeparture());
             stm.setString(6, flight.getDestination());
-            stm.setDate(7, (Date) flight.getEntryTime());
-            stm.setDate(8, (Date) flight.getStartingTime());
-            stm.setDate(9, (Date) flight.getLandingTime());
+            stm.setTimestamp(7, Timestamp.valueOf(flight.getEntryTime()));
+            stm.setTimestamp(8, Timestamp.valueOf(flight.getStartingTime()));
+            stm.setTimestamp(9, Timestamp.valueOf(flight.getLandingTime()));
             stm.setBytes(10, flight.getAtcId());
             stm.executeUpdate();
         } catch (SQLException ex) {
@@ -114,31 +176,6 @@ public class FlightDAO extends DBContext {
         }
     }
 
-    public void createFlight(Flight flight) throws SQLException {
-        String sql = "INSERT INTO Flight (id, name, code, airplaneID, departure, destination, "
-                + "entryTime, startingTime, landingTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        PreparedStatement stm = null;
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, flight.getId());
-            stm.setString(2, flight.getName());
-            stm.setString(3, flight.getCode());
-            stm.setString(4, flight.getAirplaneId());
-            stm.setString(5, flight.getDeparture());
-            stm.setString(6, flight.getDestination());
-            stm.setDate(7, new java.sql.Date(flight.getEntryTime().getTime()));
-            stm.setDate(8, new java.sql.Date(flight.getStartingTime().getTime()));
-            stm.setDate(9, new java.sql.Date(flight.getLandingTime().getTime()));
-
-            stm.executeUpdate();
-        } finally {
-            if (stm != null) {
-                stm.close();
-            }
-        }
-    }
-
     public void updateFlight(Flight flight) throws Exception {
         String sql = "UPDATE Flight SET departure=?, "
                 + "destination=?, entryTime=?, startingTime=?, landingTime=? WHERE id=?";
@@ -147,9 +184,9 @@ public class FlightDAO extends DBContext {
             stm = connection.prepareStatement(sql);
             stm.setString(1, flight.getDeparture());
             stm.setString(2, flight.getDestination());
-            stm.setDate(3, (Date) flight.getEntryTime());
-            stm.setDate(4, (Date) flight.getStartingTime());
-            stm.setDate(5, (Date) flight.getLandingTime());
+            stm.setTimestamp(3, Timestamp.valueOf(flight.getEntryTime()));
+            stm.setTimestamp(4, Timestamp.valueOf(flight.getStartingTime()));
+            stm.setTimestamp(5, Timestamp.valueOf(flight.getLandingTime()));
             stm.setString(6, flight.getId());
             stm.executeUpdate();
         } catch (SQLException ex) {
@@ -168,8 +205,8 @@ public class FlightDAO extends DBContext {
         }
     }
 
-    public List<Flight> getFlightsByPriceRange(double minPrice, double maxPrice) {
-        List<Flight> flights = new ArrayList<>();
+    public ArrayList<Flight> getFlightsByPriceRange(double minPrice, double maxPrice) {
+        ArrayList<Flight> list = new ArrayList<>();
         String sql = """
             SELECT f.* FROM Flight f INNER JOIN Ticket t ON f.id = t.flightId 
             WHERE t.price BETWEEN ? AND ?
@@ -181,15 +218,15 @@ public class FlightDAO extends DBContext {
             stm.setDouble(2, maxPrice);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                flights.add(new Flight(rs.getString("id"),
+                list.add(new Flight(rs.getString("id"),
                         rs.getString("name"),
                         rs.getString("code"),
                         rs.getString("airplaneID"),
                         rs.getString("departure"),
                         rs.getString("destination"),
-                        rs.getTimestamp("entryTime"),
-                        rs.getTimestamp("startingTime"),
-                        rs.getTimestamp("landingTime"),
+                        rs.getTimestamp("entryTime").toLocalDateTime(),
+                        rs.getTimestamp("startingTime").toLocalDateTime(),
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
                         rs.getBytes("atcID")));
             }
             rs.close();
@@ -202,7 +239,7 @@ public class FlightDAO extends DBContext {
                 Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return flights;
+        return list;
     }
 
     public double getLowestTicketPrice(String flightId) {

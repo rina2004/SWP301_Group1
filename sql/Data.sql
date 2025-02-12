@@ -28,12 +28,14 @@ INSERT INTO Account (username, password, roleID, id, citizenID, name, dob, phone
 -- Insert into Type
 INSERT INTO Type (id, Name, manufacture, length, weight, height, atcID) VALUES
 ('T1', 'Boeing 747', 'Boeing', 70.60, 183500, 19.40, 'ATC1'),
-('T2', 'Airbus A320', 'Airbus', 37.57, 73500, 11.76, 'ATC2');
+('T2', 'Airbus A320', 'Airbus', 37.57, 73500, 11.76, 'ATC2'),
+('T3', 'Ginger N666', 'Ginger', 66.66, 666666, 66.06, 'ATC3');
 
 -- Insert into Airplane
 INSERT INTO Airplane (id, name, typeID, statusID, maintainanceTime, usedTime, atcID) VALUES
 (NULL, 'Boeing 747', 'T1', 1, '2024-01-15 10:00:00', '2023-12-10 08:00:00', 'ATC1'),
-(NULL, 'Airbus A320', 'T2', 2, '2024-02-20 15:30:00', '2023-11-20 12:00:00', 'ATC2');
+(NULL, 'Airbus A320', 'T2', 2, '2024-02-20 15:30:00', '2023-11-20 12:00:00', 'ATC2'),
+(NULL, 'Ginger N666', 'T2', 2, '2024-02-23 07:30:00', '2023-11-25 12:00:00', 'ATC3');
 
 -- Insert into Compartment
 INSERT INTO Compartment (id, name, typeID, capacity) VALUES
@@ -45,7 +47,10 @@ INSERT INTO Compartment (id, name, typeID, capacity) VALUES
 -- Insert into Flight
 INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime, atcID) VALUES
 (NULL, 'Flight 101', 'FL101', 'PL1', 'Hanoi', 'Ho Chi Minh City', '2024-03-10 08:00:00', '2024-03-10 09:00:00', '2024-03-10 11:00:00', 'ATC1'),
-(NULL, 'Flight 202', 'FL202', 'PL2', 'Da Nang', 'Singapore', '2024-04-15 10:30:00', '2024-04-15 11:30:00', '2024-04-15 14:00:00', 'ATC2');
+(NULL, 'Flight 102', 'FL102', 'PL1', 'Da Nang', 'Singapore', '2024-04-15 10:30:00', '2024-04-15 11:30:00', '2024-04-15 14:00:00', 'ATC2'),
+(NULL, 'Flight 201', 'FL201', 'PL2', 'Africa', 'Rung Pac Po', '2025-02-12 11:10:00', '2025-02-12 11:30:00', '2025-02-12 21:30:00', 'ATC1'),
+(NULL, 'Flight 202', 'FL202', 'PL2', 'Ohio Gyatt', 'Sigma', '2024-04-18 10:30:00', '2024-04-18 11:30:00', '2024-04-20 14:00:00', 'ATC1'),
+(NULL, 'Flight 301', 'FL301', 'PL', 'Africa', 'Rung Pac Po', '2025-02-12 11:10:00', '2025-02-12 11:30:00', '2025-02-12 21:30:00', 'ATC2');
 
 -- Insert into Seat
 INSERT INTO Seat (id, compartmentID, available) VALUES

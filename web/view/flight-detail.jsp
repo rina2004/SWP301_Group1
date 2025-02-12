@@ -66,6 +66,30 @@
                                     <th>Destination:</th>
                                     <td>${flight.getDestination()}</td>
                                 </tr>
+                                
+                                <%-- 12-2-25 --%>
+                                <tr>
+                                    <th>Entry DateTime:</th>
+                                    <td>
+                                        <div class="date-display">${flight.getEntryDate()}</div>
+                                        <div class="time-display">${flight.getEntryHour()}</div>
+                                    </td>
+                                </tr>
+                               
+                                <tr>
+                                    <th>Starting DateTime:</th>
+                                    <td>
+                                        <div class="date-display">${flight.getStartingDate()}</div>
+                                        <div class="time-display">${flight.getStartingHour()}</div>
+                                    </td>
+                                <tr>
+                                    <th>Landing DateTime:</th>
+                                    <td>
+                                        <div class="date-display">${flight.getLandingDate()}</div>
+                                        <div class="time-display">${flight.getLandingHour()}</div>
+                                    </td>
+                                </tr>
+                                <%-- ban cu~, fix date->localdatetime
                                 <tr>
                                     <th>Entry Date:</th>
                                     <td><fmt:formatDate value="${flight.entryTime}" pattern="dd-MM-yyyy" /></td>
@@ -90,6 +114,7 @@
                                     <th>Landing Time:</th>
                                     <td><fmt:formatDate value="${flight.landingTime}" pattern="HH:mm:ss" /></td>
                                 </tr>
+                                --%>
                             </table>
                         </div>
                     </div>
