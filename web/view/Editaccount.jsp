@@ -53,15 +53,6 @@
                                 </div>
 
                                
-                                <div class="form-group">
-                                    <label>Role</label>
-                                    <select name="roleID" class="form-select" aria-label="Select Role" required>  
-                                        <option value="2" <c:if test="${account.roleID == 2}">selected</c:if>>Staff</option>
-                                        <option value="3" <c:if test="${account.roleID == 3}">selected</c:if>>Customer</option>                                      
-                                        <option value="4" <c:if test="${account.roleID == 4}">selected</c:if>>AirTrafficControl</option>
-                                        </select>
-                                    </div>
-
                                     <div class="form-group">
                                         <label>Status</label>
                                         <select name="status" class="form-select" aria-label="Select Status" required>

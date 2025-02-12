@@ -11,11 +11,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.Account;
+
 /**
  *
  * @author anhbu
  */
 public class AccountDAO extends DBContext {
+
     // Get all accounts
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
@@ -27,11 +29,11 @@ public class AccountDAO extends DBContext {
 
             while (rs.next()) {
                 Account acc = new Account(
-                    rs.getString("id"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getInt("roleID"),
-                    rs.getBoolean("status")
+                        rs.getString("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getInt("roleID"),
+                        rs.getBoolean("status")
                 );
                 accounts.add(acc);
             }
@@ -42,21 +44,20 @@ public class AccountDAO extends DBContext {
     }
 
     // Update account information
-    public void updateAccount(String id, String password, String roleID, boolean status) {
-        String sql = "UPDATE Account SET password = ?, roleID = ?, status = ? WHERE id = ?";
+    public void updateAccount(String id, String password, boolean status) {
+        String sql = "UPDATE Account SET password = ?, status = ? WHERE id = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, password);
-            st.setString(2, roleID);
-            st.setBoolean(3, status);
-            st.setString(4, id);
+            st.setBoolean(2, status);
+            st.setString(3, id);
 
             st.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
-    
+
     // Get user by ID
     public Account getUserByID(String id) {
         String sql = "SELECT * FROM Account WHERE id = ?";
@@ -67,11 +68,11 @@ public class AccountDAO extends DBContext {
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 return new Account(
-                    rs.getString("id"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getInt("roleID"),
-                    rs.getBoolean("status")
+                        rs.getString("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getInt("roleID"),
+                        rs.getBoolean("status")
                 );
             }
         } catch (SQLException e) {
@@ -79,4 +80,42 @@ public class AccountDAO extends DBContext {
         }
         return null;
     }
+
+    
+    public boolean isUsernameExists(String username) {
+        String sql = "SELECT 1 FROM Account WHERE username = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, username);
+            ResultSet rs = st.executeQuery();
+            return rs.next(); 
+        } catch (SQLException e) {
+            System.out.println("Error in isUsernameExists: " + e);
+        }
+        return false;
+    }
+
+
+    public boolean addUser(String username, String password, int roleID, boolean status) {
+        if (isUsernameExists(username)) {
+            System.out.println("Username already exists.");
+            return false; 
+        }
+
+        String sql = "INSERT INTO Account (username, password, roleID, status) VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, username);
+            st.setString(2, password);
+            st.setInt(3, roleID);
+            st.setBoolean(4, status);
+
+            int rowsInserted = st.executeUpdate();
+            return rowsInserted > 0; 
+        } catch (SQLException e) {
+            System.out.println("Error in addUser: " + e);
+        }
+        return false; 
+    }
+
 }
