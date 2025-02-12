@@ -1,16 +1,8 @@
-<%-- 
-    Document   : createAirplane
-    Created on : 10 Feb 2025, 03:02:27
-    Author     : Rinaaaa
---%>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <title>Create Airplane</title>
     <style>
         body {
@@ -34,6 +26,7 @@
             font-size: 1.8rem;
             color: #0056b3;
             margin: 0;
+            text-align: right;
         }
 
         .btn-secondary {
@@ -95,20 +88,37 @@
             margin-bottom: 1rem;
             font-weight: bold;
         }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #0056b3;
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #004494;
+        }
+
+        .btn-back i {
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
     <div class="header-section">
-        <div class="container d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center">
-                <a href="<%= request.getContextPath() %>/airplane/view" class="back-btn">
-                    <i style="display:flex; align-items: center; justify-content: flex-end; color: #DBF8FE" class="fa-solid fa-arrow-right-to-bracket fa-rotate-180 fa-xl"></i>
-                </a>
-                <h2 style="display: flex; align-items: center; justify-content: center" class="title">Create Airplane</h2>
-            </div>
+        <div class="container">
+            <h2>Create Airplane</h2>
+            <a href="<%= request.getContextPath() %>/airplane/view" class="btn-back">
+                <i class="fas fa-arrow-left"></i>
+            </a>
         </div>
     </div>
-
 
     <c:if test="${not empty error}">
         <div class="error-message">${error}</div>
@@ -133,10 +143,10 @@
         </select>
 
         <label for="maintainanceTime">Maintenance Time:</label>
-        <input type="datetime-local" id="maintainanceTime" name="maintainanceTime" required>
+        <input type="date" id="maintainanceTime" name="maintainanceTime" required>
 
         <label for="usedTime">Used Time:</label>
-        <input type="datetime-local" id="usedTime" name="usedTime" required>
+        <input type="date" id="usedTime" name="usedTime" required>
 
         <label for="actID">Air Traffic Control:</label>
         <select id="actID" name="actID" required>

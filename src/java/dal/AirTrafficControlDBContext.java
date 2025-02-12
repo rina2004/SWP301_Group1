@@ -46,7 +46,6 @@ public class AirTrafficControlDBContext extends DBContext<AirTrafficControl>{
             }
             rs.close();
             ps.close();
-            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
