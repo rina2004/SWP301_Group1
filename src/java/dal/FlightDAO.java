@@ -259,7 +259,6 @@ public class FlightDAO extends DBContext {
             System.out.println(ex);
         } finally {
             try {
-                stm.close();
                 connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);

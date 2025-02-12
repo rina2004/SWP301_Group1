@@ -30,16 +30,18 @@ public class ListFlightServlet extends HttpServlet {
             throws ServletException, IOException {
         FlightDAO dao = new FlightDAO();
         ArrayList<Flight> list = dao.getAllFlight();
+        TicketDAO ticketDao = new TicketDAO();
+        Map<String, Ticket> ticketMap = new HashMap<>();
+
+        // Get lowest price ticket for each flight
+        for (Flight flight : list) {
+            Ticket ticket = ticketDao.getTicketByFlightId(flight.getId());
+            ticketMap.put(flight.getId(), ticket);
+        }
+
+        request.setAttribute("ticketMap", ticketMap);
         request.setAttribute("list", list);
-
-//        String successMessage = (String) request.getSession().getAttribute("successMessage");
-//        if (successMessage != null) {
-//            request.setAttribute("successMessage", successMessage);
-//            request.getSession().removeAttribute("successMessage"); // Xóa thông báo sau khi hiển thị
-//        }
-
         list.sort(Comparator.comparing(Flight::getName));
-
         request.getRequestDispatcher("flight-list.jsp").forward(request, response);
 
 //        //test filter
