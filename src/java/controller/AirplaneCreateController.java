@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import model.AirTrafficControl;
 import model.Airplane;
@@ -106,10 +107,10 @@ public class AirplaneCreateController extends HttpServlet {
 
             // Handle dates
             String maintainanceTime = request.getParameter("maintainanceTime");
-            a.setMaintainanceTime(LocalDate.parse(maintainanceTime).atStartOfDay());
+            a.setMaintainanceTime(LocalDateTime.parse(maintainanceTime));
 
             String usedTime = request.getParameter("usedTime");
-            a.setUsedTime(LocalDate.parse(usedTime).atStartOfDay());
+            a.setUsedTime(LocalDateTime.parse(usedTime));
 
             // Handle ATC
             String actID = request.getParameter("actID");

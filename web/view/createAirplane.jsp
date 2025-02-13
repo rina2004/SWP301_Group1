@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -143,10 +145,10 @@
         </select>
 
         <label for="maintainanceTime">Maintenance Time:</label>
-        <input type="date" id="maintainanceTime" name="maintainanceTime" required>
+        <input type="datetime-local" id="maintainanceTime" name="maintainanceTime" required>
 
         <label for="usedTime">Used Time:</label>
-        <input type="date" id="usedTime" name="usedTime" required>
+        <input type="datetime-local" id="usedTime" name="usedTime" required>
 
         <label for="actID">Air Traffic Control:</label>
         <select id="actID" name="actID" required>

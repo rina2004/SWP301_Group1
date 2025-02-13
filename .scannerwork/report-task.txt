@@ -1,6 +1,0 @@
-projectKey=PRJ301
-serverUrl=http://localhost:9000
-serverVersion=25.2.0.102705
-dashboardUrl=http://localhost:9000/dashboard?id=PRJ301
-ceTaskId=64b0a2bc-36c9-41c4-bd34-12c3eec0c362
-ceTaskUrl=http://localhost:9000/api/ce/task?id=64b0a2bc-36c9-41c4-bd34-12c3eec0c362
