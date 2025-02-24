@@ -22,7 +22,7 @@ public class DBContext {
         try {
             String user = "root";
             String pass = "hiep123";
-            String url = "jdbc:mysql://localhost:3306/Temp?useSSL=false&serverTimezone=UTC";
+            String url = "jdbc:mysql://localhost:3306/Test?useSSL=false&serverTimezone=UTC";
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, user, pass);
 
