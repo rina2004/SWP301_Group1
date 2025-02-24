@@ -29,7 +29,7 @@ public class AddFlightServlet extends HttpServlet {
             throws ServletException, IOException {
         // Load airplane --> dropdown
         AirplaneDAO airplaneDao = new AirplaneDAO();
-        List<Airplane> list = airplaneDao.getAllAirplane();
+        List<Airplane> list = airplaneDao.list();
         request.setAttribute("airplanes", list);
         request.getRequestDispatcher("flight-form.jsp").forward(request, response);
     }

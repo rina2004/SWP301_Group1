@@ -40,4 +40,21 @@ public class TypeDBContext extends DBContext{
 
         return type;   
     }
+    
+    public ArrayList<Type> list() {
+        ArrayList<Type> types = new ArrayList<>();
+        String sql = "SELECT * FROM Type";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Type type = new Type();
+                type.setId(rs.getString("id"));
+                type.setName(rs.getString("name"));
+                types.add(type);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TypeDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return types;
+    }
 }

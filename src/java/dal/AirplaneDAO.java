@@ -4,79 +4,116 @@
  */
 package dal;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+import model.Airplane;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Airplane;
-import model.Flight;
+
 /**
  *
- * @author A A
+ * @author Rinaaaa
  */
 public class AirplaneDAO extends DBContext{
-    public List<Airplane> getAllAirplane() {
-        List<Airplane> list = new ArrayList<>();
-        String sql = "SELECT id, name, statusID FROM swp301.airplane";
+    
+    public void insert(Airplane a) {
+        String sql = "INSERT INTO Airplane (id, name, typeID, statusID, maintainanceTime, usedTime, atcID) "
+                       + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stm = null;
         try {
             stm = connection.prepareStatement(sql);
-            ResultSet rs = stm.executeQuery();
-            while(rs.next()) {
-                list.add(new Airplane(rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getString("statusID")));
-            }
-            rs.close();
+            stm.setString(1, a.getId());
+            stm.setString(2, a.getName());
+            stm.setString(3, a.getType().getId());
+            stm.setInt(4, a.getStatus().getId());
+            stm.setTimestamp(5, Timestamp.valueOf(a.getMaintainanceTime()));
+            stm.setTimestamp(6, Timestamp.valueOf(a.getUsedTime()));
+            stm.setString(7, a.getAtc().getId());
+
+            stm.executeUpdate();
         } catch (SQLException ex) {
-            System.out.println(ex);
+            Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Error inserting airplane: " + ex.getMessage());
         } finally {
-            try {
-                stm.close();
-                connection.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
-        return list;
     }
     
-    // Phương thức lấy danh sách máy bay được phân công cho một chuyến bay
-    public List<Airplane> getAirplanesByFlightId(String flightId) {
-        List<Airplane> list = new ArrayList<>();
-        String sql = """
-            SELECT a.* 
-            FROM Airplane a 
-            INNER JOIN Flight f ON a.id = f.airplaneId 
-            WHERE f.id = ?
-        """;
+    public Airplane get(String id) {
+        Airplane airplane = null;
+        String sql = "SELECT * FROM swp301.airplane WHERE id = ?";
+        
+        TypeDBContext tp = new TypeDBContext();
+        AirplaneStatusDBContext as = new AirplaneStatusDBContext();
+        AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
+        
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, id);
+            ResultSet rs = stm.executeQuery();
+            
+            if (rs.next()) {
+                airplane = new Airplane();
+                airplane.setId(rs.getString("id"));
+                airplane.setName(rs.getString("name"));
+                airplane.setType(tp.get(rs.getString("typeID")));
+                airplane.setStatus(as.get(rs.getInt("statusID")));
+                airplane.setMaintainanceTime(rs.getTimestamp("maintainanceTime").toLocalDateTime());
+                airplane.setUsedTime(rs.getTimestamp("usedTime").toLocalDateTime());
+                airplane.setAtc(airtc.get(rs.getString("atcID")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return airplane;
+    }
+    
+    public void update(Airplane airplane) {
+        String sql = "UPDATE Airplane SET statusID = ?, maintainanceTime = ? WHERE id = ?";
+        
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, airplane.getStatus().getId());
+            stm.setTimestamp(2, Timestamp.valueOf(airplane.getMaintainanceTime()));
+            stm.setString(3, airplane.getId());
+            
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Error updating airplane: " + ex.getMessage());
+        }
+    }
+
+    public ArrayList<Airplane> list() {
+        ArrayList<Airplane> planes = new ArrayList<>();
+        TypeDBContext tp = new TypeDBContext();
+        AirplaneStatusDBContext as = new AirplaneStatusDBContext();
+        AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
+        String sql = "SELECT * FROM swp301.airplane";
         PreparedStatement stm = null;
         try {
             stm = connection.prepareStatement(sql);
-            stm.setString(1, flightId);
             ResultSet rs = stm.executeQuery();
-            
-            while(rs.next()) {
-                list.add(new Airplane(rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getString("statusID")));
-            }
-            
-            rs.close();
-            connection.close();
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        } finally {
-            try {
-                stm.close();
-                connection.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+            while (rs.next()) {
+                Airplane p = new Airplane();
+                p.setId(rs.getString("id"));
+                p.setName(rs.getString("name"));
+                p.setType(tp.get(rs.getString("typeID")));
+                p.setStatus(as.get(rs.getInt("statusID")));
+                p.setMaintainanceTime(rs.getTimestamp("maintainanceTime").toLocalDateTime());
+                p.setUsedTime(rs.getTimestamp("usedTime").toLocalDateTime());
+                p.setAtc(airtc.get(rs.getString("atcID")));
+                planes.add(p);
             }
         }
-        return list;
+        catch (SQLException ex) {
+            Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return planes;
     }
 }
