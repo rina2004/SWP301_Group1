@@ -24,6 +24,7 @@
         <servlet-name>AirplaneUpdateController</servlet-name>
         <url-pattern>/airplane/update</url-pattern>
     </servlet-mapping>
+    <servlet>
         <servlet-name>homeController</servlet-name>
         <servlet-class>controller.homeController</servlet-class>
     </servlet>

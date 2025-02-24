@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Blog;
 
-public class BlogDAO extends DBContext {
+public class BlogDAO extends DBContext<Blog> {
     
     public void insertBlog(Blog blog) {
         String sql = "INSERT INTO Blog (id, title, image, descripion, categoryID) VALUES (?, ?, ?, ?, ?)";
@@ -91,5 +91,25 @@ public class BlogDAO extends DBContext {
         for(Blog blog : new BlogDAO().getAllBlogs()){
             System.out.println(blog);
         }
+    }
+
+    @Override
+    public void insert(Blog model) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void update(Blog model) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void delete(Blog model) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public ArrayList<Blog> list() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
