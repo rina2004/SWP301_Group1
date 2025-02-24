@@ -15,7 +15,7 @@ import model.Flight;
  *
  * @author A A
  */
-public class FlightDAO extends DBContext {
+public class FlightDAO extends DBContext<Flight> {
 
     public ArrayList<Flight> getAllFlight() {
         ArrayList<Flight> list = new ArrayList<>();

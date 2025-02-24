@@ -17,7 +17,7 @@ import model.Flight;
  *
  * @author A A
  */
-public class AirplaneDAO extends DBContext{
+public class AirplaneDAO extends DBContext<Airplane>{
     public List<Airplane> getAllAirplane() {
         List<Airplane> list = new ArrayList<>();
         String sql = "SELECT id, name, statusID FROM swp301.airplane";
@@ -78,5 +78,25 @@ public class AirplaneDAO extends DBContext{
             }
         }
         return list;
+    }
+
+    @Override
+    public void insert(Airplane model) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void update(Airplane model) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void delete(Airplane model) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public ArrayList<Airplane> list() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
