@@ -24,4 +24,22 @@
         <servlet-name>AirplaneUpdateController</servlet-name>
         <url-pattern>/airplane/update</url-pattern>
     </servlet-mapping>
+        <servlet-name>homeController</servlet-name>
+        <servlet-class>controller.homeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>blogController</servlet-name>
+        <servlet-class>controller.blogController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>homeController</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>blogController</servlet-name>
+        <url-pattern>/blog</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>home</welcome-file>
+    </welcome-file-list>
 </web-app>
