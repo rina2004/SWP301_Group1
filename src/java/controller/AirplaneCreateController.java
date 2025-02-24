@@ -6,7 +6,7 @@
 package controller;
 
 import dal.AirTrafficControlDBContext;
-import dal.AirplaneDBContext;
+import dal.AirplaneDAO;
 import dal.AirplaneStatusDBContext;
 import dal.TypeDBContext;
 import java.io.IOException;
@@ -15,7 +15,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import model.AirTrafficControl;
@@ -122,7 +121,7 @@ public class AirplaneCreateController extends HttpServlet {
             a.setAtc(atc);
 
             // Insert airplane
-            AirplaneDBContext dao = new AirplaneDBContext();
+            AirplaneDAO dao = new AirplaneDAO();
             dao.insert(a);
             
             response.sendRedirect(request.getContextPath() + "/airplane/view");

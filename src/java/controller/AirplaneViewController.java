@@ -5,7 +5,7 @@
 
 package controller;
 
-import dal.AirplaneDBContext;
+import dal.AirplaneDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -56,7 +56,7 @@ public class AirplaneViewController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        AirplaneDBContext planeDB = new AirplaneDBContext();
+        AirplaneDAO planeDB = new AirplaneDAO();
         ArrayList<Airplane> planes = planeDB.list();
         request.setAttribute("planes", planes);
         request.getRequestDispatcher("/view/viewAirplane.jsp").forward(request, response);

@@ -5,7 +5,7 @@
 
 package controller;
 
-import dal.AirplaneDBContext;
+import dal.AirplaneDAO;
 import dal.AirplaneStatusDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -61,7 +61,7 @@ public class AirplaneUpdateController extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("id");
         
-        AirplaneDBContext airplaneDB = new AirplaneDBContext();
+        AirplaneDAO airplaneDB = new AirplaneDAO();
         Airplane airplane = airplaneDB.get(id);
         
         if (airplane == null) {
@@ -90,7 +90,7 @@ public class AirplaneUpdateController extends HttpServlet {
             throws ServletException, IOException {
         try {
             String id = request.getParameter("id");
-            AirplaneDBContext airplaneDB = new AirplaneDBContext();
+            AirplaneDAO airplaneDB = new AirplaneDAO();
             Airplane airplane = airplaneDB.get(id);
             
             if (airplane == null) {
