@@ -18,8 +18,7 @@ import model.Ticket;
  *
  * @author A A
  */
-public class TicketDAO extends DBContext<Ticket> {
-    
+public class TicketDAO extends DBContext {
     public Ticket getTicketByFlightId(String flightId) {
         String sql = "SELECT * FROM swp301.ticket WHERE flightID = ? ORDER BY price ASC LIMIT 1";
         PreparedStatement stm = null;
@@ -112,25 +111,5 @@ public class TicketDAO extends DBContext<Ticket> {
             }
         }
         return null;
-    }
-
-    @Override
-    public void insert(Ticket model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void update(Ticket model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void delete(Ticket model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public ArrayList<Ticket> list() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

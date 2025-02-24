@@ -14,24 +14,7 @@ import model.AirTrafficControl;
  *
  * @author Rinaaaa
  */
-public class AirTrafficControlDBContext extends DBContext<AirTrafficControl>{
-
-    @Override
-    public void insert(AirTrafficControl model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void update(AirTrafficControl model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void delete(AirTrafficControl model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
+public class AirTrafficControlDBContext extends DBContext {
     public ArrayList<AirTrafficControl> list() {
         ArrayList<AirTrafficControl> atcs = new ArrayList<>();
         try {

@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author Rinaaaa
  */
-public abstract class DBContext<T> {
+public class DBContext {
 
     protected Connection connection;
 
@@ -31,9 +31,4 @@ public abstract class DBContext<T> {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public abstract void insert(T model);
-    public abstract void update(T model);
-    public abstract void delete(T model);
-    public abstract ArrayList<T> list();
 }

@@ -15,7 +15,7 @@ import model.Flight;
  *
  * @author A A
  */
-public class FlightDAO extends DBContext<Flight> {
+public class FlightDAO extends DBContext{
 
     public ArrayList<Flight> getAllFlight() {
         ArrayList<Flight> list = new ArrayList<>();
@@ -265,25 +265,5 @@ public class FlightDAO extends DBContext<Flight> {
             }
         }
         return price;
-    }
-
-    @Override
-    public void insert(Flight model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void update(Flight model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void delete(Flight model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public ArrayList<Flight> list() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

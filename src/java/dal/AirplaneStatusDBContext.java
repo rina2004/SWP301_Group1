@@ -14,24 +14,8 @@ import java.util.logging.Logger;
  *
  * @author Rinaaaa
  */
-public class AirplaneStatusDBContext extends DBContext<AirplaneStatus> {
-
-    @Override
-    public void insert(AirplaneStatus model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void update(AirplaneStatus model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void delete(AirplaneStatus model) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
+public class AirplaneStatusDBContext extends DBContext{
+    
     public ArrayList<AirplaneStatus> list() {
         ArrayList<AirplaneStatus> statuses = new ArrayList<>();
         String sql = "SELECT * FROM swp301.airplane_status";

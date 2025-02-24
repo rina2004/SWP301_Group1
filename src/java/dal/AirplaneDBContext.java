@@ -14,9 +14,7 @@ import java.util.logging.Logger;
  *
  * @author Rinaaaa
  */
-public class AirplaneDBContext extends DBContext<Airplane> {
-
-    @Override
+public class AirplaneDBContext extends DBContext{
     public void insert(Airplane a) {
         String sql = "INSERT INTO Airplane (id, name, typeID, statusID, maintainanceTime, usedTime, atcID) "
                        + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -72,7 +70,7 @@ public class AirplaneDBContext extends DBContext<Airplane> {
         }
         return airplane;
     }
-    @Override
+    
     public void update(Airplane airplane) {
         String sql = "UPDATE Airplane SET statusID = ?, maintainanceTime = ? WHERE id = ?";
         
@@ -88,12 +86,10 @@ public class AirplaneDBContext extends DBContext<Airplane> {
         }
     }
 
-    @Override
     public void delete(Airplane model) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
     public ArrayList<Airplane> list() {
         ArrayList<Airplane> planes = new ArrayList<>();
         TypeDBContext tp = new TypeDBContext();
@@ -122,5 +118,4 @@ public class AirplaneDBContext extends DBContext<Airplane> {
         
         return planes;
     }
-    
 }
