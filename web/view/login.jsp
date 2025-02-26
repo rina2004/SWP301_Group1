@@ -33,18 +33,18 @@
             }
             .all {
                 display: flex;
-                width: 600px; 
+                width: 600px;
                 background: hsla(205, 100%, 60%, 0.5);
                 padding: 20px;
                 border-radius: 10px;
                 color: black;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); 
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
                 margin-top: 180px;
                 font-size: 15px;
             }
 
             .left, .right {
-                flex: 1; 
+                flex: 1;
                 padding: 20px;
                 text-align: center;
             }
@@ -53,7 +53,7 @@
             }
             .left img{
                 width: 60%;
-               
+
             }
             .right input {
                 width: 100%;
@@ -74,7 +74,7 @@
             a:active{
                 color: aqua;
             }
-            
+
         </style>
     </head>
     <body>
@@ -88,11 +88,11 @@
 
                 <div class="right">
                     <p>Username</p>
-                        <input type="text" name="username" required="" placeholder="Enter your username">
+                    <input type="text" name="username" required="" placeholder="Enter your username">
                     <p>Password</p>
-                        <input type="password" name="password" required="" placeholder="Enter your password"><br>
-                        <input type="submit" value="Login">
-                        <p>${error}</p>
+                    <input type="password" name="password" required="" placeholder="Enter your password"><br>
+                    <input type="submit" value="Login">
+                    <p>${error}</p>
                 </div>
             </div>
         </form>

@@ -1,3 +1,5 @@
+package controller;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
@@ -80,25 +82,25 @@ public class register extends HttpServlet {
 
         if (!password.equals(password2)) {
             request.setAttribute("error", "Confirm password not correct!!!");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/register.jsp").forward(request, response);
         } else if (dao.checkAccountExist(username)) {
             request.setAttribute("errorExistUsername", "Username is existed, try again!!!");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/register.jsp").forward(request, response);
         } else if (username.trim().isEmpty()){
             request.setAttribute("errorUsername", "Username does not contain space, try again!!!");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/register.jsp").forward(request, response);
         } else if (password.trim().isEmpty()) {
             request.setAttribute("errorPassword", "Password does not contain space, try again!!!");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/register.jsp").forward(request, response);
         }else if(username.matches("^[a-zA-Z0-9_]{5,16}$")){
             request.setAttribute("invalidUsername", "Username is invalid, try again!!!");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/register.jsp").forward(request, response);
         }else if(password.matches("^[a-zA-Z0-9]{8,16}$")){
             request.setAttribute("invalidPassword", "Password is invalid, try again!!!");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher( "/view/register.jsp").forward(request, response);
         }else{
              dao.register(username, password);
-             response.sendRedirect("login.jsp");
+             response.sendRedirect(request.getContextPath()+"/view/login.jsp");
         }
 
        
