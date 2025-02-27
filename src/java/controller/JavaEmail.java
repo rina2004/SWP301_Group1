@@ -9,31 +9,32 @@ import java.util.Properties;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.MimeMessage;
 import java.util.Random;
+
+
+
 /**
  *
  * @author tungn
  */
 public class JavaEmail {
+    public static void sendOtpEmail(String toEmail, String otp) {
+        final String fromEmail = "khanhnthe181799@fpt.edu.vn"; 
+        final String password = "wfqj xhfa hnqm ureq "; 
 
-    public static void sendOTP(String toEmail, String otp) {
-        final String fromEmail = "khanhnthe181799@fpt.edu.vn";
-        final String password = "wfqj xhfa hnqm ureq";
-        
-        Properties pop = new Properties();
-        pop.put("mail.smtp.host", "smtp.gmail.com"); // Đặt SMTP cho gmail
-        pop.put("mail.smtp.port", "587"); //Cổng 587(cho TLS)
-        pop.put("mail.smtp.auth", "true");//Bật xác thực 
-        pop.put("mail.smtp.starttls.enable", "true");//Bật TLS để bảo mật
-        
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
         Session session;
-        // xác thực tài khoản gửi email
-        session = Session.getInstance(pop, new Authenticator() {
+        session = Session.getInstance(props, new Authenticator() {
             @Override
-            protected PasswordAuthentication getPasswordAuthentication(){
+            protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(fromEmail, password);
             }
         });
-        
+
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(fromEmail));
@@ -43,20 +44,24 @@ public class JavaEmail {
 
             Transport.send(message);
         } catch (MessagingException e) {
+            e.printStackTrace();
             System.out.println("Lỗi khi gửi email!");
         }
     }
     
     public static String createOTP(){
-         final String otp_character = "0123456789";
-         final int otp_length = 6;
-         
-         StringBuilder otp = new StringBuilder();
-         Random random = new Random();
-         
-         for (int i = 0; i < otp_length; i++) {
-            otp.append(otp_character.charAt(random.nextInt(otp_character.length())));
+        final String OTP_Character = "1234567890";
+        final int OTP_LENGTH = 6;
+        
+        StringBuilder otp = new StringBuilder();
+        Random random = new Random();
+        
+        for (int i = 0; i < OTP_LENGTH; i++) {
+            otp.append(OTP_Character.charAt(random.nextInt(OTP_Character.length())));
         }
         return otp.toString();
     }
+    
+    
+    
 }
