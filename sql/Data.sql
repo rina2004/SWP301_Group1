@@ -7,11 +7,14 @@ INSERT INTO airplane_status (name) VALUES
 INSERT INTO Blog_Category (name) VALUES 
 ('Travel'), ('Aviation'), ('News'), ('Technology'), ('Lifestyle');
 
+INSERT INTO Customer VALUES ();
+SELECT id FROM Customer ORDER BY CAST(SUBSTRING(id, 2) AS UNSIGNED) DESC LIMIT 1;
 -- Insert into Blog
-INSERT INTO Blog (id, title, categoryID, image, description) VALUES
+INSERT INTO Blog (id, title, categoryID, image, description) VALUES 
 ('B1', 'Top 10 Travel Destinations', 1, 'travel.jpg', 'Explore the best places to visit in 2024.'),
 ('B2', 'How Planes Are Maintained', 2, 'maintenance.jpg', 'A look into airplane maintenance procedures.');
 
+insert into Account(id,username,password,status,name,dob,phone,address,email) VALUES();
 -- Insert into Role
 INSERT INTO Role (name, adminID) VALUES 
 ('Super Admin', 'ADMIN1'), 
@@ -19,6 +22,8 @@ INSERT INTO Role (name, adminID) VALUES
 ('Operator', 'ADMIN3'), 
 ('Technician', 'ADMIN4'), 
 ('Support', 'ADMIN5');
+
+Select * from AccountUserRole;
 
 -- Insert into Account
 INSERT INTO Account (username, password, roleID, id, citizenID, name, dob, phone, address, email, adminID) VALUES

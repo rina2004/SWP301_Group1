@@ -11,44 +11,39 @@ import java.sql.Date;
  * @author tungn
  */
 public class Account {
+    private String id;
     private String username;
     private String password;
-    private String role;
     private String status;
-    private String id;
     private String citizenID;
     private String name;
     private Date dob;
     private String phone;
     private String address;
     private String email;
-    private String adminID;
 
     public Account() {
     }
 
-    public Account(String username, String password, String role, String status) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.status = status;
-    }
-
-    
-    
-    public Account(String username, String password, String role, String status, String id, String citizenID, String name, Date dob, String phone, String address, String email, String adminID) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.status = status;
+    public Account(String id, String username, String password, String status, String citizenID, String name, Date dob, String phone, String address, String email) {
         this.id = id;
+        this.username = username;
+        this.password = password;
+        this.status = status;
         this.citizenID = citizenID;
         this.name = name;
         this.dob = dob;
         this.phone = phone;
         this.address = address;
         this.email = email;
-        this.adminID = adminID;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -67,28 +62,12 @@ public class Account {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getCitizenID() {
@@ -139,17 +118,9 @@ public class Account {
         this.email = email;
     }
 
-    public String getAdminID() {
-        return adminID;
-    }
-
-    public void setAdminID(String adminID) {
-        this.adminID = adminID;
-    }
-
     @Override
     public String toString() {
-        return "Account{" + "username=" + username + ", password=" + password + ", role=" + role + ", status=" + status + ", id=" + id + ", citizenID=" + citizenID + ", name=" + name + ", dob=" + dob + ", phone=" + phone + ", address=" + address + ", email=" + email + ", adminID=" + adminID + '}';
+        return "Account{" + "id=" + id + ", username=" + username + ", password=" + password + ", status=" + status + ", citizenID=" + citizenID + ", name=" + name + ", dob=" + dob + ", phone=" + phone + ", address=" + address + ", email=" + email + '}';
     }
-        
+
 }

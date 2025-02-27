@@ -75,9 +75,18 @@
                 <p>Password</p>
                 <input type="password" name="pass" required="" placeholder="Enter your password">
                 <p>Confirm Password</p>
-                <input type="password" name="pass2" required="" placeholder="Confirm Password"><br><br>
+                <input type="password" name="pass2" required="" placeholder="Confirm Password">
+                <p>Full Name</p>
+                <input type="text" name="name" required="" >
+                <p>Date of Birth</p>
+                <input type="date" name="dob" required="" >
+                <p>Phone</p>
+                <input type="text" name="phone" required="">
+                <p>Address</p>
+                <input type="text" name="address" required="">
+                <p>Email</p>
+                <input type="text" name="email" required=""><br><br>
                 <input type="submit" value="Register">
-                <p>${error}</p>
                 <p>If you have an account? <a href="login.jsp">Login here</a></p>
             </div>
         </form>

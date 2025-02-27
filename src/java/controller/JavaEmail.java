@@ -61,11 +61,4 @@ public class JavaEmail {
         }
         return otp.toString();
     }
-
-    public static void main(String[] args) {
-        String a = createOTP();
-        String email = "tungnguyenkhanh95@gmail.com";
-        sendOtpEmail(email, a);
-    }
-
 }
