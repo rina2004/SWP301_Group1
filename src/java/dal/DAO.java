@@ -82,6 +82,25 @@ public class DAO extends DBContext {
         return false;
     }
 
+    public boolean checkEmailExist(String email){
+        PreparedStatement stm ;
+        ResultSet rs ;
+        String sql = " Select Count() From account where email = ?";
+        
+        try{
+            stm = connection.prepareStatement(sql);
+            stm.setString(1,email);
+            rs =stm.executeQuery();
+            if(rs.next() && rs.getInt(1) > 0){
+                return true;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            System.out.println("Lỗi truy xuất dữ liệu");
+        }
+        return false;
+    }
+    
     public void register(String username, String password) {
         String id = createCustomerID();
         if (id == null) {
