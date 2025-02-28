@@ -132,32 +132,5 @@ public class AccountDAO extends DBContext {
         return false;
     }
 
-    public List<Account> searchAccountByUsername(String username) {
-        List<Account> accounts = new ArrayList<>();
-        String sql = "SELECT a.id, a.username, a.password, a.status, aur.roleID, aur.entityID "
-                + "FROM Account a "
-                + "LEFT JOIN AccountUserRole aur ON a.id = aur.accountID "
-                + "WHERE a.username LIKE ? "
-                + "AND NOT EXISTS (SELECT 1 FROM AccountUserRole aur2 WHERE aur2.accountID = a.id AND aur2.roleID = 1)";
-
-        try (PreparedStatement st = connection.prepareStatement(sql)) {
-            st.setString(1, "%" + username + "%"); // Tìm kiếm gần đúng
-            try (ResultSet rs = st.executeQuery()) {
-                while (rs.next()) {
-                    accounts.add(new Account(
-                            rs.getString("id"),
-                            rs.getString("username"),
-                            rs.getString("password"),
-                            rs.getBoolean("status"),
-                            rs.getInt("entityID"),
-                            rs.getInt("roleID")
-                    ));
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error in searchAccountByUsername: " + e);
-        }
-        return accounts;
-    }
 
 }

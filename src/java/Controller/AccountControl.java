@@ -10,6 +10,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import model.Account;
 
@@ -48,7 +50,35 @@ public class AccountControl extends HttpServlet {
         //processRequest(request, response);
         response.setContentType("text/html;charset=UTF-8");
         AccountDAO dao = new AccountDAO();
+
         List<Account> listA = dao.getAllAccounts();
+        String sortOrder = request.getParameter("sortOrder");// Lấy tham số sắp xếp từ URL
+        String roleFilter = request.getParameter("role"); // Lấy giá trị role từ request
+
+        // Sắp xếp danh sách theo RoleID
+        if ("asc".equals(sortOrder)) {
+            listA.sort(Comparator.comparingInt(Account::getRoleID)); // Tăng dần
+        } else if ("desc".equals(sortOrder)) {
+            listA.sort(Comparator.comparingInt(Account::getRoleID).reversed()); // Giảm dần
+        }
+
+        if (roleFilter != null && !roleFilter.isEmpty()) {
+            int roleID = -1;
+            switch (roleFilter) {
+                case "Staff" -> roleID = 2;
+                case "Customer" -> roleID = 3;                
+                case "AirTrafficControl" -> roleID = 4;
+            }
+            if (listA != null) {
+                Iterator<Account> iterator = listA.iterator();
+                while (iterator.hasNext()) {
+                    if (iterator.next().getRoleID() != roleID) {
+                        iterator.remove();
+                    }
+                }
+            }
+
+        }
 
         request.setAttribute("listA", listA);
         request.getRequestDispatcher("view/Manageraccount.jsp").forward(request, response);

@@ -16,10 +16,6 @@
         <servlet-name>LoadAccountControl</servlet-name>
         <servlet-class>Controller.LoadAccountControl</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>SearchAccountControl</servlet-name>
-        <servlet-class>Controller.SearchAccountControl</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>AccountControl</servlet-name>
         <url-pattern>/acc</url-pattern>
@@ -36,8 +32,5 @@
         <servlet-name>LoadAccountControl</servlet-name>
         <url-pattern>/loadacc</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>SearchAccountControl</servlet-name>
-        <url-pattern>/searchacc</url-pattern>
-    </servlet-mapping>
+    
 </web-app>

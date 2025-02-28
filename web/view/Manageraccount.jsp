@@ -43,6 +43,17 @@
                         </div>
                     </div>
 
+                    <form action="acc" method="GET">
+                        <label for="roleFilter">Filter by Role:</label>
+                        <select name="role" id="roleFilter" onchange="this.form.submit()">
+                            <option value="">All</option>
+                            <option value="Customer" ${param.role == 'Customer' ? 'selected' : ''}>Customer</option>
+                            <option value="Staff" ${param.role == 'Staff' ? 'selected' : ''}>Staff</option>
+                            <option value="AirTrafficControl" ${param.role == 'AirTrafficControl' ? 'selected' : ''}>Air Traffic Control</option>
+                        </select>
+                    </form>
+
+
                     <!-- Form tìm kiếm -->                   
                     <div class="form-group">
                         <input type="text" id="searchInput" class="form-control" placeholder="Enter username..." onkeyup="filterTable()">
@@ -54,7 +65,12 @@
                                 <th>ID</th>
                                 <th>Username</th>
                                 <th>Password</th>
-                                <th>Role</th>
+                                <th>
+                                    <a href="?sortOrder=asc">▲</a>
+                                    Role
+                                    <a href="?sortOrder=desc">▼</a>
+                                </th>
+
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -68,8 +84,8 @@
                                     <td>${user.password}</td>
                                     <td>
                                         <c:choose>
-                                            <c:when test="${user.roleID == 3}">Customer</c:when>
-                                            <c:when test="${user.roleID == 2}">Staff</c:when>                                        
+                                            <c:when test="${user.roleID == 2}">Staff</c:when>  
+                                            <c:when test="${user.roleID == 3}">Customer</c:when>                                                                                  
                                             <c:when test="${user.roleID == 4}">AirTrafficControl</c:when>
                                             <c:otherwise>Unknown</c:otherwise>
                                         </c:choose>
