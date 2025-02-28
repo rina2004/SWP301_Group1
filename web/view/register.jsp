@@ -71,21 +71,21 @@
         <form action="register" method="post">
             <div>
                 <p>Username</p>
-                <input type="text" name="username" required="" placeholder="Enter your username">
+                <input type="text" name="username" required="" value="<%= session.getAttribute("username") != null ? session.getAttribute("username") : "" %>" placeholder="Enter your username">
                 <p>Password</p>
-                <input type="password" name="pass" required="" placeholder="Enter your password">
+                <input type="password" name="pass" required="" value="<%= session.getAttribute("pass") != null ? session.getAttribute("pass") : "" %>" placeholder="Enter your password">
                 <p>Confirm Password</p>
-                <input type="password" name="pass2" required="" placeholder="Confirm Password">
+                <input type="password" name="pass2" required="" value="<%= session.getAttribute("pass2") != null ? session.getAttribute("pass2") : "" %>" placeholder="Confirm Password">
                 <p>Full Name</p>
-                <input type="text" name="name" required="" >
+                <input type="text" name="name" required="" value="<%= session.getAttribute("name") != null ? session.getAttribute("name") : "" %>">
                 <p>Date of Birth</p>
-                <input type="date" name="dob" required="" >
+                <input type="date" name="dob" required="">
                 <p>Phone</p>
-                <input type="text" name="phone" required="">
+                <input type="text" name="phone" required="" value="<%= session.getAttribute("phone") != null ? session.getAttribute("phone") : "" %>">
                 <p>Address</p>
-                <input type="text" name="address" required="">
+                <input type="text" name="address" required="" value="<%= session.getAttribute("address") != null ? session.getAttribute("address") : "" %>">
                 <p>Email</p>
-                <input type="text" name="email" required=""><br><br>
+                <input type="text" name="email" required="" value="<%= session.getAttribute("email") != null ? session.getAttribute("email") : ""%>"><br><br>
                 <input type="submit" value="Register">
                 <p>If you have an account? <a href="login.jsp">Login here</a></p>
             </div>

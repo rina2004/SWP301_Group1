@@ -14,7 +14,12 @@ INSERT INTO Blog (id, title, categoryID, image, description) VALUES
 ('B1', 'Top 10 Travel Destinations', 1, 'travel.jpg', 'Explore the best places to visit in 2024.'),
 ('B2', 'How Planes Are Maintained', 2, 'maintenance.jpg', 'A look into airplane maintenance procedures.');
 
-insert into Account(id,username,password,status,name,dob,phone,address,email) VALUES();
+insert into Account(id,username,password,status,name,dob,phone,address,email) VALUES
+('C1','customer1','123456','1','khanhnguyen','2004-02-20','01234567','hanoi','adsfggdg');
+
+Select Count(username) From account Where username = 'customer1';
+select * From Account;
+select * From AccountUserRole ;
 -- Insert into Role
 INSERT INTO Role (name, adminID) VALUES 
 ('Super Admin', 'ADMIN1'), 

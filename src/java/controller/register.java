@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -83,7 +84,7 @@ public class register extends HttpServlet {
         String email = request.getParameter("email");
 
         AccountDAO acc = new AccountDAO();
-        final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        final String EMAIL_REGEX = "^[A-Za-z0-9_.-]+@[A-Za-z0-9.-]+$";
 
         if (acc.checkUserNameExist(username)) {
             request.setAttribute("errorUsername", "Username is existed !!!");
@@ -91,22 +92,22 @@ public class register extends HttpServlet {
         } else if (username.trim().isEmpty()) {
             request.setAttribute("errorUsername", "Username does not contain space, try again!!!");
             request.getRequestDispatcher("register.jsp").forward(request, response);
-        } else if (username.matches("[a-zA-Z0-9_]{5,16}")) {
+        } else if (!username.matches("[a-zA-Z0-9_]{5,16}")) {
             request.setAttribute("errorUsername", "Username invalid, try again!!!");
             request.getRequestDispatcher("register.jsp").forward(request, response);
-        } else if (password.equals(password2)) {
+        } else if (!password.equals(password2)) {
             request.setAttribute("errorPassword", "Confirrm password not match, try again!!!");
             request.getRequestDispatcher("register.jsp").forward(request, response);
         } else if (password.trim().isEmpty()) {
             request.setAttribute("errorPassword", "Password does not contain space, try again!!!");
             request.getRequestDispatcher("register.jsp").forward(request, response);
-        } else if (password.matches("^[a-zA-Z0-9]{8,16}$")) {
+        } else if (!password.matches("^[a-zA-Z0-9]{8,16}$")) {
             request.setAttribute("errorPassword", "Password is invalid, try again!!!");
             request.getRequestDispatcher("register.jsp").forward(request, response);
         } else if (email.trim().isEmpty()) {
             request.setAttribute("errorEmail", "Password is invalid, try again!!!");
             request.getRequestDispatcher("register.jsp").forward(request, response);
-        } else if (email.matches(EMAIL_REGEX)) {
+        } else if (!email.matches(EMAIL_REGEX)) {
             request.setAttribute("errorEmail", "Email is invalid, try again!!!");
             request.getRequestDispatcher("register.jsp").forward(request, response);
         } else if (acc.checkEmailExist(email)) {
@@ -120,14 +121,16 @@ public class register extends HttpServlet {
             session.setAttribute("name", name);
             session.setAttribute("email", email);
             session.setAttribute("phone", phone);
-            session.setAttribute("dob", dob);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            String dobFormatted = sdf.format(dob);
+            session.setAttribute("dob", dobFormatted);
             session.setAttribute("address", address);
 
             String otp = JavaEmail.createOTP();
             JavaEmail.sendOtpEmail(email, otp);
             session.setAttribute("otp", otp);
             session.setAttribute("timeOtp", System.currentTimeMillis() + 2 * 60 * 1000);
-            response.sendRedirect("Otp.jsp");
+            response.sendRedirect(request.getContextPath() + "/view/Otp.jsp");
         }
     }
 
