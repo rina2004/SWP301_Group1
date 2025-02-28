@@ -1,6 +1,10 @@
 CREATE DATABASE `swp301`;
 USE `swp301`;
 
+-------------------------------------------------------------
+-------------------------------------------------------------
+-------------------------------------------------------------
+
 CREATE TABLE `Customer` (
   `id` varchar(10),
   
@@ -31,31 +35,34 @@ CREATE TABLE `AirTrafficControl` (
 
 CREATE TABLE `Role` (
   `id` INT AUTO_INCREMENT,
-  `name` VARCHAR(50),
-  `adminID` varchar(10),
+  `name` VARCHAR(50) unique not null,
 	
-  PRIMARY KEY (`id`),
-  foreign key (`adminID`) references `Administrator`(`id`)
+  PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `Account` (
-  `username` VARCHAR(50),
+  `id` VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+  `username` VARCHAR(50) UNIQUE NOT NULL,
   `password` VARCHAR(50) NOT NULL,
   `status` bool DEFAULT(TRUE),
-  `roleID` INT,
-  `id` varchar(10) UNIQUE,
   `citizenID` VARCHAR(12),
   `name` VARCHAR(50),
   `dob` DATE,
   `phone` VARCHAR(10),
   `address` VARCHAR(255),
   `email` VARCHAR(255),
-  `adminID` varchar(10),
   
-  PRIMARY KEY (`username`),
-  FOREIGN KEY (`roleID`) REFERENCES `Role`(`id`),
-  FOREIGN KEY (`id`) references `Customer`(`id`),
-  FOREIGN KEY (`adminID`) references `Administrator`(`id`)
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `AccountUserRole` (
+    `accountID` VARCHAR(36) NOT NULL,
+    `entityID` INT NOT NULL,
+    `roleID` INT NOT NULL,
+    PRIMARY KEY (`accountID`, `entityID`, `roleID`),
+
+    FOREIGN KEY (`accountID`) REFERENCES Account(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`roleID`) REFERENCES Role(`id`) ON DELETE CASCADE
 );
 
 -------------------------------------------------------------
@@ -174,20 +181,77 @@ CREATE TABLE `Luggage` (
   foreign key (`orderID`) references `Order`(`id`)
 );
 
-CREATE TABLE `Blog_Category` (
+-------------------------------------------------------------
+-------------------------------------------------------------
+-------------------------------------------------------------
+
+CREATE TABLE `BlogCategory` (
 	`id` int auto_increment,
-    `name` varchar(255),
+    `name` varchar(255) unique,
     
     primary key (`id`)
 );
 
+CREATE TABLE `BlogPost` (
+    `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('POST-', UUID())), 
+    `title` VARCHAR(255) NOT NULL,
+    `content` TEXT NOT NULL,
+    `authorID` VARCHAR(41) NOT NULL,
+    `categoryID` INT NOT NULL,
+    `published` BOOLEAN DEFAULT FALSE,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (`authorID`) REFERENCES `Account`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`categoryID`) REFERENCES `BlogCategory`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Comment` (
+    `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('CMT-', UUID())),
+    `postID` VARCHAR(41) NOT NULL,
+    `accountID` VARCHAR(41) NOT NULL,
+    `content` TEXT NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`accountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `PostLike` (
+    `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('LIKE-', UUID())),
+    `postID` VARCHAR(41) NOT NULL,
+    `accountID` VARCHAR(41) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`accountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Tags` (
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE `PostTags` (
+    `postID` VARCHAR(36) NOT NULL,
+    `tagID` INT NOT NULL,
+    PRIMARY KEY (`post_id`, `tag_id`),
+
+    FOREIGN KEY (`postID`) REFERENCES `BlogPosts`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`tagID`) REFERENCES `Tags`(`id`) ON DELETE CASCADE
+);
+
+
 CREATE TABLE `Blog` (
-	`id` varchar(10),
-    `title` varchar(255),
-    `categoryID` int,
-    `image` varchar(100),
-    `description` text,
-    
-    primary key (`id`),
-    foreign key (`categoryID`) references `Blog_Category`(`id`)
-)
+    `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('BLOG-', UUID())),
+    `postID` VARCHAR(41) NOT NULL UNIQUE,
+    `title` VARCHAR(255) NOT NULL,
+    `short_description` TEXT NOT NULL,
+    `thumbnail` VARCHAR(255),
+    `authorID` VARCHAR(41) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`authorID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
+);

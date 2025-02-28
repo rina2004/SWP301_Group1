@@ -1,8 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
-	 version="6.0">
-
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <servlet>
+        <servlet-name>AccountControl</servlet-name>
+        <servlet-class>Controller.AccountControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddUserControl</servlet-name>
+        <servlet-class>Controller.AddUserControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditAccountControl</servlet-name>
+        <servlet-class>Controller.EditAccountControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadAccountControl</servlet-name>
+        <servlet-class>Controller.LoadAccountControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchAccountControl</servlet-name>
+        <servlet-class>Controller.SearchAccountControl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountControl</servlet-name>
+        <url-pattern>/acc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddUserControl</servlet-name>
+        <url-pattern>/addUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditAccountControl</servlet-name>
+        <url-pattern>/editAccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadAccountControl</servlet-name>
+        <url-pattern>/loadacc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchAccountControl</servlet-name>
+        <url-pattern>/searchacc</url-pattern>
+    </servlet-mapping>
 </web-app>

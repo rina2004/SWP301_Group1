@@ -12,18 +12,20 @@ public class Account {
     private String id;
     private String username;
     private String password;
-    private int roleID;
     private boolean status;
+    private int entityID; 
+    private int roleID; // Chỉ giữ một vai trò duy nhất
 
     public Account() {
     }
 
-    public Account(String id, String username, String password, int roleID, boolean status) {
+    public Account(String id, String username, String password, boolean status, int entityID, int roleID) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.roleID = roleID;
         this.status = status;
+        this.entityID = entityID;
+        this.roleID = roleID;
     }
 
     public String getId() {
@@ -50,6 +52,22 @@ public class Account {
         this.password = password;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public int getEntityID() {
+        return entityID;
+    }
+
+    public void setEntityID(int entityID) {
+        this.entityID = entityID;
+    }
+
     public int getRoleID() {
         return roleID;
     }
@@ -58,14 +76,17 @@ public class Account {
         this.roleID = roleID;
     }
 
-    public boolean isStatus() {
-        return status;
+    @Override
+    public String toString() {
+        return "Account{"
+                + "id='" + id + '\''
+                + ", username='" + username + '\''
+                + ", password='" + password + '\''
+                + ", status=" + status
+                + ", entityID=" + entityID
+                + ", roleID=" + roleID
+                + '}';
     }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-    
     
     
 }

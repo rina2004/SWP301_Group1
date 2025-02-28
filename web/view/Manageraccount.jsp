@@ -43,11 +43,16 @@
                         </div>
                     </div>
 
+                    <!-- Form tìm kiếm -->                   
+                    <div class="form-group">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Enter username..." onkeyup="filterTable()">
+                    </div>
+
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>UserID</th>
-                                <th>UserName</th>
+                                <th>ID</th>
+                                <th>Username</th>
                                 <th>Password</th>
                                 <th>Role</th>
                                 <th>Status</th>
@@ -63,12 +68,13 @@
                                     <td>${user.password}</td>
                                     <td>
                                         <c:choose>
-                                            <c:when test="${user.roleID == 2}">Customer</c:when>
-                                            <c:when test="${user.roleID == 3}">Staff</c:when>                                        
+                                            <c:when test="${user.roleID == 3}">Customer</c:when>
+                                            <c:when test="${user.roleID == 2}">Staff</c:when>                                        
                                             <c:when test="${user.roleID == 4}">AirTrafficControl</c:when>
                                             <c:otherwise>Unknown</c:otherwise>
                                         </c:choose>
                                     </td>
+
 
                                     <td>${user.status ? 'Active' : 'Inactive'}</td>
                                     <td>
@@ -85,7 +91,6 @@
 
             </div>
 
-
             <div id="addUserModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -101,20 +106,26 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Password</label>
-                                    <input name="password" type="text" class="form-control" required>
-                                </div>                            
+                                    <input name="password" type="password" class="form-control" required>
+                                </div>   
+                                <div class="form-group">
+                                    <label>Entity ID</label>
+                                    <input name="entityID" type="number" class="form-control" required>
+                                </div>                         
                                 <div class="form-group">
                                     <label>Role</label>
                                     <select name="roleID" class="form-control" required>
-                                        <option value="3">Staff</option>
+                                        <option value="2">Staff</option>
                                         <option value="4">AirTrafficControl</option>      
                                     </select>
+
+
                                 </div>
                                 <div class="form-group">
                                     <label>Status</label>
                                     <select name="status" class="form-select" aria-label="Select Status" required>
-                                        <option value="true" <c:if test="${account.status}">selected</c:if>>Active</option>
-                                        <option value="false" <c:if test="${!account.status}">selected</c:if>>Inactive</option>
+                                        <option value="true">Active</option>
+                                        <option value="false">Inactive</option>
                                     </select>
                                 </div>
                             </div>
@@ -128,6 +139,51 @@
             </div>
 
             <script src="js/manager.js" type="text/javascript"></script>
+            <script>
+                            function filterTable() {
+                                var input, filter, table, tr, td, i, txtValue;
+                                input = document.getElementById("searchInput");
+                                filter = input.value;
+                                table = document.querySelector(".table");
+                                tr = table.getElementsByTagName("tr");
+
+                                var noResult = true; // Biến kiểm tra có kết quả hay không
+
+                                for (i = 1; i < tr.length; i++) {
+                                    td = tr[i].getElementsByTagName("td")[1]; // Lấy cột username
+                                    if (td) {
+                                        txtValue = td.textContent || td.innerText;
+                                        if (txtValue.indexOf(filter) > -1) {
+                                            tr[i].style.display = "";
+                                            noResult = false; // Tìm thấy ít nhất một kết quả
+                                        } else {
+                                            tr[i].style.display = "none";
+                                        }
+                                    }
+                                }
+
+                                // Hiển thị thông báo nếu không tìm thấy kết quả
+                                var messageRow = document.getElementById("noResultRow");
+                                if (noResult) {
+                                    if (!messageRow) { // Nếu chưa có hàng thông báo thì thêm vào
+                                        messageRow = document.createElement("tr");
+                                        messageRow.id = "noResultRow";
+                                        var td = document.createElement("td");
+                                        td.colSpan = 6; // Merge cột
+                                        td.style.textAlign = "center";
+                                        td.style.fontWeight = "bold";
+                                        td.innerText = "No matching accounts found!";
+                                        messageRow.appendChild(td);
+                                        table.appendChild(messageRow);
+                                    }
+                                } else {
+                                    if (messageRow) { // Nếu có thông báo thì xoá đi
+                                        messageRow.remove();
+                                    }
+                                }
+                            }
+
+            </script>
 
 
     </body>

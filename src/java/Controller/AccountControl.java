@@ -6,9 +6,7 @@ package Controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,8 +17,7 @@ import model.Account;
  *
  * @author anhbu
  */
-@WebServlet(name = "AccountCoutrol", urlPatterns = {"/acc"})
-public class AccountCoutrol extends HttpServlet {
+public class AccountControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,12 +30,7 @@ public class AccountCoutrol extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        AccountDAO dao = new AccountDAO();
-        List<Account> listA = dao.getAllAccounts();
 
-        request.setAttribute("listA", listA);
-        request.getRequestDispatcher("view/Manageraccount.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -53,7 +45,13 @@ public class AccountCoutrol extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        AccountDAO dao = new AccountDAO();
+        List<Account> listA = dao.getAllAccounts();
+
+        request.setAttribute("listA", listA);
+        request.getRequestDispatcher("view/Manageraccount.jsp").forward(request, response);
     }
 
     /**
