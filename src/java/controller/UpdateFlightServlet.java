@@ -47,16 +47,6 @@ public class UpdateFlightServlet extends HttpServlet {
             String departure = request.getParameter("departure");
             String destination = request.getParameter("destination");
             
-            //ban cu~
-//            // Convert datetime-local string to Date format YYYY-MM-DD
-//            String entryTimeStr = request.getParameter("entryTime").split("T")[0];
-//            String startingTimeStr = request.getParameter("startingTime").split("T")[0];
-//            String landingTimeStr = request.getParameter("landingTime").split("T")[0];
-//
-//            Date entryTime = Date.valueOf(entryTimeStr);
-//            Date startingTime = Date.valueOf(startingTimeStr);
-//            Date landingTime = Date.valueOf(landingTimeStr);
-
             Flight f = new Flight();
             f.setId(id);
             f.setName(name);
@@ -73,14 +63,25 @@ public class UpdateFlightServlet extends HttpServlet {
             f.setStartingTime(LocalDateTime.parse(startingTimeStr));
             f.setLandingTime(LocalDateTime.parse(landingTimeStr));
 
+            validateFlight(f);
+            
             FlightDAO dao = new FlightDAO();
-            dao.updateFlight(f);
+            dao.update(f);
 
             response.sendRedirect("list-flight");
         } catch (Exception ex) {
             Logger.getLogger(UpdateFlightServlet.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("error", "Failed to update flight: " + ex.getMessage());
             request.getRequestDispatcher("flight-update.jsp").forward(request, response);
+        }
+    }
+    
+    private void validateFlight(Flight f) throws Exception{
+        if(f.getStartingTime().isBefore(f.getEntryTime())){
+            throw new Exception("Starting time must be after entry time");
+        }
+        if(f.getLandingTime().isBefore(f.getStartingTime())){
+            throw new Exception("Landing time must be after starting time");
         }
     }
 }

@@ -38,10 +38,6 @@
                             <h4>Basic Information</h4>
                             <table class="table table-borderless">
                                 <tr>
-                                    <th>Flight ID:</th>
-                                    <td>${flight.getId()}</td>
-                                </tr>
-                                <tr>
                                     <th>Flight Name:</th>
                                     <td>${flight.getName()}</td>
                                 </tr>

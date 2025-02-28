@@ -14,7 +14,7 @@
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-        <link rel="icon" type="image/png" href="assets/images/logo.png"> 
+        <link rel="icon" type="image/png" href="img/logo.jpg"> 
         <style>
             body {
                 background: linear-gradient(to bottom, #f0f7ff 0%, #ffffff 100%);
@@ -131,13 +131,13 @@
                 color: #6b7280;
             }
             .date-display {
-                font-size: 1.2rem;
+                font-size: 2rem;
                 font-weight: bold;
                 color: #333;
             }
 
             .time-display {
-                font-size: 1rem;
+                font-size: 1.7rem;
                 color: #2563eb;
                 margin-top: 3px;
             }
@@ -158,7 +158,7 @@
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
-                        <img src="/api/placeholder/40/40" alt="Logo" class="me-2" style="height: 40px;">
+                        <img src="img/logo.jpg" alt="Logo" class="me-2" style="height: 40px;">
                         <h2 class="mb-0">Flight Management</h2>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -192,15 +192,15 @@
                     <div class="btn-group">
                         <a href="filter-flights?priceRange=cheapest" class="btn btn-outline-primary">
                             Cheapest
-                            <small class="d-block">Under ₹200</small>
+                            <small class="d-block">Under 200.000 VND</small>
                         </a>
                         <a href="filter-flights?priceRange=best" class="btn btn-outline-primary">
                             Best
-                            <small class="d-block">₹200 - ₹1M</small>
+                            <small class="d-block">200.000 - 1.000.000 VND</small>
                         </a>
                         <a href="filter-flights?priceRange=quickest" class="btn btn-outline-primary">
                             Quickest
-                            <small class="d-block">Above ₹1M</small>
+                            <small class="d-block">Above 1.000.000 VND</small>
                         </a>
                     </div>
                 </div>
@@ -214,14 +214,10 @@
                             <div>
                                 <h5 class="card-title">${flight.getName()}</h5>
                             </div>
-                            <%--div class="text-end" name="tID">
-                                <div class="price-display">120.00vnd</div>
-                                <small class="text-muted">Economy</small>
-                            </div--%>
                             <div class="text-end">
                                 <div class="price-display">
                                     <c:set var="ticket" value="${ticketMap[flight.getId()]}" />
-                                    <fmt:formatNumber value="${ticket.price}" type="currency" currencySymbol="KVN₫" maxFractionDigits="0"/>
+                                    <fmt:formatNumber value="${ticket.price}" type="currency" currencySymbol="" maxFractionDigits="0"/> VN₫
                                 </div>
                                 <small class="text-muted">${ticket.type}</small>
                             </div>

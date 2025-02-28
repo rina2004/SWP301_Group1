@@ -39,11 +39,11 @@
                                 <input type="text" class="form-control" name="name" 
                                        value="${flight.name}" required>
                             </div>
-                            <div class="col-md-6">
+                            <%--div class="col-md-6">
                                 <label class="form-label">Flight Code</label>
                                 <input type="text" class="form-control" name="code" 
                                        value="${flight.code}" required>
-                            </div>
+                            </div--%>
                         </div>
 
                         <div class="row mb-3">

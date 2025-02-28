@@ -7,7 +7,6 @@ package controller;
 import dal.AirplaneDAO;
 import dal.FlightDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +26,6 @@ public class AddFlightServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Load airplane --> dropdown
         AirplaneDAO airplaneDao = new AirplaneDAO();
         List<Airplane> list = airplaneDao.list();
         request.setAttribute("airplanes", list);
@@ -43,15 +41,13 @@ public class AddFlightServlet extends HttpServlet {
             Flight f = new Flight();
             f.setId(generateFlightId());
             f.setName(request.getParameter("name"));
-            f.setCode(request.getParameter("code"));
+//            f.setCode(request.getParameter("code"));
+            f.setCode(generateFlightCode(request.getParameter("name")).substring(9));
+
             f.setAirplaneId(request.getParameter("airplaneId"));
             f.setDeparture(request.getParameter("departure"));
             f.setDestination(request.getParameter("destination"));
 
-//            // Parse và set timestamps
-//            f.setEntryTime(Date.valueOf(request.getParameter("entryTime").replace("T", " ")));
-//            f.setStartingTime(Date.valueOf(request.getParameter("startingTime").replace("T", " ")));
-//            f.setLandingTime(Date.valueOf(request.getParameter("landingTime").replace("T", " ")));
             f.setEntryTime(LocalDateTime.parse(request.getParameter("entryTime")));
             f.setStartingTime(LocalDateTime.parse(request.getParameter("startingTime")));
             f.setLandingTime(LocalDateTime.parse(request.getParameter("landingTime")));
@@ -59,9 +55,8 @@ public class AddFlightServlet extends HttpServlet {
             validateFlight(f);
 
             FlightDAO dao = new FlightDAO();
-            dao.insertFlight(f);
+            dao.insert(f);
 
-//            request.getSession().setAttribute("successMessage", "Flight added successfully!");
             response.sendRedirect("list-flight");
 
         } catch (Exception e) {
@@ -73,6 +68,10 @@ public class AddFlightServlet extends HttpServlet {
     private String generateFlightId() {
         // Generate a unique flight ID (implement your logic)
         return "F" + System.currentTimeMillis() % 10000;
+    }
+    
+    private String generateFlightCode(String s) {
+        return "FL" + s;
     }
 
     private void validateFlight(Flight flight) throws Exception {

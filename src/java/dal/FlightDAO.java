@@ -17,7 +17,7 @@ import model.Flight;
  */
 public class FlightDAO extends DBContext{
 
-    public ArrayList<Flight> getAllFlight() {
+    public ArrayList<Flight> list() {
         ArrayList<Flight> list = new ArrayList<>();
         String sql = "SELECT * FROM swp301.flight";
         PreparedStatement stm = null;
@@ -144,7 +144,7 @@ public class FlightDAO extends DBContext{
         return null;
     }
 
-    public void insertFlight(Flight flight) throws Exception {
+    public void insert(Flight flight) throws Exception {
         String sql = "INSERT INTO Flight VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stm = null;
         try {
@@ -176,7 +176,7 @@ public class FlightDAO extends DBContext{
         }
     }
 
-    public void updateFlight(Flight flight) throws Exception {
+    public void update(Flight flight) throws Exception {
         String sql = "UPDATE Flight SET departure=?, "
                 + "destination=?, entryTime=?, startingTime=?, landingTime=? WHERE id=?";
         PreparedStatement stm = null;
