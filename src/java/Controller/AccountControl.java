@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -54,6 +55,7 @@ public class AccountControl extends HttpServlet {
         List<Account> listA = dao.getAllAccounts();
         String sortOrder = request.getParameter("sortOrder");// Lấy tham số sắp xếp từ URL
         String roleFilter = request.getParameter("role"); // Lấy giá trị role từ request
+        String pageStr = request.getParameter("page");
 
         // Sắp xếp danh sách theo RoleID
         if ("asc".equals(sortOrder)) {
@@ -62,12 +64,16 @@ public class AccountControl extends HttpServlet {
             listA.sort(Comparator.comparingInt(Account::getRoleID).reversed()); // Giảm dần
         }
 
+        //Lọc tài khoản theo roleID
         if (roleFilter != null && !roleFilter.isEmpty()) {
             int roleID = -1;
             switch (roleFilter) {
-                case "Staff" -> roleID = 2;
-                case "Customer" -> roleID = 3;                
-                case "AirTrafficControl" -> roleID = 4;
+                case "Staff" ->
+                    roleID = 2;
+                case "Customer" ->
+                    roleID = 3;
+                case "AirTrafficControl" ->
+                    roleID = 4;
             }
             if (listA != null) {
                 Iterator<Account> iterator = listA.iterator();
@@ -80,7 +86,33 @@ public class AccountControl extends HttpServlet {
 
         }
 
-        request.setAttribute("listA", listA);
+        // Phân trang
+        int recordsPerPage = 5; // Số tài khoản mỗi trang
+        int totalAccounts = listA.size();
+        int totalPages = (int) Math.ceil((double) totalAccounts / recordsPerPage);
+
+        int page = 1; // Mặc định trang đầu tiên
+        if (pageStr != null) {
+            try {
+                page = Integer.parseInt(pageStr);
+                if (page < 1) {
+                    page = 1;
+                }
+                if (page > totalPages) {
+                    page = totalPages;
+                }
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
+        }
+
+        int startIndex = (page - 1) * recordsPerPage;
+        int endIndex = Math.min(startIndex + recordsPerPage, totalAccounts);
+        List<Account> paginatedList = listA.subList(startIndex, endIndex);
+        request.setAttribute("listA", paginatedList);
+
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("view/Manageraccount.jsp").forward(request, response);
     }
 
