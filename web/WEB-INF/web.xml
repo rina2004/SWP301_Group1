@@ -16,6 +16,10 @@
         <servlet-name>LoadAccountControl</servlet-name>
         <servlet-class>Controller.LoadAccountControl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProfileAccountControl</servlet-name>
+        <servlet-class>Controller.ProfileAccountControl</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AccountControl</servlet-name>
         <url-pattern>/acc</url-pattern>
@@ -32,5 +36,8 @@
         <servlet-name>LoadAccountControl</servlet-name>
         <url-pattern>/loadacc</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>ProfileAccountControl</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
 </web-app>

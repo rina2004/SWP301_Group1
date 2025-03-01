@@ -21,10 +21,7 @@ public class AccountDAO extends DBContext {
     // Lấy tất cả tài khoản (trừ Admin)
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
-        String sql = "SELECT a.id, a.username, a.password, a.status, aur.roleID, aur.entityID "
-                + "FROM Account a "
-                + "LEFT JOIN AccountUserRole aur ON a.id = aur.accountID "
-                + "WHERE NOT EXISTS (SELECT 1 FROM AccountUserRole aur2 WHERE aur2.accountID = a.id AND aur2.roleID = 1)";
+        String sql = "SELECT a.*, aur.entityID, aur.roleID FROM Account a LEFT JOIN AccountUserRole aur ON a.id = aur.accountID";
 
         try (PreparedStatement st = connection.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
@@ -33,6 +30,12 @@ public class AccountDAO extends DBContext {
                         rs.getString("username"),
                         rs.getString("password"),
                         rs.getBoolean("status"),
+                        rs.getString("citizenID"),
+                        rs.getString("name"),
+                        rs.getDate("dob"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        rs.getString("email"),
                         rs.getInt("entityID"),
                         rs.getInt("roleID")
                 );
@@ -59,10 +62,7 @@ public class AccountDAO extends DBContext {
 
     // Lấy tài khoản theo ID (bao gồm role)
     public Account getUserByID(String id) {
-        String sql = "SELECT a.id, a.username, a.password, a.status, aur.roleID, aur.entityID "
-                + "FROM Account a "
-                + "LEFT JOIN AccountUserRole aur ON a.id = aur.accountID "
-                + "WHERE a.id = ?";
+        String sql = "SELECT a.*, aur.entityID, aur.roleID FROM Account a LEFT JOIN AccountUserRole aur ON a.id = aur.accountID WHERE a.id = ?";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, id);
@@ -73,8 +73,14 @@ public class AccountDAO extends DBContext {
                             rs.getString("username"),
                             rs.getString("password"),
                             rs.getBoolean("status"),
+                            rs.getString("citizenID"),
+                            rs.getString("name"),
+                            rs.getDate("dob"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
+                            rs.getString("email"),
                             rs.getInt("entityID"),
-                            rs.getInt("roleID") // Chỉ lấy một role
+                            rs.getInt("roleID")
                     );
                 }
             }
@@ -131,6 +137,5 @@ public class AccountDAO extends DBContext {
         }
         return false;
     }
-
 
 }
