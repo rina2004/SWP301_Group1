@@ -138,4 +138,37 @@ public class AccountDAO extends DBContext {
         return false;
     }
 
+    public Account getAccountByUsername(String username) {
+        String sql = "SELECT a.*, aur.entityID, aur.roleID FROM Account a "
+                + "LEFT JOIN AccountUserRole aur ON a.id = aur.accountID "
+                + "WHERE a.username = ?";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, username);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return new Account(
+                            rs.getString("id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getBoolean("status"),
+                            rs.getString("citizenID"),
+                            rs.getString("name"),
+                            rs.getDate("dob"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
+                            rs.getString("email"),
+                            rs.getInt("entityID"),
+                            rs.getInt("roleID")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getAccountByUsername: " + e);
+        }
+        return null;
+    }
+    
+    
+
 }
