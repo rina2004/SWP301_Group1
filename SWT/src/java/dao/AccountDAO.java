@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
+import model.Account;
 /**
  *
  * @author tungn
@@ -75,7 +76,7 @@ public class AccountDAO extends DBContext{
         return false;
     }
 
-    public void register(String username, String password, String status, String name, Date dob, String phone, String address, String email) {
+    public void register(String username, String password, String name, Date dob, String phone, String address, String email) {
         PreparedStatement stm;
         ResultSet rs;
 
@@ -104,5 +105,11 @@ public class AccountDAO extends DBContext{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    public static void main(String[] args) {
+        Account acc = new Account();
+        
+        
     }
 }

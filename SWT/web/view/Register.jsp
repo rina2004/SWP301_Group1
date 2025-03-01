@@ -10,7 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Register</title>
-         <style>
+        <style>
             * {
                 margin: 0;
                 padding: 0;
@@ -24,13 +24,13 @@
                 height: 100vh;
                 width: 100vw;
                 display: flex;
-                justify-content: center; 
-                align-items: center; 
-                overflow: hidden; 
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
             }
 
             form {
-                background: rgba(255, 255, 255, 0.2); 
+                background: rgba(255, 255, 255, 0.2);
                 padding: 20px;
                 border-radius: 10px;
                 backdrop-filter: blur(5px);
@@ -66,24 +66,27 @@
         </style>
     </head>
     <body>
-        <form action="../register" method="post">
+        <form action="<%= request.getContextPath() %>/register" method="post">
             <div>
                 <p>Username</p>
                 <input type="text" name="username" required="" value="<%= session.getAttribute("username") != null ? session.getAttribute("username") : "" %>" placeholder="Enter your username">
+                <p>${errorUsername}</p>
                 <p>Password</p>
                 <input type="password" name="pass" required="" value="<%= session.getAttribute("pass") != null ? session.getAttribute("pass") : "" %>" placeholder="Enter your password">
                 <p>Confirm Password</p>
                 <input type="password" name="pass2" required="" value="<%= session.getAttribute("pass2") != null ? session.getAttribute("pass2") : "" %>" placeholder="Confirm Password">
+                <p>${errorPassword}</p>
                 <p>Full Name</p>
                 <input type="text" name="name" required="" value="<%= session.getAttribute("name") != null ? session.getAttribute("name") : "" %>">
                 <p>Date of Birth</p>
-                <input type="date" name="dob" required="">
+                <input type="date" name="dob" value="<%= session.getAttribute("dob") != null ? session.getAttribute("dob") : "" %>"required>
                 <p>Phone</p>
                 <input type="text" name="phone" required="" value="<%= session.getAttribute("phone") != null ? session.getAttribute("phone") : "" %>">
                 <p>Address</p>
                 <input type="text" name="address" required="" value="<%= session.getAttribute("address") != null ? session.getAttribute("address") : "" %>">
                 <p>Email</p>
-                <input type="text" name="email" required="" value="<%= session.getAttribute("email") != null ? session.getAttribute("email") : ""%>"><br><br>
+                <input type="text" name="email" required="" value="<%= session.getAttribute("email") != null ? session.getAttribute("email") : ""%>">
+                <p>${errorEmail}</p><br><br>
                 <input type="submit" value="Register">
                 <p>If you have an account? <a href="Login.jsp">Login here</a></p>
             </div>

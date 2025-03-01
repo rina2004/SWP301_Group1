@@ -23,7 +23,7 @@ public class JavaMail {
 
         Properties pop = new Properties();
         pop.put("mail.smtp.host", "smtp.gmail.com");
-        pop.put("mail.stmp.port", "587");
+        pop.put("mail.smtp.port", "587");
         pop.put("mail.smtp.auth", "true");
         pop.put("mail.smtp.starttls.enable", "true");
 
@@ -58,10 +58,5 @@ public class JavaMail {
             otp.append(OTP_CHARACTER.charAt(random.nextInt(OTP_CHARACTER.length())));
         }
         return otp.toString();
-    }
-    
-    public static void main(String[] args) {
-        String a = createOTP();
-        System.out.println(a);
     }
 }
