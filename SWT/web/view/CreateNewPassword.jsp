@@ -13,7 +13,7 @@
     </head>
     <body>
         <form action="<%= request.getContextPath() %>/createpassword" method="post">
-            <input type="hidden" name="email" value="">
+            <input type="hidden" name="email" value="<%= session.getAttribute("email") != null ? session.getAttribute("email") : ""%>">
             <p>New Password</p>
             <input type="text" name="pass" required>
             <p>Confirm Password</p>

@@ -78,7 +78,7 @@
         </style>
     </head>
     <body>
-        <form action="" method="post">
+        <form action="<%= request.getContextPath() %>/login" method="post">
             <div class="all">
                 <div class="left">
                     <img alt="logo" src="img/logo1.jpg">
@@ -92,6 +92,7 @@
                     <p>Password</p>
                     <input type="password" name="password" required="" placeholder="Enter your password"><br>
                     <a href="ResetPassword.jsp">Forgot Password</a>
+                    <p>${error}</p>
                     <input type="submit" value="Login">
                     <p>${error}</p>
                 </div>

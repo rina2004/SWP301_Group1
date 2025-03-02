@@ -1,6 +1,6 @@
 <%-- 
-    Document   : OTP
-    Created on : Feb 28, 2025, 2:34:35 PM
+    Document   : OTPResetPassword
+    Created on : Mar 1, 2025, 11:46:40 PM
     Author     : tungn
 --%>
 
@@ -9,7 +9,6 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Xác nhận Email</title>
         <style>
             * {
                 box-sizing: border-box;
@@ -131,7 +130,7 @@
         </style>
     </head>
     <body>
-        <form id="otpForm" action="<%= request.getContextPath() %>/confirm" method="post" onsubmit="updateHiddenOtp()">
+        <form id="otpForm" action="<%= request.getContextPath() %>/checkotp" method="post" onsubmit="updateHiddenOtp()">
             <p>Email</p>
             <input id="mail" type="text" name="email" value="<%=session.getAttribute("email") != null ? session.getAttribute("email") : "" %>" readonly>
             <p>Nhập mã OTP</p>
@@ -146,9 +145,9 @@
             </div>
             <br>
             <input type="hidden" id="otp" name="otp"> 
-            <a href="<%= request.getContextPath() %>/resend?frompage=view/OTP.jsp">Gửi lại mã OTP</a>
+            <a href="<%= request.getContextPath() %>/resend?frompage=view/OTPResetPassword.jsp">Gửi lại mã OTP</a>
             <button type="submit">Xác nhận</button><br>
-            <a href="Register.jsp">Quay lại</a>
+            <a href="ResetPassword.jsp">Quay lại</a>
         </form>
 
         <script>

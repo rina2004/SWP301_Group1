@@ -3,12 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Code/SWP301_Group1/SWT/src/java/controller/Login.java</file>
             <file>file:/D:/Code/SWP301_Group1/SWT/src/java/model/Account.java</file>
+            <file>file:/D:/Code/SWP301_Group1/SWT/src/java/controller/CreateNewPassword.java</file>
             <file>file:/D:/Code/SWP301_Group1/SWT/src/java/dao/AccountDAO.java</file>
+            <file>file:/D:/Code/SWP301_Group1/SWT/src/java/controller/ChangePassword.java</file>
             <file>file:/D:/Code/SWP301_Group1/SWT/src/java/controller/ConfirmEmail.java</file>
-            <file>file:/D:/Code/SWP301_Group1/SWT/web/view/Login.jsp</file>
-            <file>file:/D:/Code/SWP301_Group1/SWT/src/java/controller/Register.java</file>
-            <file>file:/D:/Code/SWP301_Group1/SWT/web/view/OTP.jsp</file>
+            <file>file:/D:/Code/SWP301_Group1/SWT/web/view/ChangePassword.jsp</file>
         </group>
     </open-files>
 </project-private>

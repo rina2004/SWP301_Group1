@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author tungn
  */
-public class ResendOTP extends HttpServlet {
+public class Logout extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,10 +34,10 @@ public class ResendOTP extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ResendOTP</title>");  
+            out.println("<title>Servlet Logout</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ResendOTP at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet Logout at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,14 +55,9 @@ public class ResendOTP extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String frompage = request.getParameter("frompage");
-        String email = (String) session.getAttribute("email");
-        String otp = JavaMail.createOTP();
-        JavaMail.sendOTP(email, otp);
-        session.setAttribute("otp", otp);
-        session.setAttribute("timeOtp", System.currentTimeMillis() + 2 * 60 * 1000);
-        response.sendRedirect(frompage);
-        
+        session.getAttribute("acc");
+        session.invalidate();
+        response.sendRedirect("view/Login.jsp");
     } 
 
     /** 

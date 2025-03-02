@@ -5,12 +5,14 @@
 
 package controller;
 
+import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -66,6 +68,8 @@ public class CreateNewPassword extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
         String pass = request.getParameter("pass");
         String pass2 = request.getParameter("pass2");
         
@@ -86,7 +90,10 @@ public class CreateNewPassword extends HttpServlet {
             return;
         }
         
-        
+        AccountDAO dao = new AccountDAO();
+        dao.updatePasswordByEmail(email, pass);
+        session.invalidate();
+        response.sendRedirect("view/Login.jsp");
     }
 
     /** 

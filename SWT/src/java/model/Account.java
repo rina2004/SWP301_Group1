@@ -18,6 +18,8 @@ public class Account {
     private String status;
     private String citizenID;
     private String name;
+    private int roleID;
+    private int entityID;
     private Date dob;
     private String phone;
     private String address;
@@ -26,7 +28,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(String id, String username, String password, String role, String status, String citizenID, String name, Date dob, String phone, String address, String email) {
+    public Account(String id, String username, String password, String role, String status, String citizenID, String name, int roleID, int entityID, Date dob, String phone, String address, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -34,6 +36,8 @@ public class Account {
         this.status = status;
         this.citizenID = citizenID;
         this.name = name;
+        this.roleID = roleID;
+        this.entityID = entityID;
         this.dob = dob;
         this.phone = phone;
         this.address = address;
@@ -96,6 +100,22 @@ public class Account {
         this.name = name;
     }
 
+    public int getRoleID() {
+        return roleID;
+    }
+
+    public void setRoleID(int roleID) {
+        this.roleID = roleID;
+    }
+
+    public int getEntityID() {
+        return entityID;
+    }
+
+    public void setEntityID(int entityID) {
+        this.entityID = entityID;
+    }
+
     public Date getDob() {
         return dob;
     }
@@ -130,8 +150,9 @@ public class Account {
 
     @Override
     public String toString() {
-        return "Account{" + "id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + ", status=" + status + ", citizenID=" + citizenID + ", name=" + name + ", dob=" + dob + ", phone=" + phone + ", address=" + address + ", email=" + email + '}';
+        return "Account{" + "id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + ", status=" + status + ", citizenID=" + citizenID + ", name=" + name + ", roleID=" + roleID + ", entityID=" + entityID + ", dob=" + dob + ", phone=" + phone + ", address=" + address + ", email=" + email + '}';
     }
+
     
     
 }

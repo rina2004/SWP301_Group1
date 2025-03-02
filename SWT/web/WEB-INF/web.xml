@@ -24,6 +24,18 @@
         <servlet-name>CreateNewPassword</servlet-name>
         <servlet-class>controller.CreateNewPassword</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CheckOTP2</servlet-name>
+        <servlet-class>controller.CheckOTP2</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>controller.Login</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>controller.Logout</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Register</servlet-name>
         <url-pattern>/register</url-pattern>
@@ -47,5 +59,17 @@
     <servlet-mapping>
         <servlet-name>CreateNewPassword</servlet-name>
         <url-pattern>/createpassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckOTP2</servlet-name>
+        <url-pattern>/checkotp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 </web-app>

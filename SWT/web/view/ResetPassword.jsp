@@ -15,6 +15,7 @@
         <form action="<%= request.getContextPath() %>/resetpassword" method="post">
             <p>Enter Email</p>
             <input type="text" name="email" required><br><br>
+            <p>${error}</p>
             <input type="submit" value="Continue">
         </form>
     </body>

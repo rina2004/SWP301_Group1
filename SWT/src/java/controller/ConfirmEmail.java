@@ -81,7 +81,6 @@ public class ConfirmEmail extends HttpServlet {
         String otp = request.getParameter("otp");
         String otpStore = (String) session.getAttribute("otp");
 
-
         if (otp == null || !otp.equals(otpStore)) {
             request.setAttribute("otpInvalid", "Mã OTP không hợp lệ, vui lòng thử lại!!!");
             request.getRequestDispatcher("view/OTP.jsp").forward(request, response);
@@ -91,7 +90,7 @@ public class ConfirmEmail extends HttpServlet {
         session.removeAttribute("otp");
         session.removeAttribute("timeOtp");
 
-        String username = (String) request.getAttribute("username");
+        String username = (String) session.getAttribute("username");
         String password = (String) session.getAttribute("pass");
         String fullname = (String) session.getAttribute("name");
         String email = (String) session.getAttribute("email");
@@ -99,21 +98,29 @@ public class ConfirmEmail extends HttpServlet {
         String dobString = (String) session.getAttribute("dob");
         String address = (String) session.getAttribute("address");
 
+        if (username == null || password == null || fullname == null || email == null) {
+            request.setAttribute("error", "Dữ liệu đăng ký bị thiếu, vui lòng thử lại!");
+            request.getRequestDispatcher("view/OTP.jsp").forward(request, response);
+            return;
+        }
+
         AccountDAO dao = new AccountDAO();
 
-        if (dobString != null && !dobString.isEmpty()) {
-            try {
+        try {
+            java.sql.Date dob = null;
+            if (dobString != null && !dobString.isEmpty()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 java.util.Date parsedDate = sdf.parse(dobString);
-                java.sql.Date dob = new java.sql.Date(parsedDate.getTime());
-
-                dao.register(username, password, fullname, dob, phone, address, email);
-                response.sendRedirect("view/Login.jsp");
-            } catch (ParseException e) {
-                e.printStackTrace();
-                request.setAttribute("errorDob", "Ngày sinh không hợp lệ!");
-                request.getRequestDispatcher("view/OTP.jsp").forward(request, response);
+                dob = new java.sql.Date(parsedDate.getTime());
             }
+            dao.register(username, password, fullname, dob, phone, address, email);
+            session.invalidate();
+            response.sendRedirect("view/Login.jsp");
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            request.setAttribute("errorDob", "Ngày sinh không hợp lệ!");
+            request.getRequestDispatcher("view/OTP.jsp").forward(request, response);
         }
     }
 
