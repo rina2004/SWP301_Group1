@@ -42,6 +42,10 @@ public class Account {
         this.roleID = roleID;
     }
 
+    public Account(String username, String password, String name, String citizenID, java.sql.Date dateDob, String phone, String address, String email) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public String getId() {
         return id;
     }

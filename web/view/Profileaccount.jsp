@@ -35,7 +35,7 @@
                         <div class="card mb-4">
                             <div class="card-header">Account Details</div>
                             <div class="card-body">
-                                <form action="updateProfile" method="POST">
+                                <form>
                                     <div class="row gx-3 mb-3">
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputUsername">Username</label>
@@ -43,40 +43,40 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputPassword">Password</label>
-                                            <input class="form-control" id="inputPassword" type="text" value="${account.password}">
+                                            <input class="form-control" id="inputPassword" type="text" value="${account.password}" readonly>
                                         </div>
                                     </div>
                                     <div class="row gx-3 mb-3">
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputName">Full Name</label>
-                                            <input class="form-control" id="inputName" type="text" value="${account.name}">
+                                            <input class="form-control" id="inputName" type="text" value="${account.name}" readonly>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputCitizenID">Citizen ID</label>
-                                            <input class="form-control" id="inputCitizenID" type="text" value="${account.citizenID}">
+                                            <input class="form-control" id="inputCitizenID" type="text" value="${account.citizenID}" readonly>
                                         </div>
                                     </div>
                                     <div class="row gx-3 mb-3">
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputDob">Date of Birth</label>
                                             <input class="form-control" id="inputDob" name="dob" type="date"
-                                                   value="<fmt:formatDate value='${account.dob}' pattern='yyyy-MM-dd'/>">
+                                                   value="<fmt:formatDate value='${account.dob}' pattern='yyyy-MM-dd'/>" readonly>
                                         </div>
 
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputPhone">Phone</label>
-                                            <input class="form-control" id="inputPhone" type="text" value="${account.phone}">
+                                            <input class="form-control" id="inputPhone" type="text" value="${account.phone}" readonly>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputAddress">Address</label>
-                                        <input class="form-control" id="inputAddress" type="text" value="${account.address}">
+                                        <input class="form-control" id="inputAddress" type="text" value="${account.address}" readonly>
                                     </div>
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputEmail">Email</label>
-                                        <input class="form-control" id="inputEmail" type="email" value="${account.email}">
+                                        <input class="form-control" id="inputEmail" type="email" value="${account.email}" readonly>
                                     </div>
-                                    <button class="btn btn-primary" type="button">Save changes</button>
+                                     <a href="view/EditProfile.jsp" class="btn btn-primary">Edit Profile</a>
                                 </form>
                             </div>
                         </div>
@@ -88,6 +88,8 @@
                     No account information found.
                 </div>
             </c:if>
+            
+            
         </div>
     </body>
 </html>
