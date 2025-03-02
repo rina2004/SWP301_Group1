@@ -58,7 +58,7 @@
                                     </div>
 
                                     <button class="btn btn-success" type="submit">Save Changes</button>
-                                    <a href="Profileaccount.jsp" class="btn btn-secondary">Cancel</a>
+                                    <a href="profile" class="btn btn-secondary">Cancel</a>
                                 </form>
                             </div>
                         </div>

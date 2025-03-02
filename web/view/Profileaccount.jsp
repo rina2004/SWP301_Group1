@@ -76,7 +76,7 @@
                                         <label class="small mb-1" for="inputEmail">Email</label>
                                         <input class="form-control" id="inputEmail" type="email" value="${account.email}" readonly>
                                     </div>
-                                    <a href="view/EditProfile.jsp" class="btn btn-primary">Edit Profile</a>
+                                    <a href="updateProfile" class="btn btn-primary">Edit Profile</a>
                                 </form>
                             </div>
                         </div>

@@ -170,36 +170,52 @@ public class AccountDAO extends DBContext {
     }
 
     public Account login(String username, String password) {
+        PreparedStatement stm;
+        ResultSet rs;
+
         String sql = "SELECT * FROM Account WHERE username = ? AND password = ?";
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        try {
+            stm = connection.prepareStatement(sql);
             stm.setString(1, username);
             stm.setString(2, password);
-            try (ResultSet rs = stm.executeQuery()) {
-                if (rs.next()) {
-                    if (!rs.getBoolean("status")) {
-                        return null; // Nếu tài khoản bị vô hiệu hóa, không cho đăng nhập
-                    }
+            rs = stm.executeQuery();
 
-                    return new Account(
-                            rs.getString("id"),
-                            rs.getString("username"),
-                            rs.getString("password"),
-                            rs.getBoolean("status"),
-                            rs.getString("citizenID"),
-                            rs.getString("name"),
-                            rs.getDate("dob"),
-                            rs.getString("phone"),
-                            rs.getString("address"),
-                            rs.getString("email"),
-                            0, // entityID nếu không cần thiết có thể bỏ qua
-                            0 // roleID nếu không cần thiết có thể bỏ qua
-                    );
+            if (rs.next()) {
+                boolean status = rs.getBoolean("status"); // Lấy giá trị status từ DB
+
+                if (!status) { // Nếu status = false (0), không cho phép đăng nhập
+                    return null;
                 }
+
+                Account acc = new Account();
+                acc.setUsername(rs.getString("username"));
+                acc.setPassword(rs.getString("password"));
+                acc.setStatus(status); // Lưu status vào đối tượng Account
+
+                return acc;
             }
         } catch (SQLException e) {
-            System.out.println("Error in login: " + e);
+            System.out.println(e);
         }
         return null;
     }
+    
+    public boolean updateProfile(Account acc) {
+        String sql = "UPDATE Account SET password=?, name=?, citizenID=?, dob=?, phone=?, address=?, email=? WHERE username=?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, acc.getPassword());
+            stm.setString(2, acc.getName());
+            stm.setString(3, acc.getCitizenID());
+            stm.setDate(4, acc.getDob() != null ? new java.sql.Date(acc.getDob().getTime()) : null);
+            stm.setString(5, acc.getPhone());
+            stm.setString(6, acc.getAddress());
+            stm.setString(7, acc.getEmail());
+            stm.setString(8, acc.getUsername());
 
+            return stm.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import dal.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,7 +61,18 @@ public class UpdateProfileControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        HttpSession session = request.getSession();
+    Account acc = (Account) session.getAttribute("acc");
+
+    if (acc == null) {
+        request.setAttribute("error", "You must be logged in to edit your profile.");
+        request.getRequestDispatcher("Login.jsp").forward(request, response);
+        return;
+    }
+
+    request.setAttribute("account", acc);
+    request.getRequestDispatcher("view/EditProfile.jsp").forward(request, response);
     }
 
     /**
@@ -75,42 +87,61 @@ public class UpdateProfileControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        // Kiểm tra đăng nhập
-        HttpSession session = request.getSession();
-        Account account = (Account) session.getAttribute("account");
-        if (account == null) {
-            response.sendRedirect("view/Login.jsp");
-            return;
-        }
-
         // Lấy dữ liệu từ form
-        String username = account.getUsername(); // Giữ nguyên username
+        String username = request.getParameter("username");
         String password = request.getParameter("password");
         String name = request.getParameter("name");
         String citizenID = request.getParameter("citizenID");
-        String dob = request.getParameter("dob"); // "yyyy-MM-dd"
+        String dobStr = request.getParameter("dob");
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
         String email = request.getParameter("email");
 
-        // Chuyển đổi String -> java.sql.Date
-        java.sql.Date dateDob = null;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date utilDate = sdf.parse(dob);
-            dateDob = new java.sql.Date(utilDate.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            response.sendRedirect("editProfile.jsp?error=invalid_date");
-            return;
+        // Chuyển đổi ngày sinh (dob) từ String -> Date
+        Date dob = null;
+        if (dobStr != null && !dobStr.isEmpty()) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                dob = sdf.parse(dobStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                request.setAttribute("error", "Invalid date format!");
+                request.getRequestDispatcher("view/Profileaccount.jsp").forward(request, response);
+                return;
+            }
         }
 
-        // Cập nhật dữ liệu vào session (KHÔNG cập nhật database)
-        Account updatedAccount = new Account(username, password, name, citizenID, dateDob, phone, address, email);
-        session.setAttribute("account", updatedAccount);
+        // Lấy session
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("acc");
 
-        response.sendRedirect("profile.jsp?success=true");
+        if (acc != null && acc.getUsername().equals(username)) {
+            // Cập nhật thông tin tài khoản
+            acc.setPassword(password);
+            acc.setName(name);
+            acc.setCitizenID(citizenID);
+            acc.setDob(dob);
+            acc.setPhone(phone);
+            acc.setAddress(address);
+            acc.setEmail(email);
+
+            // Gọi DAO để cập nhật database
+            AccountDAO dao = new AccountDAO();
+            boolean updated = dao.updateProfile(acc);
+
+            if (updated) {
+                session.setAttribute("acc", acc); // Cập nhật session
+                request.setAttribute("message", "Profile updated successfully!");
+            } else {
+                request.setAttribute("error", "Failed to update profile.");
+            }
+        } else {
+            request.setAttribute("error", "Unauthorized update attempt!");
+        }
+
+         response.sendRedirect("profile");
     }
+
 
 
 /**
