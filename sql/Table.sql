@@ -253,3 +253,19 @@ CREATE TABLE `Blog` (
     FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`authorID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
 );
+
+-------------------------------------------------------------
+-------------------------------------------------------------
+-------------------------------------------------------------
+
+CREATE TABLE `ChatMessage` (
+  `id` VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+  `senderAccountID` VARCHAR(36) NOT NULL,
+  `receiverAccountID` VARCHAR(36) NOT NULL,
+  `message` TEXT NOT NULL,
+  `timestamp` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `isRead` BOOLEAN DEFAULT FALSE,
+  
+  FOREIGN KEY (`senderAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`receiverAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
+);

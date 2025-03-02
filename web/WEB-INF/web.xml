@@ -12,6 +12,14 @@
         <servlet-name>AirplaneUpdateController</servlet-name>
         <servlet-class>controller.AirplaneUpdateController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChatboxController</servlet-name>
+        <servlet-class>controller.ChatboxController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypingStatusController</servlet-name>
+        <servlet-class>controller.TypingStatusController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
         <url-pattern>/airplane/create</url-pattern>
@@ -39,6 +47,14 @@
     <servlet-mapping>
         <servlet-name>blogController</servlet-name>
         <url-pattern>/blog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChatboxController</servlet-name>
+        <url-pattern>/chatbox</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypingStatusController</servlet-name>
+        <url-pattern>/typingstatus</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
