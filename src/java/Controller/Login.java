@@ -12,15 +12,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.Date;
-import java.util.List;
 import model.Account;
 
 /**
  *
  * @author anhbu
  */
-public class ProfileAccountControl extends HttpServlet {
+public class Login extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +37,10 @@ public class ProfileAccountControl extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProfileAccountControl</title>");
+            out.println("<title>Servlet Login</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProfileAccountControl at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,29 +59,7 @@ public class ProfileAccountControl extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        HttpSession session = request.getSession();
-        AccountDAO accountDAO = new AccountDAO();  // Tạo instance của DAO
-        Account sessionAccount = (Account) session.getAttribute("acc");
-
-        if (sessionAccount == null) {
-            response.sendRedirect("view/Login.jsp");
-            return;
-        }
-
-        // Lấy dữ liệu mới nhất từ database
-        Account account = accountDAO.getAccountByUsername(sessionAccount.getUsername());
-
-        if (account == null) {
-            response.sendRedirect("view/Login.jsp");
-            return;
-        }
-
-        // Cập nhật session và chuyển đến JSP
-        session.setAttribute("acc", account);
-        request.setAttribute("account", account);
-        request.getRequestDispatcher("view/Profileaccount.jsp").forward(request, response);
-
-
+        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
     }
 
     /**
@@ -97,17 +73,40 @@ public class ProfileAccountControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        AccountDAO dao = new AccountDAO();
+        Account acc = dao.login(username, password);
+
+        if (acc == null || !acc.getUsername().equals(username) || !acc.getPassword().equals(password)) {
+            request.setAttribute("error", "Username or password not correct!!!");
+            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
+        } else if (!acc.isStatus()) { // Kiểm tra status có phải false không
+            request.setAttribute("error", "The account is not allowed to login to the system !!!");
+            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
+            return; // Cần return để tránh redirect tiếp tục
+        }
+
+        if (acc != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("acc", acc);
+            session.setMaxInactiveInterval(60 * 30);
+            response.sendRedirect("view/Home.jsp");
+
+        }
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
+        /**
+         * Returns a short description of the servlet.
+         *
+         * @return a String containing servlet description
+         */
+        @Override
+        public String getServletInfo
+        
+            () {
         return "Short description";
-    }// </editor-fold>
+        }// </editor-fold>
 
-}
+    }

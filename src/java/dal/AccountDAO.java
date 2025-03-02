@@ -168,7 +168,38 @@ public class AccountDAO extends DBContext {
         }
         return null;
     }
-    
-    
+
+    public Account login(String username, String password) {
+        String sql = "SELECT * FROM Account WHERE username = ? AND password = ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, username);
+            stm.setString(2, password);
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    if (!rs.getBoolean("status")) {
+                        return null; // Nếu tài khoản bị vô hiệu hóa, không cho đăng nhập
+                    }
+
+                    return new Account(
+                            rs.getString("id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getBoolean("status"),
+                            rs.getString("citizenID"),
+                            rs.getString("name"),
+                            rs.getDate("dob"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
+                            rs.getString("email"),
+                            0, // entityID nếu không cần thiết có thể bỏ qua
+                            0 // roleID nếu không cần thiết có thể bỏ qua
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in login: " + e);
+        }
+        return null;
+    }
 
 }
