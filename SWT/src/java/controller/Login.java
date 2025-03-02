@@ -58,7 +58,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
     }
 
     /**
@@ -80,15 +80,16 @@ public class Login extends HttpServlet {
 
         if (acc == null || !acc.getUsername().equals(username) || !acc.getPassword().equals(password)) {
             request.setAttribute("error", "Username or password not correct!!!");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
         } else if (!acc.getStatus().equals("Active")) {
             request.setAttribute("error", "The account is not allowed to login to the system !!!");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("vew/Login.jsp").forward(request, response);
         }
 
         if (acc != null) {
             HttpSession session = request.getSession();
             session.setAttribute("acc", acc);
+            session.setAttribute("username", username);
             session.setMaxInactiveInterval(60 * 30);
         }
 

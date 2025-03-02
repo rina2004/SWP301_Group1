@@ -12,13 +12,14 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <form>
+        <form action="change" method="post">
             <p>Old Password</p>
             <input type="password" name="oldpass" required="">
             <p>New Password</p>
             <input type="password" name="newpass" required=""> 
             <p>Confirm Password</p>
             <input type="password" name="confirm" required=""><br><br>
+            <p>${error}</p>
             <input type="submit" value="Update Password">
         </form>
     </body>

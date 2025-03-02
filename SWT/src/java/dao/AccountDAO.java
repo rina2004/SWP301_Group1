@@ -105,6 +105,41 @@ public class AccountDAO extends DBContext {
         return false;
     }
 
+    public void updatePasswordByUsername(String username, String password) {
+        PreparedStatement stm;
+        ResultSet rs;
+
+        String sql = "Update Account Set password = ? where username = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, password);
+            stm.setString(2, username);
+            stm.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
+    public boolean checkPassword(String username,String password){
+        PreparedStatement stm;
+        ResultSet rs;
+        String sql = "Select Count(password) where username = ? and password = ?";
+        
+        try{
+          stm = connection.prepareStatement(sql);
+          stm.setString(1, username);
+          stm.setString(2, password);
+          rs = stm.executeQuery();
+          if(rs.next() && rs.getInt(1) > 0){
+              return true;
+          }
+        }catch(SQLException e){
+            
+        }
+        return false;
+    }
+
     public void updatePasswordByEmail(String email, String password) {
         PreparedStatement stm;
         ResultSet rs;
@@ -181,11 +216,10 @@ public class AccountDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-       
+
         AccountDAO dao = new AccountDAO();
-       Account acc = dao.login("khanhnguyen", "123456");
-       
-        System.out.println(acc.toString());
+        dao.updatePasswordByUsername("khanhnguyen", "12345678");
+
 
     }
 }

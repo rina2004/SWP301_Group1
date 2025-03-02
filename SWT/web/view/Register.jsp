@@ -88,7 +88,7 @@
                 <input type="text" name="email" required="" value="<%= session.getAttribute("email") != null ? session.getAttribute("email") : ""%>">
                 <p>${errorEmail}</p><br><br>
                 <input type="submit" value="Register">
-                <p>If you have an account? <a href="Login.jsp">Login here</a></p>
+                <p>If you have an account? <a href="<%= request.getContextPath() %>/login">Login here</a></p>
             </div>
         </form>
     </body>

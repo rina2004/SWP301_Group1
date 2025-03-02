@@ -5,12 +5,14 @@
 
 package controller;
 
+import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -53,7 +55,7 @@ public class ChangePassword extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("view/ChangePassword.jsp").forward(request, response);
     } 
 
     /** 
@@ -66,7 +68,25 @@ public class ChangePassword extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+       HttpSession session = request.getSession();
+       String username = (String)session.getAttribute("username");
+       String pass = request.getParameter("oldpass");
+       String newpass = request.getParameter("newpass");
+       String confirm = request.getParameter("confirm");
+        AccountDAO acc = new AccountDAO();
+       if(pass == null || acc.checkPassword(username, pass)){
+           request.setAttribute("error", "Password not correct.");
+           request.getRequestDispatcher("view/ChangePassword.jsp").forward(request, response);
+       }else if(!newpass.matches("^[a-zA-Z0-9]{8,16}$") || !confirm.matches("^[a-zA-Z0-9]{8,16}$")){
+           request.setAttribute("error", "Password is invalid.");
+           request.getRequestDispatcher("view/ChangePassword.jsp").forward(request, response);
+       }else if(!newpass.equals(confirm)){
+           request.setAttribute("error", "Confirm password not match.");
+           request.getRequestDispatcher("view/ChangePassword.jsp").forward(request, response);
+       }else{
+           acc.updatePasswordByUsername(username, newpass);
+           response.sendRedirect("view/home.jsp");
+       }
     }
 
     /** 

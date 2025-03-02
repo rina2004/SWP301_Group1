@@ -57,7 +57,7 @@ public class ResetPassword extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("view/ResetPassword.jsp").forward(request, response);
     }
 
     /**
@@ -83,7 +83,7 @@ public class ResetPassword extends HttpServlet {
             JavaMail.sendOTP(email, otp);
             session.setAttribute("otp", otp);
             session.setAttribute("timeOtp", System.currentTimeMillis() + 2 * 60 * 1000);
-            response.sendRedirect("view/OTPResetPassword.jsp");
+            request.getRequestDispatcher("view/OTPResetPassword.jsp").forward(request, response);
         } else {
             request.setAttribute("error", "Email không tồn tại!");
             request.getRequestDispatcher("view/ResetPassword.jsp").forward(request, response);

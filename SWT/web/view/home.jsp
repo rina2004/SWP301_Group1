@@ -13,5 +13,6 @@
     </head>
     <body>
         <a href="<%= request.getContextPath() %>/logout">Log out</a>
+        <a href="<%= request.getContextPath() %>/change">Change Password</a>
     </body>
 </html>

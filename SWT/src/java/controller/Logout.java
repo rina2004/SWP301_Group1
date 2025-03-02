@@ -57,7 +57,7 @@ public class Logout extends HttpServlet {
         HttpSession session = request.getSession();
         session.getAttribute("acc");
         session.invalidate();
-        response.sendRedirect("view/Login.jsp");
+        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
     } 
 
     /** 
