@@ -4,26 +4,54 @@
  */
 package model;
 
+import java.sql.Date;
+
 /**
  *
  * @author anhbu
  */
 public class Account {
+
     private String id;
     private String username;
     private String password;
+    private String role;
+    private String status;
+    private String citizenID;
+    private String name;
     private int roleID;
-    private boolean status;
+    private int entityID;
+    private Date dob;
+    private String phone;
+    private String address;
+    private String email;
 
     public Account() {
     }
 
-    public Account(String id, String username, String password, int roleID, boolean status) {
+    public Account(String username, String password, String role, int roleID, String status) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.roleID = roleID;
+        this.status = status;
+
+    }
+
+    public Account(String id, String username, String password, String role, String status, String citizenID, String name, int roleID, int entityID, Date dob, String phone, String address, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.roleID = roleID;
+        this.role = role;
         this.status = status;
+        this.citizenID = citizenID;
+        this.name = name;
+        this.roleID = roleID;
+        this.entityID = entityID;
+        this.dob = dob;
+        this.phone = phone;
+        this.address = address;
+        this.email = email;
     }
 
     public String getId() {
@@ -50,6 +78,38 @@ public class Account {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCitizenID() {
+        return citizenID;
+    }
+
+    public void setCitizenID(String citizenID) {
+        this.citizenID = citizenID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getRoleID() {
         return roleID;
     }
@@ -58,14 +118,44 @@ public class Account {
         this.roleID = roleID;
     }
 
-    public boolean isStatus() {
-        return status;
+    public int getEntityID() {
+        return entityID;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setEntityID(int entityID) {
+        this.entityID = entityID;
     }
-    
-    
-    
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }
