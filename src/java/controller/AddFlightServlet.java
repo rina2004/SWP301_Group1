@@ -42,7 +42,7 @@ public class AddFlightServlet extends HttpServlet {
             f.setId(generateFlightId());
             f.setName(request.getParameter("name"));
 //            f.setCode(request.getParameter("code"));
-            f.setCode(generateFlightCode(request.getParameter("name")).substring(9));
+            f.setCode(generateFlightCode(request.getParameter("name")));
 
             f.setAirplaneId(request.getParameter("airplaneId"));
             f.setDeparture(request.getParameter("departure"));
@@ -69,9 +69,17 @@ public class AddFlightServlet extends HttpServlet {
         // Generate a unique flight ID (implement your logic)
         return "F" + System.currentTimeMillis() % 10000;
     }
-    
-    private String generateFlightCode(String s) {
-        return "FL" + s;
+
+    private String generateFlightCode(String flightName) {
+        // Extract numeric part from flight name
+        String numericPart = flightName.replaceAll("[^0-9]", "");
+
+        // If no numeric part found, use a default number
+        if (numericPart.isEmpty()) {
+            numericPart = String.valueOf(System.currentTimeMillis() % 1000);
+        }
+
+        return "FL" + numericPart;
     }
 
     private void validateFlight(Flight flight) throws Exception {

@@ -16,51 +16,27 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.*;
 import model.Flight;
 import model.Ticket;
-
 /**
  *
  * @author A A
  */
-public class FilterFlightServlet extends HttpServlet {
+public class SearchFlightServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String priceRange = request.getParameter("priceRange");
+        String searchTerm = request.getParameter("searchTerm");
         
         FlightDAO flightDAO = new FlightDAO();
         TicketDAO ticketDAO = new TicketDAO();
         
-        ArrayList<Flight> flights = new ArrayList<>();
+        ArrayList<Flight> flights;
         
-        // Check if we should toggle filter or apply it
-        String currentFilter = (String) request.getSession().getAttribute("currentFilter");
-        
-        if (priceRange != null && priceRange.equals(currentFilter)) {
-            // If clicking the same filter again, clear the filter
-            request.getSession().removeAttribute("currentFilter");
-            flights = flightDAO.list(); // Get all flights
-        } else if (priceRange != null) {
-            // Store current filter in session
-            request.getSession().setAttribute("currentFilter", priceRange);
-            
-            // Apply filter based on price range
-            switch (priceRange) {
-                case "cheapest":
-                    flights = flightDAO.getFlightsByPriceRange(0, 200000);
-                    break;
-                case "best":
-                    flights = flightDAO.getFlightsByPriceRange(200000, 1000000);
-                    break;
-                case "quickest":
-                    flights = flightDAO.getFlightsByPriceRange(1000000, Double.MAX_VALUE);
-                    break;
-                default:
-                    flights = flightDAO.list();
-                    break;
-            }
+        if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+            // Search for flights by name
+            flights = flightDAO.searchFlightsByName(searchTerm);
         } else {
-            // If no filter specified, get all flights
+            // If no search term provided, get all flights
             flights = flightDAO.list();
         }
         
@@ -73,7 +49,7 @@ public class FilterFlightServlet extends HttpServlet {
         
         request.setAttribute("list", flights);
         request.setAttribute("ticketMap", ticketMap);
-        request.setAttribute("activeFilter", priceRange);
+        request.setAttribute("searchTerm", searchTerm); // Store search term for re-displaying
         
         request.getRequestDispatcher("flight-list.jsp").forward(request, response);
     }

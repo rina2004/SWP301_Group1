@@ -15,7 +15,7 @@ import model.Flight;
  *
  * @author A A
  */
-public class FlightDAO extends DBContext{
+public class FlightDAO extends DBContext {
 
     public ArrayList<Flight> list() {
         ArrayList<Flight> list = new ArrayList<>();
@@ -81,6 +81,7 @@ public class FlightDAO extends DBContext{
         }
         return null;
     }
+
     public Flight getFlightByName(String name) throws Exception {
         //encoding id
         String sql = "SELECT * FROM Flight WHERE name = ?";
@@ -112,6 +113,7 @@ public class FlightDAO extends DBContext{
         }
         return null;
     }
+
     public Flight getFlightByCode(String code) throws Exception {
         //encoding id
         String sql = "SELECT * FROM Flight WHERE code = ?";
@@ -265,5 +267,45 @@ public class FlightDAO extends DBContext{
             }
         }
         return price;
+    }
+
+    public ArrayList<Flight> searchFlightsByName(String searchTerm) {
+        ArrayList<Flight> list = new ArrayList<>();
+        String sql = "SELECT * FROM swp301.flight WHERE name LIKE ? OR departure LIKE ? OR destination LIKE ?";
+        PreparedStatement stm = null;
+        try {
+            stm = connection.prepareStatement(sql);
+            String searchPattern = "%" + searchTerm + "%";
+            stm.setString(1, searchPattern);
+            stm.setString(2, searchPattern);
+            stm.setString(3, searchPattern);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new Flight(
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("code"),
+                        rs.getString("airplaneID"),
+                        rs.getString("departure"),
+                        rs.getString("destination"),
+                        rs.getTimestamp("entryTime").toLocalDateTime(),
+                        rs.getTimestamp("startingTime").toLocalDateTime(),
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getBytes("atcID")
+                ));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            try {
+                if (stm != null) {
+                    stm.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return list;
     }
 }

@@ -4,26 +4,19 @@ INSERT INTO Staff VALUES (NULL, NOW()), (NULL, NOW()), (NULL, NOW()), (NULL, NOW
 INSERT INTO AirTrafficControl VALUES (NULL, 'ABC', NOW()), (NULL, 'DEF', NOW()), (NULL, 'GHI', NOW()), (NULL, 'JKL', NOW()), (NULL, 'MNO', NOW());
 INSERT INTO airplane_status (name) VALUES 
 ('Active'), ('Maintenance'), ('Retired'), ('In Use'), ('Under Repair');
-INSERT INTO Blog_Category (name) VALUES 
-('Travel'), ('Aviation'), ('News'), ('Technology'), ('Lifestyle');
-
--- Insert into Blog
-INSERT INTO Blog (id, title, categoryID, image, description) VALUES
-('B1', 'Top 10 Travel Destinations', 1, 'travel.jpg', 'Explore the best places to visit in 2024.'),
-('B2', 'How Planes Are Maintained', 2, 'maintenance.jpg', 'A look into airplane maintenance procedures.');
 
 -- Insert into Role
-INSERT INTO Role (name, adminID) VALUES 
-('Super Admin', 'ADMIN1'), 
-('Manager', 'ADMIN2'), 
-('Operator', 'ADMIN3'), 
-('Technician', 'ADMIN4'), 
-('Support', 'ADMIN5');
+INSERT INTO Role (name) VALUES 
+('Super Admin'), 
+('Manager'), 
+('Operator'), 
+('Technician'), 
+('Support');
 
 -- Insert into Account
-INSERT INTO Account (username, password, roleID, id, citizenID, name, dob, phone, address, email, adminID) VALUES
-('admin1', 'pass123', 1, NULL, '123456789012', 'John Doe', '1990-05-15', '0987654321', '123 Street, City', 'john@example.com', 'ADMIN1'),
-('admin2', 'pass123', 2, NULL, '123456789013', 'Jane Smith', '1985-08-21', '0976543210', '456 Avenue, City', 'jane@example.com', 'ADMIN2');
+INSERT INTO Account (username, password, citizenID, name, dob, phone, address, email) VALUES
+('admin1', 'pass123', '123456789012', 'John Doe', '1990-05-15', '0987654321', '123 Street, City', 'john@example.com'),
+('admin2', 'pass123', '123456789013', 'Jane Smith', '1985-08-21', '0976543210', '456 Avenue, City', 'jane@example.com');
 
 -- Insert into Type
 INSERT INTO Type (id, Name, manufacture, length, weight, height, atcID) VALUES
@@ -60,8 +53,8 @@ INSERT INTO `Order` (id, customerID, staffID, status, time) VALUES
 
 INSERT INTO Ticket (id, staffID, orderID, flightID, seatID, type, Price, Status) 
 VALUES 
-('O1', 'S1', (SELECT id FROM `Order` ORDER BY time DESC LIMIT 1), 'F1', 'S1', 'Economy', 200.00, 'Booked'),
-('O2', 'S2', (SELECT id FROM `Order` ORDER BY time DESC LIMIT 1 OFFSET 1), 'F2', 'S2', 'Business', 500.00, 'Confirmed');
+('O1', 'S1', (SELECT id FROM `Order` ORDER BY time DESC LIMIT 1), 'F1', 'S1', 'Normal', 200000.00, 'Booked'),
+('O2', 'S2', (SELECT id FROM `Order` ORDER BY time DESC LIMIT 1 OFFSET 1), 'F2', 'S2', 'VIP', 500000.00, 'Confirmed');
 
 -- Insert into Luggage
 INSERT INTO Luggage (id, customerID, orderID, type, weight) VALUES

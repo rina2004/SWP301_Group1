@@ -50,9 +50,7 @@ CREATE TABLE `Account` (
   `dob` DATE,
   `phone` VARCHAR(10),
   `address` VARCHAR(255),
-  `email` VARCHAR(255),
-  
-  PRIMARY KEY (`id`)
+  `email` VARCHAR(255)
 );
 
 CREATE TABLE `AccountUserRole` (
@@ -196,7 +194,7 @@ CREATE TABLE `BlogPost` (
     `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('POST-', UUID())), 
     `title` VARCHAR(255) NOT NULL,
     `content` TEXT NOT NULL,
-    `authorID` VARCHAR(41) NOT NULL,
+    `authorID` VARCHAR(36) NOT NULL,
     `categoryID` INT NOT NULL,
     `published` BOOLEAN DEFAULT FALSE,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -209,7 +207,7 @@ CREATE TABLE `BlogPost` (
 CREATE TABLE `Comment` (
     `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('CMT-', UUID())),
     `postID` VARCHAR(41) NOT NULL,
-    `accountID` VARCHAR(41) NOT NULL,
+    `accountID` VARCHAR(36) NOT NULL,
     `content` TEXT NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -221,25 +219,25 @@ CREATE TABLE `Comment` (
 CREATE TABLE `PostLike` (
     `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('LIKE-', UUID())),
     `postID` VARCHAR(41) NOT NULL,
-    `accountID` VARCHAR(41) NOT NULL,
+    `accountID` VARCHAR(36) NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`accountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
 );
 
-CREATE TABLE `Tags` (
+CREATE TABLE `Tag` (
     `id` INT PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255) UNIQUE NOT NULL
 );
 
-CREATE TABLE `PostTags` (
+CREATE TABLE `PostTag` (
     `postID` VARCHAR(36) NOT NULL,
     `tagID` INT NOT NULL,
-    PRIMARY KEY (`post_id`, `tag_id`),
+    PRIMARY KEY (`postID`, `tagID`),
 
-    FOREIGN KEY (`postID`) REFERENCES `BlogPosts`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`tagID`) REFERENCES `Tags`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`tagID`) REFERENCES `Tag`(`id`) ON DELETE CASCADE
 );
 
 
@@ -249,7 +247,7 @@ CREATE TABLE `Blog` (
     `title` VARCHAR(255) NOT NULL,
     `short_description` TEXT NOT NULL,
     `thumbnail` VARCHAR(255),
-    `authorID` VARCHAR(41) NOT NULL,
+    `authorID` VARCHAR(36) NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
