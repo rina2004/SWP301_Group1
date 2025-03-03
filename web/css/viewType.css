@@ -40,6 +40,40 @@ p.message {
     margin-top: 15px;
 }
 
+.search-container {
+    margin: 15px 0px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 250px;
+    margin-right: 10px;
+}
+
+.search-button {
+    padding: 8px 15px;
+    font-size: 14px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #e0e0e0;
+}
+
+
 .create-button {
     padding: 10px 15px;
     background-color: #007bff;

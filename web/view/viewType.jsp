@@ -13,6 +13,7 @@
         <title>Type List</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/viewType.css"/>
         <script src="${pageContext.request.contextPath}/js/type.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-xxx" crossorigin="anonymous" />
     </head>
     <body>
         <div class="header">
@@ -34,6 +35,14 @@
                     <button type="button" class="cancel-button" onclick="closeDeletePanel()">Cancel</button>
                 </form>
             </div>
+        </div>
+
+        <div class="search-container">
+            <form action="search" method="GET" class="search-form">
+                <input type="text" name="searchField" placeholder="Search ..." 
+                       value="${param.searchField}" class="search-input">
+                <button type="submit" class="search-button">Search</button>
+            </form>
         </div>
 
         <table border="1">

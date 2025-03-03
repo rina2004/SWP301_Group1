@@ -1,7 +1,7 @@
 INSERT INTO Customer VALUES (NULL), (NULL), (NULL), (NULL), (NULL);
 INSERT INTO Administrator VALUES (NULL, NULL), (NULL, NULL), (NULL, NULL), (NULL, NULL), (NULL, NULL);
 INSERT INTO Staff VALUES (NULL, NOW()), (NULL, NOW()), (NULL, NOW()), (NULL, NOW()), (NULL, NOW());
-INSERT INTO AirTrafficControl VALUES (NULL, 'ABC', NOW()), (NULL, 'DEF', NOW()), (NULL, 'GHI', NOW()), (NULL, 'JKL', NOW()), (NULL, 'MNO', NOW());
+INSERT INTO AirTrafficControl VALUES (NULL, NOW()), (NULL, NOW()), (NULL, NOW()), (NULL, NOW()), (NULL, NOW());
 INSERT INTO airplane_status (name) VALUES 
 ('Active'), ('Maintenance'), ('Retired'), ('In Use'), ('Under Repair');
 INSERT INTO Blog_Category (name) VALUES 

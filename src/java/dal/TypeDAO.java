@@ -78,6 +78,30 @@ public class TypeDAO extends DBContext {
         }
     }
 
+    public ArrayList<Type> search(String searchTerm) {
+        ArrayList<Type> types = new ArrayList<>();
+        String sql = "SELECT * FROM Type WHERE id LIKE ? OR name LIKE ? OR manufacture LIKE ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, "%" + searchTerm + "%");
+            stm.setString(2, "%" + searchTerm + "%");
+            stm.setString(3, "%" + searchTerm + "%");
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Type type = new Type();
+                type.setId(rs.getString("id"));
+                type.setName(rs.getString("name"));
+                type.setManufacture(rs.getString("manufacture"));
+                type.setLength(rs.getFloat("length"));
+                type.setWeight(rs.getFloat("weight"));
+                type.setHeight(rs.getFloat("height"));
+                types.add(type);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TypeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return types;
+    }
+
     public void update(Type type) {
         String sql = """
                  UPDATE `swp301`.`type`

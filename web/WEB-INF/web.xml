@@ -36,6 +36,10 @@
         <servlet-name>TypeViewController</servlet-name>
         <servlet-class>controller.TypeViewController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TypeSearchController</servlet-name>
+        <servlet-class>controller.TypeSearchController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
         <url-pattern>/airplane/create</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>TypeViewController</servlet-name>
         <url-pattern>/type/list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeSearchController</servlet-name>
+        <url-pattern>/type/search</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
