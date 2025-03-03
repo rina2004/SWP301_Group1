@@ -8,7 +8,7 @@ package controller;
 import dal.AirTrafficControlDBContext;
 import dal.AirplaneDAO;
 import dal.AirplaneStatusDBContext;
-import dal.TypeDBContext;
+import dal.TypeDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -67,7 +67,7 @@ public class AirplaneCreateController extends HttpServlet {
         List<AirTrafficControl> atcs = atcDB.list();
         request.setAttribute("atcs", atcs);
 
-        TypeDBContext typeDB = new TypeDBContext();
+        TypeDAO typeDB = new TypeDAO();
         List<Type> types = typeDB.list();
         request.setAttribute("types", types);
 
@@ -96,7 +96,7 @@ public class AirplaneCreateController extends HttpServlet {
 
             // Handle type
             String typeId = request.getParameter("type");
-            TypeDBContext typeDB = new TypeDBContext();
+            TypeDAO typeDB = new TypeDAO();
             a.setType(typeDB.get(typeId));
 
             // Handle status
@@ -125,7 +125,7 @@ public class AirplaneCreateController extends HttpServlet {
             dao.insert(a);
             
             response.sendRedirect(request.getContextPath() + "/airplane/view");
-        } catch (Exception e) {
+        } catch (IOException | IllegalArgumentException e) {
             request.setAttribute("error", "Error adding airplane: " + e.getMessage());
             doGet(request, response);
         }

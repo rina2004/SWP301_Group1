@@ -20,6 +20,22 @@
         <servlet-name>TypingStatusController</servlet-name>
         <servlet-class>controller.TypingStatusController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TypeCreateController</servlet-name>
+        <servlet-class>controller.TypeCreateController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypeUpdateController</servlet-name>
+        <servlet-class>controller.TypeUpdateController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypeDeleteController</servlet-name>
+        <servlet-class>controller.TypeDeleteController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypeViewController</servlet-name>
+        <servlet-class>controller.TypeViewController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
         <url-pattern>/airplane/create</url-pattern>
@@ -55,6 +71,22 @@
     <servlet-mapping>
         <servlet-name>TypingStatusController</servlet-name>
         <url-pattern>/typingstatus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeCreateController</servlet-name>
+        <url-pattern>/type/create</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeUpdateController</servlet-name>
+        <url-pattern>/type/update</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeDeleteController</servlet-name>
+        <url-pattern>/type/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeViewController</servlet-name>
+        <url-pattern>/type/list</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
