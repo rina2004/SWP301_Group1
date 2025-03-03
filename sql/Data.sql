@@ -37,8 +37,8 @@ INSERT INTO Compartment (id, name, typeID, capacity) VALUES
 
 -- Insert into Flight
 INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime, atcID) VALUES
-(NULL, 'Flight 101', 'FL101', 'PL1', 'Hanoi', 'Ho Chi Minh City', '2024-03-10 08:00:00', '2024-03-10 09:00:00', '2024-03-10 11:00:00', 'ATC1'),
-(NULL, 'Flight 202', 'FL202', 'PL2', 'Da Nang', 'Singapore', '2024-04-15 10:30:00', '2024-04-15 11:30:00', '2024-04-15 14:00:00', 'ATC2');
+(NULL, 'Flight 101', 'FL101', 'PL1', 'Hanoi', 'Ho Chi Minh City', '2024-03-10 08:00:00', '2025-03-10 09:00:00', '2025-03-10 11:00:00', 'ATC1'),
+(NULL, 'Flight 202', 'FL202', 'PL2', 'Da Nang', 'Singapore', '2024-04-15 10:30:00', '2025-04-15 11:30:00', '2025-04-15 14:00:00', 'ATC2');
 
 -- Insert into Seat
 INSERT INTO Seat (id, compartmentID, available) VALUES

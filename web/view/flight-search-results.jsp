@@ -1,6 +1,6 @@
 <%-- 
-    Document   : flight-list
-    Created on : 8 Feb 2025, 18:24:09
+    Document   : flight-search-results
+    Created on : 3 Mar 2025, 09:45:09
     Author     : A A
 --%>
 
@@ -141,12 +141,12 @@
                 color: #2563eb;
                 margin-top: 3px;
             }
-            
+
             .btn-filter.active {
                 background-color: #2563eb;
                 color: white;
             }
-            
+
             .no-flights {
                 padding: 2rem;
                 text-align: center;
@@ -163,19 +163,14 @@
             </div>
             <c:remove var="successMessage" scope="session"/>
         </c:if>
-        
+
         <!-- Header Section -->
         <div class="header-section">
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
                         <img src="img/logo.jpg" alt="Logo" class="me-2" style="height: 40px;">
-                        <h2 class="mb-0">Flight Management</h2>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <a href="add-flight" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i> Add New Flight
-                        </a>
+                        <h2 class="mb-0">Flight Booking</h2>
                     </div>
                 </div>
             </div>
@@ -183,45 +178,71 @@
 
         <div class="container">
             <!-- Search Section -->
+            <!-- Search Section with Search Parameters Display -->
             <div class="search-section">
-                <form action="search-flight" method="GET">
-                    <div class="row">
-                        <div class="col">
-                            <div class="search-box">
-                                <i class="fas fa-search search-icon"></i>
-                                <input type="text" name="searchTerm" class="form-control" 
-                                       placeholder="Search by flight name, departure, or destination..." 
-                                       value="${searchTerm}">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="d-flex align-items-center">
+                            <h5 class="mb-0 me-3">Search Results</h5>
+                            <div class="badge bg-primary p-2">
+                                <i class="fas fa-map-marker-alt me-1"></i> ${departure} → ${destination}
+                            </div>
+                            <div class="badge bg-secondary p-2 ms-2">
+                                <i class="fas fa-calendar me-1"></i> ${departureDate}
                             </div>
                         </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary">Search Flight</button>
-                            <c:if test="${not empty searchTerm}">
-                                <a href="search-flight" class="btn btn-outline-secondary ms-2">
-                                    <i class="fas fa-times"></i> Clear
-                                </a>
-                            </c:if>
+                    </div>
+                </div>
+
+                <form action="search-flights" method="GET">
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-plane-departure"></i></span>
+                                <input type="text" name="departure" class="form-control" 
+                                       placeholder="From" value="${departure}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-plane-arrival"></i></span>
+                                <input type="text" name="destination" class="form-control" 
+                                       placeholder="To" value="${destination}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                <input type="date" name="departureDate" class="form-control" 
+                                       value="${departureDate}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i> Search
+                            </button>
                         </div>
                     </div>
                 </form>
-            </div> 
-            
+            </div>
+                            
+                            
             <!-- Filter Section -->
             <div class="search-section">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Filter by Price</h5>
                     <div class="btn-group">
-                        <a href="filter-flights?priceRange=cheapest" 
+                        <a href="filter-flightorder?priceRange=cheapest" 
                            class="btn btn-outline-primary ${activeFilter eq 'cheapest' ? 'active' : ''}">
                             Cheapest
                             <small class="d-block">Under 200.000 VND</small>
                         </a>
-                        <a href="filter-flights?priceRange=best" 
+                        <a href="filter-flightorder?priceRange=best" 
                            class="btn btn-outline-primary ${activeFilter eq 'best' ? 'active' : ''}">
                             Best
                             <small class="d-block">200.000 - 1.000.000 VND</small>
                         </a>
-                        <a href="filter-flights?priceRange=quickest" 
+                        <a href="filter-flightorder?priceRange=quickest" 
                            class="btn btn-outline-primary ${activeFilter eq 'quickest' ? 'active' : ''}">
                             Quickest
                             <small class="d-block">Above 1.000.000 VND</small>
@@ -229,7 +250,7 @@
                     </div>
                 </div>
             </div>
-
+                            
             <!-- Flights List -->
             <c:choose>
                 <c:when test="${empty list}">
@@ -272,13 +293,16 @@
                                     </div>
 
                                     <div class="action-buttons ms-2">
-                                        <a href="view-flight?id=${flight.getId()}" class="btn btn-light" title="View Details">
+                                        <a href="view-flightorder?id=${flight.getId()}&departure=${departure}&destination=${destination}&departureDate=${departureDate}" class="btn btn-light" title="View Details">
                                             <i class="fas fa-eye text-primary"></i>
                                         </a>
-
-                                        <a href="update-flight?id=${flight.getId()}" class="btn btn-light" title="Edit">
-                                            <i class="fas fa-edit text-warning"></i>
+                                        <a href="view-account" class="btn btn-light" title="Account Details">
+                                            <i class="fas fa-user text-primary"></i>
                                         </a>
+                                            <a href="booking-confirmation.jsp" class="btn btn-light" title="Account Details">
+                                            <i class="fas fa-user text-primary"></i>
+                                        </a>
+                                        <a ></a>
                                     </div>
                                 </div>
                             </div>

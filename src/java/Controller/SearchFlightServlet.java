@@ -36,11 +36,9 @@ public class SearchFlightServlet extends HttpServlet {
             // Search for flights by name
             flights = flightDAO.searchFlightsByName(searchTerm);
         } else {
-            // If no search term provided, get all flights
             flights = flightDAO.list();
         }
         
-        // Create a map of tickets for each flight
         Map<String, Ticket> ticketMap = new HashMap<>();
         for (Flight flight : flights) {
             Ticket ticket = ticketDAO.getTicketByFlightId(flight.getId());
@@ -49,7 +47,7 @@ public class SearchFlightServlet extends HttpServlet {
         
         request.setAttribute("list", flights);
         request.setAttribute("ticketMap", ticketMap);
-        request.setAttribute("searchTerm", searchTerm); // Store search term for re-displaying
+        request.setAttribute("searchTerm", searchTerm); 
         
         request.getRequestDispatcher("flight-list.jsp").forward(request, response);
     }

@@ -6,7 +6,6 @@ package dal;
 
 import java.sql.*;
 import java.util.*;
-import java.time.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Flight;
@@ -40,12 +39,6 @@ public class FlightDAO extends DBContext {
             }
         } catch (SQLException ex) {
             System.out.println(ex);
-        } finally {
-            try {
-                stm.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
         return list;
     }
@@ -308,4 +301,50 @@ public class FlightDAO extends DBContext {
         }
         return list;
     }
+
+    public ArrayList<Flight> search(String departure, String destination, String startingDate) {
+        ArrayList<Flight> list = new ArrayList<>();
+        String sql = "SELECT f.* FROM flight f "
+                + "WHERE f.departure LIKE ? "
+                + "AND f.destination LIKE ? "
+                + "AND DATE(f.startingTime) LIKE ? ";
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, "%" + departure + "%");
+            stm.setString(2, "%" + destination + "%");
+            stm.setString(3, "%" + startingDate + "%");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new Flight(
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("code"),
+                        rs.getString("airplaneID"),
+                        rs.getString("departure"),
+                        rs.getString("destination"),
+                        rs.getTimestamp("entryTime").toLocalDateTime(),
+                        rs.getTimestamp("startingTime").toLocalDateTime(),
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getBytes("atcID")
+                ));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return list;
+    }
+
 }

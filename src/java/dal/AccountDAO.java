@@ -116,5 +116,19 @@ public class AccountDAO extends DBContext {
         }
         return false; 
     }
-
+    public boolean updateAccountDetails(String accountId, String email, String phone) {
+        String sql = "UPDATE Account SET email = ?, phone = ? WHERE id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, email);
+            st.setString(2, phone);
+            st.setString(3, accountId);
+            
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
 }

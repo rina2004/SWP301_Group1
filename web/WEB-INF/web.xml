@@ -12,7 +12,26 @@
         <servlet-name>AirplaneUpdateController</servlet-name>
         <servlet-class>controller.AirplaneUpdateController</servlet-class>
     </servlet>
-    
+    <servlet>
+        <servlet-name>SearchFlightsServlet</servlet-name>
+        <servlet-class>controller.SearchFlightsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewFlightOrderServlet</servlet-name>
+        <servlet-class>controller.ViewFlightOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewAccountServlet</servlet-name>
+        <servlet-class>controller.ViewAccountServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateAccountServlet</servlet-name>
+        <servlet-class>controller.UpdateAccountServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FilterFlightOrderServlet</servlet-name>
+        <servlet-class>controller.FilterFlightOrderServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
         <url-pattern>/airplane/create</url-pattern>
@@ -41,7 +60,26 @@
         <servlet-name>blogController</servlet-name>
         <url-pattern>/blog</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>SearchFlightsServlet</servlet-name>
+        <url-pattern>/view/search-flights</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewFlightOrderServlet</servlet-name>
+        <url-pattern>/view/view-flightorder</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewAccountServlet</servlet-name>
+        <url-pattern>/view/view-account</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAccountServlet</servlet-name>
+        <url-pattern>/update-account</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FilterFlightOrderServlet</servlet-name>
+        <url-pattern>/view/filter-flightorder</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
     </welcome-file-list>
@@ -93,5 +131,4 @@
         <servlet-name>UpdateFlightServlet</servlet-name>
         <url-pattern>/view/update-flight</url-pattern>
     </servlet-mapping>
-    
 </web-app>
