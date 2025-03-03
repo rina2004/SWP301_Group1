@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import model.Account;
 
 /**
@@ -63,16 +63,16 @@ public class UpdateProfileControl extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         HttpSession session = request.getSession();
-    Account acc = (Account) session.getAttribute("acc");
+        Account acc = (Account) session.getAttribute("acc");
 
-    if (acc == null) {
-        request.setAttribute("error", "You must be logged in to edit your profile.");
-        request.getRequestDispatcher("Login.jsp").forward(request, response);
-        return;
-    }
+        if (acc == null) {
+            request.setAttribute("error", "You must be logged in to edit your profile.");
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            return;
+        }
 
-    request.setAttribute("account", acc);
-    request.getRequestDispatcher("view/EditProfile.jsp").forward(request, response);
+        request.setAttribute("account", acc);
+        request.getRequestDispatcher("view/EditProfile.jsp").forward(request, response);
     }
 
     /**
@@ -97,12 +97,14 @@ public class UpdateProfileControl extends HttpServlet {
         String address = request.getParameter("address");
         String email = request.getParameter("email");
 
-        // Chuyển đổi ngày sinh (dob) từ String -> Date
+        // Chuyển đổi dob từ String -> java.sql.Date
         Date dob = null;
-        if (dobStr != null && !dobStr.isEmpty()) {
+        if (dobStr != null && !dobStr.trim().isEmpty()) {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                dob = sdf.parse(dobStr);
+                sdf.setLenient(false);
+                java.util.Date utilDate = sdf.parse(dobStr);
+                dob = new Date(utilDate.getTime()); // Chuyển thành java.sql.Date
             } catch (ParseException e) {
                 e.printStackTrace();
                 request.setAttribute("error", "Invalid date format!");
@@ -116,6 +118,7 @@ public class UpdateProfileControl extends HttpServlet {
         Account acc = (Account) session.getAttribute("acc");
 
         if (acc != null && acc.getUsername().equals(username)) {
+
             // Cập nhật thông tin tài khoản
             acc.setPassword(password);
             acc.setName(name);
@@ -127,30 +130,23 @@ public class UpdateProfileControl extends HttpServlet {
 
             // Gọi DAO để cập nhật database
             AccountDAO dao = new AccountDAO();
-            boolean updated = dao.updateProfile(acc);
+            dao.updateProfile(acc);
+            session.setAttribute("acc", acc); // Cập nhật session
 
-            if (updated) {
-                session.setAttribute("acc", acc); // Cập nhật session
-                request.setAttribute("message", "Profile updated successfully!");
-            } else {
-                request.setAttribute("error", "Failed to update profile.");
-            }
         } else {
             request.setAttribute("error", "Unauthorized update attempt!");
         }
 
-         response.sendRedirect("profile");
+        response.sendRedirect("profile");
     }
 
-
-
-/**
- * Returns a short description of the servlet.
- *
- * @return a String containing servlet description
- */
-@Override
-public String getServletInfo() {
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

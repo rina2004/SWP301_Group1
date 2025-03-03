@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 import model.Account;
@@ -152,12 +153,12 @@ public class AccountDAO extends DBContext {
                             rs.getString("username"),
                             rs.getString("password"),
                             rs.getBoolean("status"),
-                            rs.getString("citizenID"),
-                            rs.getString("name"),
-                            rs.getDate("dob"),
-                            rs.getString("phone"),
-                            rs.getString("address"),
-                            rs.getString("email"),
+                            rs.getString("citizenID") != null ? rs.getString("citizenID") : "",
+                            rs.getString("name") != null ? rs.getString("name") : "",
+                            rs.getDate("dob") != null ? rs.getDate("dob") : null,
+                            rs.getString("phone") != null ? rs.getString("phone") : "",
+                            rs.getString("address") != null ? rs.getString("address") : "",
+                            rs.getString("email") != null ? rs.getString("email") : "",
                             rs.getInt("entityID"),
                             rs.getInt("roleID")
                     );
@@ -199,23 +200,36 @@ public class AccountDAO extends DBContext {
         }
         return null;
     }
-    
-    public boolean updateProfile(Account acc) {
+
+    public void updateProfile(Account acc) {
         String sql = "UPDATE Account SET password=?, name=?, citizenID=?, dob=?, phone=?, address=?, email=? WHERE username=?";
+
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
+
+            // Chuyển đổi dob sang java.sql.Date
+            Date sqlDob = (acc.getDob() != null) ? new Date(acc.getDob().getTime()) : null;
+
+            // Gán giá trị vào PreparedStatement
             stm.setString(1, acc.getPassword());
             stm.setString(2, acc.getName());
             stm.setString(3, acc.getCitizenID());
-            stm.setDate(4, acc.getDob() != null ? new java.sql.Date(acc.getDob().getTime()) : null);
+            stm.setDate(4, sqlDob); 
             stm.setString(5, acc.getPhone());
             stm.setString(6, acc.getAddress());
             stm.setString(7, acc.getEmail());
             stm.setString(8, acc.getUsername());
 
-            return stm.executeUpdate() > 0;
+            
+            int rowsAffected = stm.executeUpdate();
+            if (rowsAffected == 0) {
+                System.out.println("No account was updated. Check the username.");
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
+
+   
+
 }

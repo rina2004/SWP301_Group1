@@ -20,22 +20,25 @@
                             <div class="card-body">
                                 <form action="updateProfile" method="post">
                                     <input type="hidden" name="username" value="${account.username}">
-                                    
+
                                     <div class="mb-3">
                                         <label class="small mb-1">Password</label>
-                                        <input class="form-control" type="text" name="password" value="${account.password}">
+                                        <input class="form-control" type="text" name="password" 
+                                               value="${not empty account.password ? account.password : ''}">
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="small mb-1">Full Name</label>
-                                        <input class="form-control" type="text" name="name" value="${account.name}">
+                                        <input class="form-control" type="text" name="name" 
+                                               value="${not empty account.name ? account.name : ''}">
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="small mb-1">Citizen ID</label>
-                                        <input class="form-control" type="text" name="citizenID" value="${account.citizenID}">
+                                        <input class="form-control" type="text" name="citizenID" 
+                                               value="${not empty account.citizenID ? account.citizenID : ''}">
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="small mb-1">Date of Birth</label>
                                         <input class="form-control" type="date" name="dob" 
@@ -44,17 +47,20 @@
 
                                     <div class="mb-3">
                                         <label class="small mb-1">Phone</label>
-                                        <input class="form-control" type="text" name="phone" value="${account.phone}">
+                                        <input class="form-control" type="text" name="phone" 
+                                               value="${not empty account.phone ? account.phone : ''}">
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="small mb-1">Address</label>
-                                        <input class="form-control" type="text" name="address" value="${account.address}">
+                                        <input class="form-control" type="text" name="address" 
+                                               value="${not empty account.address ? account.address : ''}">
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="small mb-1">Email</label>
-                                        <input class="form-control" type="email" name="email" value="${account.email}">
+                                        <input class="form-control" type="email" name="email" 
+                                               value="${not empty account.email ? account.email : ''}">
                                     </div>
 
                                     <button class="btn btn-success" type="submit">Save Changes</button>
