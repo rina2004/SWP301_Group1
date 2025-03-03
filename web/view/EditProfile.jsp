@@ -18,6 +18,8 @@
                         <div class="card mb-4">
                             <div class="card-header">Update Your Details</div>
                             <div class="card-body">
+                                <form name="editProfileForm" action="updateProfile" method="post" onsubmit="return validateForm()">
+
                                 <form action="updateProfile" method="post">
                                     <input type="hidden" name="username" value="${account.username}">
 
@@ -76,5 +78,48 @@
                 <div class="alert alert-danger">No account information found.</div>
             </c:if>
         </div>
+        <script>
+            function validateForm() {
+                let form = document.forms["editProfileForm"];
+                let citizenID = form["citizenID"].value;
+                let phone = form["phone"].value;
+                let email = form["email"].value;
+                let dob = form["dob"].value; // Lấy giá trị ngày sinh
+
+                let citizenIDPattern = /^[0-9]{9,12}$/; // 9-12 số
+                let phonePattern = /^(0[1-9][0-9]{8,9})$/; // Bắt đầu bằng số 0, tổng 10-11 số
+                let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Email hợp lệ
+
+                // Kiểm tra Citizen ID
+                if (!citizenIDPattern.test(citizenID)) {
+                    alert("Citizen ID must be 9 to 12 digits.");
+                    return false;
+                }
+
+                // Kiểm tra số điện thoại
+                if (!phonePattern.test(phone)) {
+                    alert("Invalid phone number format.");
+                    return false;
+                }
+
+                // Kiểm tra email
+                if (!emailPattern.test(email)) {
+                    alert("Invalid email format.");
+                    return false;
+                }
+
+                // Kiểm tra dob không được là ngày tương lai
+                let today = new Date();
+                let inputDob = new Date(dob);
+                if (dob && inputDob > today) {
+                    alert("Date of Birth cannot be in the future.");
+                    return false;
+                }
+
+                return true; // Nếu hợp lệ, gửi form
+            }
+        </script>
+
+
     </body>
 </html>
