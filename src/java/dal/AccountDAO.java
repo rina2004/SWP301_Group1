@@ -22,7 +22,9 @@ public class AccountDAO extends DBContext {
     // Lấy tất cả tài khoản (trừ Admin)
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
-        String sql = "SELECT a.*, aur.entityID, aur.roleID FROM Account a LEFT JOIN AccountUserRole aur ON a.id = aur.accountID";
+        String sql = "SELECT a.*, aur.entityID, aur.roleID FROM Account a "
+                + "LEFT JOIN AccountUserRole aur ON a.id = aur.accountID "
+                + "WHERE aur.roleID != 1"; // Loại bỏ Admin
 
         try (PreparedStatement st = connection.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
@@ -213,13 +215,12 @@ public class AccountDAO extends DBContext {
             stm.setString(1, acc.getPassword());
             stm.setString(2, acc.getName());
             stm.setString(3, acc.getCitizenID());
-            stm.setDate(4, sqlDob); 
+            stm.setDate(4, sqlDob);
             stm.setString(5, acc.getPhone());
             stm.setString(6, acc.getAddress());
             stm.setString(7, acc.getEmail());
             stm.setString(8, acc.getUsername());
 
-            
             int rowsAffected = stm.executeUpdate();
             if (rowsAffected == 0) {
                 System.out.println("No account was updated. Check the username.");
@@ -229,7 +230,5 @@ public class AccountDAO extends DBContext {
             e.printStackTrace();
         }
     }
-
-   
 
 }

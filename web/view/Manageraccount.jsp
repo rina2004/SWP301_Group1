@@ -56,7 +56,7 @@
 
                     <!-- Form tìm kiếm -->                   
                     <div class="form-group">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Enter username..." onkeyup="filterTable()">
+                        <input  type="text" id="searchInput" class="form-control" placeholder="Enter username..." onkeyup="filterTable()">
                     </div>
 
                     <table class="table table-striped table-hover">
