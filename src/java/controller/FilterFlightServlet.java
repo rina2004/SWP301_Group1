@@ -47,13 +47,13 @@ public class FilterFlightServlet extends HttpServlet {
             // Apply filter based on price range
             switch (priceRange) {
                 case "cheapest":
-                    flights = flightDAO.getFlightsByPriceRange(0, 200000);
+                    flights = flightDAO.getFlightsByPriceRange(0, 199999);
                     break;
                 case "best":
                     flights = flightDAO.getFlightsByPriceRange(200000, 1000000);
                     break;
                 case "quickest":
-                    flights = flightDAO.getFlightsByPriceRange(1000000, Double.MAX_VALUE);
+                    flights = flightDAO.getFlightsByPriceRange(1000001, Double.MAX_VALUE);
                     break;
                 default:
                     flights = flightDAO.list();

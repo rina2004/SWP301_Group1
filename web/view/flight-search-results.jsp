@@ -154,9 +154,41 @@
                 border-radius: 8px;
                 margin-top: 2rem;
             }
+            /* Toast notification */
+            .toast-notification {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background-color: #28a745;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 4px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: translateY(100px);
+                opacity: 0;
+                transition: all 0.3s ease;
+                z-index: 9999;
+            }
+
+            .toast-notification.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            .toast-content {
+                display: flex;
+                align-items: center;
+            }
+
+            /* Cart button */
+            .cart-count {
+                font-size: 0.65rem;
+                transform: translate(-50%, -50%) !important;
+            }
         </style>
     </head>
     <body>
+
         <c:if test="${not empty sessionScope.successMessage}">
             <div class="alert alert-success text-center">
                 ${sessionScope.successMessage}
@@ -171,6 +203,14 @@
                     <div class="d-flex align-items-center">
                         <img src="img/logo.jpg" alt="Logo" class="me-2" style="height: 40px;">
                         <h2 class="mb-0">Flight Booking</h2>
+                    </div>
+                    <div>
+                        <a href="cart.jsp" class="btn btn-outline-primary position-relative">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
+                                0
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -225,24 +265,24 @@
                     </div>
                 </form>
             </div>
-                            
-                            
+
+
             <!-- Filter Section -->
             <div class="search-section">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Filter by Price</h5>
                     <div class="btn-group">
-                        <a href="filter-flightorder?priceRange=cheapest" 
+                        <a href="filter-flightorder?priceRange=cheapest&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
                            class="btn btn-outline-primary ${activeFilter eq 'cheapest' ? 'active' : ''}">
                             Cheapest
                             <small class="d-block">Under 200.000 VND</small>
                         </a>
-                        <a href="filter-flightorder?priceRange=best" 
+                        <a href="filter-flightorder?priceRange=best&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
                            class="btn btn-outline-primary ${activeFilter eq 'best' ? 'active' : ''}">
                             Best
                             <small class="d-block">200.000 - 1.000.000 VND</small>
                         </a>
-                        <a href="filter-flightorder?priceRange=quickest" 
+                        <a href="filter-flightorder?priceRange=quickest&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
                            class="btn btn-outline-primary ${activeFilter eq 'quickest' ? 'active' : ''}">
                             Quickest
                             <small class="d-block">Above 1.000.000 VND</small>
@@ -250,7 +290,7 @@
                     </div>
                 </div>
             </div>
-                            
+
             <!-- Flights List -->
             <c:choose>
                 <c:when test="${empty list}">
@@ -299,10 +339,12 @@
                                         <a href="view-account" class="btn btn-light" title="Account Details">
                                             <i class="fas fa-user text-primary"></i>
                                         </a>
-                                            <a href="booking-confirmation.jsp" class="btn btn-light" title="Account Details">
-                                            <i class="fas fa-user text-primary"></i>
+                                        <a href="booking-confirmation?flightId=${flight.getId()}&ticketClass=${ticket.type}&passengers=1" class="btn btn-light" title="Book Now">
+                                            <i class="fas fa-ticket-alt text-primary"></i>
                                         </a>
-                                        <a ></a>
+                                        <button onclick="addToCart('${flight.getId()}', '${flight.getName()}', '${ticket.price}', '${ticket.type}')" class="btn btn-light" title="Add to Cart">
+                                            <i class="fas fa-plus text-success"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -312,6 +354,128 @@
             </c:choose>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js">
+                                            // Function to add flight to cart
+                                            function addToCart(id, name, price, ticketType) {
+                                                // Get current cart from localStorage
+                                                let cart = JSON.parse(localStorage.getItem('flightCart')) || [];
+
+                                                // Check if the flight is already in the cart
+                                                const existingItem = cart.find(item => item.id === id && item.ticketType === ticketType);
+
+                                                if (existingItem) {
+                                                    // Show notification that item is already in cart
+                                                    showNotification('This flight is already in your cart');
+                                                } else {
+                                                    // Add new item to cart
+                                                    cart.push({
+                                                        id: id,
+                                                        name: name,
+                                                        price: formatCurrency(price),
+                                                        ticketType: ticketType
+                                                    });
+
+                                                    // Save updated cart to localStorage
+                                                    localStorage.setItem('flightCart', JSON.stringify(cart));
+
+                                                    // Update cart count
+                                                    updateCartCount();
+
+                                                    // Show success notification
+                                                    showNotification('Flight added to cart successfully');
+                                                }
+                                            }
+
+                                            // Format currency (this function already exists, but included for reference)
+                                            function formatCurrency(value) {
+                                                return new Intl.NumberFormat('vi-VN').format(value);
+                                            }
+        </script>
+        <!-- Add this script block at the end of your body tag in flight-search-results.jsp -->
+        <script>
+            // Initialize cart in localStorage if it doesn't exist
+            if (!localStorage.getItem('flightCart')) {
+                localStorage.setItem('flightCart', JSON.stringify([]));
+            }
+
+            // Update cart count on page load
+            document.addEventListener('DOMContentLoaded', function () {
+                updateCartCount();
+            });
+
+            // Function to update cart count
+            function updateCartCount() {
+                const cart = JSON.parse(localStorage.getItem('flightCart')) || [];
+                const countElement = document.querySelector('.cart-count');
+                if (countElement) {
+                    countElement.textContent = cart.length;
+                }
+            }
+
+            // Function to add flight to cart
+            function addToCart(id, name, price, ticketType) {
+                // Get current cart from localStorage
+                let cart = JSON.parse(localStorage.getItem('flightCart')) || [];
+
+                // Check if the flight is already in the cart
+                const existingItem = cart.find(item => item.id === id && item.ticketType === ticketType);
+
+                if (existingItem) {
+                    // Show notification that item is already in cart
+                    showNotification('This flight is already in your cart');
+                } else {
+                    // Add new item to cart
+                    cart.push({
+                        id: id,
+                        name: name,
+                        price: formatCurrency(price),
+                        ticketType: ticketType
+                    });
+
+                    // Save updated cart to localStorage
+                    localStorage.setItem('flightCart', JSON.stringify(cart));
+
+                    // Update cart count
+                    updateCartCount();
+
+                    // Show success notification
+                    showNotification('Flight added to cart successfully');
+                }
+            }
+
+            // Function to show notification
+            function showNotification(message) {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.classList.add('toast-notification');
+                notification.innerHTML = `
+                    <div class="toast-content">
+                        <i class="fas fa-check-circle me-2"></i>
+            ${message}
+                    </div>
+                `;
+
+                // Add to document
+                document.body.appendChild(notification);
+
+                // Show notification
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 100);
+
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
+
+            // Format currency
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('vi-VN').format(value);
+            }
+        </script>
     </body>
 </html>

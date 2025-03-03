@@ -94,9 +94,8 @@ public class AirplaneDAO extends DBContext{
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
         AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
         String sql = "SELECT * FROM swp301.airplane";
-        PreparedStatement stm = null;
         try {
-            stm = connection.prepareStatement(sql);
+            PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Airplane p = new Airplane();
