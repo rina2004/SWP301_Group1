@@ -55,7 +55,7 @@ public class CreateNewPassword extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("view/CreateNewPassword.jsp").forward(request, response);
     } 
 
     /** 
@@ -93,7 +93,7 @@ public class CreateNewPassword extends HttpServlet {
         AccountDAO dao = new AccountDAO();
         dao.updatePasswordByEmail(email, pass);
         session.invalidate();
-        response.sendRedirect("view/Login.jsp");
+        response.sendRedirect("login");
     }
 
     /** 

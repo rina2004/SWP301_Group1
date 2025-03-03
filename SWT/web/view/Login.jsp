@@ -93,6 +93,7 @@
                     <input type="password" name="password" required="" placeholder="Enter your password"><br>
                     <a href="<%= request.getContextPath()%>/resetpassword">Forgot Password</a>
                     <p>${error}</p>
+                    <input type="checkbox" name="rememberMe" value="true"> Remember Me
                     <input type="submit" value="Login">
                     <p>${error}</p>
                 </div>

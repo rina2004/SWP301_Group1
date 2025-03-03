@@ -8,6 +8,7 @@ import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -74,7 +75,7 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
+        boolean rememberMe = "true".equals(request.getParameter("rememberMe"));
         AccountDAO dao = new AccountDAO();
         Account acc = dao.login(username, password);
 
@@ -87,13 +88,18 @@ public class Login extends HttpServlet {
         }
 
         if (acc != null) {
+
+            if (rememberMe) {
+                Cookie userCookie = new Cookie("username", username);
+                userCookie.setMaxAge(7 * 24 * 60 * 60); 
+                response.addCookie(userCookie);
+            }
             HttpSession session = request.getSession();
             session.setAttribute("acc", acc);
             session.setAttribute("username", username);
             session.setMaxInactiveInterval(60 * 30);
+            response.sendRedirect("view/home.jsp");
         }
-
-        response.sendRedirect("view/home.jsp");
 
     }
 

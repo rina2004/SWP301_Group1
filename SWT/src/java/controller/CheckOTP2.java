@@ -54,7 +54,7 @@ public class CheckOTP2 extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("view/OTPResetPassword.jsp").forward(request, response);
     } 
 
     /** 
@@ -80,7 +80,7 @@ public class CheckOTP2 extends HttpServlet {
 
         session.removeAttribute("otp");
         session.removeAttribute("timeOtp");
-        response.sendRedirect("view/CreateNewPassword.jsp");
+        response.sendRedirect("createpassword");
     }
 
     /** 

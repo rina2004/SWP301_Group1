@@ -62,7 +62,7 @@ public class ConfirmEmail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         request.getRequestDispatcher("view/OTP.jsp").forward(request, response);
     }
 
     /**

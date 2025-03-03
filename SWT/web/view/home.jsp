@@ -12,7 +12,9 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <a href="<%= request.getContextPath() %>/logout">Log out</a>
+        <p>Xin chào: ${sessionScope.username}</p>
+        <a href="<%= request.getContextPath() %>/logout">Log out</a><br>
         <a href="<%= request.getContextPath() %>/change">Change Password</a>
+
     </body>
 </html>

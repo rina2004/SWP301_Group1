@@ -142,13 +142,14 @@
                 <input type="text" id="otp4" maxlength="1" required oninput="moveNext(this, 'otp5')" onkeydown="movePrev(event, 'otp3')">
                 <input type="text" id="otp5" maxlength="1" required oninput="moveNext(this, 'otp6')" onkeydown="movePrev(event, 'otp4')">
                 <input type="text" id="otp6" maxlength="1" required onkeydown="movePrev(event, 'otp5')">
-                <p>${otpInvalid}</p>
+                
             </div>
             <br>
             <input type="hidden" id="otp" name="otp"> 
+            <p>${otpInvalid}</p>
             <a href="<%= request.getContextPath() %>/resend?frompage=view/OTP.jsp">Gửi lại mã OTP</a>
             <button type="submit">Xác nhận</button><br>
-            <a href="Register.jsp">Quay lại</a>
+            <a href="<%= request.getContextPath() %>/register">Quay lại</a>
         </form>
 
         <script>
