@@ -57,7 +57,7 @@ public class homeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Blog> listBlog = blogDAO.getAllBlogs();
+        List<Blog> listBlog = blogDAO.getAllBlog();
         request.setAttribute("listBlog", listBlog);
         request.getRequestDispatcher("home.jsp").forward(request, response);
     }

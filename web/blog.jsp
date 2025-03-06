@@ -248,6 +248,14 @@
             html {
                 scroll-behavior: smooth;
             }
+            ul {
+                padding: 0;
+                list-style: none;
+            }
+            li {
+                display: inline-block; /* Hoặc display: inline; */
+                margin-right: 10px; /* Khoảng cách giữa các mục */
+            }
         </style>
     </head>
     <body>
@@ -274,20 +282,40 @@
         <!-- Phần Blogs -->
         <div class="top-deals">
             <h2><a href="blog" style="text-decoration: none; color: inherit">Blogs</a></h2>
-            
+            <!-- Thanh tìm kiếm -->
+            <form action="blog" method="get" style="margin-bottom: 30px;">
+                <input 
+                    type="text" 
+                    name="search"
+                    placeholder="Searching blogs..."
+                    value="${searchQuery}"
+                    style="padding: 10px; width: 80%; max-width: 600px; border: 1px solid #ccc; border-radius: 5px;" 
+                    >
+                <input 
+                    type="submit"
+                    value="Search"
+                    style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;"
+                    >
+            </form>
             <c:forEach items="${listBlog}" var="blog">
                 <div class="deals-container">
                     <div class="deal">
-                        <img src="${blog.getImage()}" alt="Economy Class Special Deal">
+                        <img src="img/${blog.getImage()}" alt="${blog.getTitle()}">
                         <div class="deal-content">
                             <h3>${blog.getTitle()}</h3>
                             <p>${blog.getDescription()}</p>
                         </div>
-                        <a href="blog1" class="book-now">View</a>
+                        <a href="post?id=${blog.getPostID()}" class="book-now">View</a>
                     </div>
                 </div>
             </c:forEach>
-
+            <div>
+                <ul>
+                    <c:forEach begin="1" end="${pageControl.getTotalPage()}" var="pageNumber">
+                        <li><a href="${pageControl.getUrlPattern()}page=${pageNumber}">${pageNumber}</a></li>
+                        </c:forEach>
+                </ul>
+            </div>
         </div>
 
         <!-- Phần Contact Us -->

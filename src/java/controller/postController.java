@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dal.BlogDAO;
+import dal.PostDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,17 +12,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import model.Blog;
-import model.PageControl;
+import model.Comment;
+import model.Post;
 
 /**
  *
  * @author DUCDA
  */
-public class blogController extends HttpServlet {
+public class postController extends HttpServlet {
 
-    BlogDAO blogDAO = new BlogDAO();
-
+    PostDAO postDAO = new PostDAO();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,10 +39,10 @@ public class blogController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet blogController</title>");
+            out.println("<title>Servlet postController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet blogController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet postController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,50 +60,15 @@ public class blogController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String searchQuery = request.getParameter("search");
-        List<Blog> listBlog;
-        PageControl pageControl = new PageControl();
-
-        String requestURL = request.getRequestURL().toString();
-
-        String pageRaw = request.getParameter("page");
-        int page;
-        try {
-            page = Integer.parseInt(pageRaw);
-            if (page <= 0) {
-                page = 1;
-            }
-        } catch (NumberFormatException e) {
-            page = 1;
-        }
-        int totalRecord;
-
-        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
-            listBlog = blogDAO.searchBlogs(searchQuery, page); // Gọi DAO để tìm kiếm
-            pageControl.setUrlPattern(requestURL + "?search=" + searchQuery + "&");
-            totalRecord = blogDAO.findTotalRecordByKeyWord(searchQuery);
-        } else {
-            listBlog = blogDAO.getAllBlogs(page); // Lấy toàn bộ danh sách blog nếu không tìm kiếm
-            pageControl.setUrlPattern(requestURL + "?");
-            totalRecord = blogDAO.findAllTotalRecord();
-        }
-
-        int record_per_page = 4;
-        int totalPage;
-        if (totalRecord % record_per_page == 0) {
-            totalPage = totalRecord / record_per_page;
-        } else {
-            totalPage = (totalRecord / record_per_page) + 1;
-        }
-        pageControl.setPage(page);
-        pageControl.setTotalPage(totalPage);
-        pageControl.setTotalRecord(totalRecord);
-
-        request.setAttribute("searchQuery", searchQuery);
-        request.setAttribute("listBlog", listBlog);
-        request.setAttribute("pageControl", pageControl);
-        request.getRequestDispatcher("blog.jsp").forward(request, response);
-
+        String id = request.getParameter("id");
+        
+        Post post = postDAO.findById(id);
+        
+        List<Comment> listCmt = postDAO.findCmt(id);
+        
+        request.setAttribute("post", post);
+        request.setAttribute("listCmt", listCmt);
+        request.getRequestDispatcher("post.jsp").forward(request, response);
     }
 
     /**
@@ -118,7 +82,7 @@ public class blogController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
     }
 
     /**
