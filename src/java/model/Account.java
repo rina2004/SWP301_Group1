@@ -16,29 +16,21 @@ public class Account {
     private String username;
     private String password;
     private String role;
-    private String status;
+    private int roleID;
+    private boolean status;
     private String citizenID;
     private String name;
-    private int roleID;
-    private int entityID;
+    private int entityID; 
     private Date dob;
     private String phone;
     private String address;
     private String email;
 
     public Account() {
+    
     }
 
-    public Account(String username, String password, String role, int roleID, String status) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.roleID = roleID;
-        this.status = status;
-
-    }
-
-    public Account(String id, String username, String password, String role, String status, String citizenID, String name, int roleID, int entityID, Date dob, String phone, String address, String email) {
+    public Account(String id, String username, String password, String role, boolean status, String citizenID, String name, int roleID, int entityID, Date dob, String phone, String address, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -52,6 +44,21 @@ public class Account {
         this.phone = phone;
         this.address = address;
         this.email = email;
+    }
+
+    public Account(String id, String username, String password, boolean status, String citizenID, String name, Date dob, String phone, String address, String email, int entityID, int roleID) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.status = status;
+        this.citizenID = citizenID;
+        this.name = name;
+        this.dob = dob;
+        this.phone = phone;
+        this.address = address;
+        this.email = email;
+        this.entityID = entityID;
+        this.roleID = roleID;
     }
 
     public String getId() {
@@ -86,11 +93,11 @@ public class Account {
         this.role = role;
     }
 
-    public String getStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -157,5 +164,4 @@ public class Account {
     public void setEmail(String email) {
         this.email = email;
     }
-
 }

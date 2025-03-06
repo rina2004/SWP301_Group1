@@ -243,7 +243,7 @@ public class AccountDAO extends DBContext {
         PreparedStatement stm;
         ResultSet rs;
 
-        String sql = "Select * from Account where username = ? and password = ?";
+        String sql = "SELECT * FROM Account WHERE username = ? AND password = ?";
         try {
             stm = connection.prepareStatement(sql);
             stm.setString(1, username);
@@ -251,11 +251,16 @@ public class AccountDAO extends DBContext {
             rs = stm.executeQuery();
 
             if (rs.next()) {
+                boolean status = rs.getBoolean("status"); // Lấy giá trị status từ DB
+
+                if (!status) { // Nếu status = false (0), không cho phép đăng nhập
+                    return null;
+                }
+
                 Account acc = new Account();
                 acc.setUsername(rs.getString("username"));
                 acc.setPassword(rs.getString("password"));
-                String status = (rs.getInt("status") == 1) ? "Active" : "Inactive";
-                acc.setStatus(status);
+                acc.setStatus(status); // Lưu status vào đối tượng Account
 
                 return acc;
             }
