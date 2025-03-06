@@ -12,13 +12,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.Date;
+import java.util.List;
+import model.Account;
 
 /**
  *
  * @author anhbu
  */
-
-public class AddUserControl extends HttpServlet {
+public class ProfileAccountControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +39,10 @@ public class AddUserControl extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AddUserControl</title>");
+            out.println("<title>Servlet ProfileAccountControl</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AddUserControl at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProfileAccountControl at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,7 +60,30 @@ public class AddUserControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        HttpSession session = request.getSession();
+        AccountDAO accountDAO = new AccountDAO();  // Tạo instance của DAO
+        Account sessionAccount = (Account) session.getAttribute("acc");
+
+        if (sessionAccount == null) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
+
+        // Lấy dữ liệu mới nhất từ database
+        Account account = accountDAO.getAccountByUsername(sessionAccount.getUsername());
+
+        if (account == null) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
+
+        // Cập nhật session và chuyển đến JSP
+        session.setAttribute("acc", account);
+        request.setAttribute("account", account);
+        request.getRequestDispatcher("view/Profileaccount.jsp").forward(request, response);
+
+
     }
 
     /**
@@ -72,48 +97,7 @@ public class AddUserControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
-        // Kiểm tra trạng thái tài khoản
-        boolean status = "true".equals(request.getParameter("status"));
-
-        // Lấy entityID
-        int entityID = 0;
-        try {
-            entityID = Integer.parseInt(request.getParameter("entityID"));
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid entityID: " + request.getParameter("entityID"));
-        }
-
-        // Lấy roleID từ request (bây giờ chỉ lấy một giá trị duy nhất)
-        int roleID = 0;
-        try {
-            roleID = Integer.parseInt(request.getParameter("roleID"));
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid roleID: " + request.getParameter("roleID"));
-        }
-
-        HttpSession session = request.getSession();
-
-        // Kiểm tra roleID hợp lệ
-        if (roleID == 0) {
-            session.setAttribute("errorMessage", "Please select a valid role!");
-            response.sendRedirect("acc");
-            return;
-        }
-
-        AccountDAO dao = new AccountDAO();
-        boolean isInserted = dao.addUser(username, password, status, entityID, roleID); // Sửa để truyền vào một roleID duy nhất
-
-        if (isInserted) {
-            session.setAttribute("Message", "User added successfully!");
-        } else {
-            session.setAttribute("Message", "Cannot add user! The username may already exist.");
-        }
-
-        response.sendRedirect("acc");
+        processRequest(request, response);
     }
 
     /**

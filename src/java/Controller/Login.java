@@ -12,13 +12,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Account;
 
 /**
  *
  * @author anhbu
  */
-
-public class AddUserControl extends HttpServlet {
+public class Login extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +37,10 @@ public class AddUserControl extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AddUserControl</title>");
+            out.println("<title>Servlet Login</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AddUserControl at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,7 +58,8 @@ public class AddUserControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
     }
 
     /**
@@ -76,54 +77,36 @@ public class AddUserControl extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        // Kiểm tra trạng thái tài khoản
-        boolean status = "true".equals(request.getParameter("status"));
-
-        // Lấy entityID
-        int entityID = 0;
-        try {
-            entityID = Integer.parseInt(request.getParameter("entityID"));
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid entityID: " + request.getParameter("entityID"));
-        }
-
-        // Lấy roleID từ request (bây giờ chỉ lấy một giá trị duy nhất)
-        int roleID = 0;
-        try {
-            roleID = Integer.parseInt(request.getParameter("roleID"));
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid roleID: " + request.getParameter("roleID"));
-        }
-
-        HttpSession session = request.getSession();
-
-        // Kiểm tra roleID hợp lệ
-        if (roleID == 0) {
-            session.setAttribute("errorMessage", "Please select a valid role!");
-            response.sendRedirect("acc");
-            return;
-        }
-
         AccountDAO dao = new AccountDAO();
-        boolean isInserted = dao.addUser(username, password, status, entityID, roleID); // Sửa để truyền vào một roleID duy nhất
+        Account acc = dao.login(username, password);
 
-        if (isInserted) {
-            session.setAttribute("Message", "User added successfully!");
-        } else {
-            session.setAttribute("Message", "Cannot add user! The username may already exist.");
+        if (acc == null || !acc.getUsername().equals(username) || !acc.getPassword().equals(password)) {
+            request.setAttribute("error", "Username or password not correct!!!");
+            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
+        } else if (!acc.isStatus()) { // Kiểm tra status có phải false không
+            request.setAttribute("error", "The account is not allowed to login to the system !!!");
+            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
+            return; // Cần return để tránh redirect tiếp tục
         }
 
-        response.sendRedirect("acc");
+        if (acc != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("acc", acc);
+            session.setMaxInactiveInterval(60 * 30);
+            response.sendRedirect("view/Home.jsp");
+
+        }
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
+        /**
+         * Returns a short description of the servlet.
+         *
+         * @return a String containing servlet description
+         */
+        @Override
+        public String getServletInfo
+        
+            () {
         return "Short description";
-    }// </editor-fold>
+        }// </editor-fold>
 
-}
+    }
