@@ -68,6 +68,38 @@
         <servlet-name>ProcessBookingServlet</servlet-name>
         <servlet-class>controller.ProcessBookingServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Register</servlet-name>
+        <servlet-class>Controller.Register</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>Controller.Login</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>Controller.Logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ResendOTP</servlet-name>
+        <servlet-class>Controller.ResendOTP</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckOTP2</servlet-name>
+        <servlet-class>Controller.CheckOTP2</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateNewPassword</servlet-name>
+        <servlet-class>Controller.CreateNewPassword</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ConfirmEmail</servlet-name>
+        <servlet-class>Controller.ConfirmEmail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangePassword</servlet-name>
+        <servlet-class>Controller.ChangePassword</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
         <url-pattern>/airplane/create</url-pattern>
@@ -151,6 +183,38 @@
     <servlet-mapping>
         <servlet-name>ProcessBookingServlet</servlet-name>
         <url-pattern>/view/process-booking</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResendOTP</servlet-name>
+        <url-pattern>/resend</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckOTP2</servlet-name>
+        <url-pattern>/checkotp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateNewPassword</servlet-name>
+        <url-pattern>/createpassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ConfirmEmail</servlet-name>
+        <url-pattern>/confirm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePassword</servlet-name>
+        <url-pattern>/change</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

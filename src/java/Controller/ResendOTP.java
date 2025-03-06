@@ -8,7 +8,6 @@ package Controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author tungn
  */
-public class Logout extends HttpServlet {
+public class ResendOTP extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +34,10 @@ public class Logout extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Logout</title>");  
+            out.println("<title>Servlet ResendOTP</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Logout at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ResendOTP at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -56,15 +55,20 @@ public class Logout extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         HttpSession session = request.getSession();
-        session.invalidate(); // Xóa toàn bộ session
+        String frompage = request.getParameter("frompage");
+        String email = (String) session.getAttribute("email");
 
+        if (email == null || email.isEmpty()) {
+            request.getRequestDispatcher(frompage).forward(request, response);
+            return;
+        }
 
-        Cookie userCookie = new Cookie("username", null);
-        userCookie.setMaxAge(0);
-        userCookie.setPath("/"); // Đảm bảo áp dụng cho toàn bộ ứng dụng
-        response.addCookie(userCookie);
+        String otp = JavaMail.createOTP();
+        JavaMail.sendOTP(email, otp);
+        session.setAttribute("otp", otp);
+        session.setAttribute("timeOtp", System.currentTimeMillis() + 2 * 60 * 1000);
 
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+        request.getRequestDispatcher(frompage).forward(request, response);
     } 
 
     /** 

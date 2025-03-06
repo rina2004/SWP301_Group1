@@ -5,10 +5,11 @@
 
 package Controller;
 
+import dal.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +19,8 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author tungn
  */
-public class Logout extends HttpServlet {
+@WebServlet(name="ResetPassword", urlPatterns={"/resetpassword"})
+public class ResetPassword extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +37,10 @@ public class Logout extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Logout</title>");  
+            out.println("<title>Servlet ResetPassword</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Logout at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ResetPassword at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,16 +57,7 @@ public class Logout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.invalidate(); // Xóa toàn bộ session
-
-
-        Cookie userCookie = new Cookie("username", null);
-        userCookie.setMaxAge(0);
-        userCookie.setPath("/"); // Đảm bảo áp dụng cho toàn bộ ứng dụng
-        response.addCookie(userCookie);
-
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+        request.getRequestDispatcher("view/ResetPassword.jsp").forward(request, response);
     } 
 
     /** 
@@ -77,7 +70,23 @@ public class Logout extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+       String email = request.getParameter("email");
+
+        AccountDAO dao = new AccountDAO();
+        boolean exist = dao.checkEmailExist(email);
+
+        if (exist) {
+            HttpSession session = request.getSession();
+            session.setAttribute("email", email);
+            String otp = JavaMail.createOTP();
+            JavaMail.sendOTP(email, otp);
+            session.setAttribute("otp", otp);
+            session.setAttribute("timeOtp", System.currentTimeMillis() + 2 * 60 * 1000);
+            request.getRequestDispatcher("view/OTPResetPassword.jsp").forward(request, response);
+        } else {
+            request.setAttribute("error", "Email không tồn tại!");
+            request.getRequestDispatcher("view/ResetPassword.jsp").forward(request, response);
+        }
     }
 
     /** 

@@ -5,20 +5,22 @@
 
 package Controller;
 
+import dal.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  *
  * @author tungn
  */
-public class Logout extends HttpServlet {
+public class ConfirmEmail extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +37,10 @@ public class Logout extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Logout</title>");  
+            out.println("<title>Servlet ConfirmEmail</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Logout at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ConfirmEmail at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,16 +57,7 @@ public class Logout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.invalidate(); // Xóa toàn bộ session
-
-
-        Cookie userCookie = new Cookie("username", null);
-        userCookie.setMaxAge(0);
-        userCookie.setPath("/"); // Đảm bảo áp dụng cho toàn bộ ứng dụng
-        response.addCookie(userCookie);
-
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+        request.getRequestDispatcher("view/OTP.jsp").forward(request, response);
     } 
 
     /** 
@@ -77,7 +70,52 @@ public class Logout extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+
+        String otp = request.getParameter("otp");
+        String otpStore = (String) session.getAttribute("otp");
+
+        if (otp == null || !otp.equals(otpStore)) {
+            request.setAttribute("otpInvalid", "Mã OTP không hợp lệ, vui lòng thử lại!!!");
+            request.getRequestDispatcher("view/OTP.jsp").forward(request, response);
+            return;
+        }
+
+        session.removeAttribute("otp");
+        session.removeAttribute("timeOtp");
+
+        String username = (String) session.getAttribute("username");
+        String password = (String) session.getAttribute("pass");
+        String fullname = (String) session.getAttribute("name");
+        String email = (String) session.getAttribute("email");
+        String phone = (String) session.getAttribute("phone");
+        String dobString = (String) session.getAttribute("dob");
+        String address = (String) session.getAttribute("address");
+
+        if (username == null || password == null || fullname == null || email == null) {
+            request.setAttribute("error", "Dữ liệu đăng ký bị thiếu, vui lòng thử lại!");
+            request.getRequestDispatcher("view/OTP.jsp").forward(request, response);
+            return;
+        }
+
+        AccountDAO dao = new AccountDAO();
+
+        try {
+            java.sql.Date dob = null;
+            if (dobString != null && !dobString.isEmpty()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date parsedDate = sdf.parse(dobString);
+                dob = new java.sql.Date(parsedDate.getTime());
+            }
+            dao.register(username, password, fullname, dob, phone, address, email);
+            session.invalidate();
+            response.sendRedirect("view/Login.jsp");
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            request.setAttribute("errorDob", "Ngày sinh không hợp lệ!");
+            request.getRequestDispatcher("view/OTP.jsp").forward(request, response);
+        }
     }
 
     /** 

@@ -5,10 +5,10 @@
 
 package Controller;
 
+import dal.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author tungn
  */
-public class Logout extends HttpServlet {
+public class CreateNewPassword extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +35,10 @@ public class Logout extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Logout</title>");  
+            out.println("<title>Servlet CreateNewPassword</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Logout at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CreateNewPassword at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,16 +55,7 @@ public class Logout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.invalidate(); // Xóa toàn bộ session
-
-
-        Cookie userCookie = new Cookie("username", null);
-        userCookie.setMaxAge(0);
-        userCookie.setPath("/"); // Đảm bảo áp dụng cho toàn bộ ứng dụng
-        response.addCookie(userCookie);
-
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+        request.getRequestDispatcher("view/CreateNewPassword.jsp").forward(request, response);
     } 
 
     /** 
@@ -77,7 +68,32 @@ public class Logout extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+         HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
+        String pass = request.getParameter("pass");
+        String pass2 = request.getParameter("pass2");
+        
+        boolean error = false;
+        if(!pass.equals(pass2)){
+            request.setAttribute("error", "Confirm Password not correct.");
+            error = true;
+        }else if(pass.trim().isEmpty() || pass2.trim().isEmpty()){
+            request.setAttribute("error", "Password not contain space.");
+            error = true;
+        }else if(!pass.matches("^[A-Za-z0-9]{8,16}$")||!pass2.matches("^[A-Za-z0-9]{8,16}$")){
+            request.setAttribute("error", "Password is invalid.");
+            error = true;
+        }
+        
+        if(error){
+            request.getRequestDispatcher("view/CreateNewPassword.jsp").forward(request, response);
+            return;
+        }
+        
+        AccountDAO dao = new AccountDAO();
+        dao.updatePasswordByEmail(email, pass);
+        session.invalidate();
+        response.sendRedirect("login");
     }
 
     /** 

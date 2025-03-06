@@ -8,7 +8,6 @@ package Controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author tungn
  */
-public class Logout extends HttpServlet {
+public class CheckOTP2 extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +34,10 @@ public class Logout extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Logout</title>");  
+            out.println("<title>Servlet CheckOTP2</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Logout at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CheckOTP2 at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,16 +54,7 @@ public class Logout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.invalidate(); // Xóa toàn bộ session
-
-
-        Cookie userCookie = new Cookie("username", null);
-        userCookie.setMaxAge(0);
-        userCookie.setPath("/"); // Đảm bảo áp dụng cho toàn bộ ứng dụng
-        response.addCookie(userCookie);
-
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+       request.getRequestDispatcher("view/OTPResetPassword.jsp").forward(request, response);
     } 
 
     /** 
@@ -77,7 +67,20 @@ public class Logout extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+         HttpSession session = request.getSession();
+
+        String otp = request.getParameter("otp");
+        String otpStore = (String) session.getAttribute("otp");
+
+        if (otp == null || !otp.equals(otpStore)) {
+            request.setAttribute("otpInvalid", "Mã OTP không hợp lệ, vui lòng thử lại!!!");
+            request.getRequestDispatcher("view/OTPResetPassword.jsp").forward(request, response);
+            return;
+        }
+
+        session.removeAttribute("otp");
+        session.removeAttribute("timeOtp");
+        response.sendRedirect("createpassword");
     }
 
     /** 

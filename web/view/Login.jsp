@@ -1,3 +1,9 @@
+<%-- 
+    Document   : Login
+    Created on : Feb 28, 2025, 4:22:46 PM
+    Author     : tungn
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -77,7 +83,7 @@
                 <div class="left">
                     <img alt="logo" src="img/logo1.jpg">
                     <p>Don't have an account?</p>
-                    <a href="Register.jsp">Register here</a>
+                    <a href="<%= request.getContextPath() %>/register">Register here</a>
                 </div>
 
                 <div class="right">
@@ -85,8 +91,9 @@
                     <input type="text" name="username" required="" placeholder="Enter your username">
                     <p>Password</p>
                     <input type="password" name="password" required="" placeholder="Enter your password"><br>
-                    <a href="ResetPassword.jsp">Forgot Password</a>
+                    <a href="<%= request.getContextPath()%>/resetpassword">Forgot Password</a>
                     <p>${error}</p>
+                    <input type="checkbox" name="rememberMe" value="true"> Remember Me
                     <input type="submit" value="Login">
                     <p>${error}</p>
                 </div>

@@ -11,39 +11,47 @@ import java.sql.Date;
  * @author anhbu
  */
 public class Account {
+
     private String id;
     private String username;
     private String password;
-    private boolean status;
+    private String role;
+    private String status;
     private String citizenID;
     private String name;
+    private int roleID;
+    private int entityID;
     private Date dob;
     private String phone;
     private String address;
     private String email;
-    private int entityID;
-    private int roleID;
 
     public Account() {
     }
 
-    public Account(String id, String username, String password, boolean status, String citizenID, String name, Date dob, String phone, String address, String email, int entityID, int roleID) {
+    public Account(String username, String password, String role, int roleID, String status) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.roleID = roleID;
+        this.status = status;
+
+    }
+
+    public Account(String id, String username, String password, String role, String status, String citizenID, String name, int roleID, int entityID, Date dob, String phone, String address, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.role = role;
         this.status = status;
         this.citizenID = citizenID;
         this.name = name;
+        this.roleID = roleID;
+        this.entityID = entityID;
         this.dob = dob;
         this.phone = phone;
         this.address = address;
         this.email = email;
-        this.entityID = entityID;
-        this.roleID = roleID;
-    }
-
-    public Account(String username, String password, String name, String citizenID, java.sql.Date dateDob, String phone, String address, String email) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public String getId() {
@@ -70,14 +78,21 @@ public class Account {
         this.password = password;
     }
 
-    public boolean isStatus() {
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
-    
 
     public String getCitizenID() {
         return citizenID;
@@ -93,6 +108,22 @@ public class Account {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getRoleID() {
+        return roleID;
+    }
+
+    public void setRoleID(int roleID) {
+        this.roleID = roleID;
+    }
+
+    public int getEntityID() {
+        return entityID;
+    }
+
+    public void setEntityID(int entityID) {
+        this.entityID = entityID;
     }
 
     public Date getDob() {
@@ -127,38 +158,4 @@ public class Account {
         this.email = email;
     }
 
-    public int getEntityID() {
-        return entityID;
-    }
-
-    public void setEntityID(int entityID) {
-        this.entityID = entityID;
-    }
-
-    public int getRoleID() {
-        return roleID;
-    }
-
-    public void setRoleID(int roleID) {
-        this.roleID = roleID;
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", status=" + status +
-                ", citizenID='" + citizenID + '\'' +
-                ", name='" + name + '\'' +
-                ", dob='" + dob + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                ", entityID=" + entityID +
-                ", roleID=" + roleID +
-                '}';
-    }
-    
 }
