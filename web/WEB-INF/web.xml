@@ -8,6 +8,10 @@
         <servlet-name>blogController</servlet-name>
         <servlet-class>controller.blogController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>postController</servlet-name>
+        <servlet-class>controller.postController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeController</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>blogController</servlet-name>
         <url-pattern>/blog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>postController</servlet-name>
+        <url-pattern>/post</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
