@@ -14,6 +14,10 @@ public class Account {
     private String password;
     private int roleID;
     private boolean status;
+    private String name;
+    private String email;
+    private String phone;
+    
 
     public Account() {
     }
@@ -64,6 +68,30 @@ public class Account {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
     
     

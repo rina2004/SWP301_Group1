@@ -40,6 +40,34 @@
         <servlet-name>TypeSearchController</servlet-name>
         <servlet-class>controller.TypeSearchController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchFlightsServlet</servlet-name>
+        <servlet-class>controller.SearchFlightsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewFlightOrderServlet</servlet-name>
+        <servlet-class>controller.ViewFlightOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewAccountServlet</servlet-name>
+        <servlet-class>controller.ViewAccountServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateAccountServlet</servlet-name>
+        <servlet-class>controller.UpdateAccountServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FilterFlightOrderServlet</servlet-name>
+        <servlet-class>controller.FilterFlightOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BookingConfirmationServlet</servlet-name>
+        <servlet-class>controller.BookingConfirmationServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProcessBookingServlet</servlet-name>
+        <servlet-class>controller.ProcessBookingServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
         <url-pattern>/airplane/create</url-pattern>
@@ -96,6 +124,34 @@
         <servlet-name>TypeSearchController</servlet-name>
         <url-pattern>/type/search</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchFlightsServlet</servlet-name>
+        <url-pattern>/view/search-flights</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewFlightOrderServlet</servlet-name>
+        <url-pattern>/view/view-flightorder</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewAccountServlet</servlet-name>
+        <url-pattern>/view/view-account</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAccountServlet</servlet-name>
+        <url-pattern>/update-account</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FilterFlightOrderServlet</servlet-name>
+        <url-pattern>/view/filter-flightorder</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookingConfirmationServlet</servlet-name>
+        <url-pattern>/view/booking-confirmation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProcessBookingServlet</servlet-name>
+        <url-pattern>/view/process-booking</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
     </welcome-file-list>
@@ -108,16 +164,16 @@
         <servlet-class>controller.ViewFlightServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UpdateFlightServlet</servlet-name>
-        <servlet-class>controller.UpdateFlightServlet</servlet-class>
+        <servlet-name>SearchFlightServlet</servlet-name>
+        <servlet-class>controller.SearchFlightServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>FilterFlightServlet</servlet-name>
         <servlet-class>controller.FilterFlightServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CreateFlightServlet</servlet-name>
-        <servlet-class>controller.CreateFlightServlet</servlet-class>
+        <servlet-name>UpdateFlightServlet</servlet-name>
+        <servlet-class>controller.UpdateFlightServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddFlightServlet</servlet-name>
@@ -128,12 +184,16 @@
         <url-pattern>/view/list-flight</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ViewFlightServlet</servlet-name>
-        <url-pattern>/view/view-flight</url-pattern>
+        <servlet-name>SearchFlightServlet</servlet-name>
+        <url-pattern>/view/search-flight</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CreateFlightServlet</servlet-name>
-        <url-pattern>/view/create-flight</url-pattern>
+        <servlet-name>FilterFlightServlet</servlet-name>
+        <url-pattern>/view/filter-flights</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewFlightServlet</servlet-name>
+        <url-pattern>/view/view-flight</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddFlightServlet</servlet-name>

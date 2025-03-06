@@ -6,7 +6,6 @@ package dal;
 
 import java.sql.*;
 import java.util.*;
-import java.time.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Flight;
@@ -15,9 +14,9 @@ import model.Flight;
  *
  * @author A A
  */
-public class FlightDAO extends DBContext{
+public class FlightDAO extends DBContext {
 
-    public ArrayList<Flight> getAllFlight() {
+    public ArrayList<Flight> list() {
         ArrayList<Flight> list = new ArrayList<>();
         String sql = "SELECT * FROM swp301.flight";
         PreparedStatement stm = null;
@@ -40,12 +39,6 @@ public class FlightDAO extends DBContext{
             }
         } catch (SQLException ex) {
             System.out.println(ex);
-        } finally {
-            try {
-                stm.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
         return list;
     }
@@ -72,15 +65,10 @@ public class FlightDAO extends DBContext{
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                stm.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
         return null;
     }
+
     public Flight getFlightByName(String name) throws Exception {
         //encoding id
         String sql = "SELECT * FROM Flight WHERE name = ?";
@@ -103,15 +91,10 @@ public class FlightDAO extends DBContext{
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                stm.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
         return null;
     }
+
     public Flight getFlightByCode(String code) throws Exception {
         //encoding id
         String sql = "SELECT * FROM Flight WHERE code = ?";
@@ -134,17 +117,106 @@ public class FlightDAO extends DBContext{
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                stm.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
         return null;
     }
 
-    public void insertFlight(Flight flight) throws Exception {
+    public ArrayList<Flight> getFlightsByPriceRange(double minPrice, double maxPrice) {
+        ArrayList<Flight> list = new ArrayList<>();
+        String sql = """
+            SELECT f.* FROM Flight f INNER JOIN Ticket t ON f.id = t.flightId 
+            WHERE t.price BETWEEN ? AND ?
+            ORDER BY t.price ASC""";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setDouble(1, minPrice);
+            stm.setDouble(2, maxPrice);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new Flight(rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("code"),
+                        rs.getString("airplaneID"),
+                        rs.getString("departure"),
+                        rs.getString("destination"),
+                        rs.getTimestamp("entryTime").toLocalDateTime(),
+                        rs.getTimestamp("startingTime").toLocalDateTime(),
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getBytes("atcID")));
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    public ArrayList<Flight> searchFlightsByName(String searchTerm) {
+        ArrayList<Flight> list = new ArrayList<>();
+        String sql = "SELECT * FROM swp301.flight WHERE name LIKE ? OR departure LIKE ? OR destination LIKE ?";
+        PreparedStatement stm = null;
+        try {
+            stm = connection.prepareStatement(sql);
+            String searchPattern = "%" + searchTerm + "%";
+            stm.setString(1, searchPattern);
+            stm.setString(2, searchPattern);
+            stm.setString(3, searchPattern);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new Flight(
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("code"),
+                        rs.getString("airplaneID"),
+                        rs.getString("departure"),
+                        rs.getString("destination"),
+                        rs.getTimestamp("entryTime").toLocalDateTime(),
+                        rs.getTimestamp("startingTime").toLocalDateTime(),
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getBytes("atcID")
+                ));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    public ArrayList<Flight> search(String departure, String destination, String startingDate) {
+        ArrayList<Flight> list = new ArrayList<>();
+        String sql = "SELECT f.* FROM flight f "
+                + "WHERE f.departure LIKE ? "
+                + "AND f.destination LIKE ? "
+                + "AND DATE(f.startingTime) LIKE ? ";
+        ResultSet rs = null;
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, "%" + departure + "%");
+            stm.setString(2, "%" + destination + "%");
+            stm.setString(3, "%" + startingDate + "%");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new Flight(
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("code"),
+                        rs.getString("airplaneID"),
+                        rs.getString("departure"),
+                        rs.getString("destination"),
+                        rs.getTimestamp("entryTime").toLocalDateTime(),
+                        rs.getTimestamp("startingTime").toLocalDateTime(),
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getBytes("atcID")
+                ));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    public void insert(Flight flight) throws Exception {
         String sql = "INSERT INTO Flight VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stm = null;
         try {
@@ -176,7 +248,7 @@ public class FlightDAO extends DBContext{
         }
     }
 
-    public void updateFlight(Flight flight) throws Exception {
+    public void update(Flight flight) throws Exception {
         String sql = "UPDATE Flight SET departure=?, "
                 + "destination=?, entryTime=?, startingTime=?, landingTime=? WHERE id=?";
         PreparedStatement stm = null;
@@ -205,65 +277,4 @@ public class FlightDAO extends DBContext{
         }
     }
 
-    public ArrayList<Flight> getFlightsByPriceRange(double minPrice, double maxPrice) {
-        ArrayList<Flight> list = new ArrayList<>();
-        String sql = """
-            SELECT f.* FROM Flight f INNER JOIN Ticket t ON f.id = t.flightId 
-            WHERE t.price BETWEEN ? AND ?
-            ORDER BY t.price ASC""";
-        PreparedStatement stm = null;
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setDouble(1, minPrice);
-            stm.setDouble(2, maxPrice);
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                list.add(new Flight(rs.getString("id"),
-                        rs.getString("name"),
-                        rs.getString("code"),
-                        rs.getString("airplaneID"),
-                        rs.getString("departure"),
-                        rs.getString("destination"),
-                        rs.getTimestamp("entryTime").toLocalDateTime(),
-                        rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime(),
-                        rs.getBytes("atcID")));
-            }
-            rs.close();
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        } finally {
-            try {
-                stm.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return list;
-    }
-
-    public double getLowestTicketPrice(String flightId) {
-        double price = 0;
-        String sql = "SELECT MIN(price) as minPrice FROM Ticket WHERE flightId = ?";
-        PreparedStatement stm = null;
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, flightId);
-            ResultSet rs = stm.executeQuery();
-
-            if (rs.next()) {
-                price = rs.getDouble("minPrice");
-            }
-            rs.close();
-        } catch (SQLException ex) {
-            System.out.println(ex);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return price;
-    }
 }

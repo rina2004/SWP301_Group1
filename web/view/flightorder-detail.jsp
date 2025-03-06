@@ -1,6 +1,6 @@
 <%-- 
-    Document   : flight-detail
-    Created on : 8 Feb 2025, 20:05:41
+    Document   : flightorder-detail
+    Created on : 3 Mar 2025, 11:33:51
     Author     : A A
 --%>
 
@@ -21,7 +21,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3>Flight Details</h3>
-                    <a href="list-flight" class="btn btn-primary">
+                    <a href="search-flights?departure=${departure}&destination=${destination}&departureDate=${departureDate}" class="btn btn-primary">
                         <i class="fas fa-arrow-left"></i> Back to List
                     </a>
                 </div>
@@ -62,7 +62,7 @@
                                     <th>Destination:</th>
                                     <td>${flight.getDestination()}</td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th>Entry DateTime:</th>
                                     <td>
@@ -70,7 +70,7 @@
                                         <div class="time-display">${flight.getEntryHour()}</div>
                                     </td>
                                 </tr>
-                               
+
                                 <tr>
                                     <th>Starting DateTime:</th>
                                     <td>
