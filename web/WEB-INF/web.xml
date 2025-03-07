@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <context-param>
+        <param-name>webapp</param-name>
+        <param-value>webapp</param-value>
+    </context-param>
     <servlet>
         <servlet-name>AirplaneCreateController</servlet-name>
         <servlet-class>controller.AirplaneCreateController</servlet-class>
@@ -74,15 +78,15 @@
     </servlet>
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>Controller.Login</servlet-class>
+        <servlet-class>controller.Login</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Logout</servlet-name>
-        <servlet-class>Controller.Logout</servlet-class>
+        <servlet-class>controller.Logout</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ResendOTP</servlet-name>
-        <servlet-class>Controller.ResendOTP</servlet-class>
+        <servlet-class>controller.ResendOTP</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CheckOTP2</servlet-name>
@@ -193,14 +197,6 @@
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Login</servlet-name>
-        <url-pattern>/login</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Logout</servlet-name>
-        <url-pattern>/logout</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>ResendOTP</servlet-name>
         <url-pattern>/resend</url-pattern>
     </servlet-mapping>
@@ -275,11 +271,7 @@
         <servlet-name>UpdateFlightServlet</servlet-name>
         <url-pattern>/view/update-flight</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>FilterFlightServlet</servlet-name>
-        <url-pattern>/view/filter-flights</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
+    <servlet>
         <servlet-name>AccountControl</servlet-name>
         <servlet-class>Controller.AccountControl</servlet-class>
     </servlet>
@@ -302,14 +294,6 @@
     <servlet>
         <servlet-name>UpdateProfileControl</servlet-name>
         <servlet-class>Controller.UpdateProfileControl</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Login</servlet-name>
-        <servlet-class>Controller.Login</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Logout</servlet-name>
-        <servlet-class>Controller.Logout</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AccountControl</servlet-name>
