@@ -2,24 +2,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package model;
 
+package model;
+import java.util.Date;
 /**
  *
  * @author DUCDA
  */
 public class Blog {
-    private String id, title, image, description;
-    private int categoryID;
+    private String id, postID , title, description, image, categoryID;
+//    private Date  create_at;
 
     public Blog() {
     }
 
-    public Blog(String id, String title, String image, String description, int categoryID) {
+    public Blog(String id, String postID, String title, String description, String image, String categoryID) {
         this.id = id;
+        this.postID = postID;
         this.title = title;
-        this.image = image;
         this.description = description;
+        this.image = image;
         this.categoryID = categoryID;
     }
 
@@ -31,20 +33,20 @@ public class Blog {
         this.id = id;
     }
 
+    public String getPostID() {
+        return postID;
+    }
+
+    public void setPostID(String postID) {
+        this.postID = postID;
+    }
+
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public String getDescription() {
@@ -55,20 +57,27 @@ public class Blog {
         this.description = description;
     }
 
-    public int getCategoryID() {
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getCategoryID() {
         return categoryID;
     }
 
-    public void setCategoryID(int categoryID) {
+    public void setCategoryID(String categoryID) {
         this.categoryID = categoryID;
     }
 
     @Override
     public String toString() {
-        return "Blog{" + "id=" + id + ", title=" + title + ", image=" + image + ", description=" + description + ", categoryID=" + categoryID + '}';
+        return "Blog{" + "id=" + id + ", postID=" + postID + ", title=" + title + ", description=" + description + ", image=" + image + ", categoryID=" + categoryID + '}';
     }
 
-    
     
 }
 

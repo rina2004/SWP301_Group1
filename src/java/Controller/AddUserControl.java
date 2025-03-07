@@ -8,7 +8,6 @@ import dal.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author anhbu
  */
-@WebServlet(name = "AddUserControl", urlPatterns = {"/addUser"})
+
 public class AddUserControl extends HttpServlet {
 
     /**
@@ -76,21 +75,44 @@ public class AddUserControl extends HttpServlet {
         //processRequest(request, response);
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        int roleID = Integer.parseInt(request.getParameter("roleID"));
-        boolean status = Boolean.parseBoolean(request.getParameter("status"));
 
-        AccountDAO dao = new AccountDAO();
-        boolean isInserted = dao.addUser(username, password, roleID, status);
+        // Kiểm tra trạng thái tài khoản
+        boolean status = "true".equals(request.getParameter("status"));
 
-        String message;
-        if (isInserted) {
-            message = "Add user success ! ";
-        } else {
-            message = "Can not add user ! The username already exists !";
+        // Lấy entityID
+        int entityID = 0;
+        try {
+            entityID = Integer.parseInt(request.getParameter("entityID"));
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid entityID: " + request.getParameter("entityID"));
+        }
+
+        // Lấy roleID từ request (bây giờ chỉ lấy một giá trị duy nhất)
+        int roleID = 0;
+        try {
+            roleID = Integer.parseInt(request.getParameter("roleID"));
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid roleID: " + request.getParameter("roleID"));
         }
 
         HttpSession session = request.getSession();
-        session.setAttribute("Message", message);
+
+        // Kiểm tra roleID hợp lệ
+        if (roleID == 0) {
+            session.setAttribute("errorMessage", "Please select a valid role!");
+            response.sendRedirect("acc");
+            return;
+        }
+
+        AccountDAO dao = new AccountDAO();
+        boolean isInserted = dao.addUser(username, password, status, entityID, roleID); // Sửa để truyền vào một roleID duy nhất
+
+        if (isInserted) {
+            session.setAttribute("Message", "User added successfully!");
+        } else {
+            session.setAttribute("Message", "Cannot add user! The username may already exist.");
+        }
+
         response.sendRedirect("acc");
     }
 

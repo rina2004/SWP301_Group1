@@ -38,10 +38,6 @@
                             <h4>Basic Information</h4>
                             <table class="table table-borderless">
                                 <tr>
-                                    <th>Flight ID:</th>
-                                    <td>${flight.getId()}</td>
-                                </tr>
-                                <tr>
                                     <th>Flight Name:</th>
                                     <td>${flight.getName()}</td>
                                 </tr>
@@ -67,7 +63,6 @@
                                     <td>${flight.getDestination()}</td>
                                 </tr>
                                 
-                                <%-- 12-2-25 --%>
                                 <tr>
                                     <th>Entry DateTime:</th>
                                     <td>
@@ -89,32 +84,6 @@
                                         <div class="time-display">${flight.getLandingHour()}</div>
                                     </td>
                                 </tr>
-                                <%-- ban cu~, fix date->localdatetime
-                                <tr>
-                                    <th>Entry Date:</th>
-                                    <td><fmt:formatDate value="${flight.entryTime}" pattern="dd-MM-yyyy" /></td>
-                                </tr>
-                                <tr>
-                                    <th>Entry Time:</th>
-                                    <td><fmt:formatDate value="${flight.entryTime}" pattern="HH:mm:ss" /></td>
-                                </tr>
-                                <tr>
-                                    <th>Starting Date:</th>
-                                    <td><fmt:formatDate value="${flight.startingTime}" pattern="dd-MM-yyyy" /></td>
-                                </tr>
-                                <tr>
-                                    <th>Starting Time:</th>
-                                    <td><fmt:formatDate value="${flight.startingTime}" pattern="HH:mm:ss" /></td>
-                                </tr>
-                                <tr>
-                                    <th>Landing Date:</th>
-                                    <td><fmt:formatDate value="${flight.landingTime}" pattern="dd-MM-yyyy" /></td>
-                                </tr>
-                                <tr>
-                                    <th>Landing Time:</th>
-                                    <td><fmt:formatDate value="${flight.landingTime}" pattern="HH:mm:ss" /></td>
-                                </tr>
-                                --%>
                             </table>
                         </div>
                     </div>

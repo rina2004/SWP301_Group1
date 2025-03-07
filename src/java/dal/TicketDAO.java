@@ -37,15 +37,7 @@ public class TicketDAO extends DBContext {
             }
         } catch (SQLException ex) {
             Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (stm != null) {
-                try {
-                    stm.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
+        } 
         // If no ticket found, return default ticket
         Ticket defaultTicket = new Ticket();
         defaultTicket.setPrice(0);
@@ -71,15 +63,7 @@ public class TicketDAO extends DBContext {
             }
         } catch (SQLException ex) {
             Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (stm != null) {
-                try {
-                    stm.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
+        } 
         return list;
     }
 
@@ -101,15 +85,7 @@ public class TicketDAO extends DBContext {
             }
         } catch (SQLException ex) {
             Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (stm != null) {
-                try {
-                    stm.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
+        } 
         return null;
     }
 }

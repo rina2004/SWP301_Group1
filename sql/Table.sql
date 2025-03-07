@@ -61,6 +61,31 @@ CREATE TABLE `AccountUserRole` (
 	FOREIGN KEY (`roleID`) REFERENCES Role(`id`) ON DELETE CASCADE
 );
 
+CREATE TABLE `Account` (
+  `id` VARCHAR(36) DEFAULT (UUID()),
+  `username` VARCHAR(50) UNIQUE NOT NULL,
+  `password` VARCHAR(50) NOT NULL,
+  `status` bool DEFAULT(TRUE),
+  `citizenID` VARCHAR(12),
+  `name` VARCHAR(50),
+  `dob` DATE,
+  `phone` VARCHAR(10),
+  `address` VARCHAR(255),
+  `email` VARCHAR(255),
+  
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `AccountUserRole` (
+    `accountID` VARCHAR(36) NOT NULL,
+    `entityID` INT NOT NULL,
+    `roleID` INT NOT NULL,
+    PRIMARY KEY (`accountID`, `entityID`, `roleID`),
+
+    FOREIGN KEY (`accountID`) REFERENCES Account(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`roleID`) REFERENCES Role(`id`) ON DELETE CASCADE
+);
+
 -------------------------------------------------------------
 -------------------------------------------------------------
 -------------------------------------------------------------
@@ -233,7 +258,59 @@ CREATE TABLE `PostTag` (
 	PRIMARY KEY (`postID`, `tagID`),
 
 	FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
-	FOREIGN KEY (`tagID`) REFERENCES `Tag`(`id`) ON DELETE CASCADE
+	FOREIGN KEY (`tagID`) REFERENCES `Tag`(`id`) ON DELETE CASCADE,
+    
+    primary key (`id`)
+);
+
+CREATE TABLE `BlogPost` (
+    `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('POST-', UUID())), 
+    `title` VARCHAR(255) NOT NULL,
+    `content` TEXT NOT NULL,
+    `authorID` VARCHAR(41) NOT NULL,
+    `categoryID` INT NOT NULL,
+    `published` BOOLEAN DEFAULT FALSE,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (`authorID`) REFERENCES `Account`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`categoryID`) REFERENCES `BlogCategory`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Comment` (
+    `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('CMT-', UUID())),
+    `postID` VARCHAR(41) NOT NULL,
+    `accountID` VARCHAR(41) NOT NULL,
+    `content` TEXT NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`accountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `PostLike` (
+    `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('LIKE-', UUID())),
+    `postID` VARCHAR(41) NOT NULL,
+    `accountID` VARCHAR(41) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`accountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Tags` (
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE `PostTags` (
+    `postID` VARCHAR(36) NOT NULL,
+    `tagID` INT NOT NULL,
+    PRIMARY KEY (`post_id`, `tag_id`),
+
+    FOREIGN KEY (`postID`) REFERENCES `BlogPosts`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`tagID`) REFERENCES `Tags`(`id`) ON DELETE CASCADE
 );
 
 
