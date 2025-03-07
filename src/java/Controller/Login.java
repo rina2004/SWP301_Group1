@@ -81,7 +81,7 @@ public class Login extends HttpServlet {
             request.getRequestDispatcher("view/Login.jsp").forward(request, response);
         } else if (!acc.isStatus()) {
             request.setAttribute("error", "The account is not allowed to login to the system !!!");
-            request.getRequestDispatcher("vew/Login.jsp").forward(request, response);
+            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
         }
 
         if (acc != null) {
