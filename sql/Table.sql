@@ -5,32 +5,6 @@ USE `swp301`;
 -------------------------------------------------------------
 -------------------------------------------------------------
 
-CREATE TABLE `Customer` (
-	`id` varchar(10),
-	PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `Administrator` (
-	`id` varchar(10),
-	`roleID` INT,
-	  
-	PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `Staff` (
-	`id` varchar(10),
-	`createdDate` DATETIME,
-	  
-	PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `AirTrafficControl` (
-	`id` varchar(10),
-	`createdDate` DATETIME,
-	  
-	PRIMARY KEY (`id`)
-);
-
 CREATE TABLE `Role` (
 	`id` INT AUTO_INCREMENT,
 	`name` VARCHAR(50) unique not null,
@@ -38,29 +12,39 @@ CREATE TABLE `Role` (
 	PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `Feature` (
+	`id` int auto_increment,
+    `name` varchar(255),
+    `url` varchar(100),
+    
+    primary key (`id`)
+);
+
+CREATE TABLE `RoleFeature` (
+	`roleID` int,
+    `featureID` int,
+    
+    primary key (`roleID`, `featureID`),
+    foreign key (`roleID`) references `Role`(`id`),
+    foreign key (`featureID`) references `Feature`(`id`)
+);
+
 CREATE TABLE `Account` (
-	`id` VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+	`id` VARCHAR(36) DEFAULT (UUID()),
 	`username` VARCHAR(50) UNIQUE NOT NULL,
 	`password` VARCHAR(50) NOT NULL,
+    `roleID` int,
 	`status` bool DEFAULT(TRUE),
 	`citizenID` VARCHAR(12),
 	`name` VARCHAR(50),
 	`dob` DATE,
 	`phone` VARCHAR(10),
 	`address` VARCHAR(255),
-	`email` VARCHAR(255)
+	`email` VARCHAR(255),
+    
+    primary key (`id`),
+    foreign key (`roleID`) references `Role`(`id`)
 );
-
-CREATE TABLE `AccountUserRole` (
-	`accountID` VARCHAR(36) NOT NULL,
-	`entityID` INT NOT NULL,
-	`roleID` INT NOT NULL,
-	PRIMARY KEY (`accountID`, `entityID`, `roleID`),
-
-	FOREIGN KEY (`accountID`) REFERENCES Account(`id`) ON DELETE CASCADE,
-	FOREIGN KEY (`roleID`) REFERENCES Role(`id`) ON DELETE CASCADE
-);
-
 -------------------------------------------------------------
 -------------------------------------------------------------
 -------------------------------------------------------------
@@ -100,12 +84,10 @@ CREATE TABLE `Airplane` (
 	`statusID` int,
 	`maintainanceTime` datetime,
 	`usedTime` datetime,
-	`atcID` varchar(10),
 	  
 	PRIMARY KEY (`id`),
 	foreign key (`statusID`) references `AirplaneStatus`(`id`),
-	foreign key (`typeID`) references `Type`(`id`) ON DELETE CASCADE,
-	foreign key (`atcID`) references `AirTrafficControl`(`id`)
+	foreign key (`typeID`) references `Type`(`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE `Flight` (
@@ -118,11 +100,9 @@ CREATE TABLE `Flight` (
 	`entryTime` datetime,
 	`startingTime` datetime,
 	`landingTime` datetime,
-	`atcID` varchar(10),
 	  
 	PRIMARY KEY (`id`),
-	foreign key (`airplaneID`) references `Airplane`(`id`),
-	foreign key (`atcID`) references `AirTrafficControl`(`id`)
+	foreign key (`airplaneID`) references `Airplane`(`id`)
 );
 
 CREATE TABLE `Seat` (
@@ -136,19 +116,18 @@ CREATE TABLE `Seat` (
 
 CREATE TABLE `Order` (
 	`id` varchar(10),
-	`customerID` varchar(10),
-	`staffID` varchar(10),
+	`customerID` varchar(36),
+	`staffID` varchar(36),
 	`status` varchar(50),
 	`time` datetime,
 	  
 	PRIMARY KEY (`id`),
-	foreign key (`customerID`) references `Customer`(`id`),
-	foreign key (`staffID`) references `Staff`(`id`)
+	foreign key (`customerID`) references `Account`(`id`),
+	foreign key (`staffID`) references `Account`(`id`)
 );
 
 CREATE TABLE `Ticket` (
 	`id` varchar(10),
-	`staffID` varchar(10),
 	`orderID` varchar(10),
 	`flightID` varchar(10),
 	`seatID` varchar(10),
@@ -158,20 +137,19 @@ CREATE TABLE `Ticket` (
 	  
 	PRIMARY KEY (`id`),
 	foreign key (`orderID`) references `Order`(`id`),
-	foreign key (`staffID`) references `Staff`(`id`),
 	foreign key (`flightID`) references `Flight`(`id`),
 	foreign key (`seatID`) references `Seat`(`id`)
 );
 
 CREATE TABLE `Luggage` (
 	`id` varchar(10),
-	`customerID` varchar(10),
+	`customerID` varchar(36),
 	`orderID` varchar(10),
 	`type` varchar(30),
 	`weight` decimal(10,2),
 	  
 	PRIMARY KEY (`id`),
-	foreign key (`customerID`) references `Customer`(`id`),
+	foreign key (`customerID`) references `Account`(`id`),
 	foreign key (`orderID`) references `Order`(`id`)
 );
 
