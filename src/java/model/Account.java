@@ -12,25 +12,22 @@ import java.sql.Date;
  */
 public class Account {
 
-    private String id;
+   private String id;
     private String username;
     private String password;
-    private String role;
-    private int roleID;
+    private Role role; // Thay vì int roleID
     private boolean status;
     private String citizenID;
     private String name;
-    private int entityID; 
     private Date dob;
     private String phone;
     private String address;
     private String email;
 
     public Account() {
-    
     }
 
-    public Account(String id, String username, String password, String role, boolean status, String citizenID, String name, int roleID, int entityID, Date dob, String phone, String address, String email) {
+    public Account(String id, String username, String password, Role role, boolean status, String citizenID, String name, Date dob, String phone, String address, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -38,27 +35,10 @@ public class Account {
         this.status = status;
         this.citizenID = citizenID;
         this.name = name;
-        this.roleID = roleID;
-        this.entityID = entityID;
         this.dob = dob;
         this.phone = phone;
         this.address = address;
         this.email = email;
-    }
-
-    public Account(String id, String username, String password, boolean status, String citizenID, String name, Date dob, String phone, String address, String email, int entityID, int roleID) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.status = status;
-        this.citizenID = citizenID;
-        this.name = name;
-        this.dob = dob;
-        this.phone = phone;
-        this.address = address;
-        this.email = email;
-        this.entityID = entityID;
-        this.roleID = roleID;
     }
 
     public String getId() {
@@ -85,11 +65,11 @@ public class Account {
         this.password = password;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -115,22 +95,6 @@ public class Account {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getRoleID() {
-        return roleID;
-    }
-
-    public void setRoleID(int roleID) {
-        this.roleID = roleID;
-    }
-
-    public int getEntityID() {
-        return entityID;
-    }
-
-    public void setEntityID(int entityID) {
-        this.entityID = entityID;
     }
 
     public Date getDob() {

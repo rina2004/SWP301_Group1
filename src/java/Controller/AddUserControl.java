@@ -12,12 +12,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Role;
 
 /**
  *
  * @author anhbu
  */
-
 public class AddUserControl extends HttpServlet {
 
     /**
@@ -79,15 +79,7 @@ public class AddUserControl extends HttpServlet {
         // Kiểm tra trạng thái tài khoản
         boolean status = "true".equals(request.getParameter("status"));
 
-        // Lấy entityID
-        int entityID = 0;
-        try {
-            entityID = Integer.parseInt(request.getParameter("entityID"));
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid entityID: " + request.getParameter("entityID"));
-        }
-
-        // Lấy roleID từ request (bây giờ chỉ lấy một giá trị duy nhất)
+        // Lấy roleID từ request
         int roleID = 0;
         try {
             roleID = Integer.parseInt(request.getParameter("roleID"));
@@ -104,8 +96,11 @@ public class AddUserControl extends HttpServlet {
             return;
         }
 
+        // Tạo đối tượng Role từ roleID
+        Role role = new Role(roleID, ""); // Role chưa có roleName, chỉ có roleID
+
         AccountDAO dao = new AccountDAO();
-        boolean isInserted = dao.addUser(username, password, status, entityID, roleID); // Sửa để truyền vào một roleID duy nhất
+        boolean isInserted = dao.addUser(username, password, role, status, "", "", null, "", "", "");
 
         if (isInserted) {
             session.setAttribute("Message", "User added successfully!");

@@ -21,13 +21,24 @@ public class DBContext {
     public DBContext() {
         try {
             String user = "root";
-            String pass = "26122004";
+            String pass = "hiep123";
             String url = "jdbc:mysql://localhost:3306/swp301?useSSL=false&serverTimezone=UTC";
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, user, pass);
 
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void main(String[] args) {
+        DBContext db = new DBContext();
+        Connection conn = db.connection;
+
+        if (conn != null) {
+            System.out.println("Kết nối database thành công!");
+        } else {
+            System.out.println("Kết nối database thất bại!");
         }
     }
 }

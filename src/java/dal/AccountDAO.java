@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 import model.Account;
+import model.Role;
 
 /**
  *
@@ -23,25 +24,23 @@ public class AccountDAO extends DBContext {
     // Lấy tất cả tài khoản (trừ Admin)
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
-        String sql = "SELECT a.*, aur.entityID, aur.roleID FROM Account a "
-                + "LEFT JOIN AccountUserRole aur ON a.id = aur.accountID "
-                + "WHERE aur.roleID != 1"; // Loại bỏ Admin
+        String sql = "SELECT a.*, r.name AS roleName FROM Account a JOIN Role r ON a.roleID = r.id WHERE a.roleID != 1"; // Loại bỏ Admin
 
         try (PreparedStatement st = connection.prepareStatement(sql); ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
+                Role role = new Role(rs.getInt("roleID"), rs.getString("roleName")); // Sửa "roleName"
                 Account acc = new Account(
                         rs.getString("id"),
                         rs.getString("username"),
                         rs.getString("password"),
+                        role, // Truyền vào đối tượng Role
                         rs.getBoolean("status"),
                         rs.getString("citizenID"),
                         rs.getString("name"),
                         rs.getDate("dob"),
                         rs.getString("phone"),
                         rs.getString("address"),
-                        rs.getString("email"),
-                        rs.getInt("entityID"),
-                        rs.getInt("roleID")
+                        rs.getString("email")
                 );
                 accounts.add(acc);
             }
@@ -66,25 +65,25 @@ public class AccountDAO extends DBContext {
 
     // Lấy tài khoản theo ID (bao gồm role)
     public Account getUserByID(String id) {
-        String sql = "SELECT a.*, aur.entityID, aur.roleID FROM Account a LEFT JOIN AccountUserRole aur ON a.id = aur.accountID WHERE a.id = ?";
+        String sql = "SELECT a.*, r.name AS roleName FROM Account a JOIN Role r ON a.roleID = r.id WHERE a.id = ?";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, id);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
+                    Role role = new Role(rs.getInt("roleID"), rs.getString("roleName")); // Sửa "roleName"
                     return new Account(
                             rs.getString("id"),
                             rs.getString("username"),
                             rs.getString("password"),
+                            role,
                             rs.getBoolean("status"),
                             rs.getString("citizenID"),
                             rs.getString("name"),
                             rs.getDate("dob"),
                             rs.getString("phone"),
                             rs.getString("address"),
-                            rs.getString("email"),
-                            rs.getInt("entityID"),
-                            rs.getInt("roleID")
+                            rs.getString("email")
                     );
                 }
             }
@@ -109,33 +108,30 @@ public class AccountDAO extends DBContext {
     }
 
     // Thêm tài khoản mới và gán vai trò
-    public boolean addUser(String username, String password, boolean status, int entityID, int roleID) {
+    public boolean addUser(String username, String password, Role role, boolean status, String citizenID, String name, Date dob, String phone, String address, String email) {
         if (isUsernameExists(username)) {
             System.out.println("Username already exists.");
             return false;
         }
 
         String generatedID = UUID.randomUUID().toString();
+        String sql = "INSERT INTO Account (id, username, password, roleID, status, citizenID, name, dob, phone, address, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        String accountSql = "INSERT INTO Account (id, username, password, status) VALUES (?, ?, ?, ?)";
-        String roleSql = "INSERT INTO AccountUserRole (accountID, entityID, roleID) VALUES (?, ?, ?)";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, generatedID);
+            st.setString(2, username);
+            st.setString(3, password);
+            st.setInt(4, role.getId()); // Lấy roleID từ Role
+            st.setBoolean(5, status);
+            st.setString(6, citizenID);
+            st.setString(7, name);
+            st.setDate(8, dob);
+            st.setString(9, phone);
+            st.setString(10, address);
+            st.setString(11, email);
 
-        try (PreparedStatement accSt = connection.prepareStatement(accountSql)) {
-            accSt.setString(1, generatedID);
-            accSt.setString(2, username);
-            accSt.setString(3, password);
-            accSt.setBoolean(4, status);
-            int rowsInserted = accSt.executeUpdate();
-
-            if (rowsInserted > 0) {
-                try (PreparedStatement roleSt = connection.prepareStatement(roleSql)) {
-                    roleSt.setString(1, generatedID);
-                    roleSt.setInt(2, entityID);
-                    roleSt.setInt(3, roleID);
-                    roleSt.executeUpdate();
-                }
-                return true;
-            }
+            int rowsInserted = st.executeUpdate();
+            return rowsInserted > 0;
         } catch (SQLException e) {
             System.out.println("Error in addUser: " + e);
         }
@@ -143,32 +139,32 @@ public class AccountDAO extends DBContext {
     }
 
     public Account getAccountByUsername(String username) {
-        String sql = "SELECT a.*, aur.entityID, aur.roleID FROM Account a "
-                + "LEFT JOIN AccountUserRole aur ON a.id = aur.accountID "
-                + "WHERE a.username = ?";
+        String sql = "SELECT a.*, r.id AS roleID, r.name AS roleName FROM Account a JOIN Role r ON a.roleID = r.id WHERE a.username = ?";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, username);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
+                    Role role = new Role(rs.getInt("roleID"), rs.getString("roleName"));
                     return new Account(
                             rs.getString("id"),
                             rs.getString("username"),
                             rs.getString("password"),
+                            role,
                             rs.getBoolean("status"),
-                            rs.getString("citizenID") != null ? rs.getString("citizenID") : "",
-                            rs.getString("name") != null ? rs.getString("name") : "",
-                            rs.getDate("dob") != null ? rs.getDate("dob") : null,
-                            rs.getString("phone") != null ? rs.getString("phone") : "",
-                            rs.getString("address") != null ? rs.getString("address") : "",
-                            rs.getString("email") != null ? rs.getString("email") : "",
-                            rs.getInt("entityID"),
-                            rs.getInt("roleID")
+                            rs.getString("citizenID"),
+                            rs.getString("name"),
+                            rs.getDate("dob"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
+                            rs.getString("email")
                     );
+                } else {
+                    System.out.println("No account found for username: " + username);
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error in getAccountByUsername: " + e);
+            System.out.println("Error in getAccountByUsername: " + e.getMessage());
         }
         return null;
     }
@@ -200,7 +196,7 @@ public class AccountDAO extends DBContext {
             e.printStackTrace();
         }
     }
-    
+
     public boolean updateAccountDetails(String accountId, String email, String phone) {
         String sql = "UPDATE Account SET email = ?, phone = ? WHERE id = ?";
         try {
@@ -208,7 +204,7 @@ public class AccountDAO extends DBContext {
             st.setString(1, email);
             st.setString(2, phone);
             st.setString(3, accountId);
-            
+
             int rowsAffected = st.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -348,22 +344,22 @@ public class AccountDAO extends DBContext {
             System.out.println(e);
         }
     }
-    
-    public boolean checkPassword(String username,String password){
+
+    public boolean checkPassword(String username, String password) {
         PreparedStatement stm;
         ResultSet rs;
         String sql = "Select Count(password) where username = ? and password = ?";
-        
-        try{
-          stm = connection.prepareStatement(sql);
-          stm.setString(1, username);
-          stm.setString(2, password);
-          rs = stm.executeQuery();
-          if(rs.next() && rs.getInt(1) > 0){
-              return true;
-          }
-        }catch(SQLException e){
-            
+
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, username);
+            stm.setString(2, password);
+            rs = stm.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+
         }
         return false;
     }
