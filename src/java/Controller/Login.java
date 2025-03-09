@@ -82,6 +82,7 @@ public class Login extends HttpServlet {
         } else if (!acc.isStatus()) {
             request.setAttribute("error", "The account is not allowed to login to the system !!!");
             request.getRequestDispatcher("view/Login.jsp").forward(request, response);
+            return;
         }
 
         if (acc != null) {
@@ -95,7 +96,7 @@ public class Login extends HttpServlet {
             session.setAttribute("acc", acc);
             session.setAttribute("username", username);
             session.setMaxInactiveInterval(60 * 30);
-            response.sendRedirect("view/home.jsp");
+            response.sendRedirect("view/Home.jsp");
 
         }
     }

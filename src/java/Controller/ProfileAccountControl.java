@@ -71,7 +71,8 @@ public class ProfileAccountControl extends HttpServlet {
         }
 
         // Lấy dữ liệu mới nhất từ database
-        Account account = accountDAO.getAccountByUsername(sessionAccount.getUsername());
+        Account account = accountDAO.getUserByID(sessionAccount.getId());
+
 
         if (account == null) {
             response.sendRedirect("view/Login.jsp");

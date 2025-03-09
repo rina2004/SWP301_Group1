@@ -26,7 +26,7 @@
                             <div class="card-header">Profile Picture</div>
                             <div class="card-body text-center">
                                 <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                         <div class="card mb-4">
                             <div class="card-header">Account Details</div>
                             <div class="card-body">
-                                <form>
+                                <form id="profileForm" action="updateProfile" method="post">
                                     <div class="row gx-3 mb-3">
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputUsername">Username</label>
@@ -75,7 +75,9 @@
                                         <label class="small mb-1" for="inputEmail">Email</label>
                                         <input class="form-control" id="inputEmail" type="email" value="${account.email}" readonly>
                                     </div>
-                                    <a href="updateProfile" class="btn btn-primary">Edit Profile</a>
+                                    <!-- Nút Edit và Save luôn hiển thị -->
+                                    <button type="button" id="editBtn" class="btn btn-primary">Edit Profile</button>
+                                    <button type="submit" id="saveBtn" class="btn btn-success" disabled>Save</button>
                                 </form>
                             </div>
                         </div>
@@ -90,5 +92,46 @@
 
 
         </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const editBtn = document.getElementById("editBtn");
+                const saveBtn = document.getElementById("saveBtn");
+                const inputs = document.querySelectorAll("#profileForm input:not(#inputUsername)");
+
+                // Ban đầu: disable nút Save
+                saveBtn.disabled = true;
+
+                // Khi nhấn Edit: mở khóa các trường input và kích hoạt nút Save
+                editBtn.addEventListener("click", function () {
+                    inputs.forEach(input => input.removeAttribute("readonly"));
+                    saveBtn.disabled = false; // Kích hoạt nút Save
+                });
+
+                // Xử lý lưu thông tin bằng AJAX
+                document.getElementById("profileForm").addEventListener("submit", function (e) {
+                    e.preventDefault(); // Ngăn chặn tải lại trang
+
+                    const formData = new FormData(this);
+
+                    fetch("updateProfile", {
+                        method: "POST",
+                        body: new URLSearchParams(formData),
+                        headers: {"Content-Type": "application/x-www-form-urlencoded"}
+                    })
+                            .then(response => response.text())
+                            .then(data => {
+                                alert("Profile updated successfully!");
+
+                                // Sau khi lưu, khóa lại các trường input
+                                inputs.forEach(input => input.setAttribute("readonly", true));
+                                saveBtn.disabled = true; // Disable nút Save sau khi lưu
+                            })
+                            .catch(error => console.error("Error updating profile:", error));
+                });
+            });
+
+        </script>
+
     </body>
 </html>

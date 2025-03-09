@@ -19,5 +19,6 @@
         <form action="<%= request.getContextPath() %>/profile" method="get">
             <button type="submit" class="logout-btn">Profile</button>
         </form>
+         <p>Xin chào: ${sessionScope.username}</p>
     </body>
 </html>

@@ -78,11 +78,11 @@
     </servlet>
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>controller.Login</servlet-class>
+        <servlet-class>Controller.Login</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Logout</servlet-name>
-        <servlet-class>controller.Logout</servlet-class>
+        <servlet-class>Controller.Logout</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ResendOTP</servlet-name>

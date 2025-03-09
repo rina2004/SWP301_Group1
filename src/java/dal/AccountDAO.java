@@ -4,7 +4,6 @@
  */
 package dal;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -170,10 +169,9 @@ public class AccountDAO extends DBContext {
     }
 
     public void updateProfile(Account acc) {
-        String sql = "UPDATE Account SET password=?, name=?, citizenID=?, dob=?, phone=?, address=?, email=? WHERE username=?";
+        String sql = "UPDATE Account SET password=?, name=?, citizenID=?, dob=?, phone=?, address=?, email=? WHERE userID=?";
 
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
-
             // Chuyển đổi dob sang java.sql.Date
             Date sqlDob = (acc.getDob() != null) ? new Date(acc.getDob().getTime()) : null;
 
@@ -185,11 +183,11 @@ public class AccountDAO extends DBContext {
             stm.setString(5, acc.getPhone());
             stm.setString(6, acc.getAddress());
             stm.setString(7, acc.getEmail());
-            stm.setString(8, acc.getUsername());
+            stm.setString(8, acc.getId()); // Cập nhật theo userID, không phải username!
 
             int rowsAffected = stm.executeUpdate();
             if (rowsAffected == 0) {
-                System.out.println("No account was updated. Check the username.");
+                System.out.println("No account was updated. Check the userID.");
             }
 
         } catch (SQLException e) {
@@ -247,16 +245,17 @@ public class AccountDAO extends DBContext {
             rs = stm.executeQuery();
 
             if (rs.next()) {
-                boolean status = rs.getBoolean("status"); // Lấy giá trị status từ DB
+                boolean status = rs.getBoolean("status");
 
-                if (!status) { // Nếu status = false (0), không cho phép đăng nhập
+                if (!status) {
                     return null;
                 }
 
                 Account acc = new Account();
+                acc.setId(rs.getString("id")); // Lấy ID từ DB
                 acc.setUsername(rs.getString("username"));
                 acc.setPassword(rs.getString("password"));
-                acc.setStatus(status); // Lưu status vào đối tượng Account
+                acc.setStatus(status);
 
                 return acc;
             }

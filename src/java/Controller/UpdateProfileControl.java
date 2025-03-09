@@ -88,7 +88,6 @@ public class UpdateProfileControl extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         // Lấy dữ liệu từ form
-        String username = request.getParameter("username");
         String password = request.getParameter("password");
         String name = request.getParameter("name");
         String citizenID = request.getParameter("citizenID");
@@ -117,8 +116,7 @@ public class UpdateProfileControl extends HttpServlet {
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("acc");
 
-        if (acc != null && acc.getUsername().equals(username)) {
-
+        if (acc != null) {
             // Cập nhật thông tin tài khoản
             acc.setPassword(password);
             acc.setName(name);
@@ -130,8 +128,11 @@ public class UpdateProfileControl extends HttpServlet {
 
             // Gọi DAO để cập nhật database
             AccountDAO dao = new AccountDAO();
-            dao.updateProfile(acc);
-            session.setAttribute("acc", acc); // Cập nhật session
+            dao.updateProfile(acc); // Đảm bảo phương thức này cập nhật theo userID
+
+            // Lấy lại thông tin mới từ database
+            Account updatedAcc = dao.getUserByID(acc.getId());
+            session.setAttribute("acc", updatedAcc); // Cập nhật lại session với thông tin mới
 
         } else {
             request.setAttribute("error", "Unauthorized update attempt!");
