@@ -169,7 +169,7 @@ public class AccountDAO extends DBContext {
     }
 
     public void updateProfile(Account acc) {
-        String sql = "UPDATE Account SET password=?, name=?, citizenID=?, dob=?, phone=?, address=?, email=? WHERE userID=?";
+        String sql = "UPDATE Account SET password=?, name=?, citizenID=?, dob=?, phone=?, address=?, email=? WHERE id=?";
 
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             // Chuyển đổi dob sang java.sql.Date

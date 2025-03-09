@@ -100,7 +100,7 @@ public class AddUserControl extends HttpServlet {
         Role role = new Role(roleID, ""); // Role chưa có roleName, chỉ có roleID
 
         AccountDAO dao = new AccountDAO();
-        boolean isInserted = dao.addUser(username, password, role, status, "", "", null, "", "", "");
+        boolean isInserted = dao.addUser(username, password, role, status, null, null, null, null, null, null);
 
         if (isInserted) {
             session.setAttribute("Message", "User added successfully!");
