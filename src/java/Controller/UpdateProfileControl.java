@@ -72,7 +72,7 @@ public class UpdateProfileControl extends HttpServlet {
         }
 
         request.setAttribute("account", acc);
-        request.getRequestDispatcher("view/EditProfile.jsp").forward(request, response);
+        request.getRequestDispatcher("view/Profileaccount.jsp").forward(request, response);
     }
 
     /**
@@ -88,6 +88,9 @@ public class UpdateProfileControl extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         // Lấy dữ liệu từ form
+        HttpSession session = request.getSession();
+
+        // Lấy dữ liệu từ form
         String name = request.getParameter("name");
         String citizenID = request.getParameter("citizenID");
         String dobStr = request.getParameter("dob");
@@ -95,7 +98,30 @@ public class UpdateProfileControl extends HttpServlet {
         String address = request.getParameter("address");
         String email = request.getParameter("email");
 
-        // Chuyển đổi dob từ String -> java.sql.Date
+        // Kiểm tra dữ liệu hợp lệ
+        String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        String phonePattern = "^[0-9]{10,11}$";
+        String citizenIDPattern = "^[0-9]{9,12}$";
+
+        if (!email.matches(emailPattern)) {
+            session.setAttribute("error", "Invalid email format!");
+            response.sendRedirect("profile");
+            return;
+        }
+
+        if (!phone.matches(phonePattern)) {
+            session.setAttribute("error", "Phone number must be 10-11 digits!");
+            response.sendRedirect("profile");
+            return;
+        }
+
+        if (!citizenID.matches(citizenIDPattern)) {
+            session.setAttribute("error", "Citizen ID must be 9-12 digits!");
+            response.sendRedirect("profile");
+            return;
+        }
+
+        // Chuyển đổi ngày sinh từ String -> java.sql.Date
         Date dob = null;
         if (dobStr != null && !dobStr.trim().isEmpty()) {
             try {
@@ -104,14 +130,13 @@ public class UpdateProfileControl extends HttpServlet {
                 java.util.Date utilDate = sdf.parse(dobStr);
                 dob = new Date(utilDate.getTime()); // Chuyển thành java.sql.Date
             } catch (ParseException e) {
-                request.setAttribute("error", "Invalid date format!");
-                request.getRequestDispatcher("view/Profileaccount.jsp").forward(request, response);
+                session.setAttribute("error", "Invalid date format!");
+                response.sendRedirect("profile");
                 return;
             }
         }
 
-        // Lấy session
-        HttpSession session = request.getSession();
+        // Lấy tài khoản từ session
         Account acc = (Account) session.getAttribute("acc");
 
         if (acc != null) {
@@ -131,11 +156,12 @@ public class UpdateProfileControl extends HttpServlet {
             Account updatedAcc = dao.getUserByID(acc.getId());
             session.setAttribute("acc", updatedAcc); // Cập nhật lại session với thông tin mới
 
+            session.setAttribute("success", "Profile updated successfully!");
+            response.sendRedirect("profile");
         } else {
-            request.setAttribute("error", "Unauthorized update attempt!");
+            session.setAttribute("error", "Unauthorized update attempt!");
+            response.sendRedirect("profile");
         }
-
-        response.sendRedirect("profile");
     }
 
     /**

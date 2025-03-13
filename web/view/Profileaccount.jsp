@@ -19,28 +19,46 @@
             </nav>
             <hr class="mt-0 mb-4">
 
+            <%-- Hiển thị thông báo lỗi --%>
+            <c:if test="${not empty sessionScope.error}">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error:</strong> ${sessionScope.error}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <c:remove var="error" scope="session"/> <%-- Xóa session ngay sau khi hiển thị --%>
+            </c:if>
+
+            <%-- Hiển thị thông báo thành công --%>
+            <c:if test="${not empty sessionScope.success}">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success:</strong> ${sessionScope.success}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <c:remove var="success" scope="session"/> <%-- Xóa session ngay sau khi hiển thị --%>
+            </c:if>
+
+
             <c:if test="${not empty account}">
                 <div class="row">
                     <div class="col-xl-4">
                         <div class="card mb-4 mb-xl-0">
-                            <div class="card-header">Profile Picture</div>
                             <div class="card-body text-center">
-                                <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                <img class="img-account-profile rounded-circle mb-2" 
+                                     src="https://i.pinimg.com/736x/8f/1c/a2/8f1ca2029e2efceebd22fa05cca423d7.jpg" 
+                                     alt="Profile Picture">
+
+                                <h5 class="mt-3">${account.username}</h5> 
                             </div>
                         </div>
                     </div>
+
 
                     <div class="col-xl-8">
                         <div class="card mb-4">
                             <div class="card-header">Account Details</div>
                             <div class="card-body">
                                 <form action="updateProfile" method="post">
-                                    <div class="row gx-3 mb-3">
-                                        <div class="col-md-6">
-                                            <label class="small mb-1" for="inputUsername">Username</label>
-                                            <input class="form-control" id="inputUsername" type="text" value="${account.username}" readonly>
-                                        </div>
-                                    </div>
+
 
                                     <div class="row gx-3 mb-3">
                                         <div class="col-md-6">
