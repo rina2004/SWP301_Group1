@@ -169,21 +169,20 @@ public class AccountDAO extends DBContext {
     }
 
     public void updateProfile(Account acc) {
-        String sql = "UPDATE Account SET password=?, name=?, citizenID=?, dob=?, phone=?, address=?, email=? WHERE id=?";
+        String sql = "UPDATE Account SET name=?, citizenID=?, dob=?, phone=?, address=?, email=? WHERE id=?";
 
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             // Chuyển đổi dob sang java.sql.Date
             Date sqlDob = (acc.getDob() != null) ? new Date(acc.getDob().getTime()) : null;
 
-            // Gán giá trị vào PreparedStatement
-            stm.setString(1, acc.getPassword());
-            stm.setString(2, acc.getName());
-            stm.setString(3, acc.getCitizenID());
-            stm.setDate(4, sqlDob);
-            stm.setString(5, acc.getPhone());
-            stm.setString(6, acc.getAddress());
-            stm.setString(7, acc.getEmail());
-            stm.setString(8, acc.getId()); // Cập nhật theo userID, không phải username!
+            // Gán giá trị vào PreparedStatement (bỏ mật khẩu)
+            stm.setString(1, acc.getName());
+            stm.setString(2, acc.getCitizenID());
+            stm.setDate(3, sqlDob);
+            stm.setString(4, acc.getPhone());
+            stm.setString(5, acc.getAddress());
+            stm.setString(6, acc.getEmail());
+            stm.setString(7, acc.getId()); // Cập nhật theo ID tài khoản
 
             int rowsAffected = stm.executeUpdate();
             if (rowsAffected == 0) {

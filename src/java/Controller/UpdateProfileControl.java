@@ -88,7 +88,6 @@ public class UpdateProfileControl extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         // Lấy dữ liệu từ form
-        String password = request.getParameter("password");
         String name = request.getParameter("name");
         String citizenID = request.getParameter("citizenID");
         String dobStr = request.getParameter("dob");
@@ -105,7 +104,6 @@ public class UpdateProfileControl extends HttpServlet {
                 java.util.Date utilDate = sdf.parse(dobStr);
                 dob = new Date(utilDate.getTime()); // Chuyển thành java.sql.Date
             } catch (ParseException e) {
-                e.printStackTrace();
                 request.setAttribute("error", "Invalid date format!");
                 request.getRequestDispatcher("view/Profileaccount.jsp").forward(request, response);
                 return;
@@ -118,7 +116,6 @@ public class UpdateProfileControl extends HttpServlet {
 
         if (acc != null) {
             // Cập nhật thông tin tài khoản
-            acc.setPassword(password);
             acc.setName(name);
             acc.setCitizenID(citizenID);
             acc.setDob(dob);
