@@ -22,7 +22,7 @@ import model.Ticket;
  *
  * @author A A
  */
-public class FilterFlightOrderServlet extends HttpServlet {
+public class OrderFilterController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -131,7 +131,7 @@ public class FilterFlightOrderServlet extends HttpServlet {
         request.setAttribute("destination", destination);
         request.setAttribute("departureDate", departureDate);
 
-        request.getRequestDispatcher("flight-search-results.jsp").forward(request, response);
+        request.getRequestDispatcher("order-result.jsp").forward(request, response);
     }
 
     @Override

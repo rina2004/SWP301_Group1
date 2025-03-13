@@ -114,7 +114,7 @@
                         <h2 class="mb-0">Flight Booking</h2>
                     </div>
                     <div>
-                        <a href="cart.jsp" class="btn btn-primary position-relative">
+                        <a href="order-cart.jsp" class="btn btn-primary position-relative">
                             <i class="fas fa-shopping-cart"></i> Cart
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
                                 0
@@ -136,10 +136,10 @@
             </div>
 
             <div class="d-flex justify-content-between mt-4">
-                <a href="search-flights" class="btn btn-outline-primary">
+                <a href="order" class="btn btn-outline-primary">
                     <i class="fas fa-arrow-left me-2"></i> Continue Shopping
                 </a>
-                <a href="checkout.jsp" class="btn btn-success" id="checkoutBtn">
+                <a href="order-checkout.jsp" class="btn btn-success" id="checkoutBtn">
                     <i class="fas fa-check-circle me-2"></i> Checkout All Items
                 </a>
             </div>
@@ -147,7 +147,7 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            // Update the loadCartItems function in cart.jsp to correctly handle the Proceed Booking button
+            // Update the loadCartItems function in order-cart.jsp to correctly handle the Proceed Booking button
 
 function loadCartItems() {
     const cartContainer = document.getElementById('cartItems');
@@ -161,7 +161,7 @@ function loadCartItems() {
                 <i class="fas fa-shopping-cart fa-3x mb-3 text-muted"></i>
                 <h4>Your cart is empty</h4>
                 <p>Add flights to your cart to proceed with booking</p>
-                <a href="search-flights" class="btn btn-primary mt-3">
+                <a href="order" class="btn btn-primary mt-3">
                     <i class="fas fa-search me-2"></i> Search Flights
                 </a>
             </div>
@@ -202,7 +202,7 @@ function loadCartItems() {
 // Add this new function to handle the proceed to booking action
 function proceedToBooking(flightId, ticketType) {
     // Redirect to booking confirmation page with parameters
-    window.location.href = `booking-confirmation?flightId=${flightId}&ticketClass=${ticketType}&passengers=1`;
+    window.location.href = `order-confirm?flightId=${flightId}&ticketClass=${ticketType}&passengers=1`;
 }
             // Initialize cart in localStorage if it doesn't exist
             if (!localStorage.getItem('flightCart')) {
@@ -293,7 +293,7 @@ function proceedToBooking(flightId, ticketType) {
                             <i class="fas fa-shopping-cart fa-3x mb-3 text-muted"></i>
                             <h4>Your cart is empty</h4>
                             <p>Add flights to your cart to proceed with booking</p>
-                            <a href="search-flights" class="btn btn-primary mt-3">
+                            <a href="order" class="btn btn-primary mt-3">
                                 <i class="fas fa-search me-2"></i> Search Flights
                             </a>
                         </div>
@@ -314,7 +314,7 @@ function proceedToBooking(flightId, ticketType) {
                                     <div class="text-end">
                                         <div class="price-display">${item.price} VND</div>
                                         <div class="action-buttons mt-2">
-                                            <a href="booking-confirmation?flightId=${item.id}&ticketClass=${item.ticketType}&passengers=1" class="btn btn-primary btn-sm">
+                                            <a href="order-confirm?flightId=${item.id}&ticketClass=${item.ticketType}&passengers=1" class="btn btn-primary btn-sm">
                                                 <i class="fas fa-user me-1"></i> Proceed Booking
                                             </a>
                                             <button onclick="removeFromCart(${index})" class="btn btn-danger btn-sm ms-2">

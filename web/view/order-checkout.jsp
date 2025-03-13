@@ -4,12 +4,6 @@
     Author     : A A
 --%>
 
-<%-- 
-    Document   : checkout
-    Created on : 3 Mar 2025, 15:45:22
-    Author     : A A
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -95,7 +89,7 @@
                         <h2 class="mb-0">Flight Booking</h2>
                     </div>
                     <div>
-                        <a href="cart.jsp" class="btn btn-outline-primary position-relative">
+                        <a href="order-cart.jsp" class="btn btn-outline-primary position-relative">
                             <i class="fas fa-shopping-cart"></i> Cart
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
                                 0
@@ -235,7 +229,7 @@
                             <button type="submit" form="checkoutForm" class="btn btn-primary">
                                 <i class="fas fa-lock me-2"></i> Complete Booking
                             </button>
-                            <a href="cart.jsp" class="btn btn-outline-secondary">
+                            <a href="order-cart.jsp" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left me-2"></i> Back to Cart
                             </a>
                         </div>
@@ -276,7 +270,7 @@
                     checkoutContainer.innerHTML = `
                         <div class="text-center p-3">
                             <p>No items in your cart</p>
-                            <a href="search-flights" class="btn btn-sm btn-primary">Search Flights</a>
+                            <a href="order" class="btn btn-sm btn-primary">Search Flights</a>
                         </div>
                     `;
                     return;
