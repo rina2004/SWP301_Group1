@@ -12,9 +12,9 @@
     <body>
         <div class="container-xl px-4 mt-4">
             <nav class="nav nav-borders">
-                <a class="nav-link active ms-0" href="#">Profile</a>
+                <a class="nav-link active ms-0" href="profile">Profile</a>
                 <a class="nav-link" href="#">Billing</a>
-                <a class="nav-link" href="#">Security</a>
+                <a class="nav-link" href="view/changePasswordProfile.jsp">Security</a>
                 <a class="nav-link" href="#">Notifications</a>
             </nav>
             <hr class="mt-0 mb-4">
@@ -63,11 +63,16 @@
                                     <div class="row gx-3 mb-3">
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputName">Full Name</label>
-                                            <input class="form-control" id="inputName" name="name" type="text" value="${account.name}">
+                                            <input class="form-control" id="inputName" name="name" type="text" 
+                                                   value="${account.name}" required minlength="2" maxlength="50"
+                                                   pattern="[A-Za-zÀ-ỹ\s]{2,50}" title="Only letters and spaces are allowed (2-50 characters).">
                                         </div>
+
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputCitizenID">Citizen ID</label>
-                                            <input class="form-control" id="inputCitizenID" name="citizenID" type="text" value="${account.citizenID}">
+                                            <input class="form-control" id="inputCitizenID" name="citizenID" type="text" value="${account.citizenID}" 
+                                                   required pattern="[0-9]{9,12}" title="Citizen ID must be 9-12 digits.">
+
                                         </div>
                                     </div>
 
@@ -80,18 +85,19 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputPhone">Phone</label>
-                                            <input class="form-control" id="inputPhone" name="phone" type="text" value="${account.phone}">
+                                            <input class="form-control" id="inputPhone" name="phone" type="text" value="${account.phone}" 
+                                                   required pattern="[0-9]{10}" title="Phone number must be 10-11 digits.">
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputAddress">Address</label>
-                                        <input class="form-control" id="inputAddress" name="address" type="text" value="${account.address}">
+                                        <input class="form-control" id="inputAddress" name="address" type="text" value="${account.address}" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputEmail">Email</label>
-                                        <input class="form-control" id="inputEmail" name="email" type="email" value="${account.email}">
+                                        <input class="form-control" id="inputEmail" name="email" type="email" value="${account.email}" required>
                                     </div>
 
                                     <!-- Chỉ có nút Save -->

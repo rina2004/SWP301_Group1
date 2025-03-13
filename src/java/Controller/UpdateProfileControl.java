@@ -99,10 +99,17 @@ public class UpdateProfileControl extends HttpServlet {
         String email = request.getParameter("email");
 
         // Kiểm tra dữ liệu hợp lệ
+        String namePattern = "^[A-Za-zÀ-ỹ\\s]{2,50}$";
         String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
         String phonePattern = "^[0-9]{10,11}$";
         String citizenIDPattern = "^[0-9]{9,12}$";
 
+        if (!name.matches(namePattern)) {
+            session.setAttribute("error", "Invalid name format! Only letters and spaces are allowed (2-50 characters).");
+            response.sendRedirect("profile");
+            return;
+        }
+        
         if (!email.matches(emailPattern)) {
             session.setAttribute("error", "Invalid email format!");
             response.sendRedirect("profile");

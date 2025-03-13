@@ -377,6 +377,20 @@ public class AccountDAO extends DBContext {
 
         }
     }
+    
+     public void updatePasswordProfile(String username, String newPassword) {
+        PreparedStatement stm;
+        String sql = "UPDATE Account SET password = ? WHERE username = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, newPassword); // Nên dùng hashing nếu bảo mật cao hơn
+            stm.setString(2, username);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
 
     public void register(String username, String password, String name, Date dob, String phone, String address, String email) {
         PreparedStatement accountStmt = null;
@@ -436,4 +450,6 @@ public class AccountDAO extends DBContext {
         }
 
     }
+    
+    
 }
