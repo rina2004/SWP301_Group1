@@ -64,7 +64,7 @@
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputName">Full Name</label>
                                             <input class="form-control" id="inputName" name="name" type="text" 
-                                                   value="${account.name}" minlength="2" maxlength="50"
+                                                   value="${account.name}" required minlength="2" maxlength="50"
                                                    pattern="[A-Za-zÀ-ỹ\s]{2,50}" title="Only letters and spaces are allowed (2-50 characters).">
                                         </div>
 
