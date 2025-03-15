@@ -299,10 +299,6 @@
         <servlet-name>ProfileAccountControl</servlet-name>
         <servlet-class>controller.ProfileAccountControl</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>UpdateProfileControl</servlet-name>
-        <servlet-class>controller.UpdateProfileControl</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>AccountControl</servlet-name>
         <url-pattern>/acc</url-pattern>
@@ -322,10 +318,6 @@
     <servlet-mapping>
         <servlet-name>ProfileAccountControl</servlet-name>
         <url-pattern>/profile</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UpdateProfileControl</servlet-name>
-        <url-pattern>/updateProfile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>

@@ -57,22 +57,21 @@
                         <div class="card mb-4">
                             <div class="card-header">Account Details</div>
                             <div class="card-body">
-                                <form action="updateProfile" method="post">
+                                <form action="profile" method="post">
 
 
                                     <div class="row gx-3 mb-3">
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputName">Full Name</label>
                                             <input class="form-control" id="inputName" name="name" type="text" 
-                                                   value="${account.name}" required minlength="2" maxlength="50"
+                                                   value="${account.name}" minlength="2" maxlength="50"
                                                    pattern="[A-Za-zÀ-ỹ\s]{2,50}" title="Only letters and spaces are allowed (2-50 characters).">
                                         </div>
 
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputCitizenID">Citizen ID</label>
                                             <input class="form-control" id="inputCitizenID" name="citizenID" type="text" value="${account.citizenID}" 
-                                                   required pattern="[0-9]{9,12}" title="Citizen ID must be 9-12 digits.">
-
+                                                   pattern="[0-9]{9,12}" title="Citizen ID must be 9-12 digits.">
                                         </div>
                                     </div>
 
@@ -81,23 +80,23 @@
                                             <label class="small mb-1" for="inputDob">Date of Birth</label>
                                             <input class="form-control" id="inputDob" name="dob" type="date"
                                                    value="<fmt:formatDate value='${account.dob}' pattern='yyyy-MM-dd'/>" 
-                                                   required max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
+                                                   max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
                                         </div>
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputPhone">Phone</label>
                                             <input class="form-control" id="inputPhone" name="phone" type="text" value="${account.phone}" 
-                                                   required pattern="[0-9]{10}" title="Phone number must be 10-11 digits.">
+                                                   pattern="[0-9]{10}" title="Phone number must be 10 digits.">
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputAddress">Address</label>
-                                        <input class="form-control" id="inputAddress" name="address" type="text" value="${account.address}" required>
+                                        <input class="form-control" id="inputAddress" name="address" type="text" value="${account.address}">
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputEmail">Email</label>
-                                        <input class="form-control" id="inputEmail" name="email" type="email" value="${account.email}" required>
+                                        <input class="form-control" id="inputEmail" name="email" type="email" value="${account.email}">
                                     </div>
 
                                     <!-- Chỉ có nút Save -->
