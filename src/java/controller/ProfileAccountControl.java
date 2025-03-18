@@ -8,10 +8,11 @@ import dal.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.sql.Date;
 import java.util.List;
 import model.Account;
 
@@ -19,8 +20,7 @@ import model.Account;
  *
  * @author anhbu
  */
-@WebServlet(name = "AccountCoutrol", urlPatterns = {"/acc"})
-public class AccountCoutrol extends HttpServlet {
+public class ProfileAccountControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,11 +34,18 @@ public class AccountCoutrol extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        AccountDAO dao = new AccountDAO();
-        List<Account> listA = dao.getAllAccounts();
-
-        request.setAttribute("listA", listA);
-        request.getRequestDispatcher("view/Manageraccount.jsp").forward(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ProfileAccountControl</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ProfileAccountControl at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -53,7 +60,30 @@ public class AccountCoutrol extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        HttpSession session = request.getSession();
+        AccountDAO accountDAO = new AccountDAO();  // Tạo instance của DAO
+        Account sessionAccount = (Account) session.getAttribute("acc");
+
+        if (sessionAccount == null) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
+
+        // Lấy dữ liệu mới nhất từ database
+        Account account = accountDAO.getAccountByUsername(sessionAccount.getUsername());
+
+        if (account == null) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
+
+        // Cập nhật session và chuyển đến JSP
+        session.setAttribute("acc", account);
+        request.setAttribute("account", account);
+        request.getRequestDispatcher("view/Profileaccount.jsp").forward(request, response);
+
+
     }
 
     /**

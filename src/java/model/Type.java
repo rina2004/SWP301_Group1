@@ -15,7 +15,17 @@ public class Type {
     private float length;
     private float weight;
     private float height;
-    private AirTrafficControl atc;
+
+    public Type() { }
+   
+    public Type(String id, String name, String manufacture, float length, float weight, float height) {
+        this.id = id;
+        this.name = name;
+        this.manufacture = manufacture;
+        this.length = length;
+        this.weight = weight;
+        this.height = height;
+    }
 
     public String getId() {
         return id;
@@ -64,14 +74,4 @@ public class Type {
     public void setHeight(float height) {
         this.height = height;
     }
-
-    public AirTrafficControl getAtc() {
-        return atc;
-    }
-
-    public void setAtc(AirTrafficControl atc) {
-        this.atc = atc;
-    }
-    
-    
 }

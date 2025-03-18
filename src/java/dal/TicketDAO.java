@@ -57,7 +57,7 @@ public class TicketDAO extends DBContext {
                     rs.getString("id"),
                     rs.getString("flightID"),
                     rs.getString("type"),
-                    rs.getDouble("Price"), // Changed from getInt to getDouble
+                    rs.getDouble("Price"),
                     rs.getString("Status")
                 ));
             }

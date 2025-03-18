@@ -1,0 +1,119 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 3 Mar 2025, 10:52:06
+    Author     : Rinaaaa
+*/
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+h1 {
+    color: #0066cc;
+    margin-bottom: 30px;
+}
+
+/* Additional styles to match the header in screenshot */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-actions {
+    overflow: hidden;
+    margin-top: 30px;
+}
+
+/* Optional: Add this if you want a blue header bar like in the screenshot */
+.header {
+    background-color: #0066cc;
+    color: white;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    margin: 0;
+}
+
+.header .btn {
+    background-color: white;
+    color: #0066cc;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+form {
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 600px;
+}
+
+label {
+    display: inline-block;
+    width: 120px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: calc(100% - 130px);
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+    float: right;
+}
+
+input[type="submit"]:hover {
+    background-color: #0052a3;
+}
+
+/* Optional: Add a cancel button that matches the delete button style from your screenshot */
+.cancel-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+    float: left;
+    text-decoration: none;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
+}

@@ -16,19 +16,19 @@ import java.util.logging.Logger;
  */
 public class AirplaneDAO extends DBContext{
     
-    public void insert(Airplane a) {
+    public void insert(Airplane airplane) {
         String sql = "INSERT INTO Airplane (id, name, typeID, statusID, maintainanceTime, usedTime, atcID) "
                        + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement stm = null;
         try {
             stm = connection.prepareStatement(sql);
-            stm.setString(1, a.getId());
-            stm.setString(2, a.getName());
-            stm.setString(3, a.getType().getId());
-            stm.setInt(4, a.getStatus().getId());
-            stm.setTimestamp(5, Timestamp.valueOf(a.getMaintainanceTime()));
-            stm.setTimestamp(6, Timestamp.valueOf(a.getUsedTime()));
-            stm.setString(7, a.getAtc().getId());
+            stm.setString(1, airplane.getId());
+            stm.setString(2, airplane.getName());
+            stm.setString(3, airplane.getType().getId());
+            stm.setInt(4, airplane.getStatus().getId());
+            stm.setTimestamp(5, Timestamp.valueOf(airplane.getMaintainanceTime()));
+            stm.setTimestamp(6, Timestamp.valueOf(airplane.getUsedTime()));
+            stm.setString(7, airplane.getAtc().getId());
 
             stm.executeUpdate();
         } catch (SQLException ex) {
@@ -49,7 +49,7 @@ public class AirplaneDAO extends DBContext{
         Airplane airplane = null;
         String sql = "SELECT * FROM swp301.airplane WHERE id = ?";
         
-        TypeDBContext tp = new TypeDBContext();
+        TypeDAO tp = new TypeDAO();
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
         AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
         
@@ -90,7 +90,7 @@ public class AirplaneDAO extends DBContext{
 
     public ArrayList<Airplane> list() {
         ArrayList<Airplane> planes = new ArrayList<>();
-        TypeDBContext tp = new TypeDBContext();
+        TypeDAO tp = new TypeDAO();
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
         AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
         String sql = "SELECT * FROM swp301.airplane";

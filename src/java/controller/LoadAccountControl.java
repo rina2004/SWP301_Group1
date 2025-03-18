@@ -7,9 +7,7 @@ package controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +17,7 @@ import model.Account;
  *
  * @author anhbu
  */
-@WebServlet(name="LoadAccountControl", urlPatterns={"/loadacc"})
+
 public class LoadAccountControl extends HttpServlet {
    
     /** 
@@ -32,12 +30,7 @@ public class LoadAccountControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String id = request.getParameter("uid");
-        AccountDAO dao = new AccountDAO();
-        Account u = dao.getUserByID(id);
-
-        request.setAttribute("account", u);
-        request.getRequestDispatcher("view/Editaccount.jsp").forward(request, response);
+        
 
     } 
 
@@ -52,7 +45,13 @@ public class LoadAccountControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        String id = request.getParameter("uid");
+        AccountDAO dao = new AccountDAO();
+        Account u = dao.getUserByID(id);
+
+        request.setAttribute("account", u);
+        request.getRequestDispatcher("view/Editaccount.jsp").forward(request, response);
     } 
 
     /** 

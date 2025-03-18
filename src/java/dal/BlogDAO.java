@@ -8,36 +8,40 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Blog;
 
-public class BlogDAO extends DBContext{
-    
+public class BlogDAO extends DBContext {
+
     public void insertBlog(Blog blog) {
-        String sql = "INSERT INTO Blog (id, title, image, descripion, categoryID) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Blog (id, postID, title, description, image, categoryID) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, blog.getId());
-            ps.setString(2, blog.getTitle());
-            ps.setString(3, blog.getImage());
+            ps.setString(2, blog.getPostID());
+            ps.setString(3, blog.getTitle());
             ps.setString(4, blog.getDescription());
-            ps.setInt(5, blog.getCategoryID());
+            ps.setString(5, blog.getImage());
+            ps.setString(6, blog.getCategoryID());
+//          ps.setString(7, blog.getCreate_at());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
+
     public void updateBlog(Blog blog) {
-        String sql = "UPDATE Blog SET title = ?, image = ?, descripion = ?, categoryID = ? WHERE id = ?";
+        String sql = "UPDATE Blog SET postID = ?, title = ?, description = ?, image = ?, categoryID = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, blog.getTitle());
-            ps.setString(2, blog.getImage());
-            ps.setString(4, blog.getDescription());
-            ps.setInt(4, blog.getCategoryID());
-            ps.setString(5, blog.getId());
+            ps.setString(1, blog.getPostID());
+            ps.setString(2, blog.getTitle());
+            ps.setString(3, blog.getDescription());
+            ps.setString(4, blog.getImage());
+            ps.setString(5, blog.getCategoryID());
+//          ps.setString(6, blog.getCreate_at());
+            ps.setString(6, blog.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
+
     public void deleteBlog(String id) {
         String sql = "DELETE FROM Blog WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -47,38 +51,104 @@ public class BlogDAO extends DBContext{
             e.printStackTrace();
         }
     }
-    
-    public Blog getBlogById(String id) {
-        String sql = "SELECT * FROM Blog WHERE id = ?";
+
+    public List<Blog> searchBlogs(String keyword, int page) {
+        List<Blog> blogs = new ArrayList<>();
+        String sql = "SELECT * FROM blog WHERE title LIKE ?\n"
+                + "order by id\n"
+                + "limit 4 offset ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, id);
+            ps.setString(1, "%" + keyword + "%");
+            ps.setInt(2, 4 * (page - 1));
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return new Blog(
-                    rs.getString("id"),
-                    rs.getString("title"),
-                    rs.getString("image"),
-                    rs.getString("descripion"),
-                    rs.getInt("categoryID")
-                );
+            while (rs.next()) {
+                blogs.add(new Blog(
+                        rs.getString("id"),
+                        rs.getString("postID"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("image"),
+                        rs.getString("categoryID")
+                //      rs.getString("create_at")
+                ));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return blogs;
+    }
+
+    public List<Blog> getAllBlogs(int page) {
+        List<Blog> list = new ArrayList<>();
+        String sql = "SELECT * FROM blog\n"
+                + "order by id\n"
+                + "limit 4 offset ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, 4 * (page - 1));
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Blog(
+                        rs.getString("id"),
+                        rs.getString("postID"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("image"),
+                        rs.getString("categoryID")
+                //      rs.getString("create_at")
+                ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return list;
     }
-    
-    public List<Blog> getAllBlogs() {
+
+    public int findTotalRecordByKeyWord(String keyword) {
+        int totalRecord = 0;
+        String sql = "SELECT count(*) FROM blog WHERE title LIKE ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, "%" + keyword + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    totalRecord = rs.getInt(1); // Lấy giá trị đếm từ kết quả truy vấn
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalRecord;
+    }
+
+    public int findAllTotalRecord() {
+        int totalRecord = 0;
+        String sql = "SELECT count(*) FROM blog";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    totalRecord = rs.getInt(1); // Lấy giá trị đếm từ kết quả truy vấn
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalRecord;
+    }
+
+    public List<Blog> getAllBlog() {
         List<Blog> list = new ArrayList<>();
         String sql = "SELECT * FROM blog";
-        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Blog(
-                    rs.getString("id"),
-                    rs.getString("title"),
-                    rs.getString("image"),
-                    rs.getString("description"),
-                    rs.getInt("categoryID")
+                        rs.getString("id"),
+                        rs.getString("postID"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("image"),
+                        rs.getString("categoryID")
+                //      rs.getString("create_at")
                 ));
             }
         } catch (SQLException e) {

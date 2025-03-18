@@ -313,10 +313,12 @@
                 <div class="deals-container">
                     <c:forEach items="${listBlog}" var="blog">
                         <div class="deal">
-                            <img src="${blog.getImage()}" alt="Economy Class Special Deal">
-                            <h3>${blog.getTitle()}</h3>
-                            <p>${blog.getDescription()}</p>
-                            <a href="blog1" class="book-now">View</a>
+                            <img src="img/${blog.getImage()}" alt="${blog.getTitle()}">
+                            <div class="deal-content">
+                                <h3>${blog.getTitle()}</h3>
+                                <p>${blog.getDescription()}</p>
+                            </div>
+                            <a href="post?id=${blog.getPostID()}" class="book-now">View</a>
                         </div>
                     </c:forEach>
                 </div>
