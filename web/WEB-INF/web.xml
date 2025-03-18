@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <context-param>
+        <param-name>webapp</param-name>
+        <param-value>webapp</param-value>
+    </context-param>
     <servlet>
         <servlet-name>AirplaneCreateController</servlet-name>
         <servlet-class>controller.AirplaneCreateController</servlet-class>
@@ -13,20 +17,92 @@
         <servlet-class>controller.AirplaneUpdateController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>OrderFlightController</servlet-name>
-        <servlet-class>controller.OrderFlightController</servlet-class>
+        <servlet-name>ChatboxController</servlet-name>
+        <servlet-class>controller.ChatboxController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>OrderDetailController</servlet-name>
-        <servlet-class>controller.OrderDetailController</servlet-class>
+        <servlet-name>TypingStatusController</servlet-name>
+        <servlet-class>controller.TypingStatusController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>OrderFilterController</servlet-name>
-        <servlet-class>controller.OrderFilterController</servlet-class>
+        <servlet-name>TypeCreateController</servlet-name>
+        <servlet-class>controller.TypeCreateController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>OrderConfirmServlet</servlet-name>
-        <servlet-class>controller.OrderConfirmServlet</servlet-class>
+        <servlet-name>TypeUpdateController</servlet-name>
+        <servlet-class>controller.TypeUpdateController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypeDeleteController</servlet-name>
+        <servlet-class>controller.TypeDeleteController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypeViewController</servlet-name>
+        <servlet-class>controller.TypeViewController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypeSearchController</servlet-name>
+        <servlet-class>controller.TypeSearchController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchFlightsServlet</servlet-name>
+        <servlet-class>controller.SearchFlightsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewFlightOrderServlet</servlet-name>
+        <servlet-class>controller.ViewFlightOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewAccountServlet</servlet-name>
+        <servlet-class>controller.ViewAccountServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateAccountServlet</servlet-name>
+        <servlet-class>controller.UpdateAccountServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FilterFlightOrderServlet</servlet-name>
+        <servlet-class>controller.FilterFlightOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BookingConfirmationServlet</servlet-name>
+        <servlet-class>controller.BookingConfirmationServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProcessBookingServlet</servlet-name>
+        <servlet-class>controller.ProcessBookingServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Register</servlet-name>
+        <servlet-class>controller.Register</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>controller.Login</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>controller.Logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ResendOTP</servlet-name>
+        <servlet-class>controller.ResendOTP</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckOTP2</servlet-name>
+        <servlet-class>controller.CheckOTP2</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateNewPassword</servlet-name>
+        <servlet-class>controller.CreateNewPassword</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ConfirmEmail</servlet-name>
+        <servlet-class>controller.ConfirmEmail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangePassword</servlet-name>
+        <servlet-class>controller.ChangePassword</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
@@ -48,6 +124,10 @@
         <servlet-name>blogController</servlet-name>
         <servlet-class>controller.blogController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>postController</servlet-name>
+        <servlet-class>controller.postController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homeController</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -57,20 +137,88 @@
         <url-pattern>/blog</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>OrderFlightController</servlet-name>
-        <url-pattern>/view/order</url-pattern>
+        <servlet-name>ChatboxController</servlet-name>
+        <url-pattern>/chatbox</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>OrderFilterController</servlet-name>
-        <url-pattern>/view/order-filter</url-pattern>
+        <servlet-name>TypingStatusController</servlet-name>
+        <url-pattern>/typingstatus</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>OrderConfirmServlet</servlet-name>
-        <url-pattern>/view/order-confirm</url-pattern>
+        <servlet-name>TypeCreateController</servlet-name>
+        <url-pattern>/type/create</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>OrderDetailController</servlet-name>
-        <url-pattern>/view/order-detail</url-pattern>
+        <servlet-name>TypeUpdateController</servlet-name>
+        <url-pattern>/type/update</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeDeleteController</servlet-name>
+        <url-pattern>/type/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeViewController</servlet-name>
+        <url-pattern>/type/list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeSearchController</servlet-name>
+        <url-pattern>/type/search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchFlightsServlet</servlet-name>
+        <url-pattern>/view/search-flights</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewFlightOrderServlet</servlet-name>
+        <url-pattern>/view/view-flightorder</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewAccountServlet</servlet-name>
+        <url-pattern>/view/view-account</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateAccountServlet</servlet-name>
+        <url-pattern>/update-account</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FilterFlightOrderServlet</servlet-name>
+        <url-pattern>/view/filter-flightorder</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookingConfirmationServlet</servlet-name>
+        <url-pattern>/view/booking-confirmation</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProcessBookingServlet</servlet-name>
+        <url-pattern>/view/process-booking</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Register</servlet-name>
+        <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResendOTP</servlet-name>
+        <url-pattern>/resend</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckOTP2</servlet-name>
+        <url-pattern>/checkotp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateNewPassword</servlet-name>
+        <url-pattern>/createpassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ConfirmEmail</servlet-name>
+        <url-pattern>/confirm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePassword</servlet-name>
+        <url-pattern>/change</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>postController</servlet-name>
+        <url-pattern>/post</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
@@ -122,5 +270,61 @@
     <servlet-mapping>
         <servlet-name>UpdateFlightServlet</servlet-name>
         <url-pattern>/view/update-flight</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AccountControl</servlet-name>
+        <servlet-class>controller.AccountControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddUserControl</servlet-name>
+        <servlet-class>controller.AddUserControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditAccountControl</servlet-name>
+        <servlet-class>controller.EditAccountControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadAccountControl</servlet-name>
+        <servlet-class>controller.LoadAccountControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ProfileAccountControl</servlet-name>
+        <servlet-class>controller.ProfileAccountControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateProfileControl</servlet-name>
+        <servlet-class>controller.UpdateProfileControl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountControl</servlet-name>
+        <url-pattern>/acc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddUserControl</servlet-name>
+        <url-pattern>/addUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditAccountControl</servlet-name>
+        <url-pattern>/editAccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadAccountControl</servlet-name>
+        <url-pattern>/loadacc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfileAccountControl</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateProfileControl</servlet-name>
+        <url-pattern>/updateProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 </web-app>
