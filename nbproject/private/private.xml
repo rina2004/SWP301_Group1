@@ -3,13 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Project_Java/SWP301_Group1/src/java/controller/AccountControl.java</file>
-            <file>file:/E:/Project_Java/SWP301_Group1/src/java/model/Account.java</file>
-            <file>file:/E:/Project_Java/SWP301_Group1/src/java/model/Role.java</file>
-            <file>file:/E:/Project_Java/SWP301_Group1/web/WEB-INF/web.xml</file>
-            <file>file:/E:/Project_Java/SWP301_Group1/src/java/controller/AddUserControl.java</file>
-            <file>file:/E:/Project_Java/SWP301_Group1/src/java/dal/AccountDAO.java</file>
-            <file>file:/E:/Project_Java/SWP301_Group1/src/java/controller/Login.java</file>
+            <file>file:/E:/Code/JavaWeb/SWP301_Group1/src/java/Controller/AddFlightServlet.java</file>
         </group>
     </open-files>
 </project-private>

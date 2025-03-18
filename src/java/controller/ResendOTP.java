@@ -3,22 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package controller;
 
-import dal.AccountDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Account;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author anhbu
+ * @author tungn
  */
-
-public class LoadAccountControl extends HttpServlet {
+public class ResendOTP extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -30,8 +29,18 @@ public class LoadAccountControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ResendOTP</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ResendOTP at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -45,13 +54,21 @@ public class LoadAccountControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        //processRequest(request, response);
-        String id = request.getParameter("uid");
-        AccountDAO dao = new AccountDAO();
-        Account u = dao.getUserByID(id);
+        HttpSession session = request.getSession();
+        String frompage = request.getParameter("frompage");
+        String email = (String) session.getAttribute("email");
 
-        request.setAttribute("account", u);
-        request.getRequestDispatcher("view/Editaccount.jsp").forward(request, response);
+        if (email == null || email.isEmpty()) {
+            request.getRequestDispatcher(frompage).forward(request, response);
+            return;
+        }
+
+        String otp = JavaMail.createOTP();
+        JavaMail.sendOTP(email, otp);
+        session.setAttribute("otp", otp);
+        session.setAttribute("timeOtp", System.currentTimeMillis() + 2 * 60 * 1000);
+
+        request.getRequestDispatcher(frompage).forward(request, response);
     } 
 
     /** 

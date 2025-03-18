@@ -3,24 +3,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import model.Account;
 
 /**
  *
- * @author tungn
+ * @author anhbu
  */
-@WebServlet(name="ResetPassword", urlPatterns={"/resetpassword"})
-public class ResetPassword extends HttpServlet {
+
+public class LoadAccountControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -32,18 +30,8 @@ public class ResetPassword extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ResetPassword</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ResetPassword at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        
+
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -57,7 +45,13 @@ public class ResetPassword extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("view/ResetPassword.jsp").forward(request, response);
+        //processRequest(request, response);
+        String id = request.getParameter("uid");
+        AccountDAO dao = new AccountDAO();
+        Account u = dao.getUserByID(id);
+
+        request.setAttribute("account", u);
+        request.getRequestDispatcher("view/Editaccount.jsp").forward(request, response);
     } 
 
     /** 
@@ -70,23 +64,7 @@ public class ResetPassword extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-       String email = request.getParameter("email");
-
-        AccountDAO dao = new AccountDAO();
-        boolean exist = dao.checkEmailExist(email);
-
-        if (exist) {
-            HttpSession session = request.getSession();
-            session.setAttribute("email", email);
-            String otp = JavaMail.createOTP();
-            JavaMail.sendOTP(email, otp);
-            session.setAttribute("otp", otp);
-            session.setAttribute("timeOtp", System.currentTimeMillis() + 2 * 60 * 1000);
-            request.getRequestDispatcher("view/OTPResetPassword.jsp").forward(request, response);
-        } else {
-            request.setAttribute("error", "Email không tồn tại!");
-            request.getRequestDispatcher("view/ResetPassword.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /** 
