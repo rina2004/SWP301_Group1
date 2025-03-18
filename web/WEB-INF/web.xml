@@ -74,7 +74,7 @@
     </servlet>
     <servlet>
         <servlet-name>Register</servlet-name>
-        <servlet-class>Controller.Register</servlet-class>
+        <servlet-class>controller.Register</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Login</servlet-name>
@@ -90,19 +90,19 @@
     </servlet>
     <servlet>
         <servlet-name>CheckOTP2</servlet-name>
-        <servlet-class>Controller.CheckOTP2</servlet-class>
+        <servlet-class>controller.CheckOTP2</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CreateNewPassword</servlet-name>
-        <servlet-class>Controller.CreateNewPassword</servlet-class>
+        <servlet-class>controller.CreateNewPassword</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ConfirmEmail</servlet-name>
-        <servlet-class>Controller.ConfirmEmail</servlet-class>
+        <servlet-class>controller.ConfirmEmail</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangePassword</servlet-name>
-        <servlet-class>Controller.ChangePassword</servlet-class>
+        <servlet-class>controller.ChangePassword</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CreateCompartment</servlet-name>
@@ -337,27 +337,27 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>AccountControl</servlet-name>
-        <servlet-class>Controller.AccountControl</servlet-class>
+        <servlet-class>controller.AccountControl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddUserControl</servlet-name>
-        <servlet-class>Controller.AddUserControl</servlet-class>
+        <servlet-class>controller.AddUserControl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditAccountControl</servlet-name>
-        <servlet-class>Controller.EditAccountControl</servlet-class>
+        <servlet-class>controller.EditAccountControl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoadAccountControl</servlet-name>
-        <servlet-class>Controller.LoadAccountControl</servlet-class>
+        <servlet-class>controller.LoadAccountControl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ProfileAccountControl</servlet-name>
-        <servlet-class>Controller.ProfileAccountControl</servlet-class>
+        <servlet-class>controller.ProfileAccountControl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateProfileControl</servlet-name>
-        <servlet-class>Controller.UpdateProfileControl</servlet-class>
+        <servlet-class>controller.UpdateProfileControl</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AccountControl</servlet-name>

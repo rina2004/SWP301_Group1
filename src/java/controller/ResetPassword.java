@@ -3,24 +3,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Account;
 
 /**
  *
  * @author tungn
  */
-public class Login extends HttpServlet {
+@WebServlet(name="ResetPassword", urlPatterns={"/resetpassword"})
+public class ResetPassword extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,10 +37,10 @@ public class Login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");  
+            out.println("<title>Servlet ResetPassword</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ResetPassword at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,7 +57,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+        request.getRequestDispatcher("view/ResetPassword.jsp").forward(request, response);
     } 
 
     /** 
@@ -70,33 +70,22 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        boolean rememberMe = "true".equals(request.getParameter("rememberMe"));
+       String email = request.getParameter("email");
+
         AccountDAO dao = new AccountDAO();
-        Account acc = dao.login(username, password);
+        boolean exist = dao.checkEmailExist(email);
 
-        if (acc == null || !acc.getUsername().equals(username) || !acc.getPassword().equals(password)) {
-            request.setAttribute("error", "Username or password not correct!!!");
-            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
-        } else if (!acc.isStatus()) {
-            request.setAttribute("error", "The account is not allowed to login to the system !!!");
-            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
-        }
-
-        if (acc != null) {
-
-            if (rememberMe) {
-                Cookie userCookie = new Cookie("username", username);
-                userCookie.setMaxAge(7 * 24 * 60 * 60);
-                response.addCookie(userCookie);
-            }
+        if (exist) {
             HttpSession session = request.getSession();
-            session.setAttribute("acc", acc);
-            session.setAttribute("username", username);
-            session.setMaxInactiveInterval(60 * 30);
-            request.getRequestDispatcher("home").forward(request, response);
-
+            session.setAttribute("email", email);
+            String otp = JavaMail.createOTP();
+            JavaMail.sendOTP(email, otp);
+            session.setAttribute("otp", otp);
+            session.setAttribute("timeOtp", System.currentTimeMillis() + 2 * 60 * 1000);
+            request.getRequestDispatcher("view/OTPResetPassword.jsp").forward(request, response);
+        } else {
+            request.setAttribute("error", "Email không tồn tại!");
+            request.getRequestDispatcher("view/ResetPassword.jsp").forward(request, response);
         }
     }
 
