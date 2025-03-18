@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
@@ -10,7 +10,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -59,9 +58,11 @@ public class AccountControl extends HttpServlet {
 
         // Sắp xếp danh sách theo RoleID
         if ("asc".equals(sortOrder)) {
-            listA.sort(Comparator.comparingInt(Account::getRoleID)); // Tăng dần
+            listA.sort(Comparator.comparing(a -> a.getRole().getId())); // Tăng dần
+
         } else if ("desc".equals(sortOrder)) {
-            listA.sort(Comparator.comparingInt(Account::getRoleID).reversed()); // Giảm dần
+            listA.sort(Comparator.comparing((Account a) -> a.getRole().getId()).reversed());
+
         }
 
         //Lọc tài khoản theo roleID
@@ -69,16 +70,16 @@ public class AccountControl extends HttpServlet {
             int roleID = -1;
             switch (roleFilter) {
                 case "Staff" ->
-                    roleID = 2;
-                case "Customer" ->
                     roleID = 3;
+                case "Customer" ->
+                    roleID = 2;
                 case "AirTrafficControl" ->
                     roleID = 4;
             }
             if (listA != null) {
                 Iterator<Account> iterator = listA.iterator();
                 while (iterator.hasNext()) {
-                    if (iterator.next().getRoleID() != roleID) {
+                    if (iterator.next().getRole().getId() != roleID) {
                         iterator.remove();
                     }
                 }

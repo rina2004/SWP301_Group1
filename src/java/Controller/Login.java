@@ -79,7 +79,7 @@ public class Login extends HttpServlet {
         if (acc == null || !acc.getUsername().equals(username) || !acc.getPassword().equals(password)) {
             request.setAttribute("error", "Username or password not correct!!!");
             request.getRequestDispatcher("view/Login.jsp").forward(request, response);
-        } else if (!acc.getStatus().equals("Active")) {
+        } else if (!acc.isStatus() == true) {
             request.setAttribute("error", "The account is not allowed to login to the system !!!");
             request.getRequestDispatcher("vew/Login.jsp").forward(request, response);
         }
