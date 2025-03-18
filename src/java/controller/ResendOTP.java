@@ -3,9 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package controller;
 
-import dal.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -18,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author tungn
  */
-public class CreateNewPassword extends HttpServlet {
+public class ResendOTP extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +34,10 @@ public class CreateNewPassword extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CreateNewPassword</title>");  
+            out.println("<title>Servlet ResendOTP</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CreateNewPassword at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ResendOTP at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +54,21 @@ public class CreateNewPassword extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("view/CreateNewPassword.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        String frompage = request.getParameter("frompage");
+        String email = (String) session.getAttribute("email");
+
+        if (email == null || email.isEmpty()) {
+            request.getRequestDispatcher(frompage).forward(request, response);
+            return;
+        }
+
+        String otp = JavaMail.createOTP();
+        JavaMail.sendOTP(email, otp);
+        session.setAttribute("otp", otp);
+        session.setAttribute("timeOtp", System.currentTimeMillis() + 2 * 60 * 1000);
+
+        request.getRequestDispatcher(frompage).forward(request, response);
     } 
 
     /** 
@@ -68,32 +81,7 @@ public class CreateNewPassword extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         HttpSession session = request.getSession();
-        String email = (String) session.getAttribute("email");
-        String pass = request.getParameter("pass");
-        String pass2 = request.getParameter("pass2");
-        
-        boolean error = false;
-        if(!pass.equals(pass2)){
-            request.setAttribute("error", "Confirm Password not correct.");
-            error = true;
-        }else if(pass.trim().isEmpty() || pass2.trim().isEmpty()){
-            request.setAttribute("error", "Password not contain space.");
-            error = true;
-        }else if(!pass.matches("^[A-Za-z0-9]{8,16}$")||!pass2.matches("^[A-Za-z0-9]{8,16}$")){
-            request.setAttribute("error", "Password is invalid.");
-            error = true;
-        }
-        
-        if(error){
-            request.getRequestDispatcher("view/CreateNewPassword.jsp").forward(request, response);
-            return;
-        }
-        
-        AccountDAO dao = new AccountDAO();
-        dao.updatePasswordByEmail(email, pass);
-        session.invalidate();
-        response.sendRedirect("login");
+        processRequest(request, response);
     }
 
     /** 

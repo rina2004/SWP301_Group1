@@ -3,24 +3,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import model.Account;
 
 /**
  *
- * @author tungn
+ * @author anhbu
  */
-public class Login extends HttpServlet {
+
+public class LoadAccountControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -32,18 +30,8 @@ public class Login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Login</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        
+
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -57,7 +45,13 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+        //processRequest(request, response);
+        String id = request.getParameter("uid");
+        AccountDAO dao = new AccountDAO();
+        Account u = dao.getUserByID(id);
+
+        request.setAttribute("account", u);
+        request.getRequestDispatcher("view/Editaccount.jsp").forward(request, response);
     } 
 
     /** 
@@ -70,34 +64,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        boolean rememberMe = "true".equals(request.getParameter("rememberMe"));
-        AccountDAO dao = new AccountDAO();
-        Account acc = dao.login(username, password);
-
-        if (acc == null || !acc.getUsername().equals(username) || !acc.getPassword().equals(password)) {
-            request.setAttribute("error", "Username or password not correct!!!");
-            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
-        } else if (!acc.isStatus()) {
-            request.setAttribute("error", "The account is not allowed to login to the system !!!");
-            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
-        }
-
-        if (acc != null) {
-
-            if (rememberMe) {
-                Cookie userCookie = new Cookie("username", username);
-                userCookie.setMaxAge(7 * 24 * 60 * 60);
-                response.addCookie(userCookie);
-            }
-            HttpSession session = request.getSession();
-            session.setAttribute("acc", acc);
-            session.setAttribute("username", username);
-            session.setMaxInactiveInterval(60 * 30);
-            response.sendRedirect("view/home.jsp");
-
-        }
+        processRequest(request, response);
     }
 
     /** 
