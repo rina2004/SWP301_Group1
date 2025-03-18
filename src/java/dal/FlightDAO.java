@@ -18,7 +18,7 @@ public class FlightDAO extends DBContext {
 
     public ArrayList<Flight> list() {
         ArrayList<Flight> list = new ArrayList<>();
-        String sql = "SELECT * FROM swp301.flight";
+        String sql = "SELECT * FROM flight";
         PreparedStatement stm = null;
         try {
             stm = connection.prepareStatement(sql);
@@ -33,14 +33,32 @@ public class FlightDAO extends DBContext {
                         rs.getString("destination"),
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime(),
-                        rs.getBytes("atcID")
+                        rs.getTimestamp("landingTime").toLocalDateTime()
                 ));
             }
         } catch (SQLException ex) {
             System.out.println(ex);
         }
         return list;
+    }
+
+    public static void main(String[] args) {
+        FlightDAO dao = new FlightDAO();
+        ArrayList<Flight> flights = dao.list();
+
+        for (Flight flight : flights) {
+            System.out.println("ID: " + flight.getId());
+            System.out.println("Name: " + flight.getName());
+            System.out.println("Code: " + flight.getCode());
+            System.out.println("AirplaneID: " + flight.getAirplaneId());
+            System.out.println("Departure: " + flight.getDeparture());
+            System.out.println("Destination: " + flight.getDestination());
+            System.out.println("Entry Time: " + flight.getEntryTime());
+            System.out.println("Starting Time: " + flight.getStartingTime());
+            System.out.println("Landing Time: " + flight.getLandingTime());
+            System.out.println("ATC ID: " + Arrays.toString(flight.getAtcId())); // Nếu là byte[], cần chuyển thành chuỗi
+            System.out.println("------------------------");
+        }
     }
 
     public Flight getFlightById(String id) throws Exception {
@@ -60,8 +78,7 @@ public class FlightDAO extends DBContext {
                         rs.getString("destination"),
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime(),
-                        rs.getBytes("atcID"));
+                        rs.getTimestamp("landingTime").toLocalDateTime());
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,8 +103,7 @@ public class FlightDAO extends DBContext {
                         rs.getString("destination"),
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime(),
-                        rs.getBytes("atcID"));
+                        rs.getTimestamp("landingTime").toLocalDateTime());
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -112,8 +128,7 @@ public class FlightDAO extends DBContext {
                         rs.getString("destination"),
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime(),
-                        rs.getBytes("atcID"));
+                        rs.getTimestamp("landingTime").toLocalDateTime());
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,8 +156,7 @@ public class FlightDAO extends DBContext {
                         rs.getString("destination"),
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime(),
-                        rs.getBytes("atcID")));
+                        rs.getTimestamp("landingTime").toLocalDateTime()));
             }
             rs.close();
         } catch (SQLException ex) {
@@ -173,8 +187,7 @@ public class FlightDAO extends DBContext {
                         rs.getString("destination"),
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime(),
-                        rs.getBytes("atcID")
+                        rs.getTimestamp("landingTime").toLocalDateTime()
                 ));
             }
         } catch (SQLException ex) {
@@ -206,8 +219,7 @@ public class FlightDAO extends DBContext {
                         rs.getString("destination"),
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime(),
-                        rs.getBytes("atcID")
+                        rs.getTimestamp("landingTime").toLocalDateTime()
                 ));
             }
         } catch (SQLException ex) {

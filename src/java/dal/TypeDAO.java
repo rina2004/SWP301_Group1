@@ -40,6 +40,25 @@ public class TypeDAO extends DBContext {
         return type;
     }
 
+    public String getTypeNamebyName(String id) {
+        PreparedStatement stm;
+        ResultSet rs;
+
+        String sql = "Select id From `Type` Where id = ?";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getString("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
     public ArrayList<Type> list() {
         ArrayList<Type> types = new ArrayList<>();
         String sql = "SELECT * FROM Type";
@@ -130,5 +149,51 @@ public class TypeDAO extends DBContext {
             Logger.getLogger(TypeDAO.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException("Error deleting airplane type: " + ex.getMessage());
         }
+    }
+
+    public Type getTypeByID(String id) {
+        PreparedStatement stm;
+        ResultSet rs;
+
+        String sql = "Select * From Type where id = ?";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                id = rs.getString("id");
+                String name = rs.getString("name");
+                String manufacture = rs.getString("manufacture");
+                float length = rs.getFloat("length");
+                float weight = rs.getFloat("weight");
+                float height = rs.getFloat("height");
+
+                Type type = new Type(id, name, manufacture, length, weight, height);
+                return type;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public String getTypeIDbyID(String id) {
+        PreparedStatement stm;
+        ResultSet rs;
+
+        String sql = "Select id From `Type` Where id = ?";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getString("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
     }
 }

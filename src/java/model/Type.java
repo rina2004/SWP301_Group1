@@ -16,8 +16,16 @@ public class Type {
     private float weight;
     private float height;
 
-    public Type() { }
+    public Type() { 
+    
+    }
+
+    public Type(String id) {
+        this.id = id;
+    }
    
+    
+    
     public Type(String id, String name, String manufacture, float length, float weight, float height) {
         this.id = id;
         this.name = name;

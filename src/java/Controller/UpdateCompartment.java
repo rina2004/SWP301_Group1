@@ -4,24 +4,21 @@
  */
 package Controller;
 
-import dal.PostDAO;
+import dal.CompartmentDAO;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-import model.Comment;
-import model.Post;
+import model.Compartment;
 
 /**
  *
- * @author DUCDA
+ * @author tungn
  */
-public class postController extends HttpServlet {
+public class UpdateCompartment extends HttpServlet {
 
-    PostDAO postDAO = new PostDAO();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,10 +36,10 @@ public class postController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet postController</title>");            
+            out.println("<title>Servlet UpdateCompartment</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet postController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UpdateCompartment at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,15 +57,12 @@ public class postController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        CompartmentDAO dao = new CompartmentDAO();
         String id = request.getParameter("id");
-        
-        Post post = postDAO.findById(id);
-        
-        List<Comment> listCmt = postDAO.findCmt(id);
-        
-        request.setAttribute("post", post);
-        request.setAttribute("listCmt", listCmt);
-        request.getRequestDispatcher("post.jsp").forward(request, response);
+        String type = request.getParameter("type");
+        Compartment com = dao.getCompartmentByID(id, type);
+        request.setAttribute("com", com);
+        request.getRequestDispatcher("view/UpdateCompartment.jsp").forward(request, response);
     }
 
     /**
@@ -82,7 +76,19 @@ public class postController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        String id = request.getParameter("id");
+        String type = request.getParameter("typeid");
+        String cap = request.getParameter("capacity");
+
+        try {
+            int newCapacity = Integer.parseInt(cap);
+            CompartmentDAO dao = new CompartmentDAO();
+            dao.updateCompartmenByID(id.charAt(0), type, newCapacity);
+            response.sendRedirect(request.getContextPath() + "/list");
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Invalid capacity value!");
+            request.getRequestDispatcher("view/updateCompartment.jsp").forward(request, response);
+        }
     }
 
     /**
