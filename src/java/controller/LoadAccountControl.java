@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
@@ -13,13 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Account;
 
 /**
  *
  * @author anhbu
  */
-@WebServlet(name="EditAccountControl", urlPatterns={"/editAccount"})
-public class EditAccountControl extends HttpServlet {
+@WebServlet(name="LoadAccountControl", urlPatterns={"/loadacc"})
+public class LoadAccountControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,15 +32,13 @@ public class EditAccountControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String id = request.getParameter("id");
-        String password = request.getParameter("password");
-     
-        boolean status = Boolean.parseBoolean(request.getParameter("status"));
-
-        
+        String id = request.getParameter("uid");
         AccountDAO dao = new AccountDAO();
-        dao.updateAccount(id, password, status);
-        response.sendRedirect("acc");
+        Account u = dao.getUserByID(id);
+
+        request.setAttribute("account", u);
+        request.getRequestDispatcher("view/Editaccount.jsp").forward(request, response);
+
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
