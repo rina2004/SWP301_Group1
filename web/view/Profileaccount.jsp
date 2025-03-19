@@ -65,13 +65,13 @@
                                             <label class="small mb-1" for="inputName">Full Name</label>
                                             <input class="form-control" id="inputName" name="name" type="text" 
                                                    value="${account.name}" required minlength="2" maxlength="50"
-                                                   pattern="[A-Za-zÀ-ỹ\s]{2,50}" title="Only letters and spaces are allowed (2-50 characters).">
+                                                   pattern="[A-Za-zÀ-ỹ\s]{2,50}" title="Only letters and spaces are allowed (2-50 characters)." disabled>
                                         </div>
 
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputCitizenID">Citizen ID</label>
                                             <input class="form-control" id="inputCitizenID" name="citizenID" type="text" value="${account.citizenID}" 
-                                                   pattern="[0-9]{9,12}" title="Citizen ID must be 9-12 digits.">
+                                                   pattern="[0-9]{9,12}" title="Citizen ID must be 9-12 digits." disabled>
                                         </div>
                                     </div>
 
@@ -80,27 +80,30 @@
                                             <label class="small mb-1" for="inputDob">Date of Birth</label>
                                             <input class="form-control" id="inputDob" name="dob" type="date"
                                                    value="<fmt:formatDate value='${account.dob}' pattern='yyyy-MM-dd'/>" 
-                                                   max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>">
+                                                   max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" disabled>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputPhone">Phone</label>
                                             <input class="form-control" id="inputPhone" name="phone" type="text" value="${account.phone}" 
-                                                   pattern="[0-9]{10}" title="Phone number must be 10 digits.">
+                                                   pattern="[0-9]{10}" title="Phone number must be 10 digits." disabled>
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputAddress">Address</label>
-                                        <input class="form-control" id="inputAddress" name="address" type="text" value="${account.address}">
+                                        <input class="form-control" id="inputAddress" name="address" type="text" value="${account.address}" disabled>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputEmail">Email</label>
-                                        <input class="form-control" id="inputEmail" name="email" type="email" value="${account.email}">
+                                        <input class="form-control" id="inputEmail" name="email" type="email" value="${account.email}" disabled>
                                     </div>
 
-                                    <!-- Chỉ có nút Save -->
-                                    <button type="submit" class="btn btn-success">Save</button>
+                                    <!-- Thêm nút Edit & Cancel -->
+                                    <button type="button" id="editBtn" class="btn btn-primary">Edit</button>
+                                    <button type="button" id="cancelBtn" class="btn btn-secondary d-none">Cancel</button>
+                                    <button type="submit" id="saveBtn" class="btn btn-success d-none">Save</button>
+
                                 </form>
                             </div>
                         </div>
@@ -113,6 +116,32 @@
                     No account information found.
                 </div>
             </c:if>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const editBtn = document.getElementById("editBtn");
+                    const cancelBtn = document.getElementById("cancelBtn");
+                    const saveBtn = document.getElementById("saveBtn");
+                    const inputs = document.querySelectorAll("input.form-control");
+
+                    // Khi bấm Edit
+                    editBtn.addEventListener("click", function () {
+                        inputs.forEach(input => input.removeAttribute("disabled"));
+                        editBtn.classList.add("d-none");  // Ẩn nút Edit
+                        cancelBtn.classList.remove("d-none"); // Hiện Cancel
+                        saveBtn.classList.remove("d-none");   // Hiện Save
+                    });
+
+                    // Khi bấm Cancel
+                    cancelBtn.addEventListener("click", function () {
+                        inputs.forEach(input => input.setAttribute("disabled", "true"));
+                        editBtn.classList.remove("d-none");  // Hiện lại nút Edit
+                        cancelBtn.classList.add("d-none");   // Ẩn Cancel
+                        saveBtn.classList.add("d-none");     // Ẩn Save
+                    });
+                });
+            </script>
+
         </div>
     </body>
 </html>

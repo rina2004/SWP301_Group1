@@ -29,7 +29,9 @@ public class TicketDAO extends DBContext {
             if (rs.next()) {
                 return new Ticket(
                     rs.getString("id"),
+                    rs.getString("orderId"),
                     rs.getString("flightID"),
+                    rs.getString("seatId"),
                     rs.getString("type"),
                     rs.getDouble("Price"), // Changed from getInt to getDouble
                     rs.getString("Status")
@@ -54,10 +56,12 @@ public class TicketDAO extends DBContext {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 list.add(new Ticket(
-                    rs.getString("id"),
+                   rs.getString("id"),
+                    rs.getString("orderId"),
                     rs.getString("flightID"),
+                    rs.getString("seatId"),
                     rs.getString("type"),
-                    rs.getDouble("Price"),
+                    rs.getDouble("Price"), // Changed from getInt to getDouble
                     rs.getString("Status")
                 ));
             }
@@ -77,7 +81,9 @@ public class TicketDAO extends DBContext {
             if (rs.next()) {
                 return new Ticket(
                     rs.getString("id"),
+                    rs.getString("orderId"),
                     rs.getString("flightID"),
+                    rs.getString("seatId"),
                     rs.getString("type"),
                     rs.getDouble("Price"), // Changed from getInt to getDouble
                     rs.getString("Status")

@@ -10,7 +10,9 @@ package model;
  */
 public class Ticket {
     private String id;
+    private String orderId;
     private String flightId;
+    private String seatId;
     private String type;
     private double price;
     private String status;
@@ -18,9 +20,11 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(String id, String flightId, String type, double price, String status) {
+    public Ticket(String id, String orderId, String flightId, String seatId, String type, double price, String status) {
         this.id = id;
+        this.orderId = orderId;
         this.flightId = flightId;
+        this.seatId = seatId;
         this.type = type;
         this.price = price;
         this.status = status;
@@ -34,12 +38,28 @@ public class Ticket {
         this.id = id;
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
     public String getFlightId() {
         return flightId;
     }
 
     public void setFlightId(String flightId) {
         this.flightId = flightId;
+    }
+
+    public String getSeatId() {
+        return seatId;
+    }
+
+    public void setSeatId(String seatId) {
+        this.seatId = seatId;
     }
 
     public String getType() {
@@ -49,7 +69,7 @@ public class Ticket {
     public void setType(String type) {
         this.type = type;
     }
-    
+
     public double getPrice() {
         return price;
     }
@@ -65,5 +85,7 @@ public class Ticket {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    
     
 }
