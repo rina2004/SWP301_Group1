@@ -7,8 +7,6 @@ INSERT INTO Role (name) VALUES
 ('Staff'),
 ('AirTrafficControl');
 
-
-
 -- Account table (10 records)
 INSERT INTO Account (username, password, roleID, status, citizenID, name, dob, phone, address, email) VALUES
 ('johndoe', 'password123', 1, TRUE, '123456789012', 'John Doe', '1990-05-15', '0987654321', '123 Main Street, Hanoi', 'john.doe@example.com'),
@@ -22,7 +20,6 @@ INSERT INTO Account (username, password, roleID, status, citizenID, name, dob, p
 ('williamtaylor', 'taylor888', 1, TRUE, '901234567890', 'William Taylor', '1987-06-28', '0978901234', '606 Spruce Court, Phu Quoc', 'william.taylor@example.com'),
 ('sophiaanderson', 'sophia999', 2, TRUE, '012345678901', 'Sophia Anderson', '1994-03-17', '0989012345', '707 Redwood Place, Da Lat', 'sophia.anderson@example.com');
 
-
 -- Type table (10 records)
 INSERT INTO Type (id, name, manufacture, length, weight, height) VALUES
 ('TYP001', 'Boeing 737-800', 'Boeing', 39.50, 41400.00, 12.50),
@@ -35,19 +32,6 @@ INSERT INTO Type (id, name, manufacture, length, weight, height) VALUES
 ('TYP008', 'Boeing 777-300ER', 'Boeing', 73.90, 160000.00, 18.50),
 ('TYP009', 'ATR 72-600', 'ATR', 27.17, 12800.00, 7.65),
 ('TYP010', 'Airbus A321neo', 'Airbus', 44.51, 50500.00, 11.76);
-
--- Compartment table (10 records)
-INSERT INTO Compartment (id, name, typeID, capacity) VALUES
-('A', 'First Class', 'TYP001', 8),
-('B', 'Business Class', 'TYP001', 32),
-('C', 'Economy Class', 'TYP001', 120),
-('D', 'Business Class', 'TYP002', 28),
-('E', 'Economy Class', 'TYP002', 150),
-('F', 'First Class', 'TYP003', 10),
-('G', 'Business Class', 'TYP003', 42),
-('H', 'Premium Economy', 'TYP003', 28),
-('I', 'Economy Class', 'TYP003', 198),
-('J', 'Economy Plus', 'TYP004', 48);
 
 -- AirplaneStatus table already has 5 records, adding 5 more to reach 10
 INSERT INTO AirplaneStatus (name) VALUES 
@@ -66,6 +50,20 @@ INSERT INTO Airplane (id, name, typeID, statusID, maintainanceTime, usedTime) VA
 ('VN-A009', 'Sky Voyager', 'TYP009', 4, '2024-06-05 08:30:00', '2023-12-15 00:00:00'),
 ('VN-A010', 'Cloud Dancer', 'TYP010', 5, '2024-07-28 09:45:00', '2024-01-05 00:00:00');
 
+-- Compartment table (10 records)
+INSERT INTO Compartment (id, name, airplaneID, capacity) VALUES
+('A', 'First Class', 'VN-A001', 8),
+('B', 'Business Class', 'VN-A001', 32),
+('C', 'Economy Class', 'VN-A001', 120),
+('D', 'Business Class', 'VN-A002', 28),
+('E', 'Economy Class', 'VN-A002', 150),
+('F', 'First Class', 'VN-A003', 10),
+('G', 'Business Class', 'VN-A003', 42),
+('H', 'Premium Economy', 'VN-A003', 28),
+('I', 'Economy Class', 'VN-A003', 198),
+('J', 'Economy Plus', 'VN-A004', 48);
+
+
 -- Flight table (10 records)
 INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime) VALUES
 ('FL001', 'Morning Express', 'VN001', 'VN-A001', 'Hanoi', 'Ho Chi Minh City', '2024-04-10 06:00:00', '2024-04-10 07:00:00', '2024-04-10 09:00:00'),
@@ -80,17 +78,17 @@ INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTim
 ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 'Cam Ranh', 'Hai Phong', '2024-04-19 16:45:00', '2024-04-19 17:45:00', '2024-04-19 19:30:00');
 
 -- Seat table (10 records)
-INSERT INTO Seat (id, compartmentID, available) VALUES
-('S001A', 'A', TRUE),
-('S002B', 'B', TRUE),
-('S003C', 'C', TRUE),
-('S004D', 'D', FALSE),
-('S005E', 'E', TRUE),
-('S006F', 'F', TRUE),
-('S007G', 'G', FALSE),
-('S008H', 'H', TRUE),
-('S009I', 'I', TRUE),
-('S010J', 'J', FALSE);
+INSERT INTO Seat (id, compartmentID, status, reason) VALUES
+('S001A', 'A', TRUE, null),
+('S002B', 'B', TRUE, null),
+('S003C', 'C', TRUE, null),
+('S004D', 'D', FALSE, 'In Maintenance'),
+('S005E', 'E', TRUE, null),
+('S006F', 'F', TRUE, null),
+('S007G', 'G', FALSE, 'In Maintenance'),
+('S008H', 'H', TRUE, null),
+('S009I', 'I', TRUE, null),
+('S010J', 'J', FALSE, 'In Reparing');
 
 -- Order table (10 records)
 INSERT INTO `Order` (id, customerID, staffID, status, time) VALUES

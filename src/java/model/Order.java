@@ -4,7 +4,8 @@
  */
 package model;
 
-import java.security.Timestamp;
+
+import java.time.LocalDateTime;
 
 /**
  *
@@ -12,22 +13,18 @@ import java.security.Timestamp;
  */
 public class Order {
     private String id;
-    private String customerId;
-    private String staffId;
+    private Account accountID;
     private String status;
-    private Timestamp time;
-    private int ticketCount; // thông tin phụ thêm khi join ticket count
+    private LocalDateTime time;
 
     public Order() {
     }
 
-    public Order(String id, String customerId, String staffId, String status, Timestamp time, int ticketCount) {
+    public Order(String id, Account accountID, String status, LocalDateTime time) {
         this.id = id;
-        this.customerId = customerId;
-        this.staffId = staffId;
+        this.accountID = accountID;
         this.status = status;
         this.time = time;
-        this.ticketCount = ticketCount;
     }
 
     public String getId() {
@@ -38,20 +35,12 @@ public class Order {
         this.id = id;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public Account getAccountID() {
+        return accountID;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getStaffId() {
-        return staffId;
-    }
-
-    public void setStaffId(String staffId) {
-        this.staffId = staffId;
+    public void setAccountID(Account accountID) {
+        this.accountID = accountID;
     }
 
     public String getStatus() {
@@ -62,21 +51,14 @@ public class Order {
         this.status = status;
     }
 
-    public Timestamp getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
-
-    public int getTicketCount() {
-        return ticketCount;
-    }
-
-    public void setTicketCount(int ticketCount) {
-        this.ticketCount = ticketCount;
-    }
+    
     
     
 }
