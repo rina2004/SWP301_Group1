@@ -88,7 +88,7 @@
 
                                     <td>${user.status ? 'Active' : 'Inactive'}</td>
                                     <td>
-                                        <a href="loadacc?uid=${user.id}" class="edit" data-toggle="modal">
+                                        <a href="editAccount?uid=${user.id}" class="edit" data-toggle="modal">
                                             <i class="material-icons" title="Edit">&#xE254;</i>
                                         </a>
 

@@ -64,7 +64,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <a href="acc" class="btn btn-primary">Back</a>
+                                <a href="account-list" class="btn btn-primary">Back</a>
                                 <input type="submit" class="btn btn-success" value="Edit">
                             </div>
 

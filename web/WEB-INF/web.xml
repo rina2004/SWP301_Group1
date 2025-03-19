@@ -284,10 +284,6 @@
         <servlet-class>controller.EditAccountControl</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>LoadAccountControl</servlet-name>
-        <servlet-class>controller.LoadAccountControl</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ProfileAccountControl</servlet-name>
         <servlet-class>controller.ProfileAccountControl</servlet-class>
     </servlet>
@@ -302,10 +298,6 @@
     <servlet-mapping>
         <servlet-name>EditAccountControl</servlet-name>
         <url-pattern>/editAccount</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>LoadAccountControl</servlet-name>
-        <url-pattern>/loadacc</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProfileAccountControl</servlet-name>

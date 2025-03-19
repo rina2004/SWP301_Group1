@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Account;
 
 /**
  *
@@ -45,6 +46,12 @@ public class EditAccountControl extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
+        String id = request.getParameter("uid");
+        AccountDAO dao = new AccountDAO();
+        Account u = dao.getUserByID(id);
+
+        request.setAttribute("account", u);
+        request.getRequestDispatcher("view/Editaccount.jsp").forward(request, response);
        
     }
 
