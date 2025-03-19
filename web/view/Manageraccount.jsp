@@ -43,7 +43,7 @@
                         </div>
                     </div>
 
-                    <form action="acc" method="GET">
+                    <form action="account-getlist" method="GET">
                         <label for="roleFilter">Filter by Role:</label>
                         <select name="role" id="roleFilter" onchange="this.form.submit()">
                             <option value="">All</option>

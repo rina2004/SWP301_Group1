@@ -57,10 +57,6 @@
         <servlet-class>controller.ViewAccountServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UpdateAccountServlet</servlet-name>
-        <servlet-class>controller.UpdateAccountServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>FilterFlightOrderServlet</servlet-name>
         <servlet-class>controller.FilterFlightOrderServlet</servlet-class>
     </servlet>
@@ -181,10 +177,6 @@
         <url-pattern>/view/view-account</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UpdateAccountServlet</servlet-name>
-        <url-pattern>/update-account</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>FilterFlightOrderServlet</servlet-name>
         <url-pattern>/view/filter-flightorder</url-pattern>
     </servlet-mapping>
@@ -301,7 +293,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>AccountControl</servlet-name>
-        <url-pattern>/acc</url-pattern>
+        <url-pattern>/account-getlist</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddUserControl</servlet-name>
