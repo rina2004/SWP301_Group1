@@ -67,7 +67,7 @@ public class EditAccountControl extends HttpServlet {
 
         AccountDAO dao = new AccountDAO();
         dao.updateAccount(id, password, status);
-        response.sendRedirect("acc");
+        response.sendRedirect("account-list");
     }
 
     /**

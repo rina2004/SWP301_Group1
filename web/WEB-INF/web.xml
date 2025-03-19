@@ -272,8 +272,8 @@
         <url-pattern>/view/update-flight</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>AccountControl</servlet-name>
-        <servlet-class>controller.AccountControl</servlet-class>
+        <servlet-name>AccountListControl</servlet-name>
+        <servlet-class>controller.AccountListControl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddUserControl</servlet-name>
@@ -292,8 +292,8 @@
         <servlet-class>controller.ProfileAccountControl</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>AccountControl</servlet-name>
-        <url-pattern>/account-getlist</url-pattern>
+        <servlet-name>AccountListControl</servlet-name>
+        <url-pattern>/account-list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddUserControl</servlet-name>
