@@ -31,7 +31,7 @@
             <div id="editAccountModal">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="editAccount" method="post">
+                        <form action="account-update" method="post">
                             <div class="modal-header">						
                                 <h4 class="modal-title">Edit Account</h4>
                             </div>

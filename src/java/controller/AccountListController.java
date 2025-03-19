@@ -19,7 +19,7 @@ import model.Account;
  *
  * @author anhbu
  */
-public class AccountListControl extends HttpServlet {
+public class AccountListController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

@@ -6,17 +6,19 @@ package controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Account;
+import jakarta.servlet.http.HttpSession;
+import model.Role;
 
 /**
  *
  * @author anhbu
  */
-public class EditAccountControl extends HttpServlet {
+public class AccountAddUserController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,7 +32,18 @@ public class EditAccountControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet AddUserControl</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet AddUserControl at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -45,14 +58,7 @@ public class EditAccountControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        String id = request.getParameter("uid");
-        AccountDAO dao = new AccountDAO();
-        Account u = dao.getUserByID(id);
-
-        request.setAttribute("account", u);
-        request.getRequestDispatcher("view/Editaccount.jsp").forward(request, response);
-       
+        processRequest(request, response);
     }
 
     /**
@@ -67,13 +73,41 @@ public class EditAccountControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-         String id = request.getParameter("id");
+        String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+        // Kiểm tra trạng thái tài khoản
+        boolean status = "true".equals(request.getParameter("status"));
+
+        // Lấy roleID từ request
+        int roleID = 0;
+        try {
+            roleID = Integer.parseInt(request.getParameter("roleID"));
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid roleID: " + request.getParameter("roleID"));
+        }
+
+        HttpSession session = request.getSession();
+
+        // Kiểm tra roleID hợp lệ
+        if (roleID == 0) {
+            session.setAttribute("errorMessage", "Please select a valid role!");
+            response.sendRedirect("account-list");
+            return;
+        }
+
+        // Tạo đối tượng Role từ roleID
+        Role role = new Role(roleID, ""); // Role chưa có roleName, chỉ có roleID
 
         AccountDAO dao = new AccountDAO();
-        dao.updateAccount(id, password, status);
+        boolean isInserted = dao.addUser(username, password, role, status, null, null, null, null, null, null);
+
+        if (isInserted) {
+            session.setAttribute("Message", "User added successfully!");
+        } else {
+            session.setAttribute("Message", "Cannot add user! The username may already exist.");
+        }
+
         response.sendRedirect("account-list");
     }
 

@@ -88,7 +88,7 @@
 
                                     <td>${user.status ? 'Active' : 'Inactive'}</td>
                                     <td>
-                                        <a href="editAccount?uid=${user.id}" class="edit" data-toggle="modal">
+                                        <a href="account-update?uid=${user.id}" class="edit" data-toggle="modal">
                                             <i class="material-icons" title="Edit">&#xE254;</i>
                                         </a>
 
@@ -104,7 +104,7 @@
             <div id="addUserModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="addUser" method="post">
+                        <form action="account-addUser" method="post">
                             <div class="modal-header">
                                 <h4 class="modal-title">Add User</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

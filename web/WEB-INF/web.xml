@@ -272,32 +272,32 @@
         <url-pattern>/view/update-flight</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>AccountListControl</servlet-name>
-        <servlet-class>controller.AccountListControl</servlet-class>
+        <servlet-name>AccountListController</servlet-name>
+        <servlet-class>controller.AccountListController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AddUserControl</servlet-name>
-        <servlet-class>controller.AddUserControl</servlet-class>
+        <servlet-name>AccountAddUserController</servlet-name>
+        <servlet-class>controller.AccountAddUserController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>EditAccountControl</servlet-name>
-        <servlet-class>controller.EditAccountControl</servlet-class>
+        <servlet-name>AccountUpdateController</servlet-name>
+        <servlet-class>controller.AccountUpdateController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ProfileAccountControl</servlet-name>
         <servlet-class>controller.ProfileAccountControl</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>AccountListControl</servlet-name>
+        <servlet-name>AccountListController</servlet-name>
         <url-pattern>/account-list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AddUserControl</servlet-name>
-        <url-pattern>/addUser</url-pattern>
+        <servlet-name>AccountAddUserController</servlet-name>
+        <url-pattern>/account-addUser</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>EditAccountControl</servlet-name>
-        <url-pattern>/editAccount</url-pattern>
+        <servlet-name>AccountUpdateController</servlet-name>
+        <url-pattern>/account-update</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProfileAccountControl</servlet-name>
