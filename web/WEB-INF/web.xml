@@ -284,8 +284,8 @@
         <servlet-class>controller.AccountUpdateController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ProfileAccountControl</servlet-name>
-        <servlet-class>controller.ProfileAccountControl</servlet-class>
+        <servlet-name>AccountProfileController</servlet-name>
+        <servlet-class>controller.AccountProfileController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AccountListController</servlet-name>
@@ -300,7 +300,7 @@
         <url-pattern>/account-update</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ProfileAccountControl</servlet-name>
+        <servlet-name>AccountProfileController</servlet-name>
         <url-pattern>/profile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
