@@ -124,20 +124,26 @@
                     const saveBtn = document.getElementById("saveBtn");
                     const inputs = document.querySelectorAll("input.form-control");
 
+                    // Lưu trạng thái ban đầu
+                    inputs.forEach(input => input.setAttribute("data-original-value", input.value));
+
                     // Khi bấm Edit
                     editBtn.addEventListener("click", function () {
                         inputs.forEach(input => input.removeAttribute("disabled"));
-                        editBtn.classList.add("d-none");  // Ẩn nút Edit
-                        cancelBtn.classList.remove("d-none"); // Hiện Cancel
-                        saveBtn.classList.remove("d-none");   // Hiện Save
+                        editBtn.classList.add("d-none");
+                        cancelBtn.classList.remove("d-none");
+                        saveBtn.classList.remove("d-none");
                     });
 
                     // Khi bấm Cancel
                     cancelBtn.addEventListener("click", function () {
-                        inputs.forEach(input => input.setAttribute("disabled", "true"));
-                        editBtn.classList.remove("d-none");  // Hiện lại nút Edit
-                        cancelBtn.classList.add("d-none");   // Ẩn Cancel
-                        saveBtn.classList.add("d-none");     // Ẩn Save
+                        inputs.forEach(input => {
+                            input.setAttribute("disabled", "true");
+                            input.value = input.getAttribute("data-original-value"); // Khôi phục giá trị cũ
+                        });
+                        editBtn.classList.remove("d-none");
+                        cancelBtn.classList.add("d-none");
+                        saveBtn.classList.add("d-none");
                     });
                 });
             </script>
