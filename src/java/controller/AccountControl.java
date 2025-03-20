@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package Controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
@@ -59,9 +59,11 @@ public class AccountControl extends HttpServlet {
 
         // Sắp xếp danh sách theo RoleID
         if ("asc".equals(sortOrder)) {
-            listA.sort(Comparator.comparingInt(Account::getRoleID)); // Tăng dần
+            listA.sort(Comparator.comparing(a -> a.getRole().getId())); // Tăng dần
+
         } else if ("desc".equals(sortOrder)) {
-            listA.sort(Comparator.comparingInt(Account::getRoleID).reversed()); // Giảm dần
+            listA.sort(Comparator.comparing((Account a) -> a.getRole().getId()).reversed());
+
         }
 
         //Lọc tài khoản theo roleID
@@ -69,23 +71,22 @@ public class AccountControl extends HttpServlet {
             int roleID = -1;
             switch (roleFilter) {
                 case "Staff" ->
-                    roleID = 2;
-                case "Customer" ->
                     roleID = 3;
+                case "Customer" ->
+                    roleID = 2;
                 case "AirTrafficControl" ->
                     roleID = 4;
             }
             if (listA != null) {
                 Iterator<Account> iterator = listA.iterator();
                 while (iterator.hasNext()) {
-                    if (iterator.next().getRoleID() != roleID) {
+                    if (iterator.next().getRole().getId() != roleID) {
                         iterator.remove();
                     }
                 }
             }
 
         }
-
         // Phân trang
         int recordsPerPage = 5; // Số tài khoản mỗi trang
         int totalAccounts = listA.size();

@@ -20,14 +20,14 @@
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
-                flex-direction: column; /* Thêm dòng này để các phần tử không bị nằm ngang */
+                flex-direction: column;
             }
 
             h2 {
                 color: #333;
                 text-align: center;
                 font-size: 24px;
-                margin-bottom: 20px; /* Thêm khoảng cách giữa h2 và form */
+                margin-bottom: 20px;
             }
 
             form {
@@ -83,7 +83,7 @@
     </head>
     <body>
         <h2>Update Seat ${seat.id}</h2>
-        <form action="updateSeat" method="post">
+        <form action="<%= request.getContextPath() %>/updateSeat" method="post">
             <input type="hidden" name="seatID" value="${seat.id}">
 
             <label>ID Seat:</label>
@@ -96,14 +96,36 @@
             <input type="text" name="typeID" value="${seat.compartment.type.id}" readonly><br>
 
             <label>Status:</label>
-            <select name="status">
+            <select name="status" id="seatStatus" onchange="toggleReasonInput()">
                 <option value="Available" ${seat.status eq 'Available' ? 'selected' : ''}>Available</option>
                 <option value="Booked" ${seat.status eq 'Booked' ? 'selected' : ''}>Booked</option>
                 <option value="Maintained" ${seat.status eq 'Maintained' ? 'selected' : ''}>Maintained</option>
             </select><br>
 
+            <div id="reasonContainer" style="display: ${seat.status eq 'Maintained' ? 'block' : 'none'};">
+                <label>Maintain Reason:</label>
+                <input type="text" name="reason" id="maintainReason" value="${seat.reason != null ? seat.reason : ''}"><br>
+            </div>
+
             <button type="submit">Update</button>
-            <a href = "listSeatByTypeID?id=${seat.compartment.type.id}">Back</a>
+            <a href="listSeatByTypeID?id=${seat.compartment.type.id}">Back</a>
         </form>
+
+        <script>
+            function toggleReasonInput() {
+                var status = document.getElementById("seatStatus").value;
+                var reasonContainer = document.getElementById("reasonContainer");
+                var reasonInput = document.getElementById("maintainReason");
+
+                if (status === "Maintained") {
+                    reasonContainer.style.display = "block";
+                    reasonInput.required = true;
+                } else {
+                    reasonContainer.style.display = "none";
+                    reasonInput.required = false;
+                    reasonInput.value = "";
+                }
+            }
+        </script>
     </body>
 </html>

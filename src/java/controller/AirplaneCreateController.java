@@ -88,47 +88,48 @@ public class AirplaneCreateController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            request.setCharacterEncoding("UTF-8");
-
-            Airplane a = new Airplane();
-            a.setName(request.getParameter("name"));
-
-            // Handle type
-            String typeId = request.getParameter("type");
-            TypeDAO typeDB = new TypeDAO();
-            a.setType(typeDB.get(typeId));
-
-            // Handle status
-            String statusId = request.getParameter("status");
-            AirplaneStatusDBContext statusDB = new AirplaneStatusDBContext();
-            a.setStatus(statusDB.get(Integer.parseInt(statusId)));
-
-            // Handle dates
-            String maintainanceTime = request.getParameter("maintainanceTime");
-            a.setMaintainanceTime(LocalDateTime.parse(maintainanceTime));
-
-            String usedTime = request.getParameter("usedTime");
-            a.setUsedTime(LocalDateTime.parse(usedTime));
-
-            // Handle ATC
-            String actID = request.getParameter("actID");
-            AirTrafficControlDBContext atcDB = new AirTrafficControlDBContext();
-            AirTrafficControl atc = atcDB.get(actID);
-            if (atc == null) {
-                throw new IllegalArgumentException("Invalid Air Traffic Control ID: " + actID);
-            }
-            a.setAtc(atc);
-
-            // Insert airplane
-            AirplaneDAO dao = new AirplaneDAO();
-            dao.insert(a);
-            
-            response.sendRedirect(request.getContextPath() + "/airplane/view");
-        } catch (IOException | IllegalArgumentException e) {
-            request.setAttribute("error", "Error adding airplane: " + e.getMessage());
-            doGet(request, response);
-        }
+//        try {
+//            request.setCharacterEncoding("UTF-8");
+//
+//            Airplane a = new Airplane();
+//            a.setName(request.getParameter("name"));
+//
+//            // Handle type
+//            String typeId = request.getParameter("type");
+//            TypeDAO typeDB = new TypeDAO();
+//            a.setType(typeDB.get(typeId));
+//
+//            // Handle status
+//            String statusId = request.getParameter("status");
+//            AirplaneStatusDBContext statusDB = new AirplaneStatusDBContext();
+//            a.setStatus(statusDB.get(Integer.parseInt(statusId)));
+//
+//            // Handle dates
+//            String maintainanceTime = request.getParameter("maintainanceTime");
+//            a.setMaintainanceTime(LocalDateTime.parse(maintainanceTime));
+//
+//            String usedTime = request.getParameter("usedTime");
+//            a.setUsedTime(LocalDateTime.parse(usedTime));
+//
+//            // Handle ATC
+//            String actID = request.getParameter("actID");
+//            AirTrafficControlDBContext atcDB = new AirTrafficControlDBContext();
+//            AirTrafficControl atc = atcDB.get(actID);
+//            if (atc == null) {
+//                throw new IllegalArgumentException("Invalid Air Traffic Control ID: " + actID);
+//            }
+//            a.setAtc(atc);
+//
+//            // Insert airplane
+//            AirplaneDAO dao = new AirplaneDAO();
+//            dao.insert(a);
+//            
+//            response.sendRedirect(request.getContextPath() + "/airplane/view");
+//        } catch (IOException | IllegalArgumentException e) {
+//            request.setAttribute("error", "Error adding airplane: " + e.getMessage());
+//            doGet(request, response);
+//        }
+        
     }
 
     /** 

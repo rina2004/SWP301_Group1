@@ -60,8 +60,8 @@ public class UpdateCompartment extends HttpServlet {
         CompartmentDAO dao = new CompartmentDAO();
         String id = request.getParameter("id");
         String type = request.getParameter("type");
-        Compartment com = dao.getCompartmentByID(id, type);
-        request.setAttribute("com", com);
+        
+       
         request.getRequestDispatcher("view/UpdateCompartment.jsp").forward(request, response);
     }
 
@@ -83,7 +83,7 @@ public class UpdateCompartment extends HttpServlet {
         try {
             int newCapacity = Integer.parseInt(cap);
             CompartmentDAO dao = new CompartmentDAO();
-            dao.updateCompartmenByID(id.charAt(0), type, newCapacity);
+          
             response.sendRedirect(request.getContextPath() + "/list");
         } catch (NumberFormatException e) {
             request.setAttribute("error", "Invalid capacity value!");

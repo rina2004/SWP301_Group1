@@ -9,18 +9,19 @@ package model;
  * @author Rinaaaa
  */
 public class Compartment {
+
     private String id;
     private String name;
-    private Type type;
+    private Airplane airplane;
     private int capacity;
 
     public Compartment() {
     }
 
-    public Compartment(String id, String name, Type type, int capacity) {
+    public Compartment(String id, String name, Airplane airplane, int capacity) {
         this.id = id;
         this.name = name;
-        this.type = type;
+        this.airplane = airplane;
         this.capacity = capacity;
     }
 
@@ -40,12 +41,12 @@ public class Compartment {
         this.name = name;
     }
 
-    public Type getType() {
-        return type;
+    public Airplane getAirplane() {
+        return airplane;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setAirplane(Airplane airplane) {
+        this.airplane = airplane;
     }
 
     public int getCapacity() {
@@ -58,8 +59,7 @@ public class Compartment {
 
     @Override
     public String toString() {
-        return "Compartment{" + "id=" + id + ", name=" + name + ", type=" + type + ", capacity=" + capacity + '}';
+        return "Compartment{" + "id=" + id + ", name=" + name + ", airplane=" + airplane + ", capacity=" + capacity + '}';
     }
 
-    
 }

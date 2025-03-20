@@ -58,13 +58,12 @@ public class CreateCompartment extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");  // Lấy id từ URL
-        TypeDAO dao = new TypeDAO();
-        String id1 = dao.getTypeIDbyID(id); // Lấy Type ID dựa vào ID đã chọn
-
-        request.setAttribute("typeID", id1);
+        String id = request.getParameter("id");
+        request.setAttribute("airplaneID", id);
         request.getRequestDispatcher("view/CreateCompartment.jsp").forward(request, response);
     }
+    
+
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -82,46 +81,7 @@ public class CreateCompartment extends HttpServlet {
         String typeid = request.getParameter("typeid");
         String capacity = request.getParameter("capacity");
 
-        if (id == null || id.length() != 1) {
-            request.setAttribute("error", "ID must be a single character!");
-            request.getRequestDispatcher("view/CreateCompartment.jsp").forward(request, response);
-            return;
-        }
-
-        char charId = id.charAt(0);
-        CompartmentDAO dao = new CompartmentDAO();
-
-        try {
-            int capacity1 = Integer.parseInt(capacity);
-
-            // Kiểm tra khoang có tồn tại không
-            if (dao.isCompartmentExist(charId, typeid)) {
-                request.setAttribute("typeID", typeid);
-                request.setAttribute("existed", "Compartment with this ID and Type already exists!");
-                request.getRequestDispatcher("view/CreateCompartment.jsp").forward(request, response);
-                return;
-            }
-
-            // Lấy đối tượng Type
-            TypeDAO dao2 = new TypeDAO();
-            Type t = dao2.getTypeByID(typeid);
-
-            if (t == null) {
-                request.setAttribute("typeID", typeid);
-                request.setAttribute("error", "Invalid Type ID!");
-                request.getRequestDispatcher("view/CreateCompartment.jsp").forward(request, response);
-                return;
-            }
-
-            // Tạo khoang mới
-            dao.createNewCompartment(charId, name, t, capacity1);
-            response.sendRedirect(request.getContextPath() + "/list");
-
-        } catch (NumberFormatException e) {
-            request.setAttribute("typeID", typeid);
-            request.setAttribute("errnumber", "Capacity must be a valid number!");
-            request.getRequestDispatcher("view/CreateCompartment.jsp").forward(request, response);
-        }
+        
     }
 
     /**

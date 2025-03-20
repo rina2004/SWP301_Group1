@@ -164,13 +164,17 @@ SELECT * FROM Compartment;
 SELECT * FROM Seat Where typeID = 'A112' and compartmentID = 'F';
 Select * FROM Flight;
 DELETE FROM Type;
-
+drop table type;
 DESCRIBE Type;
 DESCRIBE Compartment;
 DESCRIBE Seat;
-
-
-
+SELECT CONSTRAINT_NAME
+FROM information_schema.KEY_COLUMN_USAGE
+WHERE TABLE_NAME = 'Compartment' AND COLUMN_NAME = 'typeID';
+ALTER TABLE Compartment DROP FOREIGN KEY compartment_ibfk_1;
+drop table Type;
+DESC AirPlane;
+DESC Compartment;
 Select s.id, c.name, s.compartmentID, s.status, c.typeID
 From Seat s
 Join Compartment c On c.id = s.compartmentID
@@ -182,7 +186,7 @@ WHERE TABLE_NAME = 'Seat';
 
 Select * From Seat s join Compartment c On c.id = s.compartmentID  Where s.id = 'A115_B_10';
 
-
+SET SQL_SAFE_UPDATES = 0;
 ALTER TABLE Seat ADD COLUMN typeID VARCHAR(10);
 ALTER TABLE Seat ADD CONSTRAINT fk_seat_type FOREIGN KEY (typeID) REFERENCES Type(id) ON DELETE CASCADE;
 INSERT INTO Type (id, Name, manufacture, length, weight, height) 
@@ -196,16 +200,28 @@ INSERT INTO `Flight` (`id`, `name`, `code`, `airplaneID`, `departure`, `destinat
 
 insert into `ticket` (`id`,`flightID`,`type`,`Price`,`Status`) Value('T001','FL001','available','9000','Available');
 
+Select id From `Type` Where id = 'A115';
 ALTER TABLE Seat CHANGE status status VARCHAR(20);
-UPDATE Seat SET status = 'Booked' WHERE id ='A115_B_1';
+UPDATE Seat SET status = 'Maintained' WHERE id ='A115_B_2';
 UPDATE Seat SET status = 'Booked' WHERE status = '0'; -- Nếu trước đó 0 là false  
+ALTER TABLE Compartment MODIFY COLUMN id VARCHAR(20);
+ALTER TABLE Seat MODIFY COLUMN compartmentID VARCHAR(20);
+ALTER TABLE Seat ADD CONSTRAINT fk_seat_compartment 
+FOREIGN KEY (compartmentID) REFERENCES Compartment(id) ON DELETE CASCADE;
+INSERT INTO AirplaneStatus (id, name) 
 
-SELECT * FROM swp301.ticket WHERE flightID = 'FL001' ORDER BY price ASC LIMIT 1;
-
-INSERT INTO Ticket (id, staffID, orderID, flightID, seatID, type, Price, Status) 
 VALUES 
-('O1', 'S1', (SELECT id FROM `Order` ORDER BY time DESC LIMIT 1), 'F1', 'S1', 'Normal', 200000.00, 'Booked'),
-('O2', 'S2', (SELECT id FROM `Order` ORDER BY time DESC LIMIT 1 OFFSET 1), 'F2', 'S2', 'VIP', 500000.00, 'Confirmed');
+(1, 'Active'), 
+(2, 'Maintenance'), 
+(3, 'Out of Service');
+ALTER TABLE Airplane ADD COLUMN numberOfCompartments INT NOT NULL DEFAULT 0;
+
+INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime)
+VALUES 
+('A001', 'Boeing 747', 1, '2025-03-18 12:00:00', '2025-03-10 08:00:00'),
+('A002', 'Airbus A320', 2, '2025-03-19 14:00:00', '2025-03-11 10:00:00');
+UPDATE Airplane SET numberOfCompartments = 4 WHERE id = 'A002';
+
 
 -- Insert into Luggage
 INSERT INTO Luggage (id, customerID, orderID, type, weight) VALUES

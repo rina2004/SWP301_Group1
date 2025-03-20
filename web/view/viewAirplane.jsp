@@ -119,11 +119,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Type</th>
                     <th>Status</th>
                     <th>Maintenance Time</th>
                     <th>Used Time</th>
-                    <th>ATC</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -132,16 +130,18 @@
                     <tr>
                         <td>${pl.id}</td>
                         <td>${pl.name}</td>
-                        <td>${pl.type.name}</td>
                         <td>${pl.status.name}</td>
                         <td>${pl.maintainanceTime}</td>
                         <td>${pl.usedTime}</td>
-                        <td>${pl.atc.name}</td>
                         <td>
                             <a href="update?id=${pl.id}" class="btn-edit">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
+                            <a href="<%= request.getContextPath() %>/createCompartment?id=${pl.id}">
+                                <i class="fas fa-edit">Create Compartment</i>
+                            </a>
                         </td>
+
                     </tr> 
                 </c:forEach>
             </tbody>

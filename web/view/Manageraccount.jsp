@@ -82,14 +82,8 @@
                                     <td>${user.id}</td>
                                     <td>${user.username}</td>
                                     <td>${user.password}</td>
-                                    <td>
-                                        <c:choose>
-                                            <c:when test="${user.roleID == 2}">Staff</c:when>  
-                                            <c:when test="${user.roleID == 3}">Customer</c:when>                                                                                  
-                                            <c:when test="${user.roleID == 4}">AirTrafficControl</c:when>
-                                            <c:otherwise>Unknown</c:otherwise>
-                                        </c:choose>
-                                    </td>
+                                    <td>${user.role.name}</td>
+
 
 
                                     <td>${user.status ? 'Active' : 'Inactive'}</td>
@@ -124,14 +118,11 @@
                                     <label>Password</label>
                                     <input name="password" type="password" class="form-control" required>
                                 </div>   
-                                <div class="form-group">
-                                    <label>Entity ID</label>
-                                    <input name="entityID" type="number" class="form-control" required>
-                                </div>                         
+
                                 <div class="form-group">
                                     <label>Role</label>
                                     <select name="roleID" class="form-control" required>
-                                        <option value="2">Staff</option>
+                                        <option value="3">Staff</option>
                                         <option value="4">AirTrafficControl</option>      
                                     </select>
 

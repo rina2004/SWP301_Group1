@@ -49,16 +49,6 @@ CREATE TABLE `Account` (
 -------------------------------------------------------------
 -------------------------------------------------------------
 
-CREATE TABLE `Type` (
-	`id` varchar(10),
-	`Name` varchar(50),
-	`manufacture` varchar(50),
-	`length` decimal(10,2),
-	`weight` decimal(10,2),
-	`height` decimal(10,2),
-	  
-	PRIMARY KEY (`id`)
-);
 
 CREATE TABLE `Compartment` (
 	`id` char,
@@ -66,8 +56,7 @@ CREATE TABLE `Compartment` (
 	`typeID` varchar(10),
 	`capacity` int,
 	  
-	PRIMARY KEY (`id`),
-	foreign key (`typeID`) references `Type`(`id`) ON DELETE CASCADE
+	PRIMARY KEY (`id`)
 );
 
 CREATE table `AirplaneStatus` (
@@ -86,8 +75,7 @@ CREATE TABLE `Airplane` (
 	`usedTime` datetime,
 	  
 	PRIMARY KEY (`id`),
-	foreign key (`statusID`) references `AirplaneStatus`(`id`),
-	foreign key (`typeID`) references `Type`(`id`) ON DELETE CASCADE
+	foreign key (`statusID`) references `AirplaneStatus`(`id`)
 );
 
 
@@ -109,8 +97,8 @@ CREATE TABLE `Flight` (
 CREATE TABLE `Seat` (
 	`id` varchar(10),
 	`compartmentID` char,
-	`available` bool,
-	  
+	`available` varchar(250),
+	  `maintainreason` varchar(250),
 	PRIMARY KEY (`id`),
 	foreign key (`compartmentID`) references `Compartment`(`id`) ON DELETE CASCADE 
 );
@@ -143,6 +131,8 @@ CREATE TABLE `Ticket` (
 	foreign key (`flightID`) references `Flight`(`id`),
 	foreign key (`seatID`) references `Seat`(`id`)
 );
+
+
 
 CREATE TABLE `Luggage` (	
 	`id` varchar(10),

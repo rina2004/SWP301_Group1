@@ -37,18 +37,17 @@ public class SeatDAO extends DBContext {
                 String status = rs.getString("status");
                 Type type = new Type(rs.getString("typeID"));
 
-                // Tạo Compartment object
-                Compartment compartment = new Compartment(compartmentID, compartmentName, type, 0);
-
-                // Tạo Seat object
-                seat = new Seat(seatID, compartment, status);
+//                // Tạo Compartment object
+////                Compartment compartment = new Compartment(compartmentID, compartmentName, type, 0);
+//
+//                // Tạo Seat object
+//                seat = new Seat(seatID, compartment, status);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return seat;
     }
-
 
     public int getCompartmentCapacity(String compartmentID, String typeID) {
         PreparedStatement stm;
@@ -90,17 +89,6 @@ public class SeatDAO extends DBContext {
         return false;
     }
 
-    public boolean validateSeatID(String seatID, char compartmentID) {
-        String pattern = compartmentID + "\\d{3}";
-        return seatID.matches(pattern);
-    }
-
-    public static void main(String[] args) {
-        SeatDAO dao = new SeatDAO();
-        dao.checkSeatIDExisted("F001", 'F', "A110");
-
-    }
-
     public ArrayList<Seat> showAllSeatByTypeID(String typeID) {
         ArrayList<Seat> seats = new ArrayList<>();
         PreparedStatement stm;
@@ -110,7 +98,7 @@ public class SeatDAO extends DBContext {
                 + "JOIN Compartment c ON c.id = s.compartmentID "
                 + "WHERE c.typeID = ? "
                 + "ORDER BY SUBSTRING_INDEX(SUBSTRING_INDEX(s.id, '_', -2), '_', 1), "
-                + "CAST(SUBSTRING_INDEX(s.id, '_', -1) AS UNSIGNED)";  // FIX hoàn toàn sắp xếp
+                + "CAST(SUBSTRING_INDEX(s.id, '_', -1) AS UNSIGNED)";
         try {
             stm = connection.prepareStatement(sql);
             stm.setString(1, typeID);
@@ -123,14 +111,30 @@ public class SeatDAO extends DBContext {
                 Type type = new Type(rs.getString("typeID"));
 
                 // Tạo Compartment object
-                Compartment compartment = new Compartment(compartmentID, compartmentName, type, 0);
-
-                // Thêm ghế vào danh sách
-                seats.add(new Seat(seatID, compartment, status));
+//                Compartment compartment = new Compartment(compartmentID, compartmentName, type, 0);
+//
+//                // Thêm ghế vào danh sách
+//                seats.add(new Seat(seatID, compartment, status));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return seats;
+    }
+
+    public void updateSeatStatus(String id, String status, String reason) {
+        PreparedStatement stm;
+        ResultSet rs;
+
+        String sql = "Update Seat Set status = ? reason = ? Where id = ? ";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, status);
+            stm.setString(2, reason);
+            stm.setString(3, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 }
