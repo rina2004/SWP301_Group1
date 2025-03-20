@@ -55,6 +55,7 @@ public class AccountListController extends HttpServlet {
         String sortOrder = request.getParameter("sortOrder");// Lấy tham số sắp xếp từ URL
         String roleFilter = request.getParameter("role"); // Lấy giá trị role từ request
         String pageStr = request.getParameter("page");
+        String keyword = request.getParameter("search");
 
         // Sắp xếp danh sách theo RoleID
         if ("asc".equals(sortOrder)) {
@@ -67,24 +68,19 @@ public class AccountListController extends HttpServlet {
 
         //Lọc tài khoản theo roleID
         if (roleFilter != null && !roleFilter.isEmpty()) {
-            int roleID = -1;
-            switch (roleFilter) {
-                case "Staff" ->
-                    roleID = 3;
-                case "Customer" ->
-                    roleID = 2;
-                case "AirTrafficControl" ->
-                    roleID = 4;
-            }
-            if (listA != null) {
-                Iterator<Account> iterator = listA.iterator();
-                while (iterator.hasNext()) {
-                    if (iterator.next().getRole().getId() != roleID) {
-                        iterator.remove();
-                    }
+            int roleID = Integer.parseInt(roleFilter);
+            listA.removeIf(acc -> acc.getRole().getId() != roleID);
+        }
+
+        // Lọc tài khoản theo từ khóa username nếu có
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            Iterator<Account> iterator = listA.iterator();
+            while (iterator.hasNext()) {
+                Account acc = iterator.next();
+                if (!acc.getUsername().toLowerCase().contains(keyword.toLowerCase())) {
+                    iterator.remove();
                 }
             }
-
         }
 
         // Phân trang
@@ -114,6 +110,8 @@ public class AccountListController extends HttpServlet {
 
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("role", roleFilter);
+        request.setAttribute("search", keyword);
         request.getRequestDispatcher("view/Manageraccount.jsp").forward(request, response);
     }
 
