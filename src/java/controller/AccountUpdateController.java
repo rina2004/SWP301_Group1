@@ -50,7 +50,7 @@ public class AccountUpdateController extends HttpServlet {
         AccountDAO dao = new AccountDAO();
         Account u = dao.getUserByID(id);
 
-        request.setAttribute("account", u);
+        request.setAttribute("updateAccount", u);
         request.getRequestDispatcher("view/Editaccount.jsp").forward(request, response);
        
     }

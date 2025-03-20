@@ -63,27 +63,29 @@ public class AccountProfileController extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         HttpSession session = request.getSession();
-        AccountDAO accountDAO = new AccountDAO();  // Tạo instance của DAO
+        AccountDAO accountDAO = new AccountDAO();
         Account sessionAccount = (Account) session.getAttribute("acc");
 
-        if (sessionAccount == null) {
+        // Kiểm tra nếu chưa đăng nhập
+        if (sessionAccount == null || sessionAccount.getUsername() == null) {
             response.sendRedirect("view/Login.jsp");
             return;
         }
 
-        // Lấy dữ liệu mới nhất từ database
-        Account account = accountDAO.getUserByID(sessionAccount.getId());
+        // Lấy tài khoản theo username
+        Account account = accountDAO.getAccountByUsername(sessionAccount.getUsername());
 
+        // Kiểm tra nếu tài khoản đã bị xóa khỏi database
         if (account == null) {
+            session.removeAttribute("acc"); // Xóa session
             response.sendRedirect("view/Login.jsp");
             return;
         }
 
-        // Cập nhật session và chuyển đến JSP
+        // Cập nhật session và request attribute
         session.setAttribute("acc", account);
-        request.setAttribute("account", account);
+        request.setAttribute("profileAccount", account);
         request.getRequestDispatcher("view/Profileaccount.jsp").forward(request, response);
-
     }
 
     /**
@@ -114,58 +116,43 @@ public class AccountProfileController extends HttpServlet {
         String phonePattern = "^[0-9]{10}$";
         String citizenIDPattern = "^[0-9]{9,12}$";
 
-        // Kiểm tra nếu name không được để trống
-        if (name == null || name.trim().isEmpty()) {
-            session.setAttribute("error", "Full name is required!");
+        if (name == null || name.trim().isEmpty() || !name.matches(namePattern)) {
+            session.setAttribute("error", "Invalid full name!");
             response.sendRedirect("profile");
             return;
         }
 
-        // Kiểm tra định dạng của name (chỉ chứa chữ cái và khoảng trắng, từ 2 đến 50 ký tự)
-        if (!name.matches(namePattern)) {
-            session.setAttribute("error", "Full name must contain only letters and spaces (2-50 characters).");
-            response.sendRedirect("profile");
-            return;
-        }
-
-        // Nếu có nhập email thì mới kiểm tra định dạng
         if (email != null && !email.trim().isEmpty() && !email.matches(emailPattern)) {
             session.setAttribute("error", "Invalid email format!");
             response.sendRedirect("profile");
             return;
         }
 
-        // Nếu có nhập số điện thoại thì mới kiểm tra định dạng
         if (phone != null && !phone.trim().isEmpty() && !phone.matches(phonePattern)) {
-            session.setAttribute("error", "Phone number must be 10-11 digits!");
+            session.setAttribute("error", "Phone number must be 10 digits!");
             response.sendRedirect("profile");
             return;
         }
 
-        // Nếu có nhập citizenID thì mới kiểm tra định dạng
         if (citizenID != null && !citizenID.trim().isEmpty() && !citizenID.matches(citizenIDPattern)) {
             session.setAttribute("error", "Citizen ID must be 9-12 digits!");
             response.sendRedirect("profile");
             return;
         }
 
-        // Xử lý ngày sinh (cho phép để trống)
+        // Xử lý ngày sinh
         Date dob = null;
         if (dobStr != null && !dobStr.trim().isEmpty()) {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 sdf.setLenient(false);
                 java.util.Date utilDate = sdf.parse(dobStr);
-
-                // Kiểm tra nếu ngày sinh ở tương lai
-                java.util.Date currentDate = new java.util.Date();
-                if (utilDate.after(currentDate)) {
+                if (utilDate.after(new java.util.Date())) {
                     session.setAttribute("error", "Date of birth cannot be in the future!");
                     response.sendRedirect("profile");
                     return;
                 }
-
-                dob = new Date(utilDate.getTime()); // Chuyển thành java.sql.Date
+                dob = new Date(utilDate.getTime());
             } catch (ParseException e) {
                 session.setAttribute("error", "Invalid date format!");
                 response.sendRedirect("profile");
@@ -177,7 +164,6 @@ public class AccountProfileController extends HttpServlet {
         Account acc = (Account) session.getAttribute("acc");
 
         if (acc != null) {
-            // Cập nhật thông tin tài khoản (nếu người dùng để trống, giữ nguyên giá trị cũ)
             acc.setName(name);
             acc.setCitizenID((citizenID != null && !citizenID.trim().isEmpty()) ? citizenID : acc.getCitizenID());
             acc.setDob(dob != null ? dob : acc.getDob());
@@ -185,13 +171,13 @@ public class AccountProfileController extends HttpServlet {
             acc.setAddress((address != null && !address.trim().isEmpty()) ? address : acc.getAddress());
             acc.setEmail((email != null && !email.trim().isEmpty()) ? email : acc.getEmail());
 
-            // Gọi DAO để cập nhật database
+            // Cập nhật vào database
             AccountDAO dao = new AccountDAO();
-            dao.updateProfile(acc); // Đảm bảo phương thức này cập nhật theo userID
+            dao.updateProfile(acc);
 
-            // Lấy lại thông tin mới từ database
-            Account updatedAcc = dao.getUserByID(acc.getId());
-            session.setAttribute("acc", updatedAcc); // Cập nhật lại session với thông tin mới
+            // Lấy lại thông tin theo username để cập nhật session
+            Account updatedAcc = dao.getAccountByUsername(acc.getUsername());
+            session.setAttribute("acc", updatedAcc);
 
             session.setAttribute("success", "Profile updated successfully!");
             response.sendRedirect("profile");
@@ -199,7 +185,6 @@ public class AccountProfileController extends HttpServlet {
             session.setAttribute("error", "Unauthorized update attempt!");
             response.sendRedirect("profile");
         }
-
     }
 
     /**

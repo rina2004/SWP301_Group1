@@ -20,6 +20,10 @@ INSERT INTO Account (username, password, roleID, status, citizenID, name, dob, p
 ('williamtaylor', 'taylor888', 1, TRUE, '901234567890', 'William Taylor', '1987-06-28', '0978901234', '606 Spruce Court, Phu Quoc', 'william.taylor@example.com'),
 ('sophiaanderson', 'sophia999', 2, TRUE, '012345678901', 'Sophia Anderson', '1994-03-17', '0989012345', '707 Redwood Place, Da Lat', 'sophia.anderson@example.com');
 
+SELECT a.*, r.id AS roleID, r.name AS roleName FROM Account a JOIN Role r ON a.roleID = r.id WHERE a.username = 'hiepbt';
+
+Select * from Account;
+
 -- Type table (10 records)
 INSERT INTO Type (id, name, manufacture, length, weight, height) VALUES
 ('TYP001', 'Boeing 737-800', 'Boeing', 39.50, 41400.00, 12.50),

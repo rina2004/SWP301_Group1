@@ -38,7 +38,7 @@
             </c:if>
 
 
-            <c:if test="${not empty account}">
+            <c:if test="${not empty profileAccount}">
                 <div class="row">
                     <div class="col-xl-4">
                         <div class="card mb-4 mb-xl-0">
@@ -47,7 +47,7 @@
                                      src="https://i.pinimg.com/736x/8f/1c/a2/8f1ca2029e2efceebd22fa05cca423d7.jpg" 
                                      alt="Profile Picture">
 
-                                <h5 class="mt-3">${account.username}</h5> 
+                                <h5 class="mt-3">${profileAccount.username}</h5> 
                             </div>
                         </div>
                     </div>
@@ -64,13 +64,13 @@
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputName">Full Name</label>
                                             <input class="form-control" id="inputName" name="name" type="text" 
-                                                   value="${account.name}" required minlength="2" maxlength="50"
+                                                   value="${profileAccount.name}" required minlength="2" maxlength="50"
                                                    pattern="[A-Za-zÀ-ỹ\s]{2,50}" title="Only letters and spaces are allowed (2-50 characters)." disabled>
                                         </div>
 
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputCitizenID">Citizen ID</label>
-                                            <input class="form-control" id="inputCitizenID" name="citizenID" type="text" value="${account.citizenID}" 
+                                            <input class="form-control" id="inputCitizenID" name="citizenID" type="text" value="${profileAccount.citizenID}" 
                                                    pattern="[0-9]{9,12}" title="Citizen ID must be 9-12 digits." disabled>
                                         </div>
                                     </div>
@@ -79,24 +79,24 @@
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputDob">Date of Birth</label>
                                             <input class="form-control" id="inputDob" name="dob" type="date"
-                                                   value="<fmt:formatDate value='${account.dob}' pattern='yyyy-MM-dd'/>" 
+                                                   value="<fmt:formatDate value='${profileAccount.dob}' pattern='yyyy-MM-dd'/>" 
                                                    max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" disabled>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="small mb-1" for="inputPhone">Phone</label>
-                                            <input class="form-control" id="inputPhone" name="phone" type="text" value="${account.phone}" 
+                                            <input class="form-control" id="inputPhone" name="phone" type="text" value="${profileAccount.phone}" 
                                                    pattern="[0-9]{10}" title="Phone number must be 10 digits." disabled>
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputAddress">Address</label>
-                                        <input class="form-control" id="inputAddress" name="address" type="text" value="${account.address}" disabled>
+                                        <input class="form-control" id="inputAddress" name="address" type="text" value="${profileAccount.address}" disabled>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputEmail">Email</label>
-                                        <input class="form-control" id="inputEmail" name="email" type="email" value="${account.email}" disabled>
+                                        <input class="form-control" id="inputEmail" name="email" type="email" value="${profileAccount.email}" disabled>
                                     </div>
 
                                     <!-- Thêm nút Edit & Cancel -->
@@ -111,7 +111,7 @@
                 </div>
             </c:if>
 
-            <c:if test="${empty account}">
+            <c:if test="${empty profileAccount}">
                 <div class="alert alert-danger" role="alert">
                     No account information found.
                 </div>

@@ -39,17 +39,17 @@
 
                                 <div class="form-group">
                                     <label>User ID</label>
-                                    <input value="${account.id}" name="id" type="text" class="form-control" readonly required>
+                                    <input value="${updateAccount.id}" name="id" type="text" class="form-control" readonly required>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Username</label>
-                                    <input value="${account.username}" name="username" type="text" class="form-control" readonly required>
+                                    <input value="${updateAccount.username}" name="username" type="text" class="form-control" readonly required>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Password</label>
-                                    <input value="${account.password}" name="password" type="text" class="form-control" required>
+                                    <input value="${updateAccount.password}" name="password" type="text" class="form-control" required>
                                 </div>
 
 
@@ -58,8 +58,8 @@
                                 <div class="form-group">
                                     <label>Status</label>
                                     <select name="status" class="form-select" aria-label="Select Status" required>
-                                        <option value="true" <c:if test="${account.status}">selected</c:if>>Active</option>
-                                        <option value="false" <c:if test="${!account.status}">selected</c:if>>Inactive</option>
+                                        <option value="true" <c:if test="${updateAccount.status}">selected</c:if>>Active</option>
+                                        <option value="false" <c:if test="${!updateAccount.status}">selected</c:if>>Inactive</option>
                                     </select>
                                 </div>
                             </div>
