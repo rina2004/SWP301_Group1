@@ -8,7 +8,6 @@ package controller;
 import dal.AirTrafficControlDBContext;
 import dal.AirplaneDAO;
 import dal.AirplaneStatusDBContext;
-import dal.TypeDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,7 +19,6 @@ import java.util.List;
 import model.AirTrafficControl;
 import model.Airplane;
 import model.AirplaneStatus;
-import model.Type;
 
 /**
  *
@@ -88,8 +86,6 @@ public class AirplaneCreateController extends HttpServlet {
 
             // Handle type
             String typeId = request.getParameter("type");
-            TypeDAO typeDB = new TypeDAO();
-            a.setType(typeDB.get(typeId));
 
             // Handle status
             String statusId = request.getParameter("status");

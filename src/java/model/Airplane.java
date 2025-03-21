@@ -16,7 +16,6 @@ public class Airplane {
     private AirplaneStatus status;
     private LocalDateTime maintainanceTime;
     private LocalDateTime usedTime;
-    private AirTrafficControl atc;
 
     public String getId() {
         return id;
@@ -56,13 +55,5 @@ public class Airplane {
 
     public void setUsedTime(LocalDateTime usedTime) {
         this.usedTime = usedTime;
-    }
-
-    public AirTrafficControl getAtc() {
-        return atc;
-    }
-
-    public void setAtc(AirTrafficControl atc) {
-        this.atc = atc;
     }
 }

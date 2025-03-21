@@ -62,7 +62,6 @@ public class AirplaneDAO extends DBContext{
                 airplane.setStatus(as.get(rs.getInt("statusID")));
                 airplane.setMaintainanceTime(rs.getTimestamp("maintainanceTime").toLocalDateTime());
                 airplane.setUsedTime(rs.getTimestamp("usedTime").toLocalDateTime());
-                airplane.setAtc(airtc.get(rs.getString("atcID")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -88,7 +87,6 @@ public class AirplaneDAO extends DBContext{
     public ArrayList<Airplane> list() {
         ArrayList<Airplane> planes = new ArrayList<>();
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
-        AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
         String sql = "SELECT * FROM swp301.airplane";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
@@ -100,7 +98,6 @@ public class AirplaneDAO extends DBContext{
                 p.setStatus(as.get(rs.getInt("statusID")));
                 p.setMaintainanceTime(rs.getTimestamp("maintainanceTime").toLocalDateTime());
                 p.setUsedTime(rs.getTimestamp("usedTime").toLocalDateTime());
-                p.setAtc(airtc.get(rs.getString("atcID")));
                 planes.add(p);
             }
         }
