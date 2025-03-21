@@ -5,14 +5,15 @@ INSERT INTO AirTrafficControl VALUES (NULL, NOW()), (NULL, NOW()), (NULL, NOW())
 INSERT INTO airplane_status (name) VALUES 
 ('Active'), ('Maintenance'), ('Retired'), ('In Use'), ('Under Repair');
 
--- Insert into Role
-INSERT INTO Role (name) VALUES 
-('Super Admin'), 
-('Manager'), 
-('Operator'), 
-('Technician'), 
-('Support');
+INSERT INTO `Compartment` (`id`, `name`, `airplaneID`, `capacity`) 
+VALUES ('C001', 'Business Class', 'A001', 30);
 
+INSERT INTO `Compartment` (`id`, `name`, `airplaneID`, `capacity`) 
+VALUES ('C002', 'Economy', 'A001', 50);
+Delete  From Compartment where id = 'C002';
+select * From Airplane;
+Update  Airplane Set numberOfCompartments = '4' where id = 'A001'; 
+ALTER TABLE Compartment CHANGE COLUMN available status VARCHAR(50);
 -- Insert into Account
 INSERT INTO Account (username, password, citizenID, name, dob, phone, address, email) VALUES
 ('admin1', 'pass123', '123456789012', 'John Doe', '1990-05-15', '0987654321', '123 Street, City', 'john@example.com'),
@@ -37,7 +38,40 @@ INSERT INTO Account (username, password, citizenID, name, dob, phone, address, e
 -- Insert dữ liệu cho bảng Administrator
 -- INSERT INTO Administrator (id, roleID) VALUES 
 -- ('admin01', 1);
+-- Thêm dữ liệu vào bảng Role
+INSERT INTO `Role` (`name`) VALUES
+('Administrator'),
+('Customer'),
+('Staff'),
+('AirTrafficControl');
 
+-- Thêm dữ liệu vào bảng Feature
+INSERT INTO `Feature` (`name`, `url`) VALUES
+('Quản lý tài khoản', '/admin/accounts'),
+('Xem lịch bay', '/customer/flights'),
+('Quản lý chuyến bay', '/staff/flights'),
+('Điều phối không lưu', '/atc/control');
+
+-- Thêm dữ liệu vào bảng RoleFeature (Phân quyền cho vai trò)
+INSERT INTO `RoleFeature` (`roleID`, `featureID`) VALUES
+(1, 1), -- Admin có quyền quản lý tài khoản
+(2, 2), -- Customer có quyền xem lịch bay
+(3, 3), -- Staff có quyền quản lý chuyến bay
+(4, 4), -- AirTrafficControl có quyền điều phối không lưu
+(1, 2), -- Admin cũng có thể xem lịch bay
+(3, 2); -- Staff cũng có thể xem lịch bay
+
+-- Thêm dữ liệu vào bảng Account (Người dùng mẫu)
+INSERT INTO `Account` (`username`, `password`, `roleID`, `status`, `citizenID`, `name`, `dob`, `phone`, `address`, `email`)
+VALUES
+('admin', 'admin123', 1, TRUE, '123456789012', 'Nguyễn Văn A', '1985-07-10', '0901234567', 'Hà Nội', 'admin@example.com'),
+('john_doe', 'password123', 2, TRUE, '987654321012', 'John Doe', '1990-03-15', '0912345678', 'TP. Hồ Chí Minh', 'john.doe@example.com'),
+('staff01', 'staffpass', 3, TRUE, '112233445566', 'Trần Thị B', '1988-11-20', '0923456789', 'Đà Nẵng', 'staff01@example.com'),
+('atc01', 'atcpass', 4, TRUE, '667788990011', 'Lê Văn C', '1992-05-25', '0934567890', 'Hải Phòng', 'atc01@example.com');
+
+Select * From `Account`;
+
+Select * From `Role`;
 
 -- Insert dữ liệu cho bảng Staff
 -- INSERT INTO Staff (id, createdDate) VALUES 
@@ -66,10 +100,134 @@ INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTim
 -- INSERT INTO Airplane (id, name, typeID, statusID, maintainanceTime, usedTime, atcID) VALUES 
 -- ('PL001', 'Plane 001', 'TYP001', 1, '2024-02-01 10:00:00', '2024-02-15 10:00:00', 'ATC001');
 
-INSERT INTO Ticket (id, staffID, orderID, flightID, seatID, type, Price, Status) 
+select * from Account;
+SELECT c.*, t.name AS type_name 
+FROM Compartment c 
+JOIN Type t ON c.typeID= t.id
+WHERE c.id = 'B' AND c.typeID = 'A320';
+
+DELETE FROM Type WHERE id IN ('A115', 'A116');
+SET SQL_SAFE_UPDATES = 0;
+INSERT INTO `AirplaneStatus` (`name`) VALUES 
+('Active'), 
+('Maintenance'), 
+('Decommissioned');
+
+Select s.id, c.name,s.compartmentID,s.available,c.typeID From Seat s Join Compartment c On c.id = s.compartmentID Where s.compartmentID = 'E' And c.typeID = 'A110';
+
+INSERT INTO `Type` (`id`, `Name`, `manufacture`, `length`, `weight`, `height`) VALUES 
+('B737', 'Boeing 737-800', 'Boeing', 39.50, 41413.00, 12.50),
+('A320', 'Airbus A320', 'Airbus', 37.57, 42200.00, 11.76);
+
+INSERT INTO `Type` (`id`, `Name`, `manufacture`, `length`, `weight`, `height`) VALUES 
+('B737', 'Boeing 737-800', 'Boeing', 39.50, 41413.00, 12.50);
+
+-- Thêm dữ liệu vào bảng Airplane (giả sử có sẵn Type ID là 'B737' và 'A320')
+INSERT INTO `Airplane` (`id`, `name`, `typeID`, `statusID`, `maintainanceTime`, `usedTime`) VALUES 
+('VN001', 'Boeing 737-800', 'B737', 1, '2025-06-15 12:00:00', '2015-03-10 08:00:00'),
+('VN002', 'Airbus A320', 'A320', 2, '2025-04-10 10:00:00', '2017-07-22 09:30:00');
+
+Select * From AirplaneStatus;
+
+-- Thêm máy bay
+INSERT INTO `Airplane` (`id`, `name`, `statusID`, `maintainanceTime`, `usedTime`) VALUES 
+('A003', 'Airbus A320', 2, '2025-03-12 10:00:00', '2022-09-15 14:20:00');
+
+-- Thêm chuyến bay
+INSERT INTO `Flight` (`id`, `name`, `code`, `airplaneID`, `departure`, `destination`, `entryTime`, `startingTime`, `landingTime`) VALUES 
+('F001', 'VN001', 'VN001-2025', 'A001', 'Ho Chi Minh', 'Hanoi', '2025-03-15 06:00:00', '2025-03-15 07:00:00', '2025-03-15 09:00:00'),
+('F002', 'VN002', 'VN002-2025', 'A002', 'Hanoi', 'Da Nang', '2025-03-16 10:00:00', '2025-03-16 11:00:00', '2025-03-16 12:30:00');
+
+
+
+SELECT c.*, t.name AS type_name FROM Compartment c JOIN Type t ON c.typeID = t.id;
+Select * From Compartment ;
+ALTER TABLE Compartment DROP PRIMARY KEY, ADD PRIMARY KEY (id, typeID);
+Select id From `Type` Where id = 'A109';
+Select Name From `Type` Where Name = 'Airbus A109';
+Select * From Seat ;
+
+Select * From Flight;
+
+Select * From Ticket;
+DELETE FROM `Seat` WHERE `id` = 'B1';
+Delete From `Compartment` Where `id` = 'E';
+
+SELECT * FROM Flight;
+SELECT * FROM Seat;
+SELECT * FROM `Order`;
+
+SELECT c.id, c.name AS compartment_name, t.id AS type_id, t.name AS type_name, c.capacity
+FROM Compartment c
+JOIN Type t ON c.typeID = t.id;
+
+ALTER TABLE `Seat` DROP FOREIGN KEY `seat_ibfk_1`;
+ALTER TABLE `Seat` ADD CONSTRAINT `seat_ibfk_1` 
+FOREIGN KEY (`compartmentID`) REFERENCES `Compartment`(`id`) ON DELETE CASCADE;
+
+SELECT * FROM Compartment;
+
+SELECT * FROM Seat Where typeID = 'A112' and compartmentID = 'F';
+Select * FROM Flight;
+DELETE FROM Type;
+drop table type;
+DESCRIBE Type;
+DESCRIBE Compartment;
+DESCRIBE Seat;
+SELECT CONSTRAINT_NAME
+FROM information_schema.KEY_COLUMN_USAGE
+WHERE TABLE_NAME = 'Compartment' AND COLUMN_NAME = 'typeID';
+ALTER TABLE Compartment DROP FOREIGN KEY compartment_ibfk_1;
+drop table Type;
+DESC AirPlane;
+DESC Compartment;
+Select s.id, c.name, s.compartmentID, s.status, c.typeID
+From Seat s
+Join Compartment c On c.id = s.compartmentID
+Where s.compartmentID = 'B739' And c.typeID = 'Economy';
+
+SELECT COLUMN_NAME, CONSTRAINT_NAME, TABLE_NAME 
+FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+WHERE TABLE_NAME = 'Seat';
+
+Select * From Seat s join Compartment c On c.id = s.compartmentID  Where s.id = 'A115_B_10';
+
+SET SQL_SAFE_UPDATES = 0;
+ALTER TABLE Seat ADD COLUMN typeID VARCHAR(10);
+ALTER TABLE Seat ADD CONSTRAINT fk_seat_type FOREIGN KEY (typeID) REFERENCES Type(id) ON DELETE CASCADE;
+INSERT INTO Type (id, Name, manufacture, length, weight, height) 
+VALUES ('B730', 'Boeing 737-800', 'Boeing', 39.50, 41413.00, 12.50);
+
+INSERT INTO `Airplane` (`id`, `name`, `typeID`, `statusID`, `maintainanceTime`, `usedTime`) VALUES
+('VN-A123', 'Boeing 737-800', 'B738', 1, '2025-06-01 12:00:00', '2023-03-15 08:30:00');
+
+INSERT INTO `Flight` (`id`, `name`, `code`, `airplaneID`, `departure`, `destination`, `entryTime`, `startingTime`, `landingTime`) VALUES
+('FL001', 'VN123', 'VN123-B738', 'VN-A123', 'Hà Nội', 'TP.HCM', '2025-03-20 06:00:00', '2025-03-20 07:30:00', '2025-03-20 09:00:00');
+
+insert into `ticket` (`id`,`flightID`,`type`,`Price`,`Status`) Value('T001','FL001','available','9000','Available');
+
+Select id From `Type` Where id = 'A115';
+ALTER TABLE Seat CHANGE status status VARCHAR(20);
+UPDATE Seat SET status = 'Maintained' WHERE id ='A115_B_2';
+UPDATE Seat SET status = 'Booked' WHERE status = '0'; -- Nếu trước đó 0 là false  
+ALTER TABLE Compartment MODIFY COLUMN id VARCHAR(20);
+ALTER TABLE Seat MODIFY COLUMN compartmentID VARCHAR(20);
+ALTER TABLE Seat ADD CONSTRAINT fk_seat_compartment 
+FOREIGN KEY (compartmentID) REFERENCES Compartment(id) ON DELETE CASCADE;
+INSERT INTO AirplaneStatus (id, name) 
+
 VALUES 
-('O1', 'S1', (SELECT id FROM `Order` ORDER BY time DESC LIMIT 1), 'F1', 'S1', 'Normal', 200000.00, 'Booked'),
-('O2', 'S2', (SELECT id FROM `Order` ORDER BY time DESC LIMIT 1 OFFSET 1), 'F2', 'S2', 'VIP', 500000.00, 'Confirmed');
+(1, 'Active'), 
+(2, 'Maintenance'), 
+(3, 'Out of Service');
+ALTER TABLE Airplane ADD COLUMN numberOfCompartments INT NOT NULL DEFAULT 0;
+
+INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime)
+VALUES 
+('A001', 'Boeing 747', 1, '2025-03-18 12:00:00', '2025-03-10 08:00:00'),
+('A002', 'Airbus A320', 2, '2025-03-19 14:00:00', '2025-03-11 10:00:00');
+UPDATE Airplane SET numberOfCompartments = 4 WHERE id = 'A002';
+Select * From Airplane;
 
 -- Insert into Luggage
 INSERT INTO Luggage (id, customerID, orderID, type, weight) VALUES

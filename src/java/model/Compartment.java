@@ -9,15 +9,27 @@ package model;
  * @author Rinaaaa
  */
 public class Compartment {
-    private char id;
+
+    private String id;
     private String name;
+    private Airplane airplane;
     private int capacity;
 
-    public char getId() {
+    public Compartment() {
+    }
+
+    public Compartment(String id, String name, Airplane airplane, int capacity) {
+        this.id = id;
+        this.name = name;
+        this.airplane = airplane;
+        this.capacity = capacity;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(char id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -29,6 +41,14 @@ public class Compartment {
         this.name = name;
     }
 
+    public Airplane getAirplane() {
+        return airplane;
+    }
+
+    public void setAirplane(Airplane airplane) {
+        this.airplane = airplane;
+    }
+
     public int getCapacity() {
         return capacity;
     }
@@ -36,4 +56,10 @@ public class Compartment {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
+
+    @Override
+    public String toString() {
+        return "Compartment{" + "id=" + id + ", name=" + name + ", airplane=" + airplane + ", capacity=" + capacity + '}';
+    }
+
 }

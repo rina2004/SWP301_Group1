@@ -27,7 +27,7 @@ public class Flight {
     public Flight() {
     }
 
-    public Flight(String id, String name, String code, String airplaneId, String departure, String destination, LocalDateTime entryTime, LocalDateTime startingTime, LocalDateTime landingTime, byte[] atcId) {
+    public Flight(String id, String name, String code, String airplaneId, String departure, String destination, LocalDateTime entryTime, LocalDateTime startingTime, LocalDateTime landingTime) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -37,7 +37,6 @@ public class Flight {
         this.entryTime = entryTime;
         this.startingTime = startingTime;
         this.landingTime = landingTime;
-        this.atcId = atcId;
     }
 
     public String getId() {

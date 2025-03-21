@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
+package Controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
@@ -95,7 +95,7 @@ public class Login extends HttpServlet {
             session.setAttribute("acc", acc);
             session.setAttribute("username", username);
             session.setMaxInactiveInterval(60 * 30);
-            response.sendRedirect("view/home.jsp");
+            request.getRequestDispatcher("home").forward(request, response);
 
         }
     }

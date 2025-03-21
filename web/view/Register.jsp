@@ -77,15 +77,15 @@
                 <input type="password" name="pass2" required="" value="<%= session.getAttribute("pass2") != null ? session.getAttribute("pass2") : "" %>" placeholder="Confirm Password">
                 <p>${errorPassword}</p>
                 <p>Full Name</p>
-                <input type="text" name="name" required="" value="<%= session.getAttribute("name") != null ? session.getAttribute("name") : "" %>">
+                <input type="text" name="name" required="" value="<%= session.getAttribute("name") != null ? session.getAttribute("name") : "" %>" placeholder="Enter your fullname">
                 <p>Date of Birth</p>
                 <input type="date" name="dob" value="<%= session.getAttribute("dob") != null ? session.getAttribute("dob") : "" %>"required>
                 <p>Phone</p>
-                <input type="text" name="phone" required="" value="<%= session.getAttribute("phone") != null ? session.getAttribute("phone") : "" %>">
+                <input type="text" name="phone" required="" value="<%= session.getAttribute("phone") != null ? session.getAttribute("phone") : "" %>" placeholder="Enter your phone">
                 <p>Address</p>
-                <input type="text" name="address" required="" value="<%= session.getAttribute("address") != null ? session.getAttribute("address") : "" %>">
+                <input type="text" name="address" required="" value="<%= session.getAttribute("address") != null ? session.getAttribute("address") : "" %>" placeholder="Enter your address">
                 <p>Email</p>
-                <input type="text" name="email" required="" value="<%= session.getAttribute("email") != null ? session.getAttribute("email") : ""%>">
+                <input type="text" name="email" required="" value="<%= session.getAttribute("email") != null ? session.getAttribute("email") : ""%>" placeholder="Enter your email">
                 <p>${errorEmail}</p><br><br>
                 <input type="submit" value="Register">
                 <p>If you have an account? <a href="<%= request.getContextPath() %>/login">Login here</a></p>
