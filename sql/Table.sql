@@ -1,6 +1,6 @@
 CREATE DATABASE `swp301`;
 USE `swp301`;
-
+ 
 -------------------------------------------------------------
 -------------------------------------------------------------
 -------------------------------------------------------------
@@ -10,23 +10,6 @@ CREATE TABLE `Role` (
 	`name` VARCHAR(50) unique not null,
 		
 	PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `Feature` (
-	`id` int auto_increment,
-    `name` varchar(255),
-    `url` varchar(100),
-    
-    primary key (`id`)
-);
-
-CREATE TABLE `RoleFeature` (
-	`roleID` int,
-    `featureID` int,
-    
-    primary key (`roleID`, `featureID`),
-    foreign key (`roleID`) references `Role`(`id`),
-    foreign key (`featureID`) references `Feature`(`id`)
 );
 
 CREATE TABLE `Account` (
@@ -49,27 +32,6 @@ CREATE TABLE `Account` (
 -------------------------------------------------------------
 -------------------------------------------------------------
 
-CREATE TABLE `Type` (
-	`id` varchar(10),
-	`Name` varchar(50),
-	`manufacture` varchar(50),
-	`length` decimal(10,2),
-	`weight` decimal(10,2),
-	`height` decimal(10,2),
-	  
-	PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `Compartment` (
-	`id` char,
-	`name` varchar(50),
-	`typeID` varchar(10),
-	`capacity` int,
-	  
-	PRIMARY KEY (`id`),
-	foreign key (`typeID`) references `Type`(`id`) ON DELETE CASCADE
-);
-
 CREATE table `AirplaneStatus` (
 	`id` INT auto_increment,
 	`name` varchar(50),
@@ -80,14 +42,22 @@ CREATE table `AirplaneStatus` (
 CREATE TABLE `Airplane` (
 	`id` varchar(10),
 	`name` varchar(50),
-	`typeID` varchar(10),
 	`statusID` int,
 	`maintainanceTime` datetime,
 	`usedTime` datetime,
 	  
 	PRIMARY KEY (`id`),
-	foreign key (`statusID`) references `AirplaneStatus`(`id`),
-	foreign key (`typeID`) references `Type`(`id`) ON DELETE CASCADE
+	foreign key (`statusID`) references `AirplaneStatus`(`id`)
+);
+
+CREATE TABLE `Compartment` (
+	`id` varchar(20),
+	`name` varchar(50),
+	`airplaneID` varchar(10),
+	`capacity` int,
+	  
+	PRIMARY KEY (`id`),
+	foreign key (`airplaneID`) references `Airplane`(`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE `Flight` (
@@ -107,8 +77,9 @@ CREATE TABLE `Flight` (
 
 CREATE TABLE `Seat` (
 	`id` varchar(10),
-	`compartmentID` char,
-	`available` bool,
+	`compartmentID` varchar(20),
+	`status` bool,
+    `reason` varchar(250),
 	  
 	PRIMARY KEY (`id`),
 	foreign key (`compartmentID`) references `Compartment`(`id`)
@@ -132,8 +103,8 @@ CREATE TABLE `Ticket` (
 	`flightID` varchar(10),
 	`seatID` varchar(10),
 	`type` varchar(30),
-	`Price` decimal(10,2),
-	`Status` varchar(20),
+	`price` decimal(10,2),
+	`status` varchar(20),
 	  
 	PRIMARY KEY (`id`),
 	foreign key (`orderID`) references `Order`(`id`),
@@ -143,13 +114,13 @@ CREATE TABLE `Ticket` (
 
 CREATE TABLE `Luggage` (
 	`id` varchar(10),
-	`customerID` varchar(36),
+    `customerID` varchar(36),
 	`orderID` varchar(10),
 	`type` varchar(30),
 	`weight` decimal(10,2),
 	  
 	PRIMARY KEY (`id`),
-	foreign key (`customerID`) references `Account`(`id`),
+    foreign key (`customerID`) references `Account`(`id`),
 	foreign key (`orderID`) references `Order`(`id`)
 );
 
@@ -206,7 +177,7 @@ CREATE TABLE `Tag` (
 );
 
 CREATE TABLE `PostTag` (
-	`postID` VARCHAR(36) NOT NULL,
+	`postID` VARCHAR(41) NOT NULL,
 	`tagID` INT NOT NULL,
 	PRIMARY KEY (`postID`, `tagID`),
 
