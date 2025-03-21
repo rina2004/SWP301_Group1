@@ -63,14 +63,6 @@ public class AirplaneCreateController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AirTrafficControlDBContext atcDB = new AirTrafficControlDBContext();
-        List<AirTrafficControl> atcs = atcDB.list();
-        request.setAttribute("atcs", atcs);
-
-        TypeDAO typeDB = new TypeDAO();
-        List<Type> types = typeDB.list();
-        request.setAttribute("types", types);
-
         AirplaneStatusDBContext statusDB = new AirplaneStatusDBContext();
         List<AirplaneStatus> statuses = statusDB.list();
         request.setAttribute("statuses", statuses);

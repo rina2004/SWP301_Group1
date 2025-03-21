@@ -11,7 +11,6 @@ package model;
 public class Compartment {
     private char id;
     private String name;
-    private Type type;
     private int capacity;
 
     public char getId() {
@@ -28,14 +27,6 @@ public class Compartment {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
     public int getCapacity() {

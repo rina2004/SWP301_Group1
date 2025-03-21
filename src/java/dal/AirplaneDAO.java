@@ -24,7 +24,6 @@ public class AirplaneDAO extends DBContext{
             stm = connection.prepareStatement(sql);
             stm.setString(1, airplane.getId());
             stm.setString(2, airplane.getName());
-            stm.setString(3, airplane.getType().getId());
             stm.setInt(4, airplane.getStatus().getId());
             stm.setTimestamp(5, Timestamp.valueOf(airplane.getMaintainanceTime()));
             stm.setTimestamp(6, Timestamp.valueOf(airplane.getUsedTime()));
@@ -49,7 +48,6 @@ public class AirplaneDAO extends DBContext{
         Airplane airplane = null;
         String sql = "SELECT * FROM swp301.airplane WHERE id = ?";
         
-        TypeDAO tp = new TypeDAO();
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
         AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
         
@@ -61,7 +59,6 @@ public class AirplaneDAO extends DBContext{
                 airplane = new Airplane();
                 airplane.setId(rs.getString("id"));
                 airplane.setName(rs.getString("name"));
-                airplane.setType(tp.get(rs.getString("typeID")));
                 airplane.setStatus(as.get(rs.getInt("statusID")));
                 airplane.setMaintainanceTime(rs.getTimestamp("maintainanceTime").toLocalDateTime());
                 airplane.setUsedTime(rs.getTimestamp("usedTime").toLocalDateTime());
@@ -90,7 +87,6 @@ public class AirplaneDAO extends DBContext{
 
     public ArrayList<Airplane> list() {
         ArrayList<Airplane> planes = new ArrayList<>();
-        TypeDAO tp = new TypeDAO();
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
         AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
         String sql = "SELECT * FROM swp301.airplane";
@@ -101,7 +97,6 @@ public class AirplaneDAO extends DBContext{
                 Airplane p = new Airplane();
                 p.setId(rs.getString("id"));
                 p.setName(rs.getString("name"));
-                p.setType(tp.get(rs.getString("typeID")));
                 p.setStatus(as.get(rs.getInt("statusID")));
                 p.setMaintainanceTime(rs.getTimestamp("maintainanceTime").toLocalDateTime());
                 p.setUsedTime(rs.getTimestamp("usedTime").toLocalDateTime());
