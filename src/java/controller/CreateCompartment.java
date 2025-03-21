@@ -12,6 +12,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 import model.Type;
 
 /**
@@ -62,8 +64,6 @@ public class CreateCompartment extends HttpServlet {
         request.setAttribute("airplaneID", id);
         request.getRequestDispatcher("view/CreateCompartment.jsp").forward(request, response);
     }
-    
-
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -76,12 +76,22 @@ public class CreateCompartment extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
-        String name = request.getParameter("name");
-        String typeid = request.getParameter("typeid");
-        String capacity = request.getParameter("capacity");
+        String airplaneID = request.getParameter("airplaneID");
+        int businessSeats = Integer.parseInt(request.getParameter("business"));
+        int firstClassSeats = Integer.parseInt(request.getParameter("first"));
+        int economySeats = Integer.parseInt(request.getParameter("economy"));
 
-        
+        Map<String, Integer> compartmentData = new HashMap<>();
+        compartmentData.put("B", businessSeats);
+        compartmentData.put("F", firstClassSeats);
+        compartmentData.put("E", economySeats);
+
+        // Gọi hàm tạo khoang & ghế
+        CompartmentDAO dbHandler = new CompartmentDAO();
+        dbHandler.createCompartmentandSeat(airplaneID, compartmentData);
+
+        // Chuyển hướng sau khi hoàn thành
+        response.sendRedirect("home.jsp");
     }
 
     /**

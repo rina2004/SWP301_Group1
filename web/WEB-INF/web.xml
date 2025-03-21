@@ -105,24 +105,8 @@
         <servlet-class>Controller.ChangePassword</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CreateCompartment</servlet-name>
-        <servlet-class>Controller.CreateCompartment</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>CreateSeat</servlet-name>
-        <servlet-class>Controller.CreateSeat</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>UpdateCompartment</servlet-name>
-        <servlet-class>Controller.UpdateCompartment</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ListCompartment</servlet-name>
-        <servlet-class>Controller.ListCompartment</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ListSeayByTypeID</servlet-name>
-        <servlet-class>Controller.ListSeayByTypeID</servlet-class>
+        <servlet-name>ListSeatAdmin</servlet-name>
+        <servlet-class>Controller.ListSeatAdmin</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ListSeatUser</servlet-name>
@@ -253,24 +237,8 @@
         <url-pattern>/post</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CreateCompartment</servlet-name>
-        <url-pattern>/createCompartment</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>CreateSeat</servlet-name>
-        <url-pattern>/crseat</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UpdateCompartment</servlet-name>
-        <url-pattern>/updateC</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ListCompartment</servlet-name>
-        <url-pattern>/listC</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ListSeayByTypeID</servlet-name>
-        <url-pattern>/listSeayByTypeID</url-pattern>
+        <servlet-name>ListSeatAdmin</servlet-name>
+        <url-pattern>/listSeatAdmin</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ListSeatUser</servlet-name>
@@ -390,5 +358,13 @@
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CreateCompartment</servlet-name>
+        <servlet-class>Controller.CreateCompartment</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateCompartment</servlet-name>
+        <url-pattern>/createCompartment</url-pattern>
     </servlet-mapping>
 </web-app>

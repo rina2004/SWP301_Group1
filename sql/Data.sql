@@ -5,7 +5,15 @@ INSERT INTO AirTrafficControl VALUES (NULL, NOW()), (NULL, NOW()), (NULL, NOW())
 INSERT INTO airplane_status (name) VALUES 
 ('Active'), ('Maintenance'), ('Retired'), ('In Use'), ('Under Repair');
 
+INSERT INTO `Compartment` (`id`, `name`, `airplaneID`, `capacity`) 
+VALUES ('C001', 'Business Class', 'A001', 30);
 
+INSERT INTO `Compartment` (`id`, `name`, `airplaneID`, `capacity`) 
+VALUES ('C002', 'Economy', 'A001', 50);
+Delete  From Compartment where id = 'C002';
+select * From Airplane;
+Update  Airplane Set numberOfCompartments = '4' where id = 'A001'; 
+ALTER TABLE Compartment CHANGE COLUMN available status VARCHAR(50);
 -- Insert into Account
 INSERT INTO Account (username, password, citizenID, name, dob, phone, address, email) VALUES
 ('admin1', 'pass123', '123456789012', 'John Doe', '1990-05-15', '0987654321', '123 Street, City', 'john@example.com'),
@@ -122,9 +130,8 @@ INSERT INTO `Airplane` (`id`, `name`, `typeID`, `statusID`, `maintainanceTime`, 
 Select * From AirplaneStatus;
 
 -- Thêm máy bay
-INSERT INTO `Airplane` (`id`, `name`, `typeID`, `statusID`, `maintainanceTime`, `usedTime`) VALUES 
-('A001', 'Boeing 747', 'A110', 1, '2025-03-10 12:00:00', '2023-05-20 08:30:00'),
-('A002', 'Airbus A320', 'A110', 2, '2025-03-12 10:00:00', '2022-09-15 14:20:00');
+INSERT INTO `Airplane` (`id`, `name`, `statusID`, `maintainanceTime`, `usedTime`) VALUES 
+('A003', 'Airbus A320', 2, '2025-03-12 10:00:00', '2022-09-15 14:20:00');
 
 -- Thêm chuyến bay
 INSERT INTO `Flight` (`id`, `name`, `code`, `airplaneID`, `departure`, `destination`, `entryTime`, `startingTime`, `landingTime`) VALUES 
@@ -133,7 +140,6 @@ INSERT INTO `Flight` (`id`, `name`, `code`, `airplaneID`, `departure`, `destinat
 
 
 
-Select * From Type;
 SELECT c.*, t.name AS type_name FROM Compartment c JOIN Type t ON c.typeID = t.id;
 Select * From Compartment ;
 ALTER TABLE Compartment DROP PRIMARY KEY, ADD PRIMARY KEY (id, typeID);
@@ -221,7 +227,7 @@ VALUES
 ('A001', 'Boeing 747', 1, '2025-03-18 12:00:00', '2025-03-10 08:00:00'),
 ('A002', 'Airbus A320', 2, '2025-03-19 14:00:00', '2025-03-11 10:00:00');
 UPDATE Airplane SET numberOfCompartments = 4 WHERE id = 'A002';
-
+Select * From Airplane;
 
 -- Insert into Luggage
 INSERT INTO Luggage (id, customerID, orderID, type, weight) VALUES

@@ -4,6 +4,7 @@
     Author     : tungn
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <head>
@@ -93,8 +94,13 @@
         <p>Status</p>
         <input name="status" value="${seat.status}" disabled>
 
-        <p>Type ID</p>
-        <input name="typeID" value="${seat.compartment.type.id}" disabled>
+        <p>Airplane ID</p>
+        <input name="typeID" value="${seat.compartment.airplane.id}" disabled>
+
+        <c:if test="${seat.status eq 'Maintained'}">
+            <p>Maintain Reason</p>
+            <input name="reason" value="${seat.reason}" disabled>
+        </c:if>
 
         <a href="javascript:history.back()" class="button">Back</a>
     </div>

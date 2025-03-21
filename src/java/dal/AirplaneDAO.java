@@ -111,4 +111,35 @@ public class AirplaneDAO extends DBContext {
 
         return planes;
     }
+
+    public String getIdbyID(String id) {
+        PreparedStatement stm;
+        ResultSet rs;
+
+        String sql = "Select id From airplane Where id = ?";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getString("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        AirplaneDAO dao = new AirplaneDAO();
+        String a = "A003";
+        String result = dao.getIdbyID(a);
+
+        if (result != null) {
+            System.out.println("ID tìm thấy: " + result);
+        } else {
+            System.out.println("Không tìm thấy ID: " + a);
+        }
+    }
 }

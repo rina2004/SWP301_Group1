@@ -92,8 +92,8 @@
             <label>Compartment:</label>
             <input type="text" value="${seat.compartment.name}" disabled><br>
 
-            <label>TypeID:</label>
-            <input type="text" name="typeID" value="${seat.compartment.type.id}" readonly><br>
+            <label>Airplane ID:</label>
+            <input type="text" name="airplaneID" value="${seat.compartment.airplane.id}" readonly><br>
 
             <label>Status:</label>
             <select name="status" id="seatStatus" onchange="toggleReasonInput()">
@@ -108,7 +108,7 @@
             </div>
 
             <button type="submit">Update</button>
-            <a href="listSeatByTypeID?id=${seat.compartment.type.id}">Back</a>
+            <a href="listSeatAdmin?id=${seat.compartment.airplane.id}">Back</a>
         </form>
 
         <script>

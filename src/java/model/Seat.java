@@ -12,25 +12,17 @@ public class Seat {
     
     private String id;
     private Compartment compartment;
-    private String available;
-    private String reson;
+    private String status;
+    private String reason;
 
     public Seat() {
     }
 
-    public Seat(String id, Compartment compartment, String available) {
+    public Seat(String id, Compartment compartment, String status, String reason) {
         this.id = id;
         this.compartment = compartment;
-        this.available = available;
-    }
-
-    
-    
-    public Seat(String id, Compartment compartment, String available, String reson) {
-        this.id = id;
-        this.compartment = compartment;
-        this.available = available;
-        this.reson = reson;
+        this.status = status;
+        this.reason = reason;
     }
 
     public String getId() {
@@ -49,27 +41,29 @@ public class Seat {
         this.compartment = compartment;
     }
 
-    public String getAvailable() {
-        return available;
+    public String getStatus() {
+        return status;
     }
 
-    public void setAvailable(String available) {
-        this.available = available;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getReson() {
-        return reson;
+    public String getReason() {
+        return reason;
     }
 
-    public void setReson(String reson) {
-        this.reson = reson;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     @Override
     public String toString() {
-        return "Seat{" + "id=" + id + ", compartment=" + compartment + ", available=" + available + ", reson=" + reson + '}';
+        return "Seat{" + "id=" + id + ", compartment=" + compartment + ", status=" + status + ", reason=" + reason + '}';
     }
 
+   
+    
     
     
 }

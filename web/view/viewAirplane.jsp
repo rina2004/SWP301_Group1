@@ -137,8 +137,14 @@
                             <a href="update?id=${pl.id}" class="btn-edit">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
-                            <a href="<%= request.getContextPath() %>/createCompartment?id=${pl.id}">
-                                <i class="fas fa-edit">Create Compartment</i>
+                            <a href="${pageContext.request.contextPath}/createCompartment?id=${pl.id}">
+                                Create Compartment
+                            </a>
+                            <a href="${pageContext.request.contextPath}/listSeatAdmin?id=${pl.id}">
+                                <i class="fas fa-edit">List Seat Admin</i>
+                            </a>
+                            <a href="${pageContext.request.contextPath}/listSeatUser?id=${pl.id}">
+                                Check-in                            
                             </a>
                         </td>
 

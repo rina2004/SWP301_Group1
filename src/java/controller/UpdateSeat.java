@@ -77,8 +77,13 @@ public class UpdateSeat extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("seatID");
         String status = request.getParameter("status");
-        String resion = request.getParameter("reason");
-        String typeID = request.getParameter("typeID");
+        String airplaneID = request.getParameter("airplaneID");
+        String reason = request.getParameter("reason");
+
+       
+        if (!status.equals("Maintained")) {
+            reason = null;
+        }
 
         SeatDAO dao = new SeatDAO();
         if (id == null || id.isEmpty() || status == null || status.isEmpty()) {
@@ -92,9 +97,9 @@ public class UpdateSeat extends HttpServlet {
             request.getRequestDispatcher("view/UpdateSeat.jsp").forward(request, response);
             return;
         }
-        dao.updateSeatStatus(id, status, resion);
+        dao.updateSeatStatus(id, status, reason);
 
-        response.sendRedirect("listSeatByTypeID?id=" + typeID);
+        response.sendRedirect("listSeatAdmin?id=" + airplaneID);
     }
 
     /**

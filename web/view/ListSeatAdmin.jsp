@@ -16,16 +16,38 @@
             body {
                 font-family: Arial, sans-serif;
                 text-align: center;
-                background-color: #ddd;
-            }
-            .plane {
-                display: grid;
-                grid-template-columns: repeat(2, 60px) 20px repeat(2, 60px) 20px repeat(2, 60px); /* 2 nhóm ghế + 2 lối đi */
-                gap: 12px;
-                justify-content: center;
-                margin-top: 20px;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
             }
 
+            h2 {
+                margin-top: 20px;
+                color: #333;
+            }
+
+            /* Layout chính */
+            .plane-container {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            /* Layout ghế */
+            .plane {
+                display: grid;
+                grid-template-columns: repeat(2, 60px) 40px repeat(2, 60px) 40px repeat(2, 60px); /* Lối đi rộng hơn */
+                gap: 10px;
+                justify-content: center;
+                margin: 20px auto;
+                background: #fff;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Ghế ngồi */
             .seat {
                 width: 60px;
                 height: 60px;
@@ -34,53 +56,56 @@
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
-                transition: 0.3s;
-                font-size: 10px;
+                transition: transform 0.2s ease, background-color 0.3s ease;
+                font-size: 14px;
                 font-weight: bold;
+                border: 2px solid transparent;
             }
 
-            /* Chưa đặt - Xanh lá */
+            /* Trạng thái ghế */
             .seat.Available {
-                background-color: #4CAF50 !important;
+                background-color: #4CAF50;
+                color: white;
             }
-
-            /* Đã đặt - Đỏ */
             .seat.Booked {
-                background-color: #FF4C4C !important;
+                background-color: #FF4C4C;
+                color: white;
                 cursor: not-allowed;
             }
-
-            /* Bảo trì - Xám */
             .seat.Maintained {
-                background-color: #808080 !important;
+                background-color: #808080;
+                color: white;
                 cursor: not-allowed;
             }
-
-            /* Đang chọn - Vàng */
             .seat.selected {
                 background-color: #FFD700 !important;
+                border: 2px solid #000;
             }
 
-            .seat:hover {
-                transform: scale(1.1);
-            }
-            .seat:hover {
+            /* Hiệu ứng hover */
+            .seat:not(.Booked, .Maintained):hover {
                 transform: scale(1.1);
             }
 
-            .container {
+            /* Lối đi */
+            .aisle {
+                width: 40px;
                 display: flex;
+                align-items: center;
                 justify-content: center;
-                align-items: flex-start;
-                gap: 40px;
-                position: relative;
+            }
+            .aisle::before {
+                content: "|||";
+                color: #888;
+                font-size: 20px;
             }
 
+            /* Chú thích trạng thái ghế */
             .legend {
                 position: fixed;
                 right: 20px;
                 top: 50px;
-                background: #fff;
+                background: white;
                 padding: 15px;
                 border-radius: 10px;
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -92,170 +117,79 @@
                 margin-bottom: 10px;
                 font-size: 16px;
             }
-
             .legend-item {
                 display: flex;
                 align-items: center;
                 gap: 8px;
                 margin-bottom: 8px;
             }
-
             .legend-item .seat {
                 width: 20px;
                 height: 20px;
                 border-radius: 4px;
             }
 
-            .seat.available {
-                background-color: #4CAF50; /* Xanh lá - Còn trống */
+            /* Màu sắc ghế trong chú thích */
+            .legend-item .seat.available {
+                background-color: #4CAF50;
+            }
+            .legend-item .seat.booked {
+                background-color: #FF4C4C;
+            }
+            .legend-item .seat.maintained {
+                background-color: #808080;
             }
 
-            .seat.booked {
-                background-color: #FF4C4C; /* Đỏ - Đã đặt */
-            }
-
-            .seat.maintained {
-                background-color: #808080; /* Xám - Bảo trì */
-            }
-
-            .aisle-top, .aisle-bottom {
+            /* Header & Footer máy bay */
+            .plane-header, .plane-end {
                 display: flex;
                 justify-content: center;
-                align-items: center;
+                margin-bottom: -10px;
             }
-
-            /* Style lối đi */
-            .aisle {
-                width: 30px;
-                display: grid;
-                grid-template-rows: 1fr 1fr;
-                align-items: center;
-                justify-content: center;
-            }
-            .aisle-top{
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-            .plane-container {
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            /* Mũi tên nằm ngay trên hàng ghế đầu */
-            .arrow-row {
-                display: grid;
-                grid-column: 1 / -1; /* Trải rộng hàng */
-                grid-template-columns: repeat(2, 1fr); /* 2 ô cho 2 mũi tên */
-                justify-content: center;
-                gap: 40px; /* Khoảng cách giữa 2 mũi tên */
-                margin-bottom: 10px; /* Đẩy xuống gần hàng ghế đầu */
-            }
-
-            /* Ô chứa mũi tên */
-            .arrow-box {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            /* Mũi tên chung */
-            .arrow {
-                font-size: 24px;
-                font-weight: bold;
-                color: gray;
-            }
-
-            /* Mũi tên trái/phải có hiệu ứng */
-            .left {
-                animation: arrowMoveLeft 1s infinite alternate;
-            }
-
-            .right {
-                animation: arrowMoveRight 1s infinite alternate;
-            }
-
-            /* Hiệu ứng mũi tên trái/phải */
-            @keyframes arrowMoveLeft {
-                0% {
-                    transform: translateX(-5px);
-                    opacity: 0.3;
-                }
-                100% {
-                    transform: translateX(5px);
-                    opacity: 1;
-                }
-            }
-
-            @keyframes arrowMoveRight {
-                0% {
-                    transform: translateX(5px);
-                    opacity: 0.3;
-                }
-                100% {
-                    transform: translateX(-5px);
-                    opacity: 1;
-                }
-            }
-            .plane-header {
-                display: flex;
-                justify-content: center;
-                margin-bottom: -20px; /* Điều chỉnh để nó sát sơ đồ ghế */
-            }
-
-            .plane-header img {
+            .plane-header img, .plane-end img {
                 width: 850px;
                 mix-blend-mode: multiply;
-            }
-            .plane-end {
-                display: flex;
-                justify-content: center;
-                margin-bottom: -20px;
-                position: relative;
-
+                opacity: 0.9;
             }
 
-            .plane-end img {
-                width: 850px;
-                mix-blend-mode: multiply;
-                opacity: 0.9; /* Giảm nhẹ độ đậm của ảnh */
-            }
+            /* Modal Popup */
             .modal {
-                display: none;
+                display: none; /* Đảm bảo modal ẩn khi trang load */
                 position: fixed;
-                z-index: 1;
+                z-index: 1000;
                 left: 0;
                 top: 0;
                 width: 100%;
                 height: 100%;
-                overflow: auto;
-                background-color: rgb(0, 0, 0);
-                background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+                background-color: rgba(0, 0, 0, 0.4);
+                align-items: center;
+                justify-content: center;
             }
 
             .modal-content {
-                background-color: #fefefe;
-                margin: 15% auto;
+                background-color: #fff;
                 padding: 20px;
-                border: 1px solid #888;
-                width: 80%;
+                border-radius: 10px;
+                width: 300px;
                 text-align: center;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+                /* Căn giữa modal chính xác */
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
             }
 
             .close {
-                color: #aaa;
+                color: #888;
                 float: right;
-                font-size: 28px;
+                font-size: 24px;
                 font-weight: bold;
-            }
-
-            .close:hover,
-            .close:focus {
-                color: black;
-                text-decoration: none;
                 cursor: pointer;
+            }
+            .close:hover {
+                color: black;
             }
 
             button {
@@ -263,79 +197,61 @@
                 padding: 10px;
                 font-size: 16px;
                 cursor: pointer;
+                border: none;
+                background-color: #4CAF50;
+                color: white;
+                border-radius: 5px;
             }
-
             button:hover {
-                background-color: #ddd;
+                background-color: #45a049;
             }
         </style>
     </head>
     <body>
-        <h2>Sơ Đồ Ghế Máy Bay ${id}</h2>
+
+        <h2>Sơ Đồ Ghế Máy Bay</h2>
+
         <div class="plane-container">
-            <!-- Hình đầu máy bay -->
             <div class="plane-header">
                 <img src="img/ghe-ngoi-may-bay-vietjet-removebg-preview.png" alt="Đầu máy bay">
             </div>
 
             <div class="plane" id="plane">
-                <!-- Mũi tên di chuyển hàng ghế -->
-                <div class="arrow-row">
-                    <div class="arrow-box">
-                        <div class="arrow left">←</div>
-                    </div>
-                    <div class="arrow-box">
-                        <div class="arrow right">→</div>
-                    </div>
-                </div>
-
                 <c:forEach var="s" items="${seat}" varStatus="loop">
-                    <!-- Chèn lối đi giữa -->
                     <c:if test="${loop.index % 6 == 2 || loop.index % 6 == 4}">
-                        <div class="aisle">
-                            <div class="aisle-top">
-                                <div class="arrow up">↑</div>
-                            </div>                   
-                        </div>
+                        <div class="aisle"></div>
                     </c:if>
-
-                    <!-- Ghế ngồi -->
-                    <div class="seat ${s.status eq 'Booked' ? 'Booked' : (s.status eq 'Maintained' ? 'Maintained' : 'Available')}" 
-                         data-seat-id="${s.id}" onclick="showSeatOptions('${s.id}')">
+                    <div class="seat ${s.status}" data-seat-id="${s.id}" onclick="showSeatOptions('${s.id}')">
                         ${s.id}
                     </div>
                 </c:forEach>
             </div>
 
-            <!-- Hình cuối máy bay -->
             <div class="plane-end">
-                <img src="img/so-do-cho-ngoi-may-bay-Vietjet-1-removebg-preview.png" alt="Đầu máy bay">
+                <img src="img/so-do-cho-ngoi-may-bay-Vietjet-1-removebg-preview.png" alt="Đuôi máy bay">
             </div>
         </div>
 
         <div class="legend">
             <h3>Chú thích</h3>
             <div class="legend-item">
-                <div class="seat available"></div>
-                <span>Available (Còn trống)</span>
+                <div class="seat available"></div><span>Available (Còn trống)</span>
             </div>
             <div class="legend-item">
-                <div class="seat booked"></div>
-                <span>Booked (Đã đặt)</span>
+                <div class="seat booked"></div><span>Booked (Đã đặt)</span>
             </div>
             <div class="legend-item">
-                <div class="seat maintained"></div>
-                <span>Maintained (Bảo trì)</span>
+                <div class="seat maintained"></div><span>Maintained (Bảo trì)</span>
             </div>
         </div>
 
-        <!-- Popup Modal for Seat Options -->
+        <!-- Modal Popup -->
         <div id="seatOptionsModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
                 <h2>Chọn một tùy chọn cho ghế</h2>
-                <button id="updateSeatButton">Update Seat</button>
-                <button id="viewDetailButton">View Detail</button>
+                <button onclick="redirectTo('updateSeat')">Cập nhật ghế</button>
+                <button onclick="redirectTo('detailSeat')">Xem chi tiết</button>
             </div>
         </div>
 
@@ -351,22 +267,20 @@
                 document.getElementById("seatOptionsModal").style.display = "none";
             }
 
-            document.getElementById("updateSeatButton").onclick = function () {
-                window.location.href = "updateSeat?id=" + selectedSeatID;
-                closeModal(); // Đóng modal
-            };
+            function redirectTo(action) {
+                if (selectedSeatID) {
+                    closeModal(); // Ẩn modal trước khi chuyển hướng
+                    window.location.href = action + "?id=" + selectedSeatID;
+                } else {
+                    alert("Vui lòng chọn một ghế trước!");
+                }
+            }
 
-            document.getElementById("viewDetailButton").onclick = function () {
-                window.location.href = "detailSeat?id=" + selectedSeatID;
-                closeModal(); // Đóng modal
-            };
-
-            // Đóng modal nếu click ra ngoài modal
             window.onclick = function (event) {
                 if (event.target == document.getElementById("seatOptionsModal")) {
                     closeModal();
                 }
-            }
+            };
         </script>
     </body>
 </html>

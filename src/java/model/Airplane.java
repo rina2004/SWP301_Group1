@@ -21,6 +21,11 @@ public class Airplane {
     public Airplane() {
     }
 
+    public Airplane(String id) {
+        this.id = id;
+    }
+
+    
     public Airplane(String id, String name, AirplaneStatus status, LocalDateTime maintainanceTime, LocalDateTime usedTime, int numberCompartment) {
         this.id = id;
         this.name = name;
@@ -76,6 +81,11 @@ public class Airplane {
 
     public void setNumberCompartment(int numberCompartment) {
         this.numberCompartment = numberCompartment;
+    }
+
+    @Override
+    public String toString() {
+        return "Airplane{" + "id=" + id + ", name=" + name + ", status=" + status + ", maintainanceTime=" + maintainanceTime + ", usedTime=" + usedTime + ", numberCompartment=" + numberCompartment + '}';
     }
 
     
