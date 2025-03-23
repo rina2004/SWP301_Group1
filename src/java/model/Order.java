@@ -16,15 +16,17 @@ public class Order {
     private Account accountID;
     private String status;
     private LocalDateTime time;
+    private int ticketCount; // thông tin phụ thêm khi join ticket count
 
     public Order() {
     }
 
-    public Order(String id, Account accountID, String status, LocalDateTime time) {
+    public Order(String id, Account accountID, String status, LocalDateTime time, int ticketCount) {
         this.id = id;
         this.accountID = accountID;
         this.status = status;
         this.time = time;
+        this.ticketCount = ticketCount;
     }
 
     public String getId() {
@@ -58,7 +60,15 @@ public class Order {
     public void setTime(LocalDateTime time) {
         this.time = time;
     }
-    
+
+    public int getTicketCount() {
+        return ticketCount;
+    }
+
+    public void setTicketCount(int ticketCount) {
+        this.ticketCount = ticketCount;
+    }
+
     
     
 }
