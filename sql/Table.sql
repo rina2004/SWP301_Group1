@@ -1,6 +1,6 @@
 CREATE DATABASE `swp301`;
 USE `swp301`;
-
+ 
 -------------------------------------------------------------
 -------------------------------------------------------------
 -------------------------------------------------------------
@@ -10,23 +10,6 @@ CREATE TABLE `Role` (
 	`name` VARCHAR(50) unique not null,
 		
 	PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `Feature` (
-	`id` int auto_increment,
-    `name` varchar(255),
-    `url` varchar(100),
-    
-    primary key (`id`)
-);
-
-CREATE TABLE `RoleFeature` (
-	`roleID` int,
-    `featureID` int,
-    
-    primary key (`roleID`, `featureID`),
-    foreign key (`roleID`) references `Role`(`id`),
-    foreign key (`featureID`) references `Feature`(`id`)
 );
 
 CREATE TABLE `Account` (
@@ -49,27 +32,6 @@ CREATE TABLE `Account` (
 -------------------------------------------------------------
 -------------------------------------------------------------
 
-CREATE TABLE `Type` (
-	`id` varchar(10),
-	`Name` varchar(50),
-	`manufacture` varchar(50),
-	`length` decimal(10,2),
-	`weight` decimal(10,2),
-	`height` decimal(10,2),
-	  
-	PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `Compartment` (
-	`id` char,
-	`name` varchar(50),
-	`typeID` varchar(10),
-	`capacity` int,
-	  
-	PRIMARY KEY (`id`),
-	foreign key (`typeID`) references `Type`(`id`) ON DELETE CASCADE
-);
-
 CREATE table `AirplaneStatus` (
 	`id` INT auto_increment,
 	`name` varchar(50),
@@ -80,14 +42,22 @@ CREATE table `AirplaneStatus` (
 CREATE TABLE `Airplane` (
 	`id` varchar(10),
 	`name` varchar(50),
-	`typeID` varchar(10),
 	`statusID` int,
 	`maintainanceTime` datetime,
 	`usedTime` datetime,
 	  
 	PRIMARY KEY (`id`),
-	foreign key (`statusID`) references `AirplaneStatus`(`id`),
-	foreign key (`typeID`) references `Type`(`id`) ON DELETE CASCADE
+	foreign key (`statusID`) references `AirplaneStatus`(`id`)
+);
+
+CREATE TABLE `Compartment` (
+	`id` varchar(20),
+	`name` varchar(50),
+	`airplaneID` varchar(10),
+	`capacity` int,
+	  
+	PRIMARY KEY (`id`),
+	foreign key (`airplaneID`) references `Airplane`(`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE `Flight` (
@@ -95,20 +65,30 @@ CREATE TABLE `Flight` (
 	`name` varchar(50),
 	`code` varchar(50),
 	`airplaneID` varchar(10),
-	`departure` varchar(255),
-	`destination` varchar(255),
+	`departure` int not null,
+	`destination` int not null,
 	`entryTime` datetime,
 	`startingTime` datetime,
 	`landingTime` datetime,
 	  
 	PRIMARY KEY (`id`),
-	foreign key (`airplaneID`) references `Airplane`(`id`)
+	foreign key (`airplaneID`) references `Airplane`(`id`),
+    FOREIGN KEY (`departure`) REFERENCES `Location`(id),
+    FOREIGN KEY (`destination`) REFERENCES `Location`(id)
+);
+
+CREATE TABLE `Location` (
+    `id` INT AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    
+    PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `Seat` (
 	`id` varchar(10),
-	`compartmentID` char,
-	`available` bool,
+	`compartmentID` varchar(20),
+	`status` bool,
+    `reason` varchar(250),
 	  
 	PRIMARY KEY (`id`),
 	foreign key (`compartmentID`) references `Compartment`(`id`)
@@ -132,8 +112,8 @@ CREATE TABLE `Ticket` (
 	`flightID` varchar(10),
 	`seatID` varchar(10),
 	`type` varchar(30),
-	`Price` decimal(10,2),
-	`Status` varchar(20),
+	`price` decimal(10,2),
+	`status` varchar(20),
 	  
 	PRIMARY KEY (`id`),
 	foreign key (`orderID`) references `Order`(`id`),
@@ -143,13 +123,13 @@ CREATE TABLE `Ticket` (
 
 CREATE TABLE `Luggage` (
 	`id` varchar(10),
-	`customerID` varchar(36),
+    `customerID` varchar(36),
 	`orderID` varchar(10),
 	`type` varchar(30),
 	`weight` decimal(10,2),
 	  
 	PRIMARY KEY (`id`),
-	foreign key (`customerID`) references `Account`(`id`),
+    foreign key (`customerID`) references `Account`(`id`),
 	foreign key (`orderID`) references `Order`(`id`)
 );
 
@@ -206,7 +186,7 @@ CREATE TABLE `Tag` (
 );
 
 CREATE TABLE `PostTag` (
-	`postID` VARCHAR(36) NOT NULL,
+	`postID` VARCHAR(41) NOT NULL,
 	`tagID` INT NOT NULL,
 	PRIMARY KEY (`postID`, `tagID`),
 
@@ -242,3 +222,247 @@ CREATE TABLE `ChatMessage` (
 	FOREIGN KEY (`senderAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE,
 	FOREIGN KEY (`receiverAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
 );
+
+-- Keep the original Role data
+INSERT INTO Role (name) VALUES 
+('Administrator'),
+('Customer'),
+('Staff'),
+('AirTrafficControl');
+
+-- Account table (10 records)
+INSERT INTO Account (username, password, roleID, status, citizenID, name, dob, phone, address, email) VALUES
+('johndoe', 'password123', 1, TRUE, '123456789012', 'John Doe', '1990-05-15', '0987654321', '123 Main Street, Hanoi', 'john.doe@example.com'),
+('janesmith', 'securepass', 2, TRUE, '234567890123', 'Jane Smith', '1985-08-21', '0976543210', '456 Oak Avenue, Ho Chi Minh City', 'jane.smith@example.com'),
+('robertjohnson', 'pass1234', 3, TRUE, '345678901234', 'Robert Johnson', '1988-11-30', '0912345678', '789 Pine Road, Da Nang', 'robert.johnson@example.com'),
+('sarahwilliams', 'sarahpass', 4, TRUE, '456789012345', 'Sarah Williams', '1992-04-12', '0923456789', '101 Maple Lane, Hue', 'sarah.williams@example.com'),
+('michaelbrown', 'brownie22', 1, TRUE, '567890123456', 'Michael Brown', '1979-07-25', '0934567890', '202 Cedar Street, Nha Trang', 'michael.brown@example.com'),
+('emilydavis', 'emily1995', 2, FALSE, '678901234567', 'Emily Davis', '1995-02-18', '0945678901', '303 Birch Boulevard, Hai Phong', 'emily.davis@example.com'),
+('davidmiller', 'miller2023', 3, TRUE, '789012345678', 'David Miller', '1983-09-09', '0956789012', '404 Elm Circle, Can Tho', 'david.miller@example.com'),
+('oliviawilson', 'olivia123', 4, TRUE, '890123456789', 'Olivia Wilson', '1991-12-05', '0967890123', '505 Willow Drive, Vung Tau', 'olivia.wilson@example.com'),
+('williamtaylor', 'taylor888', 1, TRUE, '901234567890', 'William Taylor', '1987-06-28', '0978901234', '606 Spruce Court, Phu Quoc', 'william.taylor@example.com'),
+('sophiaanderson', 'sophia999', 2, TRUE, '012345678901', 'Sophia Anderson', '1994-03-17', '0989012345', '707 Redwood Place, Da Lat', 'sophia.anderson@example.com');
+
+
+-- AirplaneStatus table already has 5 records, adding 5 more to reach 10
+INSERT INTO AirplaneStatus (name) VALUES 
+('Grounded'), ('Out of Service'), ('Scheduled'), ('Reserved'), ('Standby');
+
+-- Airplane table (10 records)
+INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime) VALUES
+('VN-A001', 'Sky Dragon', 1, '2024-06-15 08:00:00', '2023-12-01 00:00:00'),
+('VN-A002', 'Ocean Star', 2, '2024-07-20 10:30:00', '2024-01-15 00:00:00'),
+('VN-A003', 'Cloud Runner', 3, '2024-05-10 09:15:00', '2023-11-05 00:00:00'),
+('VN-A004', 'Wind Rider', 4, '2024-08-05 11:45:00', '2024-02-20 00:00:00'),
+('VN-A005', 'Sun Chaser', 5, '2024-06-30 13:20:00', '2023-12-25 00:00:00'),
+('VN-A006', 'Moon Walker', 1, '2024-07-12 14:00:00', '2024-01-30 00:00:00'),
+('VN-A007', 'Star Gazer', 2, '2024-05-25 15:30:00', '2023-11-20 00:00:00'),
+('VN-A008', 'Air Master', 3, '2024-08-18 16:45:00', '2024-02-10 00:00:00'),
+('VN-A009', 'Sky Voyager', 4, '2024-06-05 08:30:00', '2023-12-15 00:00:00'),
+('VN-A010', 'Cloud Dancer', 5, '2024-07-28 09:45:00', '2024-01-05 00:00:00');
+
+
+-- Compartment table (10 records)
+INSERT INTO Compartment (id, name, airplaneID, capacity) VALUES
+('VN-A001-B1', 'Business','VN-A001',20),
+('VN-A001-B2', 'Business','VN-A001',20),
+('VN-A001-B3', 'Business','VN-A001',20),
+('VN-A001-E1', 'Economy','VN-A001',20),
+('VN-A001-E2', 'Economy','VN-A001',20),
+('VN-A001-E3', 'Economy','VN-A001',20),
+('VN-A001-F1','First Class','VN-A001',20),
+('VN-A001-F2', 'First Class','VN-A001',20),
+('VN-A001-F3', 'First Class','VN-A001',20),
+('VN-A002-B1', 'Business','VN-A002',20);
+
+-- Flight table (10 records)
+INSERT INTO Flight (id, name, code, airplaneID, departureLocationID, destinationLocationID, entryTime, startingTime, landingTime) VALUES 
+    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2024-04-10 06:00:00', '2024-04-10 07:00:00', '2024-04-10 09:00:00'),
+    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2024-04-11 12:30:00', '2024-04-11 13:30:00', '2024-04-11 14:45:00'),
+    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2024-04-12 18:00:00', '2024-04-12 19:00:00', '2024-04-12 20:30:00'),
+    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2024-04-13 09:15:00', '2024-04-13 10:15:00', '2024-04-13 12:45:00'),
+    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2024-04-14 22:00:00', '2024-04-14 23:00:00', '2024-04-15 00:30:00'),
+    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2024-04-15 10:45:00', '2024-04-15 11:45:00', '2024-04-15 13:00:00'),
+    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2024-04-16 08:30:00', '2024-04-16 09:30:00', '2024-04-16 14:00:00'),
+    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2024-04-17 14:15:00', '2024-04-17 15:15:00', '2024-04-17 19:45:00'),
+    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2024-04-18 11:30:00', '2024-04-18 12:30:00', '2024-04-18 15:15:00'),
+    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2024-04-19 16:45:00', '2024-04-19 17:45:00', '2024-04-19 19:30:00');
+
+INSERT INTO `Location` (name) VALUES
+('Hà Nội-Sân bay Nội Bài'),
+('TP. Hồ Chí Minh-Sân bay Tân Sơn Nhất'),
+('Đà Nẵng-Sân bay Quốc tế Đà Nẵng'),
+('Nha Trang-Sân bay Cam Ranh'),
+('Phú Quốc-Sân bay Quốc tế Phú Quốc'),
+('Huế-Sân bay Phú Bài'),
+('Hải Phòng-Sân bay Cát Bi'),
+('Đà Lạt-Sân bay Liên Khương'),
+('Cần Thơ-Sân bay Quốc tế Cần Thơ'),
+('Quảng Ninh-Sân bay Vân Đồn'),
+('Nghệ An-Sân bay Vinh'),
+('Buôn Ma Thuột-Sân bay Buôn Ma Thuột'),
+('Quy Nhơn-Sân bay Phù Cát'),
+('Thanh Hóa-Sân bay Thọ Xuân'),
+('Quảng Bình-Sân bay Đồng Hới'),
+('Điện Biên-Sân bay Điện Biên Phủ'),
+('Pleiku-Sân bay Pleiku'),
+('Côn Đảo-Sân bay Côn Sơn'),
+('Tuy Hòa-Sân bay Tuy Hòa'),
+('Cà Mau-Sân bay Cà Mau');
+
+-- Seat table (10 records)
+INSERT INTO Seat (id, compartmentID, status, reason) VALUES
+('S001A', 'VN-A001-B1', TRUE, null),
+('S002B', 'VN-A001-B2', TRUE, null),
+('S003C', 'VN-A001-B3', TRUE, null),
+('S004D', 'VN-A001-E1', FALSE, 'In Maintenance'),
+('S005E', 'VN-A001-E2', TRUE, null),
+('S006F', 'VN-A001-E3', TRUE, null),
+('S007G', 'VN-A001-F1', FALSE, 'In Maintenance'),
+('S008H', 'VN-A001-F2', TRUE, null),
+('S009I', 'VN-A001-F3', TRUE, null),
+('S010J', 'VN-A002-B1', FALSE, 'In Reparing');
+
+
+-- Order table (10 records)
+INSERT INTO `Order` (id, customerID, staffID, status, time) VALUES
+('ORD001', (SELECT id FROM Account WHERE username = 'johndoe'), (SELECT id FROM Account WHERE username = 'sarahwilliams'), 'Confirmed', '2024-03-15 09:30:00'),
+('ORD002', (SELECT id FROM Account WHERE username = 'janesmith'), (SELECT id FROM Account WHERE username = 'michaelbrown'), 'Processing', '2024-03-16 11:45:00'),
+('ORD003', (SELECT id FROM Account WHERE username = 'robertjohnson'), (SELECT id FROM Account WHERE username = 'emilydavis'), 'Confirmed', '2024-03-17 14:20:00'),
+('ORD004', (SELECT id FROM Account WHERE username = 'sarahwilliams'), (SELECT id FROM Account WHERE username = 'davidmiller'), 'Cancelled', '2024-03-18 16:35:00'),
+('ORD005', (SELECT id FROM Account WHERE username = 'michaelbrown'), (SELECT id FROM Account WHERE username = 'oliviawilson'), 'Completed', '2024-03-19 10:10:00'),
+('ORD006', (SELECT id FROM Account WHERE username = 'emilydavis'), (SELECT id FROM Account WHERE username = 'williamtaylor'), 'Confirmed', '2024-03-20 13:25:00'),
+('ORD007', (SELECT id FROM Account WHERE username = 'davidmiller'), (SELECT id FROM Account WHERE username = 'sophiaanderson'), 'Processing', '2024-03-21 15:40:00'),
+('ORD008', (SELECT id FROM Account WHERE username = 'oliviawilson'), (SELECT id FROM Account WHERE username = 'johndoe'), 'Confirmed', '2024-03-22 08:55:00'),
+('ORD009', (SELECT id FROM Account WHERE username = 'williamtaylor'), (SELECT id FROM Account WHERE username = 'janesmith'), 'Completed', '2024-03-23 12:15:00'),
+('ORD010', (SELECT id FROM Account WHERE username = 'sophiaanderson'), (SELECT id FROM Account WHERE username = 'robertjohnson'), 'Cancelled', '2024-03-24 17:30:00');
+
+-- Ticket table (10 records)
+INSERT INTO Ticket (id, orderID, flightID, seatID, type, price, status) VALUES
+('TKT001', 'ORD001', 'FL001', 'S001A', 'First Class', 2500000.00, 'Confirmed'),
+('TKT002', 'ORD002', 'FL002', 'S002B', 'Business Class', 1800000.00, 'Issued'),
+('TKT003', 'ORD003', 'FL003', 'S003C', 'Economy Class', 1200000.00, 'Confirmed'),
+('TKT004', 'ORD004', 'FL004', 'S004D', 'Business Class', 2000000.00, 'Cancelled'),
+('TKT005', 'ORD005', 'FL005', 'S005E', 'Economy Class', 1500000.00, 'Checked-In'),
+('TKT006', 'ORD006', 'FL006', 'S006F', 'First Class', 2800000.00, 'Confirmed'),
+('TKT007', 'ORD007', 'FL007', 'S007G', 'Business Class', 2200000.00, 'Pending'),
+('TKT008', 'ORD008', 'FL008', 'S008H', 'Premium Economy', 1600000.00, 'Confirmed'),
+('TKT009', 'ORD009', 'FL009', 'S009I', 'Economy Class', 1350000.00, 'Boarded'),
+('TKT010', 'ORD010', 'FL010', 'S010J', 'Economy Plus', 1450000.00, 'Cancelled');
+
+-- Luggage table (10 records)
+INSERT INTO Luggage (id, customerID, orderID, type, weight) VALUES
+('LUG001', (SELECT id FROM Account WHERE username = 'johndoe'), 'ORD001', 'Checked', 23.5),
+('LUG002', (SELECT id FROM Account WHERE username = 'janesmith'), 'ORD002', 'Cabin', 7.0),
+('LUG003', (SELECT id FROM Account WHERE username = 'robertjohnson'), 'ORD003', 'Checked', 18.2),
+('LUG004', (SELECT id FROM Account WHERE username = 'sarahwilliams'), 'ORD004', 'Checked', 25.0),
+('LUG005', (SELECT id FROM Account WHERE username = 'michaelbrown'), 'ORD005', 'Cabin', 8.5),
+('LUG006', (SELECT id FROM Account WHERE username = 'emilydavis'), 'ORD006', 'Checked', 20.7),
+('LUG007', (SELECT id FROM Account WHERE username = 'davidmiller'), 'ORD007', 'Checked', 22.3),
+('LUG008', (SELECT id FROM Account WHERE username = 'oliviawilson'), 'ORD008', 'Cabin', 6.8),
+('LUG009', (SELECT id FROM Account WHERE username = 'williamtaylor'), 'ORD009', 'Checked', 19.5),
+('LUG010', (SELECT id FROM Account WHERE username = 'sophiaanderson'), 'ORD010', 'Cabin', 9.2);
+
+-- BlogCategory table (10 records)
+INSERT INTO BlogCategory (name) VALUES 
+('Aviation Technology'),
+('Travel Tips'),
+('Flight Experience'),
+('Airline News'),
+('Destination Guides'),
+('Safety & Security'),
+('Aircraft Reviews'),
+('Customer Service'),
+('Pilot Stories'),
+('Airport Features');
+
+-- BlogPost table (10 records)
+INSERT INTO BlogPost (title, content, authorID, categoryID, published) VALUES
+('The Future of Aviation Technology', 'Exploring the latest innovations in aviation technology that are reshaping the industry...', (SELECT id FROM Account WHERE username = 'johndoe'), 1, TRUE),
+('Top 10 Travel Tips for First-Time Flyers', 'Essential advice for those taking their first flight, covering everything from booking to landing...', (SELECT id FROM Account WHERE username = 'janesmith'), 2, TRUE),
+('Business Class Experience: Worth the Upgrade?', 'A detailed review of the business class experience and whether the premium price justifies the benefits...', (SELECT id FROM Account WHERE username = 'robertjohnson'), 3, TRUE),
+('New Routes Announced for Summer 2024', 'Breaking news about exciting new flight routes being launched for the upcoming summer season...', (SELECT id FROM Account WHERE username = 'sarahwilliams'), 4, TRUE),
+('Hidden Gems: Underrated Destinations in Southeast Asia', 'Discover lesser-known but equally beautiful destinations across Southeast Asia that deserve a visit...', (SELECT id FROM Account WHERE username = 'michaelbrown'), 5, TRUE),
+('Understanding Airline Safety Protocols', 'An in-depth look at the safety measures that airlines implement to ensure passenger security...', (SELECT id FROM Account WHERE username = 'emilydavis'), 6, FALSE),
+('Boeing 787 vs. Airbus A350: The Ultimate Comparison', 'A comprehensive comparison between two of the most advanced widebody aircraft in service today...', (SELECT id FROM Account WHERE username = 'davidmiller'), 7, TRUE),
+('How Airlines Are Improving Customer Service', 'Examining the strategies airlines are adopting to enhance the customer experience...', (SELECT id FROM Account WHERE username = 'oliviawilson'), 8, TRUE),
+('Life at 35,000 Feet: Confessions of a Long-Haul Pilot', 'Personal stories and insights from a veteran pilot about life in the cockpit...', (SELECT id FROM Account WHERE username = 'williamtaylor'), 9, FALSE),
+('World\'s Most Impressive Airport Terminals', 'A tour of architectural marvels among airport terminals around the world...', (SELECT id FROM Account WHERE username = 'sophiaanderson'), 10, TRUE);
+
+-- Comment table (10 records)
+INSERT INTO Comment (postID, accountID, content) VALUES
+((SELECT id FROM BlogPost WHERE title = 'The Future of Aviation Technology'), (SELECT id FROM Account WHERE username = 'janesmith'), 'This article opened my eyes to the amazing innovations coming to aviation!'),
+((SELECT id FROM BlogPost WHERE title = 'Top 10 Travel Tips for First-Time Flyers'), (SELECT id FROM Account WHERE username = 'robertjohnson'), 'Wish I had read this before my first flight. Great advice!'),
+((SELECT id FROM BlogPost WHERE title = 'Business Class Experience: Worth the Upgrade?'), (SELECT id FROM Account WHERE username = 'sarahwilliams'), 'Just upgraded on my last flight based on this review and completely agree with your assessment.'),
+((SELECT id FROM BlogPost WHERE title = 'New Routes Announced for Summer 2024'), (SELECT id FROM Account WHERE username = 'michaelbrown'), 'Excited about the new route to Phu Quoc! Already planning my trip.'),
+((SELECT id FROM BlogPost WHERE title = 'Hidden Gems: Underrated Destinations in Southeast Asia'), (SELECT id FROM Account WHERE username = 'emilydavis'), 'Visited Con Dao based on your recommendation - absolutely stunning!'),
+((SELECT id FROM BlogPost WHERE title = 'Understanding Airline Safety Protocols'), (SELECT id FROM Account WHERE username = 'davidmiller'), 'Very informative. Makes me feel much more confident about flying.'),
+((SELECT id FROM BlogPost WHERE title = 'Boeing 787 vs. Airbus A350: The Ultimate Comparison'), (SELECT id FROM Account WHERE username = 'oliviawilson'), 'Great technical breakdown! As an engineering student, I really appreciated the detailed analysis.'),
+((SELECT id FROM BlogPost WHERE title = 'How Airlines Are Improving Customer Service'), (SELECT id FROM Account WHERE username = 'williamtaylor'), 'Still waiting to see these improvements on my regular airline...'),
+((SELECT id FROM BlogPost WHERE title = 'Life at 35,000 Feet: Confessions of a Long-Haul Pilot'), (SELECT id FROM Account WHERE username = 'sophiaanderson'), 'Fascinating insights! Always wondered what pilots experience during those long flights.'),
+((SELECT id FROM BlogPost WHERE title = 'World\'s Most Impressive Airport Terminals'), (SELECT id FROM Account WHERE username = 'johndoe'), 'Singapore Changi is truly incredible. Great coverage of its features!');
+
+-- PostLike table (10 records)
+INSERT INTO PostLike (postID, accountID) VALUES
+((SELECT id FROM BlogPost WHERE title = 'The Future of Aviation Technology'), (SELECT id FROM Account WHERE username = 'janesmith')),
+((SELECT id FROM BlogPost WHERE title = 'The Future of Aviation Technology'), (SELECT id FROM Account WHERE username = 'robertjohnson')),
+((SELECT id FROM BlogPost WHERE title = 'Top 10 Travel Tips for First-Time Flyers'), (SELECT id FROM Account WHERE username = 'sarahwilliams')),
+((SELECT id FROM BlogPost WHERE title = 'Business Class Experience: Worth the Upgrade?'), (SELECT id FROM Account WHERE username = 'michaelbrown')),
+((SELECT id FROM BlogPost WHERE title = 'New Routes Announced for Summer 2024'), (SELECT id FROM Account WHERE username = 'emilydavis')),
+((SELECT id FROM BlogPost WHERE title = 'Hidden Gems: Underrated Destinations in Southeast Asia'), (SELECT id FROM Account WHERE username = 'davidmiller')),
+((SELECT id FROM BlogPost WHERE title = 'Understanding Airline Safety Protocols'), (SELECT id FROM Account WHERE username = 'oliviawilson')),
+((SELECT id FROM BlogPost WHERE title = 'Boeing 787 vs. Airbus A350: The Ultimate Comparison'), (SELECT id FROM Account WHERE username = 'williamtaylor')),
+((SELECT id FROM BlogPost WHERE title = 'Life at 35,000 Feet: Confessions of a Long-Haul Pilot'), (SELECT id FROM Account WHERE username = 'sophiaanderson')),
+((SELECT id FROM BlogPost WHERE title = 'World\'s Most Impressive Airport Terminals'), (SELECT id FROM Account WHERE username = 'johndoe'));
+
+-- Tag table (10 records)
+INSERT INTO Tag (name) VALUES
+('Aviation'),
+('Travel'),
+('Technology'),
+('Customer Service'),
+('Safety'),
+('Destinations'),
+('Aircraft'),
+('Airlines'),
+('Airports'),
+('Flight Experience');
+
+-- PostTag table (10 records)
+INSERT INTO PostTag (postID, tagID) VALUES
+((SELECT id FROM BlogPost WHERE title = 'The Future of Aviation Technology'), (SELECT id FROM Tag WHERE name = 'Aviation')),
+((SELECT id FROM BlogPost WHERE title = 'The Future of Aviation Technology'), (SELECT id FROM Tag WHERE name = 'Technology')),
+((SELECT id FROM BlogPost WHERE title = 'Top 10 Travel Tips for First-Time Flyers'), (SELECT id FROM Tag WHERE name = 'Travel')),
+((SELECT id FROM BlogPost WHERE title = 'Business Class Experience: Worth the Upgrade?'), (SELECT id FROM Tag WHERE name = 'Flight Experience')),
+((SELECT id FROM BlogPost WHERE title = 'New Routes Announced for Summer 2024'), (SELECT id FROM Tag WHERE name = 'Airlines')),
+((SELECT id FROM BlogPost WHERE title = 'Hidden Gems: Underrated Destinations in Southeast Asia'), (SELECT id FROM Tag WHERE name = 'Destinations')),
+((SELECT id FROM BlogPost WHERE title = 'Understanding Airline Safety Protocols'), (SELECT id FROM Tag WHERE name = 'Safety')),
+((SELECT id FROM BlogPost WHERE title = 'Boeing 787 vs. Airbus A350: The Ultimate Comparison'), (SELECT id FROM Tag WHERE name = 'Aircraft')),
+((SELECT id FROM BlogPost WHERE title = 'How Airlines Are Improving Customer Service'), (SELECT id FROM Tag WHERE name = 'Customer Service')),
+((SELECT id FROM BlogPost WHERE title = 'World\'s Most Impressive Airport Terminals'), (SELECT id FROM Tag WHERE name = 'Airports'));
+
+-- Blog table (10 records)
+INSERT INTO Blog (postID, title, short_description, thumbnail, authorID) VALUES
+((SELECT id FROM BlogPost WHERE title = 'The Future of Aviation Technology'), 'Aviation Tech Trends', 'Discover the cutting-edge technologies shaping the future of air travel', 'tech_thumb.jpg', (SELECT id FROM Account WHERE username = 'johndoe')),
+((SELECT id FROM BlogPost WHERE title = 'Top 10 Travel Tips for First-Time Flyers'), 'First-Time Flyer Guide', 'Essential advice for anyone taking their first flight', 'firstflight_thumb.jpg', (SELECT id FROM Account WHERE username = 'janesmith')),
+((SELECT id FROM BlogPost WHERE title = 'Business Class Experience: Worth the Upgrade?'), 'Business Class Analysis', 'Is the premium price worth the luxury experience?', 'business_thumb.jpg', (SELECT id FROM Account WHERE username = 'robertjohnson')),
+((SELECT id FROM BlogPost WHERE title = 'New Routes Announced for Summer 2024'), 'Summer 2024 Routes', 'Exciting new destinations for your summer travel plans', 'routes_thumb.jpg', (SELECT id FROM Account WHERE username = 'sarahwilliams')),
+((SELECT id FROM BlogPost WHERE title = 'Hidden Gems: Underrated Destinations in Southeast Asia'), 'Southeast Asia Secrets', 'Discover lesser-known but incredible places to visit in Southeast Asia', 'seasia_thumb.jpg', (SELECT id FROM Account WHERE username = 'michaelbrown')),
+((SELECT id FROM BlogPost WHERE title = 'Understanding Airline Safety Protocols'), 'Airline Safety Guide', 'An inside look at how airlines keep passengers safe', 'safety_thumb.jpg', (SELECT id FROM Account WHERE username = 'emilydavis')),
+((SELECT id FROM BlogPost WHERE title = 'Boeing 787 vs. Airbus A350: The Ultimate Comparison'), 'Modern Aircraft Comparison', 'Which widebody aircraft delivers the best passenger experience?', 'aircraft_thumb.jpg', (SELECT id FROM Account WHERE username = 'davidmiller')),
+((SELECT id FROM BlogPost WHERE title = 'How Airlines Are Improving Customer Service'), 'Customer Service Evolution', 'New approaches airlines are taking to enhance passenger satisfaction', 'service_thumb.jpg', (SELECT id FROM Account WHERE username = 'oliviawilson')),
+((SELECT id FROM BlogPost WHERE title = 'Life at 35,000 Feet: Confessions of a Long-Haul Pilot'), 'Pilot Perspectives', 'A pilot\'s view of life in the cockpit and the challenges of long flights', 'pilot_thumb.jpg', (SELECT id FROM Account WHERE username = 'williamtaylor')),
+((SELECT id FROM BlogPost WHERE title = 'World\'s Most Impressive Airport Terminals'), 'Amazing Airports', 'Exploring architectural wonders among the world\'s airports', 'airport_thumb.jpg', (SELECT id FROM Account WHERE username = 'sophiaanderson'));
+
+-- ChatMessage table (10 records)
+INSERT INTO ChatMessage (senderAccountID, receiverAccountID, message, timestamp, isRead) VALUES
+((SELECT id FROM Account WHERE username = 'johndoe'), (SELECT id FROM Account WHERE username = 'janesmith'), 'Hi Jane, I have a question about my upcoming flight.', '2024-03-15 10:15:00', TRUE),
+((SELECT id FROM Account WHERE username = 'janesmith'), (SELECT id FROM Account WHERE username = 'johndoe'), 'Sure John, how can I help you?', '2024-03-15 10:18:00', TRUE),
+((SELECT id FROM Account WHERE username = 'robertjohnson'), (SELECT id FROM Account WHERE username = 'sarahwilliams'), 'Sarah, could you check if there are any window seats available on flight VN303?', '2024-03-16 14:30:00', TRUE),
+((SELECT id FROM Account WHERE username = 'sarahwilliams'), (SELECT id FROM Account WHERE username = 'robertjohnson'), 'I just checked and there are 3 window seats available. Would you like me to book one for you?', '2024-03-16 14:45:00', TRUE),
+((SELECT id FROM Account WHERE username = 'michaelbrown'), (SELECT id FROM Account WHERE username = 'emilydavis'), 'Emily, I need to change my flight date. Is it possible?', '2024-03-17 09:20:00', FALSE),
+((SELECT id FROM Account WHERE username = 'davidmiller'), (SELECT id FROM Account WHERE username = 'oliviawilson'), 'Hi Olivia, I\'m looking for information about luggage allowance for international flights.', '2024-03-18 11:10:00', TRUE),
+((SELECT id FROM Account WHERE username = 'oliviawilson'), (SELECT id FROM Account WHERE username = 'davidmiller'), 'Hello David, for international flights, you get 30kg for business class and 20kg for economy. Do you need more details?', '2024-03-18 11:25:00', TRUE),
+((SELECT id FROM Account WHERE username = 'williamtaylor'), (SELECT id FROM Account WHERE username = 'sophiaanderson'), 'Sophia, I\'m experiencing issues with the online check-in system. Can you help?', '2024-03-19 15:40:00', FALSE),
+((SELECT id FROM Account WHERE username = 'johndoe'), (SELECT id FROM Account WHERE username = 'robertjohnson'), 'Robert, can you send me the itinerary for our business trip next week?', '2024-03-20 08:55:00', FALSE),
+((SELECT id FROM Account WHERE username = 'janesmith'), (SELECT id FROM Account WHERE username = 'michaelbrown'), 'Michael, I\'ve approved your refund request. The amount will be credited to your account within 7 business days.', '2024-03-21 13:15:00', TRUE);

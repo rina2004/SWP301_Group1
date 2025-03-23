@@ -11,9 +11,19 @@ package model;
 public class Compartment {
     private char id;
     private String name;
-    private Type type;
+    private Airplane airplaneID;
     private int capacity;
 
+    public Compartment() {
+    }
+
+    public Compartment(char id, String name, Airplane airplaneID, int capacity) {
+        this.id = id;
+        this.name = name;
+        this.airplaneID = airplaneID;
+        this.capacity = capacity;
+    }
+    
     public char getId() {
         return id;
     }
@@ -30,12 +40,12 @@ public class Compartment {
         this.name = name;
     }
 
-    public Type getType() {
-        return type;
+    public Airplane getAirplaneID() {
+        return airplaneID;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setAirplaneID(Airplane airplaneID) {
+        this.airplaneID = airplaneID;
     }
 
     public int getCapacity() {

@@ -31,8 +31,8 @@ public class TicketDAO extends DBContext {
                     rs.getString("id"),
                     rs.getString("flightID"),
                     rs.getString("type"),
-                    rs.getDouble("Price"), // Changed from getInt to getDouble
-                    rs.getString("Status")
+                    rs.getDouble("price"), 
+                    rs.getString("status")
                 );
             }
         } catch (SQLException ex) {
@@ -57,8 +57,8 @@ public class TicketDAO extends DBContext {
                     rs.getString("id"),
                     rs.getString("flightID"),
                     rs.getString("type"),
-                    rs.getDouble("Price"),
-                    rs.getString("Status")
+                    rs.getDouble("price"),
+                    rs.getString("status")
                 ));
             }
         } catch (SQLException ex) {
@@ -79,8 +79,8 @@ public class TicketDAO extends DBContext {
                     rs.getString("id"),
                     rs.getString("flightID"),
                     rs.getString("type"),
-                    rs.getDouble("Price"), // Changed from getInt to getDouble
-                    rs.getString("Status")
+                    rs.getDouble("price"), 
+                    rs.getString("status")
                 );
             }
         } catch (SQLException ex) {

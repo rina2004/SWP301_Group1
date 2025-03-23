@@ -10,10 +10,17 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>${flight == null ? 'Add New Flight' : 'Edit Flight'}</title>
+        <title>Add New Flight</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link rel="icon" type="image/png" href="https://tomcat.apache.org/res/images/asf_logo.svg">
+        <style>
+            /* Style for select dropdowns with limited size */
+            select.form-select-scrollable {
+                max-height: 200px;
+                overflow-y: auto;
+            }
+        </style>
     </head>
     <body>
         <div class="container mt-4">
@@ -32,28 +39,22 @@
                         <c:if test="${flight != null}">
                             <input type="hidden" name="id" value="${flight.id}">
                         </c:if>
-
+                            
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Flight Name</label>
                                 <input type="text" class="form-control" name="name" 
                                        value="${flight.name}" required>
                             </div>
-                            <%--div class="col-md-6">
-                                <label class="form-label">Flight Code</label>
-                                <input type="text" class="form-control" name="code" 
-                                       value="${flight.code}" required>
-                            </div--%>
                         </div>
-
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Airplane</label>
-                                <select class="form-select" name="airplaneId" required>
+                                <select class="form-select" name="airplaneID" required>
                                     <option value="">Select Airplane</option>
                                     <c:forEach items="${airplanes}" var="airplane">
                                         <option value="${airplane.id}" 
-                                                ${flight.airplaneId == airplane.id ? 'selected' : ''}>
+                                                ${flight.airplaneID.id == airplane.id ? 'selected' : ''}>
                                             ${airplane.name}
                                         </option>
                                     </c:forEach>
@@ -64,13 +65,27 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Departure</label>
-                                <input type="text" class="form-control" name="departure" 
-                                       value="${flight.departure}" required>
+                                <select class="form-select form-select-scrollable" name="departure" required>
+                                    <option value="">Select Departure Location</option>
+                                    <c:forEach items="${locations}" var="location">
+                                        <option value="${location.id}" 
+                                                ${flight.departure.id == location.id ? 'selected' : ''}>
+                                            ${location.name}
+                                        </option>
+                                    </c:forEach>
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Destination</label>
-                                <input type="text" class="form-control" name="destination" 
-                                       value="${flight.destination}" required>
+                                <select class="form-select form-select-scrollable" name="destination" required>
+                                    <option value="">Select Destination Location</option>
+                                    <c:forEach items="${locations}" var="location">
+                                        <option value="${location.id}" 
+                                                ${flight.destination.id == location.id ? 'selected' : ''}>
+                                            ${location.name}
+                                        </option>
+                                    </c:forEach>
+                                </select>
                             </div>
                         </div>
 

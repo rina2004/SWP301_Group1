@@ -166,7 +166,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>OrderDetailController</servlet-name>
-         <url-pattern>/view/order-detail</url-pattern>
+        <url-pattern>/view/order-detail</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Register</servlet-name>
