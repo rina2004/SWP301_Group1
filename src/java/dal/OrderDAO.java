@@ -7,7 +7,9 @@ package dal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import model.Account;
 import model.Order;
+
 
 /**
  *
@@ -32,34 +34,41 @@ public class OrderDAO extends DBContext {
         }
     }
 
-    public List<Order> getOrdersByAccountId(String accountId) {
-        List<Order> orders = new ArrayList<>();
-        String sql = "SELECT o.id, o.status, o.time, COUNT(t.id) AS ticketCount "
-                + "FROM [Order] o "
+    public List<Order> getOrderHistory(String accountId) {
+        List<Order> list = new ArrayList<>();
+        String sql = "SELECT o.id, o.customerID, o.staffID, o.status, o.time, COUNT(t.id) AS ticket_count "
+                + "FROM `Order` o "
                 + "LEFT JOIN Ticket t ON o.id = t.orderId "
                 + "WHERE o.customerID = ? "
-                + "GROUP BY o.id, o.status, o.time "
+                + "GROUP BY o.id, o.customerID, o.staffID, o.status, o.time "
                 + "ORDER BY o.time DESC";
-
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            ps = connection.prepareStatement(sql);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, accountId);
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Order order = new Order();
                 order.setId(rs.getString("id"));
+
+                // Set Customer account (chỉ cần id, có thể lazy load full sau)
+                Account customer = new Account();
+                customer.setId(rs.getString("customerID"));
+                order.setCustomerID(customer);
+
+                // Set Staff account (nếu cần)
+                Account staff = new Account();
+                staff.setId(rs.getString("staffID"));
+                order.setStaffID(staff);
+
                 order.setStatus(rs.getString("status"));
                 order.setTime(rs.getTimestamp("time").toLocalDateTime());
-                order.setTicketCount(rs.getInt("ticketCount"));
-                orders.add(order);
+                order.setTicketCount(rs.getInt("ticket_count"));
+
+                list.add(order);
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return orders;
+        return list;
     }
 
 }

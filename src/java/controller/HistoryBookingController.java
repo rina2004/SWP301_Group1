@@ -16,6 +16,7 @@ import java.util.List;
 import model.Account;
 import model.Order;
 
+
 /**
  *
  * @author anhbu
@@ -73,8 +74,7 @@ public class HistoryBookingController extends HttpServlet {
         String accountId = acc.getId(); // hoặc acc.getAccountId() nếu tên là như vậy trong model của bạn
 
         OrderDAO orderDAO = new OrderDAO();
-        List<Order> orders = orderDAO.getOrdersByAccountId(accountId);
-
+        List<Order> orders = orderDAO.getOrderHistory(accountId);
         request.setAttribute("orders", orders);
         request.getRequestDispatcher("view/HistoryBooking.jsp").forward(request, response);
     }

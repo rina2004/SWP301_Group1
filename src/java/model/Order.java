@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
  */
 public class Order {
     private String id;
-    private Account accountID;
+    private Account customerID;
+    private Account staffID;
     private String status;
     private LocalDateTime time;
     private int ticketCount; // thông tin phụ thêm khi join ticket count
@@ -21,9 +22,10 @@ public class Order {
     public Order() {
     }
 
-    public Order(String id, Account accountID, String status, LocalDateTime time, int ticketCount) {
+    public Order(String id, Account customerID, Account staffID, String status, LocalDateTime time, int ticketCount) {
         this.id = id;
-        this.accountID = accountID;
+        this.customerID = customerID;
+        this.staffID = staffID;
         this.status = status;
         this.time = time;
         this.ticketCount = ticketCount;
@@ -37,12 +39,20 @@ public class Order {
         this.id = id;
     }
 
-    public Account getAccountID() {
-        return accountID;
+    public Account getCustomerID() {
+        return customerID;
     }
 
-    public void setAccountID(Account accountID) {
-        this.accountID = accountID;
+    public void setCustomerID(Account customerID) {
+        this.customerID = customerID;
+    }
+
+    public Account getStaffID() {
+        return staffID;
+    }
+
+    public void setStaffID(Account staffID) {
+        this.staffID = staffID;
     }
 
     public String getStatus() {
@@ -68,7 +78,8 @@ public class Order {
     public void setTicketCount(int ticketCount) {
         this.ticketCount = ticketCount;
     }
-
     
+    
+
     
 }
