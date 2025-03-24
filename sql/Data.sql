@@ -20,79 +20,88 @@ INSERT INTO Account (username, password, roleID, status, citizenID, name, dob, p
 ('williamtaylor', 'taylor888', 1, TRUE, '901234567890', 'William Taylor', '1987-06-28', '0978901234', '606 Spruce Court, Phu Quoc', 'william.taylor@example.com'),
 ('sophiaanderson', 'sophia999', 2, TRUE, '012345678901', 'Sophia Anderson', '1994-03-17', '0989012345', '707 Redwood Place, Da Lat', 'sophia.anderson@example.com');
 
-SELECT a.*, r.id AS roleID, r.name AS roleName FROM Account a JOIN Role r ON a.roleID = r.id WHERE a.username = 'hiepbt';
-
-Select * from Account;
-
--- Type table (10 records)
-INSERT INTO Type (id, name, manufacture, length, weight, height) VALUES
-('TYP001', 'Boeing 737-800', 'Boeing', 39.50, 41400.00, 12.50),
-('TYP002', 'Airbus A320', 'Airbus', 37.57, 42600.00, 11.76),
-('TYP003', 'Boeing 787-9', 'Boeing', 63.00, 128000.00, 17.00),
-('TYP004', 'Airbus A350-900', 'Airbus', 66.80, 142000.00, 17.05),
-('TYP005', 'Embraer E190', 'Embraer', 36.24, 28080.00, 10.57),
-('TYP006', 'Bombardier CRJ900', 'Bombardier', 36.40, 21500.00, 7.50),
-('TYP007', 'Airbus A330-300', 'Airbus', 63.60, 124000.00, 16.79),
-('TYP008', 'Boeing 777-300ER', 'Boeing', 73.90, 160000.00, 18.50),
-('TYP009', 'ATR 72-600', 'ATR', 27.17, 12800.00, 7.65),
-('TYP010', 'Airbus A321neo', 'Airbus', 44.51, 50500.00, 11.76);
 
 -- AirplaneStatus table already has 5 records, adding 5 more to reach 10
 INSERT INTO AirplaneStatus (name) VALUES 
 ('Grounded'), ('Out of Service'), ('Scheduled'), ('Reserved'), ('Standby');
 
 -- Airplane table (10 records)
-INSERT INTO Airplane (id, name, typeID, statusID, maintainanceTime, usedTime) VALUES
-('VN-A001', 'Sky Dragon', 'TYP001', 1, '2024-06-15 08:00:00', '2023-12-01 00:00:00'),
-('VN-A002', 'Ocean Star', 'TYP002', 2, '2024-07-20 10:30:00', '2024-01-15 00:00:00'),
-('VN-A003', 'Cloud Runner', 'TYP003', 3, '2024-05-10 09:15:00', '2023-11-05 00:00:00'),
-('VN-A004', 'Wind Rider', 'TYP004', 4, '2024-08-05 11:45:00', '2024-02-20 00:00:00'),
-('VN-A005', 'Sun Chaser', 'TYP005', 5, '2024-06-30 13:20:00', '2023-12-25 00:00:00'),
-('VN-A006', 'Moon Walker', 'TYP006', 1, '2024-07-12 14:00:00', '2024-01-30 00:00:00'),
-('VN-A007', 'Star Gazer', 'TYP007', 2, '2024-05-25 15:30:00', '2023-11-20 00:00:00'),
-('VN-A008', 'Air Master', 'TYP008', 3, '2024-08-18 16:45:00', '2024-02-10 00:00:00'),
-('VN-A009', 'Sky Voyager', 'TYP009', 4, '2024-06-05 08:30:00', '2023-12-15 00:00:00'),
-('VN-A010', 'Cloud Dancer', 'TYP010', 5, '2024-07-28 09:45:00', '2024-01-05 00:00:00');
+INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime) VALUES
+('VN-A001', 'Sky Dragon', 1, '2024-06-15 08:00:00', '2023-12-01 00:00:00'),
+('VN-A002', 'Ocean Star', 2, '2024-07-20 10:30:00', '2024-01-15 00:00:00'),
+('VN-A003', 'Cloud Runner', 3, '2024-05-10 09:15:00', '2023-11-05 00:00:00'),
+('VN-A004', 'Wind Rider', 4, '2024-08-05 11:45:00', '2024-02-20 00:00:00'),
+('VN-A005', 'Sun Chaser', 5, '2024-06-30 13:20:00', '2023-12-25 00:00:00'),
+('VN-A006', 'Moon Walker', 1, '2024-07-12 14:00:00', '2024-01-30 00:00:00'),
+('VN-A007', 'Star Gazer', 2, '2024-05-25 15:30:00', '2023-11-20 00:00:00'),
+('VN-A008', 'Air Master', 3, '2024-08-18 16:45:00', '2024-02-10 00:00:00'),
+('VN-A009', 'Sky Voyager', 4, '2024-06-05 08:30:00', '2023-12-15 00:00:00'),
+('VN-A010', 'Cloud Dancer', 5, '2024-07-28 09:45:00', '2024-01-05 00:00:00');
+
 
 -- Compartment table (10 records)
 INSERT INTO Compartment (id, name, airplaneID, capacity) VALUES
-('A', 'First Class', 'VN-A001', 8),
-('B', 'Business Class', 'VN-A001', 32),
-('C', 'Economy Class', 'VN-A001', 120),
-('D', 'Business Class', 'VN-A002', 28),
-('E', 'Economy Class', 'VN-A002', 150),
-('F', 'First Class', 'VN-A003', 10),
-('G', 'Business Class', 'VN-A003', 42),
-('H', 'Premium Economy', 'VN-A003', 28),
-('I', 'Economy Class', 'VN-A003', 198),
-('J', 'Economy Plus', 'VN-A004', 48);
+('VN-A001-B1', 'Business','VN-A001',20),
+('VN-A001-B2', 'Business','VN-A001',20),
+('VN-A001-B3', 'Business','VN-A001',20),
+('VN-A001-E1', 'Economy','VN-A001',20),
+('VN-A001-E2', 'Economy','VN-A001',20),
+('VN-A001-E3', 'Economy','VN-A001',20),
+('VN-A001-F1','First Class','VN-A001',20),
+('VN-A001-F2', 'First Class','VN-A001',20),
+('VN-A001-F3', 'First Class','VN-A001',20),
+('VN-A002-B1', 'Business','VN-A002',20);
 
+
+INSERT INTO `Location` (name) VALUES
+('Hà Nội-Sân bay Nội Bài'),
+('TP. Hồ Chí Minh-Sân bay Tân Sơn Nhất'),
+('Đà Nẵng-Sân bay Quốc tế Đà Nẵng'),
+('Nha Trang-Sân bay Cam Ranh'),
+('Phú Quốc-Sân bay Quốc tế Phú Quốc'),
+('Huế-Sân bay Phú Bài'),
+('Hải Phòng-Sân bay Cát Bi'),
+('Đà Lạt-Sân bay Liên Khương'),
+('Cần Thơ-Sân bay Quốc tế Cần Thơ'),
+('Quảng Ninh-Sân bay Vân Đồn'),
+('Nghệ An-Sân bay Vinh'),
+('Buôn Ma Thuột-Sân bay Buôn Ma Thuột'),
+('Quy Nhơn-Sân bay Phù Cát'),
+('Thanh Hóa-Sân bay Thọ Xuân'),
+('Quảng Bình-Sân bay Đồng Hới'),
+('Điện Biên-Sân bay Điện Biên Phủ'),
+('Pleiku-Sân bay Pleiku'),
+('Côn Đảo-Sân bay Côn Sơn'),
+('Tuy Hòa-Sân bay Tuy Hòa'),
+('Cà Mau-Sân bay Cà Mau');
 
 -- Flight table (10 records)
-INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime) VALUES
-('FL001', 'Morning Express', 'VN001', 'VN-A001', 'Hanoi', 'Ho Chi Minh City', '2024-04-10 06:00:00', '2024-04-10 07:00:00', '2024-04-10 09:00:00'),
-('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 'Ho Chi Minh City', 'Da Nang', '2024-04-11 12:30:00', '2024-04-11 13:30:00', '2024-04-11 14:45:00'),
-('FL003', 'Evening Direct', 'VN003', 'VN-A003', 'Da Nang', 'Hanoi', '2024-04-12 18:00:00', '2024-04-12 19:00:00', '2024-04-12 20:30:00'),
-('FL004', 'International Route', 'VN004', 'VN-A004', 'Ho Chi Minh City', 'Singapore', '2024-04-13 09:15:00', '2024-04-13 10:15:00', '2024-04-13 12:45:00'),
-('FL005', 'Night Flight', 'VN005', 'VN-A005', 'Hanoi', 'Bangkok', '2024-04-14 22:00:00', '2024-04-14 23:00:00', '2024-04-15 00:30:00'),
-('FL006', 'Weekend Special', 'VN006', 'VN-A006', 'Da Nang', 'Phu Quoc', '2024-04-15 10:45:00', '2024-04-15 11:45:00', '2024-04-15 13:00:00'),
-('FL007', 'Business Express', 'VN007', 'VN-A007', 'Hanoi', 'Tokyo', '2024-04-16 08:30:00', '2024-04-16 09:30:00', '2024-04-16 14:00:00'),
-('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 'Ho Chi Minh City', 'Seoul', '2024-04-17 14:15:00', '2024-04-17 15:15:00', '2024-04-17 19:45:00'),
-('FL009', 'Express Connection', 'VN009', 'VN-A009', 'Da Nang', 'Hong Kong', '2024-04-18 11:30:00', '2024-04-18 12:30:00', '2024-04-18 15:15:00'),
-('FL010', 'Domestic Link', 'VN010', 'VN-A010', 'Cam Ranh', 'Hai Phong', '2024-04-19 16:45:00', '2024-04-19 17:45:00', '2024-04-19 19:30:00');
+INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime) VALUES 
+    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2024-04-10 06:00:00', '2024-04-10 07:00:00', '2024-04-10 09:00:00'),
+    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2024-04-11 12:30:00', '2024-04-11 13:30:00', '2024-04-11 14:45:00'),
+    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2024-04-12 18:00:00', '2024-04-12 19:00:00', '2024-04-12 20:30:00'),
+    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2024-04-13 09:15:00', '2024-04-13 10:15:00', '2024-04-13 12:45:00'),
+    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2024-04-14 22:00:00', '2024-04-14 23:00:00', '2024-04-15 00:30:00'),
+    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2024-04-15 10:45:00', '2024-04-15 11:45:00', '2024-04-15 13:00:00'),
+    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2024-04-16 08:30:00', '2024-04-16 09:30:00', '2024-04-16 14:00:00'),
+    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2024-04-17 14:15:00', '2024-04-17 15:15:00', '2024-04-17 19:45:00'),
+    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2024-04-18 11:30:00', '2024-04-18 12:30:00', '2024-04-18 15:15:00'),
+    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2024-04-19 16:45:00', '2024-04-19 17:45:00', '2024-04-19 19:30:00');
+
 
 -- Seat table (10 records)
 INSERT INTO Seat (id, compartmentID, status, reason) VALUES
-('S001A', 'A', TRUE, null),
-('S002B', 'B', TRUE, null),
-('S003C', 'C', TRUE, null),
-('S004D', 'D', FALSE, 'In Maintenance'),
-('S005E', 'E', TRUE, null),
-('S006F', 'F', TRUE, null),
-('S007G', 'G', FALSE, 'In Maintenance'),
-('S008H', 'H', TRUE, null),
-('S009I', 'I', TRUE, null),
-('S010J', 'J', FALSE, 'In Reparing');
+('S001A', 'VN-A001-B1', TRUE, null),
+('S002B', 'VN-A001-B2', TRUE, null),
+('S003C', 'VN-A001-B3', TRUE, null),
+('S004D', 'VN-A001-E1', FALSE, 'In Maintenance'),
+('S005E', 'VN-A001-E2', TRUE, null),
+('S006F', 'VN-A001-E3', TRUE, null),
+('S007G', 'VN-A001-F1', FALSE, 'In Maintenance'),
+('S008H', 'VN-A001-F2', TRUE, null),
+('S009I', 'VN-A001-F3', TRUE, null),
+('S010J', 'VN-A002-B1', FALSE, 'In Reparing');
+
 
 -- Order table (10 records)
 INSERT INTO `Order` (id, customerID, staffID, status, time) VALUES
@@ -108,7 +117,7 @@ INSERT INTO `Order` (id, customerID, staffID, status, time) VALUES
 ('ORD010', (SELECT id FROM Account WHERE username = 'sophiaanderson'), (SELECT id FROM Account WHERE username = 'robertjohnson'), 'Cancelled', '2024-03-24 17:30:00');
 
 -- Ticket table (10 records)
-INSERT INTO Ticket (id, orderID, flightID, seatID, type, Price, Status) VALUES
+INSERT INTO Ticket (id, orderID, flightID, seatID, type, price, status) VALUES
 ('TKT001', 'ORD001', 'FL001', 'S001A', 'First Class', 2500000.00, 'Confirmed'),
 ('TKT002', 'ORD002', 'FL002', 'S002B', 'Business Class', 1800000.00, 'Issued'),
 ('TKT003', 'ORD003', 'FL003', 'S003C', 'Economy Class', 1200000.00, 'Confirmed'),

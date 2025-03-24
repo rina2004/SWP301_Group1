@@ -32,17 +32,6 @@ CREATE TABLE `Account` (
 -------------------------------------------------------------
 -------------------------------------------------------------
 
-CREATE TABLE `Type` (
-	`id` varchar(10),
-	`name` varchar(50),
-	`manufacture` varchar(50),
-	`length` decimal(10,2),
-	`weight` decimal(10,2),
-	`height` decimal(10,2),
-	  
-	PRIMARY KEY (`id`)
-);
-
 CREATE table `AirplaneStatus` (
 	`id` INT auto_increment,
 	`name` varchar(50),
@@ -53,18 +42,16 @@ CREATE table `AirplaneStatus` (
 CREATE TABLE `Airplane` (
 	`id` varchar(10),
 	`name` varchar(50),
-	`typeID` varchar(10),
 	`statusID` int,
 	`maintainanceTime` datetime,
 	`usedTime` datetime,
 	  
 	PRIMARY KEY (`id`),
-	foreign key (`statusID`) references `AirplaneStatus`(`id`),
-	foreign key (`typeID`) references `Type`(`id`) ON DELETE CASCADE
+	foreign key (`statusID`) references `AirplaneStatus`(`id`)
 );
 
 CREATE TABLE `Compartment` (
-	`id` char,
+	`id` varchar(20),
 	`name` varchar(50),
 	`airplaneID` varchar(10),
 	`capacity` int,
@@ -73,24 +60,34 @@ CREATE TABLE `Compartment` (
 	foreign key (`airplaneID`) references `Airplane`(`id`) ON DELETE CASCADE
 );
 
+CREATE TABLE `Location` (
+    `id` INT AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    
+    PRIMARY KEY (`id`)
+);
+
 CREATE TABLE `Flight` (
 	`id` varchar(10),
 	`name` varchar(50),
 	`code` varchar(50),
 	`airplaneID` varchar(10),
-	`departure` varchar(255),
-	`destination` varchar(255),
+	`departure` int not null,
+	`destination` int not null,
 	`entryTime` datetime,
 	`startingTime` datetime,
 	`landingTime` datetime,
 	  
 	PRIMARY KEY (`id`),
-	foreign key (`airplaneID`) references `Airplane`(`id`)
+	foreign key (`airplaneID`) references `Airplane`(`id`),
+    FOREIGN KEY (`departure`) REFERENCES `Location`(`id`),
+    FOREIGN KEY (`destination`) REFERENCES `Location`(`id`)
 );
+
 
 CREATE TABLE `Seat` (
 	`id` varchar(10),
-	`compartmentID` char,
+	`compartmentID` varchar(20),
 	`status` bool,
     `reason` varchar(250),
 	  
@@ -116,8 +113,8 @@ CREATE TABLE `Ticket` (
 	`flightID` varchar(10),
 	`seatID` varchar(10),
 	`type` varchar(30),
-	`Price` decimal(10,2),
-	`Status` varchar(20),
+	`price` decimal(10,2),
+	`status` varchar(20),
 	  
 	PRIMARY KEY (`id`),
 	foreign key (`orderID`) references `Order`(`id`),
