@@ -68,7 +68,7 @@ public class OrderDetailControl extends HttpServlet {
 
         // Đổ data ra view
         request.setAttribute("tickets", tickets);
-        request.getRequestDispatcher("orderDetail.jsp").forward(request, response);
+        request.getRequestDispatcher("view/OrderDetail.jsp").forward(request, response);
     }
 
 

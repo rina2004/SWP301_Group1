@@ -93,7 +93,7 @@
                             <td>${order.ticketCount}</td> 
                             <td>
                                 <div class="action-group">
-                                    <a class="btn" href="${pageContext.request.contextPath}/history-detail?orderId=${order.id}">View</a>
+                                    <a class="btn" href="${pageContext.request.contextPath}/orderDetail?orderId=${order.id}">View</a>
                                     <a class="btn btn-secondary" href="#">Cancel</a>
                                 </div>
                             </td>

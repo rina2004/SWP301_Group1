@@ -98,31 +98,42 @@ public class TicketDAO extends DBContext {
     public List<Ticket> getTicketsByOrderId(String orderId) {
         List<Ticket> tickets = new ArrayList<>();
         String sql = "SELECT t.*, f.name AS flightName, f.code AS flightCode, "
-                + "f.departure, f.destination, f.startingTime, f.landingTime, "
-                + "s.id AS seatId, c.name AS compartmentName "
+                + "f.startingTime, f.landingTime, "
+                + "l1.name AS departureName, l2.name AS destinationName, "
+                + "s.id AS seatCode, c.name AS compartmentName "
                 + "FROM Ticket t "
                 + "JOIN Flight f ON t.flightId = f.id "
+                + "JOIN Location l1 ON f.departure = l1.id "
+                + "JOIN Location l2 ON f.destination = l2.id "
                 + "JOIN Seat s ON t.seatId = s.id "
                 + "JOIN Compartment c ON s.compartmentId = c.id "
                 + "WHERE t.orderId = ?";
 
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            ps = connection.prepareStatement(sql);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, orderId);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Ticket ticket = new Ticket();
-                ticket.setId(rs.getString("id"));
-                ticket.setOrderId(rs.getString("orderId"));
-                ticket.setFlightId(rs.getString("flightId"));
-                ticket.setSeatId(rs.getString("seatId"));
-                ticket.setType(rs.getString("type"));
-                ticket.setPrice(rs.getDouble("price"));
-                ticket.setStatus(rs.getString("status"));
-                // Sau này bạn có thể mở rộng thêm thông tin chuyến bay, ghế, khoang,...
-                tickets.add(ticket);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Ticket ticket = new Ticket();
+                    ticket.setId(rs.getString("id"));
+                    ticket.setOrderId(rs.getString("orderId"));
+                    ticket.setFlightId(rs.getString("flightId"));
+                    ticket.setSeatId(rs.getString("seatId"));
+                    ticket.setType(rs.getString("type"));
+                    ticket.setPrice(rs.getDouble("price"));
+                    ticket.setStatus(rs.getString("status"));
+
+                    // Thêm các thông tin mở rộng
+                    ticket.setFlightName(rs.getString("flightName"));
+                    ticket.setFlightCode(rs.getString("flightCode"));
+                    ticket.setStartingTime(rs.getTimestamp("startingTime").toLocalDateTime());
+                    ticket.setLandingTime(rs.getTimestamp("landingTime").toLocalDateTime());
+                    ticket.setDepartureName(rs.getString("departureName"));
+                    ticket.setDestinationName(rs.getString("destinationName"));
+                    ticket.setSeatCode(rs.getString("seatCode"));
+                    ticket.setCompartmentName(rs.getString("compartmentName"));
+
+                    tickets.add(ticket);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
