@@ -2,6 +2,7 @@
 <%@page import="java.util.List"%>
 <%@page import="model.Ticket"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <html>
     <head>
         <title>Order Details</title>
@@ -10,7 +11,7 @@
                 font-family: 'Arial', sans-serif;
                 background-color: #f0f2f5;
                 padding: 20px;
-                background-image: url('https://files.oaiusercontent.com/file-6Cvcrn7v5bPrBuncAEZZTp?se=2025-03-24T09%3A58%3A48Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D234a0dac-7eb7-4932-8c8e-4a045fd4d52b.webp&sig=MBH%2BlRf%2BnEf/WqvWP0F4yW8JFEmxbPkgEOZTAEzxDMY%3D');
+                background-image: url('https://files.oaiusercontent.com/file-6Cvcrn7v5bPrBuncAEZZTp?...');
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: center;
@@ -28,7 +29,7 @@
                 gap: 25px;
             }
             .ticket-card {
-                width: 450px;
+                width: 480px;
                 background: #fff;
                 border-radius: 15px;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -71,6 +72,21 @@
                 color: #666;
                 border-top: 1px dashed #ccc;
             }
+            .passenger-list {
+                margin-top: 10px;
+                padding: 10px;
+                background: #f7f7f7;
+                border-radius: 8px;
+                grid-column: 1 / span 2;
+            }
+            .passenger-item {
+                padding: 5px 0;
+                border-bottom: 1px solid #ddd;
+                font-size: 14px;
+            }
+            .passenger-item:last-child {
+                border-bottom: none;
+            }
             .btn {
                 padding: 12px 25px;
                 background-color: #28a745;
@@ -106,6 +122,7 @@
                             <div class="ticket-label">To:</div>
                             <div>${ticket.destinationName}</div>
                             <div class="ticket-label">Start:</div>
+                            <!-- Chỉnh sửa: Hiển thị trực tiếp LocalDateTime -->
                             <div>${ticket.startingTime}</div>
                             <div class="ticket-label">Landing:</div>
                             <div>${ticket.landingTime}</div>
@@ -117,7 +134,32 @@
                             <div>$${ticket.price}</div>
                             <div class="ticket-label">Status:</div>
                             <div>${ticket.status}</div>
+
+                            <!-- NEW FIELDS -->
+                            <div class="ticket-label">Hand Luggage:</div>
+                            <div>${ticket.handLuggageWeight} kg</div>
+                            <div class="ticket-label">Checked Luggage:</div>
+                            <div>${ticket.checkedLuggageWeight} kg</div>
+                            <div class="ticket-label">Luggage Quantity:</div>
+                            <div>${ticket.luggageQuantity}</div>
+                            <div class="ticket-label">Services:</div>
+                            <div>${ticket.additionalServices}</div>
+                            <div class="ticket-label">Airplane:</div>
+                            <div>${ticket.airplaneName}</div>
+
+                            <!-- Passengers -->
+                            <c:if test="${not empty ticket.passengers}">
+                                <div class="passenger-list">
+                                    <strong>Passengers:</strong>
+                                    <c:forEach var="p" items="${ticket.passengers}">
+                                        <div class="passenger-item">
+                                             ${p.fullName} (${p.nation.name})
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </c:if>
                         </div>
+
                         <div class="ticket-footer">
                             Ticket ID: ${ticket.id}
                         </div>

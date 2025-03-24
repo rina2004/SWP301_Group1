@@ -5,6 +5,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *
@@ -28,6 +29,19 @@ public class Ticket {
     private String destinationName;
     private String seatCode;
     private String compartmentName;
+    
+     // Các trường bổ sung từ TicketType
+    private double handLuggageWeight;
+    private double checkedLuggageWeight;
+    private int luggageQuantity;
+    private String additionalServices;
+    
+    // Các trường bổ sung từ Airplane (qua Compartment)
+    private String airplaneId;
+    private String airplaneName;
+    
+    //Danh sách hành khách đi cùng vé này (thuộc order)
+    private List<OrderPassenger> passengers;
 
     public Ticket() {
     }
@@ -42,7 +56,7 @@ public class Ticket {
         this.status = status;
     }
 
-    public Ticket(String id, String orderId, String flightId, String seatId, String type, double price, String status, String flightName, String flightCode, LocalDateTime startingTime, LocalDateTime landingTime, String departureName, String destinationName, String seatCode, String compartmentName) {
+    public Ticket(String id, String orderId, String flightId, String seatId, String type, double price, String status, String flightName, String flightCode, LocalDateTime startingTime, LocalDateTime landingTime, String departureName, String destinationName, String seatCode, String compartmentName, double handLuggageWeight, double checkedLuggageWeight, int luggageQuantity, String additionalServices, String airplaneId, String airplaneName, List<OrderPassenger> passengers) {
         this.id = id;
         this.orderId = orderId;
         this.flightId = flightId;
@@ -58,6 +72,13 @@ public class Ticket {
         this.destinationName = destinationName;
         this.seatCode = seatCode;
         this.compartmentName = compartmentName;
+        this.handLuggageWeight = handLuggageWeight;
+        this.checkedLuggageWeight = checkedLuggageWeight;
+        this.luggageQuantity = luggageQuantity;
+        this.additionalServices = additionalServices;
+        this.airplaneId = airplaneId;
+        this.airplaneName = airplaneName;
+        this.passengers = passengers;
     }
 
     public String getId() {
@@ -179,9 +200,63 @@ public class Ticket {
     public void setCompartmentName(String compartmentName) {
         this.compartmentName = compartmentName;
     }
-    
-    
 
-   
+    public double getHandLuggageWeight() {
+        return handLuggageWeight;
+    }
+
+    public void setHandLuggageWeight(double handLuggageWeight) {
+        this.handLuggageWeight = handLuggageWeight;
+    }
+
+    public double getCheckedLuggageWeight() {
+        return checkedLuggageWeight;
+    }
+
+    public void setCheckedLuggageWeight(double checkedLuggageWeight) {
+        this.checkedLuggageWeight = checkedLuggageWeight;
+    }
+
+    public int getLuggageQuantity() {
+        return luggageQuantity;
+    }
+
+    public void setLuggageQuantity(int luggageQuantity) {
+        this.luggageQuantity = luggageQuantity;
+    }
+
+    public String getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(String additionalServices) {
+        this.additionalServices = additionalServices;
+    }
+
+    public String getAirplaneId() {
+        return airplaneId;
+    }
+
+    public void setAirplaneId(String airplaneId) {
+        this.airplaneId = airplaneId;
+    }
+
+    public String getAirplaneName() {
+        return airplaneName;
+    }
+
+    public void setAirplaneName(String airplaneName) {
+        this.airplaneName = airplaneName;
+    }
+
+    public List<OrderPassenger> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(List<OrderPassenger> passengers) {
+        this.passengers = passengers;
+    }
+
+    
     
 }

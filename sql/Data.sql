@@ -38,7 +38,6 @@ INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime) VALUES
 ('VN-A009', 'Sky Voyager', 4, '2024-06-05 08:30:00', '2023-12-15 00:00:00'),
 ('VN-A010', 'Cloud Dancer', 5, '2024-07-28 09:45:00', '2024-01-05 00:00:00');
 
-
 -- Compartment table (10 records)
 INSERT INTO Compartment (id, name, airplaneID, capacity) VALUES
 ('VN-A001-B1', 'Business','VN-A001',20),
@@ -51,7 +50,6 @@ INSERT INTO Compartment (id, name, airplaneID, capacity) VALUES
 ('VN-A001-F2', 'First Class','VN-A001',20),
 ('VN-A001-F3', 'First Class','VN-A001',20),
 ('VN-A002-B1', 'Business','VN-A002',20);
-
 
 INSERT INTO `Location` (name) VALUES
 ('Hà Nội-Sân bay Nội Bài'),
@@ -88,7 +86,6 @@ INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTim
     ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2024-04-18 11:30:00', '2024-04-18 12:30:00', '2024-04-18 15:15:00'),
     ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2024-04-19 16:45:00', '2024-04-19 17:45:00', '2024-04-19 19:30:00');
 
-
 -- Seat table (10 records)
 INSERT INTO Seat (id, compartmentID, status, reason) VALUES
 ('S001A', 'VN-A001-B1', TRUE, null),
@@ -102,21 +99,55 @@ INSERT INTO Seat (id, compartmentID, status, reason) VALUES
 ('S009I', 'VN-A001-F3', TRUE, null),
 ('S010J', 'VN-A002-B1', FALSE, 'In Reparing');
 
+INSERT INTO PassengerType (name, ageMin, ageMax, discountPercentage) VALUES
+('Người lớn', 12, 100, 0),
+('Trẻ em', 2, 11, 25),
+('Em bé', 0, 1, 90);
 
--- Order table (10 records)
-INSERT INTO `Order` (id, customerID, staffID, status, time) VALUES
-('ORD001', (SELECT id FROM Account WHERE username = 'johndoe'), (SELECT id FROM Account WHERE username = 'sarahwilliams'), 'Confirmed', '2024-03-15 09:30:00'),
-('ORD002', (SELECT id FROM Account WHERE username = 'janesmith'), (SELECT id FROM Account WHERE username = 'michaelbrown'), 'Processing', '2024-03-16 11:45:00'),
-('ORD003', (SELECT id FROM Account WHERE username = 'robertjohnson'), (SELECT id FROM Account WHERE username = 'emilydavis'), 'Confirmed', '2024-03-17 14:20:00'),
-('ORD004', (SELECT id FROM Account WHERE username = 'sarahwilliams'), (SELECT id FROM Account WHERE username = 'davidmiller'), 'Cancelled', '2024-03-18 16:35:00'),
-('ORD005', (SELECT id FROM Account WHERE username = 'michaelbrown'), (SELECT id FROM Account WHERE username = 'oliviawilson'), 'Completed', '2024-03-19 10:10:00'),
-('ORD006', (SELECT id FROM Account WHERE username = 'emilydavis'), (SELECT id FROM Account WHERE username = 'williamtaylor'), 'Confirmed', '2024-03-20 13:25:00'),
-('ORD007', (SELECT id FROM Account WHERE username = 'davidmiller'), (SELECT id FROM Account WHERE username = 'sophiaanderson'), 'Processing', '2024-03-21 15:40:00'),
-('ORD008', (SELECT id FROM Account WHERE username = 'oliviawilson'), (SELECT id FROM Account WHERE username = 'johndoe'), 'Confirmed', '2024-03-22 08:55:00'),
-('ORD009', (SELECT id FROM Account WHERE username = 'williamtaylor'), (SELECT id FROM Account WHERE username = 'janesmith'), 'Completed', '2024-03-23 12:15:00'),
-('ORD010', (SELECT id FROM Account WHERE username = 'sophiaanderson'), (SELECT id FROM Account WHERE username = 'robertjohnson'), 'Cancelled', '2024-03-24 17:30:00');
+INSERT INTO `Order` (id, customerID, staffID, status, time, finalPrice, finalNum, ordername, phone, email) VALUES
+('ORD001', (SELECT id FROM Account WHERE username = 'johndoe'), (SELECT id FROM Account WHERE username = 'sarahwilliams'), 'Confirmed', '2024-03-15 09:30:00', 2500000.00, 2, 'John Doe Family Trip', '0987654321', 'john.doe@example.com'),
+('ORD002', (SELECT id FROM Account WHERE username = 'janesmith'), (SELECT id FROM Account WHERE username = 'michaelbrown'), 'Processing', '2024-03-16 11:45:00', 3600000.00, 2, 'Smith Family Vacation', '0976543210', 'jane.smith@example.com'),
+('ORD003', (SELECT id FROM Account WHERE username = 'robertjohnson'), (SELECT id FROM Account WHERE username = 'emilydavis'), 'Confirmed', '2024-03-17 14:20:00', 1200000.00, 1, 'Robert Johnson Business Trip', '0912345678', 'robert.johnson@example.com'),
+('ORD004', (SELECT id FROM Account WHERE username = 'sarahwilliams'), (SELECT id FROM Account WHERE username = 'davidmiller'), 'Cancelled', '2024-03-18 16:35:00', 2000000.00, 1, 'Sarah Williams Vacation', '0923456789', 'sarah.williams@example.com'),
+('ORD005', (SELECT id FROM Account WHERE username = 'michaelbrown'), (SELECT id FROM Account WHERE username = 'oliviawilson'), 'Completed', '2024-03-19 10:10:00', 1650000.00, 2, 'Brown Family Trip', '0934567890', 'michael.brown@example.com'),
+('ORD006', (SELECT id FROM Account WHERE username = 'emilydavis'), (SELECT id FROM Account WHERE username = 'williamtaylor'), 'Confirmed', '2024-03-20 13:25:00', 2800000.00, 1, 'Emily Davis Vacation', '0945678901', 'emily.davis@example.com'),
+('ORD007', (SELECT id FROM Account WHERE username = 'davidmiller'), (SELECT id FROM Account WHERE username = 'sophiaanderson'), 'Processing', '2024-03-21 15:40:00', 2200000.00, 1, 'David Miller Business Trip', '0956789012', 'david.miller@example.com'),
+('ORD008', (SELECT id FROM Account WHERE username = 'oliviawilson'), (SELECT id FROM Account WHERE username = 'johndoe'), 'Confirmed', '2024-03-22 08:55:00', 1600000.00, 1, 'Olivia Wilson Travel', '0967890123', 'olivia.wilson@example.com'),
+('ORD009', (SELECT id FROM Account WHERE username = 'williamtaylor'), (SELECT id FROM Account WHERE username = 'janesmith'), 'Completed', '2024-03-23 12:15:00', 1350000.00, 1, 'William Taylor Trip', '0978901234', 'william.taylor@example.com'),
+('ORD010', (SELECT id FROM Account WHERE username = 'sophiaanderson'), (SELECT id FROM Account WHERE username = 'robertjohnson'), 'Cancelled', '2024-03-24 17:30:00', 1450000.00, 1, 'Sophia Anderson Vacation', '0989012345', 'sophia.anderson@example.com');
 
--- Ticket table (10 records)
+INSERT INTO Nation (name) VALUES
+('Vietnam'),
+('United States'),
+('Japan'),
+('South Korea'),
+('China'),
+('Singapore'),
+('Thailand'),
+('Malaysia'),
+('Australia'),
+('United Kingdom');
+
+INSERT INTO OrderPassenger (id, orderID, passengerTypeID, fullName, dob, nationID)
+VALUES
+('OP001', 'ORD001', 1, 'John Doe', '1990-05-15', 1),
+('OP002', 'ORD001', 1, 'Mary Johnson', '1992-07-22', 2),
+('OP003', 'ORD002', 1, 'Jane Smith', '1985-08-21', 1),
+('OP004', 'ORD002', 2, 'Emily Smith', '2015-03-14', 1),
+('OP005', 'ORD003', 1, 'Robert Johnson', '1988-11-30', 3),
+('OP006', 'ORD004', 1, 'Sarah Williams', '1992-04-12', 4),
+('OP007', 'ORD005', 1, 'Michael Brown', '1979-07-25', 2),
+('OP008', 'ORD005', 3, 'Baby Brown', '2023-12-01', 2),
+('OP009', 'ORD006', 1, 'Emily Davis', '1995-02-18', 5),
+('OP010', 'ORD007', 1, 'David Miller', '1983-09-09', 6);
+
+INSERT INTO `TicketType` (`type`, `description`, `checkedLuggageWeight`, `handLuggageWeight`, `luggageQuantity`, `additionalServices`) VALUES
+('Economy Class', 'Standard seating and basic amenities', 23.00, 7.00, 1, 'Complimentary beverage service'),
+('Economy Plus', 'Economy with additional legroom', 23.00, 7.00, 1, 'Priority boarding, extra legroom, complimentary beverage service'),
+('Premium Economy', 'Enhanced economy experience', 32.00, 7.00, 2, 'Wider seats, enhanced meal service, amenity kit'),
+('Business Class', 'Full business class experience', 40.00, 10.00, 2, 'Lie-flat seats, lounge access, premium meals and beverages'),
+('First Class', 'Luxury air travel experience', 50.00, 10.00, 3, 'Private suites, personalized service, gourmet dining, exclusive lounge access');
+
 INSERT INTO Ticket (id, orderID, flightID, seatID, type, price, status) VALUES
 ('TKT001', 'ORD001', 'FL001', 'S001A', 'First Class', 2500000.00, 'Confirmed'),
 ('TKT002', 'ORD002', 'FL002', 'S002B', 'Business Class', 1800000.00, 'Issued'),
@@ -129,7 +160,6 @@ INSERT INTO Ticket (id, orderID, flightID, seatID, type, price, status) VALUES
 ('TKT009', 'ORD009', 'FL009', 'S009I', 'Economy Class', 1350000.00, 'Boarded'),
 ('TKT010', 'ORD010', 'FL010', 'S010J', 'Economy Plus', 1450000.00, 'Cancelled');
 
--- Luggage table (10 records)
 INSERT INTO Luggage (id, customerID, orderID, type, weight) VALUES
 ('LUG001', (SELECT id FROM Account WHERE username = 'johndoe'), 'ORD001', 'Checked', 23.5),
 ('LUG002', (SELECT id FROM Account WHERE username = 'janesmith'), 'ORD002', 'Cabin', 7.0),
@@ -245,3 +275,29 @@ INSERT INTO ChatMessage (senderAccountID, receiverAccountID, message, timestamp,
 ((SELECT id FROM Account WHERE username = 'williamtaylor'), (SELECT id FROM Account WHERE username = 'sophiaanderson'), 'Sophia, I\'m experiencing issues with the online check-in system. Can you help?', '2024-03-19 15:40:00', FALSE),
 ((SELECT id FROM Account WHERE username = 'johndoe'), (SELECT id FROM Account WHERE username = 'robertjohnson'), 'Robert, can you send me the itinerary for our business trip next week?', '2024-03-20 08:55:00', FALSE),
 ((SELECT id FROM Account WHERE username = 'janesmith'), (SELECT id FROM Account WHERE username = 'michaelbrown'), 'Michael, I\'ve approved your refund request. The amount will be credited to your account within 7 business days.', '2024-03-21 13:15:00', TRUE);
+
+SELECT t.*, 
+       f.name AS flightName, 
+       f.code AS flightCode, 
+       f.startingTime, 
+       f.landingTime, 
+       l1.name AS departureName, 
+       l2.name AS destinationName, 
+       s.id AS seatCode, 
+       c.name AS compartmentName, 
+       tt.handLuggageWeight, 
+       tt.checkedLuggageWeight, 
+       tt.luggageQuantity, 
+       tt.additionalServices, 
+       a.id AS airplaneId, 
+       a.name AS airplaneName, 
+       a.code AS airplaneCode
+FROM Ticket t
+JOIN Flight f ON t.flightId = f.id
+JOIN Location l1 ON f.departure = l1.id
+JOIN Location l2 ON f.destination = l2.id
+JOIN Seat s ON t.seatId = s.id
+JOIN Compartment c ON s.compartmentId = c.id
+JOIN Airplane a ON c.airplaneId = a.id
+JOIN TicketType tt ON t.type = tt.id
+WHERE t.orderId = 'ORD002';

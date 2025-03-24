@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Nation;
+import model.OrderPassenger;
 import model.Ticket;
 
 /**
@@ -95,18 +97,52 @@ public class TicketDAO extends DBContext {
         return null;
     }
 
+    public List<OrderPassenger> getPassengersByOrderId(String orderId) {
+        List<OrderPassenger> passengers = new ArrayList<>();
+        String sql = "SELECT op.id, op.fullName, n.id AS nationId, n.name AS nationName "
+                + "FROM OrderPassenger op "
+                + "JOIN Nation n ON op.nationID = n.id "
+                + "WHERE op.orderID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    OrderPassenger passenger = new OrderPassenger();
+                    passenger.setId(rs.getString("id"));
+                    passenger.setFullName(rs.getString("fullName"));
+
+                    Nation nation = new Nation();
+                    nation.setId(rs.getInt("nationId"));
+                    nation.setName(rs.getString("nationName"));
+
+                    passenger.setNation(nation);
+
+                    passengers.add(passenger);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return passengers;
+    }
+
     public List<Ticket> getTicketsByOrderId(String orderId) {
         List<Ticket> tickets = new ArrayList<>();
-        String sql = "SELECT t.*, f.name AS flightName, f.code AS flightCode, "
-                + "f.startingTime, f.landingTime, "
+        String sql = "SELECT t.*, "
+                + "f.name AS flightName, f.code AS flightCode, f.startingTime, f.landingTime, "
                 + "l1.name AS departureName, l2.name AS destinationName, "
-                + "s.id AS seatCode, c.name AS compartmentName "
+                + "s.id AS seatCode, c.name AS compartmentName, "
+                + "tt.handLuggageWeight, tt.checkedLuggageWeight, tt.luggageQuantity, tt.additionalServices, "
+                + "a.id AS airplaneId, a.name AS airplaneName "
                 + "FROM Ticket t "
                 + "JOIN Flight f ON t.flightId = f.id "
                 + "JOIN Location l1 ON f.departure = l1.id "
                 + "JOIN Location l2 ON f.destination = l2.id "
                 + "JOIN Seat s ON t.seatId = s.id "
                 + "JOIN Compartment c ON s.compartmentId = c.id "
+                + "JOIN Airplane a ON c.airplaneId = a.id "
+                + "JOIN TicketType tt ON t.type = tt.type "
                 + "WHERE t.orderId = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -122,7 +158,7 @@ public class TicketDAO extends DBContext {
                     ticket.setPrice(rs.getDouble("price"));
                     ticket.setStatus(rs.getString("status"));
 
-                    // Thêm các thông tin mở rộng
+                    // Các thông tin mở rộng
                     ticket.setFlightName(rs.getString("flightName"));
                     ticket.setFlightCode(rs.getString("flightCode"));
                     ticket.setStartingTime(rs.getTimestamp("startingTime").toLocalDateTime());
@@ -131,6 +167,15 @@ public class TicketDAO extends DBContext {
                     ticket.setDestinationName(rs.getString("destinationName"));
                     ticket.setSeatCode(rs.getString("seatCode"));
                     ticket.setCompartmentName(rs.getString("compartmentName"));
+                    ticket.setHandLuggageWeight(rs.getDouble("handLuggageWeight"));
+                    ticket.setCheckedLuggageWeight(rs.getDouble("checkedLuggageWeight"));
+                    ticket.setLuggageQuantity(rs.getInt("luggageQuantity"));
+                    ticket.setAdditionalServices(rs.getString("additionalServices"));
+                    ticket.setAirplaneId(rs.getString("airplaneId"));
+                    ticket.setAirplaneName(rs.getString("airplaneName"));
+
+                    // 🎯 Gắn thêm danh sách passengers cho mỗi ticket
+                    ticket.setPassengers(getPassengersByOrderId(orderId));
 
                     tickets.add(ticket);
                 }
