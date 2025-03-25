@@ -19,19 +19,63 @@ import model.Ticket;
  * @author A A
  */
 public class TicketDAO extends DBContext {
-    public Ticket getTicketByFlightId(String flightId) {
+    public Ticket getByFlightId(String flightID) {
+        OrderDAO od = new OrderDAO();
+        SeatDAO sd = new SeatDAO();
+        FlightDAO fd = new FlightDAO();
         String sql = "SELECT * FROM swp301.ticket WHERE flightID = ? ORDER BY price ASC LIMIT 1";
         try (PreparedStatement stm = connection.prepareStatement(sql)){
-            stm.setString(1, flightId);
+            stm.setString(1,  flightID);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 return new Ticket(
                     rs.getString("id"),
-                    rs.getString("flightID"),
-                    rs.getString("type"),
-                    rs.getDouble("price"), 
-                    rs.getString("status")
-                );
+                    od.get(rs.getString("orderID")),
+                    fd.getFlightById(rs.getString("flightID")),
+                    sd.get(rs.getString("seatID")),
+                    rs.getString("status"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return null;
+    }
+    public Ticket getByOrderId(String orderID) {
+        OrderDAO od = new OrderDAO();
+        SeatDAO sd = new SeatDAO();
+        FlightDAO fd = new FlightDAO();
+        String sql = "SELECT * FROM swp301.ticket WHERE orderID = ? ORDER BY price ASC LIMIT 1";
+        try (PreparedStatement stm = connection.prepareStatement(sql)){
+            stm.setString(1, orderID);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return new Ticket(
+                    rs.getString("id"),
+                    od.get(rs.getString("orderID")),
+                    fd.getFlightById(rs.getString("flightID")),
+                    sd.get(rs.getString("seatID")),
+                    rs.getString("status"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        return null;
+    }
+    public Ticket getBySeatId(String seatID) {
+        OrderDAO od = new OrderDAO();
+        SeatDAO sd = new SeatDAO();
+        FlightDAO fd = new FlightDAO();
+        String sql = "SELECT * FROM swp301.ticket WHERE seatID = ? ORDER BY price ASC LIMIT 1";
+        try (PreparedStatement stm = connection.prepareStatement(sql)){
+            stm.setString(1, seatID);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return new Ticket(
+                    rs.getString("id"),
+                    od.get(rs.getString("orderID")),
+                    fd.getFlightById(rs.getString("flightID")),
+                    sd.get(rs.getString("seatID")),
+                    rs.getString("status"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -39,7 +83,10 @@ public class TicketDAO extends DBContext {
         return null;
     }
 
-    public List<Ticket> getAllTicket() {
+    public List<Ticket> list() {
+        OrderDAO od = new OrderDAO();
+        SeatDAO sd = new SeatDAO();
+        FlightDAO fd = new FlightDAO();
         List<Ticket> list = new ArrayList<>();
         String sql = "SELECT * FROM swp301.ticket";
         try (PreparedStatement stm = connection.prepareStatement(sql)){
@@ -47,11 +94,10 @@ public class TicketDAO extends DBContext {
             while (rs.next()) {
                 list.add(new Ticket(
                     rs.getString("id"),
-                    rs.getString("flightID"),
-                    rs.getString("type"),
-                    rs.getDouble("price"),
-                    rs.getString("status")
-                ));
+                    od.get(rs.getString("orderID")),
+                    fd.getFlightById(rs.getString("flightID")),
+                    sd.get(rs.getString("seatID")),
+                    rs.getString("status")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -59,23 +105,4 @@ public class TicketDAO extends DBContext {
         return list;
     }
 
-    public Ticket getTicketById(String id) {
-        String sql = "SELECT * FROM swp301.ticket WHERE id=?";
-        try (PreparedStatement stm = connection.prepareStatement(sql)){
-            stm.setString(1, id);
-            ResultSet rs = stm.executeQuery();
-            if (rs.next()) {
-                return new Ticket(
-                    rs.getString("id"),
-                    rs.getString("flightID"),
-                    rs.getString("type"),
-                    rs.getDouble("price"), 
-                    rs.getString("status")
-                );
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        return null;
-    }
 }

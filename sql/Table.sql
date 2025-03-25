@@ -151,14 +151,14 @@ CREATE TABLE `OrderPassenger` (
 CREATE TABLE `Ticket` (
     `id` VARCHAR(50) DEFAULT (UUID()),
     `orderID` VARCHAR(10),
+    `flightID` VARCHAR(10),
     `seatID` VARCHAR(10),
-    `type` VARCHAR(30),
     `status` VARCHAR(20),
     
     PRIMARY KEY (`id`),
     FOREIGN KEY (`orderID`) REFERENCES `Order`(`id`),
-    FOREIGN KEY (`seatID`) REFERENCES `Seat`(`id`),
-    FOREIGN KEY (`type`) REFERENCES `TicketType`(`type`)
+    FOREIGN KEY (`flightID`) REFERENCES `Flight`(`id`),
+    FOREIGN KEY (`seatID`) REFERENCES `Seat`(`id`)
 );
 
 CREATE TABLE `Luggage` (
@@ -380,16 +380,16 @@ INSERT INTO Seat (id, compartmentID, status, reason) VALUES
 
 -- Flight table (10 records)
 INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime) VALUES 
-    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2024-04-11 12:30:00', '2024-04-11 13:30:00', '2024-04-11 14:45:00'),
-    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2024-04-12 18:00:00', '2024-04-12 19:00:00', '2024-04-12 20:30:00'),
-    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2024-04-13 09:15:00', '2024-04-13 10:15:00', '2024-04-13 12:45:00'),
-    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2024-04-14 22:00:00', '2024-04-14 23:00:00', '2024-04-15 00:30:00'),
-    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2024-04-15 10:45:00', '2024-04-15 11:45:00', '2024-04-15 13:00:00'),
-    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2024-04-16 08:30:00', '2024-04-16 09:30:00', '2024-04-16 14:00:00'),
-    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2024-04-17 14:15:00', '2024-04-17 15:15:00', '2024-04-17 19:45:00'),
-    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2024-04-18 11:30:00', '2024-04-18 12:30:00', '2024-04-18 15:15:00'),
-    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2024-04-19 16:45:00', '2024-04-19 17:45:00', '2024-04-19 19:30:00');
+    ('FL001', 'Morning Express', 'VN-A001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
+    ('FL002', 'Afternoon Shuttle', 'VN-A002', 'VN-A002', 2, 3, '2024-04-11 12:30:00', '2024-04-11 13:30:00', '2024-04-11 14:45:00'),
+    ('FL003', 'Evening Direct', 'VN-A003', 'VN-A003', 3, 1, '2024-04-12 18:00:00', '2024-04-12 19:00:00', '2024-04-12 20:30:00'),
+    ('FL004', 'International Route', 'VN-A004', 'VN-A004', 2, 11, '2024-04-13 09:15:00', '2024-04-13 10:15:00', '2024-04-13 12:45:00'),
+    ('FL005', 'Night Flight', 'VN-A005', 'VN-A005', 1, 12, '2024-04-14 22:00:00', '2024-04-14 23:00:00', '2024-04-15 00:30:00'),
+    ('FL006', 'Weekend Special', 'VN-A006', 'VN-A006', 3, 5, '2024-04-15 10:45:00', '2024-04-15 11:45:00', '2024-04-15 13:00:00'),
+    ('FL007', 'Business Express', 'VN-A007', 'VN-A007', 1, 13, '2024-04-16 08:30:00', '2024-04-16 09:30:00', '2024-04-16 14:00:00'),
+    ('FL008', 'Tourist Delight', 'VN-A008', 'VN-A008', 2, 14, '2024-04-17 14:15:00', '2024-04-17 15:15:00', '2024-04-17 19:45:00'),
+    ('FL009', 'Express Connection', 'VN-A009', 'VN-A009', 3, 15, '2024-04-18 11:30:00', '2024-04-18 12:30:00', '2024-04-18 15:15:00'),
+    ('FL010', 'Domestic Link', 'VN-A010', 'VN-A010', 4, 7, '2024-04-19 16:45:00', '2024-04-19 17:45:00', '2024-04-19 19:30:00');
 
 INSERT INTO PassengerType (name, ageMin, ageMax, discountPercentage) VALUES
 ('Người lớn', 12, 100, 0),
@@ -411,13 +411,13 @@ VALUES
 ('ORD003-1', 'ORD003', 1, 'Robert Johnson', '1988-11-30', 3),
 ('ORD004-1', 'ORD004', 1, 'Sarah Williams', '1992-04-12', 4);
 
-INSERT INTO Ticket (orderID, seatID, type, status) VALUES
-('ORD001', 'VN-A001-1', 'Business', 'Confirmed'),
-('ORD002', 'VN-A001-4', 'Economy', 'Pending'),
-('ORD002', 'VN-A001-5', 'Economy', 'Confirmed'),
-('ORD002', 'VN-A001-6', 'Economy', 'Cancelled'),
-('ORD003', 'VN-A001-7', 'First Class', 'Checked-In'),
-('ORD004', 'VN-A001-8', 'First Class', 'Confirmed');
+INSERT INTO Ticket (orderID, flightID, seatID, status) VALUES
+('ORD001', 'FL001', 'VN-A001-1', 'Confirmed'),
+('ORD002', 'FL001', 'VN-A001-4', 'Pending'),
+('ORD002', 'FL001', 'VN-A001-5', 'Confirmed'),
+('ORD002', 'FL001', 'VN-A001-6', 'Cancelled'),
+('ORD003', 'FL001', 'VN-A001-7', 'Checked-In'),
+('ORD004', 'FL001', 'VN-A001-8', 'Confirmed');
 
 INSERT INTO Luggage (id, customerID, orderID, type, checkedweight , handedweight) VALUES
 ('ORD001-1', (SELECT id FROM Account WHERE username = 'user1'), 'ORD001', 'Checked', 20.0, 5.0),

@@ -33,7 +33,7 @@ public class ListFlightServlet extends HttpServlet {
             TicketDAO ticketDao = new TicketDAO();
             Map<String, Ticket> ticketMap = new HashMap<>();
             for (Flight flight : list) {
-                Ticket ticket = ticketDao.getTicketByFlightId(flight.getId());
+                Ticket ticket = ticketDao.getByFlightId(flight.getId());
                 ticketMap.put(flight.getId(), ticket);
             }
             request.setAttribute("ticketMap", ticketMap);

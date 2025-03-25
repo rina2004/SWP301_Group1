@@ -9,24 +9,25 @@ package model;
  * @author A A
  */
 public class Seat {
-    private int id;
+    private String id;
     private Compartment compartment;
-    private boolean status;
+    private String status;
     private String reason;
 
     public Seat() {}
-    public Seat(int id, Compartment compartment, boolean status, String reason) {
+
+    public Seat(String id, Compartment compartment, String status, String reason) {
         this.id = id;
         this.compartment = compartment;
         this.status = status;
         this.reason = reason;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -38,11 +39,11 @@ public class Seat {
         this.compartment = compartment;
     }
 
-    public boolean isStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -53,4 +54,5 @@ public class Seat {
     public void setReason(String reason) {
         this.reason = reason;
     }
+    
 }

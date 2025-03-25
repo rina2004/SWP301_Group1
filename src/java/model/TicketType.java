@@ -12,13 +12,13 @@ public class TicketType {
     private String type;
     private String description;
     private double price;
-    private String checkedweightneed;
-    private String handedweightneed;
+    private double checkedweightneed;
+    private double handedweightneed;
 
     public TicketType() {
     }
 
-    public TicketType(String type, String description, double price, String checkedweightneed, String handedweightneed) {
+    public TicketType(String type, String description, double price, double checkedweightneed, double handedweightneed) {
         this.type = type;
         this.description = description;
         this.price = price;
@@ -50,20 +50,20 @@ public class TicketType {
         this.price = price;
     }
 
-    public String getCheckedweightneed() {
+    public double getCheckedweightneed() {
         return checkedweightneed;
     }
 
-    public void setCheckedweightneed(String checkedweightneed) {
+    public void setCheckedweightneed(double checkedweightneed) {
         this.checkedweightneed = checkedweightneed;
     }
 
-    public String getHandedweightneed() {
+    public double getHandedweightneed() {
         return handedweightneed;
     }
 
-    public void setHandedweightneed(String handedweightneed) {
+    public void setHandedweightneed(double handedweightneed) {
         this.handedweightneed = handedweightneed;
     }
-    
+
 }

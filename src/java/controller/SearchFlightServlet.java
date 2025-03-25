@@ -33,7 +33,6 @@ public class SearchFlightServlet extends HttpServlet {
         ArrayList<Flight> flights;
         
         if (searchTerm != null && !searchTerm.trim().isEmpty()) {
-            // Search for flights by name
             flights = flightDAO.searchFlightsByName(searchTerm);
         } else {
             flights = flightDAO.list();
@@ -41,7 +40,7 @@ public class SearchFlightServlet extends HttpServlet {
         
         Map<String, Ticket> ticketMap = new HashMap<>();
         for (Flight flight : flights) {
-            Ticket ticket = ticketDAO.getTicketByFlightId(flight.getId());
+            Ticket ticket = ticketDAO.getByFlightId(flight.getId());
             ticketMap.put(flight.getId(), ticket);
         }
         

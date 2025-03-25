@@ -27,15 +27,11 @@ public class OrderFilterController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Get price range filter
         String priceRange = request.getParameter("priceRange");
-
-        // Retrieve original search parameters from request or session
         String departure = request.getParameter("departure");
         String destination = request.getParameter("destination");
         String departureDate = request.getParameter("departureDate");
 
-        // If parameters are not in the request, try to get them from session
         if (departure == null) {
             departure = (String) request.getSession().getAttribute("departure");
         }
@@ -46,12 +42,10 @@ public class OrderFilterController extends HttpServlet {
             departureDate = (String) request.getSession().getAttribute("departureDate");
         }
 
-        // Store search criteria in session for subsequent requests
         request.getSession().setAttribute("departure", departure);
         request.getSession().setAttribute("destination", destination);
         request.getSession().setAttribute("departureDate", departureDate);
 
-        // Create DAO instances
         FlightDAO flightDAO = new FlightDAO();
         TicketDAO ticketDAO = new TicketDAO();
 
@@ -102,8 +96,8 @@ public class OrderFilterController extends HttpServlet {
 
             // Filter searchResults based on price range
             for (Flight flight : searchResults) {
-                Ticket ticket = ticketDAO.getTicketByFlightId(flight.getId());
-                if (ticket != null && ticket.getPrice() >= minPrice && ticket.getPrice() <= maxPrice) {
+                Ticket ticket = ticketDAO.getByFlightId(flight.getId());
+                if (ticket != null && ticket.getSeat().getCompartment().getType().getPrice() >= minPrice && ticket.getSeat().getCompartment().getType().getPrice() <= maxPrice) {
                     flights.add(flight);
                 }
             }
@@ -119,7 +113,7 @@ public class OrderFilterController extends HttpServlet {
         // Create a map of tickets for each flight
         Map<String, Ticket> ticketMap = new HashMap<>();
         for (Flight flight : flights) {
-            Ticket ticket = ticketDAO.getTicketByFlightId(flight.getId());
+            Ticket ticket = ticketDAO.getByFlightId(flight.getId());
             ticketMap.put(flight.getId(), ticket);
         }
 
