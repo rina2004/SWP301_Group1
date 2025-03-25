@@ -122,28 +122,31 @@
                             <div class="ticket-label">To:</div>
                             <div>${ticket.destinationName}</div>
                             <div class="ticket-label">Start:</div>
-                            <!-- Chỉnh sửa: Hiển thị trực tiếp LocalDateTime -->
                             <div>${ticket.startingTime}</div>
                             <div class="ticket-label">Landing:</div>
                             <div>${ticket.landingTime}</div>
                             <div class="ticket-label">Seat:</div>
                             <div>${ticket.seatCode} (${ticket.compartmentName})</div>
                             <div class="ticket-label">Type:</div>
-                            <div>${ticket.type}</div>
+                            <div>${ticket.ticketType.type}</div>
                             <div class="ticket-label">Price:</div>
                             <div>$${ticket.price}</div>
                             <div class="ticket-label">Status:</div>
                             <div>${ticket.status}</div>
 
-                            <!-- NEW FIELDS -->
-                            <div class="ticket-label">Hand Luggage:</div>
-                            <div>${ticket.handLuggageWeight} kg</div>
-                            <div class="ticket-label">Checked Luggage:</div>
-                            <div>${ticket.checkedLuggageWeight} kg</div>
-                            <div class="ticket-label">Luggage Quantity:</div>
-                            <div>${ticket.luggageQuantity}</div>
-                            <div class="ticket-label">Services:</div>
-                            <div>${ticket.additionalServices}</div>
+                            <!-- NEW FIELDS (Lấy từ ticket.ticketType) -->
+                            <c:if test="${not empty ticket.ticketType}">
+                               
+                                <div class="ticket-label">Hand Luggage:</div>
+                                <div>${ticket.ticketType.handLuggageWeight} kg</div>
+                                <div class="ticket-label">Checked Luggage:</div>
+                                <div>${ticket.ticketType.checkedLuggageWeight} kg</div>
+                                <div class="ticket-label">Luggage Quantity:</div>
+                                <div>${ticket.ticketType.luggageQuantity}</div>
+                                <div class="ticket-label">Services:</div>
+                                <div>${ticket.ticketType.additionalServices}</div>
+                            </c:if>
+
                             <div class="ticket-label">Airplane:</div>
                             <div>${ticket.airplaneName}</div>
 
@@ -153,7 +156,7 @@
                                     <strong>Passengers:</strong>
                                     <c:forEach var="p" items="${ticket.passengers}">
                                         <div class="passenger-item">
-                                             ${p.fullName} (${p.nation.name})
+                                            ${p.fullName} (${p.nation.name})
                                         </div>
                                     </c:forEach>
                                 </div>
@@ -167,6 +170,7 @@
                 </c:forEach>
             </div>
         </c:if>
+
 
         <div style="text-align: center;">
             <a class="btn" href="${pageContext.request.contextPath}/historyBooking">Back to Order History</a>
