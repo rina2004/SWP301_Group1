@@ -103,9 +103,9 @@ public class OrderFilterController extends HttpServlet {
             // Filter searchResults based on price range
             for (Flight flight : searchResults) {
                 Ticket ticket = ticketDAO.getTicketByFlightId(flight.getId());
-                if (ticket != null && ticket.getPrice() >= minPrice && ticket.getPrice() <= maxPrice) {
-                    flights.add(flight);
-                }
+//                if (ticket != null && ticket.getPrice() >= minPrice && ticket.getPrice() <= maxPrice) {
+//                    flights.add(flight);
+//                }
             }
         } else {
             // If no filter specified, get flights matching search criteria

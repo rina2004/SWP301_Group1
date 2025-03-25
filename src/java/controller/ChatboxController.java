@@ -77,29 +77,29 @@ public class ChatboxController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String action = request.getParameter("action");
-        if ("sendMessage".equals(action)) {
-            String senderID = request.getParameter("senderID");
-            String receiverID = request.getParameter("receiverID");
-            String messageText = request.getParameter("message");
-
-            ChatMessage message = new ChatMessage(
-                java.util.UUID.randomUUID().toString(),
-                senderID,
-                receiverID,
-                messageText,
-                new Timestamp(System.currentTimeMillis()),
-                false
-            );
-
-            chatDAO.saveMessage(message);
-            response.getWriter().write("Message saved");
-        } else if ("markAsRead".equals(action)) {
-            String senderID = request.getParameter("senderID");
-            String receiverID = request.getParameter("receiverID");
-            chatDAO.markMessagesAsRead(senderID, receiverID);
-            response.getWriter().write("Messages marked as read");
-        }
+//        String action = request.getParameter("action");
+//        if ("sendMessage".equals(action)) {
+//            String senderID = request.getParameter("senderID");
+//            String receiverID = request.getParameter("receiverID");
+//            String messageText = request.getParameter("message");
+//
+//            ChatMessage message = new ChatMessage(
+//                java.util.UUID.randomUUID().toString(),
+//                senderID,
+//                receiverID,
+//                messageText,
+//                new Timestamp(System.currentTimeMillis()),
+//                false
+//            );
+//
+//            chatDAO.saveMessage(message);
+//            response.getWriter().write("Message saved");
+//        } else if ("markAsRead".equals(action)) {
+//            String senderID = request.getParameter("senderID");
+//            String receiverID = request.getParameter("receiverID");
+//            chatDAO.markMessagesAsRead(senderID, receiverID);
+//            response.getWriter().write("Messages marked as read");
+//        }
     }
 
     /** 

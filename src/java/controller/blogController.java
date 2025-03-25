@@ -79,31 +79,31 @@ public class blogController extends HttpServlet {
         }
         int totalRecord;
 
-        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
-            listBlog = blogDAO.searchBlogs(searchQuery, page); // Gọi DAO để tìm kiếm
-            pageControl.setUrlPattern(requestURL + "?search=" + searchQuery + "&");
-            totalRecord = blogDAO.findTotalRecordByKeyWord(searchQuery);
-        } else {
-            listBlog = blogDAO.getAllBlogs(page); // Lấy toàn bộ danh sách blog nếu không tìm kiếm
-            pageControl.setUrlPattern(requestURL + "?");
-            totalRecord = blogDAO.findAllTotalRecord();
-        }
+//        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+//            listBlog = blogDAO.searchBlogs(searchQuery, page); // Gọi DAO để tìm kiếm
+//            pageControl.setUrlPattern(requestURL + "?search=" + searchQuery + "&");
+//            totalRecord = blogDAO.findTotalRecordByKeyWord(searchQuery);
+//        } else {
+//            listBlog = blogDAO.getAllBlogs(page); // Lấy toàn bộ danh sách blog nếu không tìm kiếm
+//            pageControl.setUrlPattern(requestURL + "?");
+//            totalRecord = blogDAO.findAllTotalRecord();
+//        }
 
-        int record_per_page = 4;
-        int totalPage;
-        if (totalRecord % record_per_page == 0) {
-            totalPage = totalRecord / record_per_page;
-        } else {
-            totalPage = (totalRecord / record_per_page) + 1;
-        }
-        pageControl.setPage(page);
-        pageControl.setTotalPage(totalPage);
-        pageControl.setTotalRecord(totalRecord);
-
-        request.setAttribute("searchQuery", searchQuery);
-        request.setAttribute("listBlog", listBlog);
-        request.setAttribute("pageControl", pageControl);
-        request.getRequestDispatcher("blog.jsp").forward(request, response);
+//        int record_per_page = 4;
+//        int totalPage;
+//        if (totalRecord % record_per_page == 0) {
+//            totalPage = totalRecord / record_per_page;
+//        } else {
+//            totalPage = (totalRecord / record_per_page) + 1;
+//        }
+//        pageControl.setPage(page);
+//        pageControl.setTotalPage(totalPage);
+//        pageControl.setTotalRecord(totalRecord);
+//
+//        request.setAttribute("searchQuery", searchQuery);
+//        request.setAttribute("listBlog", listBlog);
+//        request.setAttribute("pageControl", pageControl);
+//        request.getRequestDispatcher("blog.jsp").forward(request, response);
 
     }
 
