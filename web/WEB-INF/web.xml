@@ -92,6 +92,26 @@
         <servlet-name>ChangePassword</servlet-name>
         <servlet-class>controller.ChangePassword</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangePasswordProfileControl</servlet-name>
+        <servlet-class>controller.ChangePasswordProfileControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>HistoryBookingController</servlet-name>
+        <servlet-class>controller.HistoryBookingController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OrderDetailControl</servlet-name>
+        <servlet-class>controller.OrderDetailControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CancelTicketController</servlet-name>
+        <servlet-class>controller.CancelTicketController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CancelListTicketController</servlet-name>
+        <servlet-class>dal.CancelListTicketController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
         <url-pattern>/airplane/create</url-pattern>
@@ -196,6 +216,26 @@
         <servlet-name>postController</servlet-name>
         <url-pattern>/post</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePasswordProfileControl</servlet-name>
+        <url-pattern>/changePasswordProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HistoryBookingController</servlet-name>
+        <url-pattern>/historyBooking</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderDetailControl</servlet-name>
+        <url-pattern>/orderDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelTicketController</servlet-name>
+        <url-pattern>/cancelTicket</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelListTicketController</servlet-name>
+        <url-pattern>/cancelListTicket</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
     </welcome-file-list>
@@ -248,52 +288,36 @@
         <url-pattern>/view/update-flight</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>AccountControl</servlet-name>
-        <servlet-class>controller.AccountControl</servlet-class>
+        <servlet-name>AccountListController</servlet-name>
+        <servlet-class>controller.AccountListController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AddUserControl</servlet-name>
-        <servlet-class>controller.AddUserControl</servlet-class>
+        <servlet-name>AccountAddUserController</servlet-name>
+        <servlet-class>controller.AccountAddUserController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>EditAccountControl</servlet-name>
-        <servlet-class>controller.EditAccountControl</servlet-class>
+        <servlet-name>AccountUpdateController</servlet-name>
+        <servlet-class>controller.AccountUpdateController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>LoadAccountControl</servlet-name>
-        <servlet-class>controller.LoadAccountControl</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ProfileAccountControl</servlet-name>
-        <servlet-class>controller.ProfileAccountControl</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>UpdateProfileControl</servlet-name>
-        <servlet-class>controller.UpdateProfileControl</servlet-class>
+        <servlet-name>AccountProfileController</servlet-name>
+        <servlet-class>controller.AccountProfileController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>AccountControl</servlet-name>
-        <url-pattern>/acc</url-pattern>
+        <servlet-name>AccountListController</servlet-name>
+        <url-pattern>/account-list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AddUserControl</servlet-name>
-        <url-pattern>/addUser</url-pattern>
+        <servlet-name>AccountAddUserController</servlet-name>
+        <url-pattern>/account-addUser</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>EditAccountControl</servlet-name>
-        <url-pattern>/editAccount</url-pattern>
+        <servlet-name>AccountUpdateController</servlet-name>
+        <url-pattern>/account-update</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>LoadAccountControl</servlet-name>
-        <url-pattern>/loadacc</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ProfileAccountControl</servlet-name>
+        <servlet-name>AccountProfileController</servlet-name>
         <url-pattern>/profile</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UpdateProfileControl</servlet-name>
-        <url-pattern>/updateProfile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>

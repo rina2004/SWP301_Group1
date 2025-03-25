@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
@@ -10,7 +10,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -20,7 +19,7 @@ import model.Account;
  *
  * @author anhbu
  */
-public class AccountControl extends HttpServlet {
+public class AccountListController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -56,37 +55,34 @@ public class AccountControl extends HttpServlet {
         String sortOrder = request.getParameter("sortOrder");// Lấy tham số sắp xếp từ URL
         String roleFilter = request.getParameter("role"); // Lấy giá trị role từ request
         String pageStr = request.getParameter("page");
+        String keyword = request.getParameter("search");
 
         // Sắp xếp danh sách theo RoleID
         if ("asc".equals(sortOrder)) {
-            listA.sort(Comparator.comparing(a -> a.getRoleID().getId())); // Tăng dần
+            listA.sort(Comparator.comparing(a -> a.getRole().getId())); // Tăng dần
 
         } else if ("desc".equals(sortOrder)) {
-            listA.sort(Comparator.comparing((Account a) -> a.getRoleID().getId()).reversed());
+            listA.sort(Comparator.comparing((Account a) -> a.getRole().getId()).reversed());
 
         }
 
         //Lọc tài khoản theo roleID
         if (roleFilter != null && !roleFilter.isEmpty()) {
-            int roleID = -1;
-            switch (roleFilter) {
-                case "Staff" ->
-                    roleID = 3;
-                case "Customer" ->
-                    roleID = 2;
-                case "AirTrafficControl" ->
-                    roleID = 4;
-            }
-            if (listA != null) {
-                Iterator<Account> iterator = listA.iterator();
-                while (iterator.hasNext()) {
-                    if (iterator.next().getRoleID().getId() != roleID) {
-                        iterator.remove();
-                    }
+            int roleID = Integer.parseInt(roleFilter);
+            listA.removeIf(acc -> acc.getRole().getId() != roleID);
+        }
+
+        // Lọc tài khoản theo từ khóa username nếu có
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            Iterator<Account> iterator = listA.iterator();
+            while (iterator.hasNext()) {
+                Account acc = iterator.next();
+                if (!acc.getUsername().toLowerCase().contains(keyword.toLowerCase())) {
+                    iterator.remove();
                 }
             }
-
         }
+
         // Phân trang
         int recordsPerPage = 5; // Số tài khoản mỗi trang
         int totalAccounts = listA.size();
@@ -114,6 +110,8 @@ public class AccountControl extends HttpServlet {
 
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("role", roleFilter);
+        request.setAttribute("search", keyword);
         request.getRequestDispatcher("view/Manageraccount.jsp").forward(request, response);
     }
 

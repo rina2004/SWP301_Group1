@@ -1,15 +1,15 @@
-//package dal;
-//
-//import java.sql.Connection;
-//import java.sql.PreparedStatement;
-//import java.sql.ResultSet;
-//import java.sql.SQLException;
-//import java.util.ArrayList;
-//import java.util.List;
-//import model.Blog;
-//
-//public class BlogDAO extends DBContext {
-//
+package dal;
+
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import model.Blog;
+
+public class BlogDAO extends DBContext {
+
 //    public void insertBlog(Blog blog) {
 //        String sql = "INSERT INTO Blog (id, postID, title, description, image, categoryID) VALUES (?, ?, ?, ?, ?, ?)";
 //        try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -25,7 +25,7 @@
 //            e.printStackTrace();
 //        }
 //    }
-//
+
 //    public void updateBlog(Blog blog) {
 //        String sql = "UPDATE Blog SET postID = ?, title = ?, description = ?, image = ?, categoryID = ? WHERE id = ?";
 //        try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -41,17 +41,17 @@
 //            e.printStackTrace();
 //        }
 //    }
-//
-//    public void deleteBlog(String id) {
-//        String sql = "DELETE FROM Blog WHERE id = ?";
-//        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-//            ps.setString(1, id);
-//            ps.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
+
+    public void deleteBlog(String id) {
+        String sql = "DELETE FROM Blog WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 //    public List<Blog> searchBlogs(String keyword, int page) {
 //        List<Blog> blogs = new ArrayList<>();
 //        String sql = "SELECT * FROM blog WHERE title LIKE ?\n"
@@ -78,7 +78,7 @@
 //        }
 //        return blogs;
 //    }
-//
+
 //    public List<Blog> getAllBlogs(int page) {
 //        List<Blog> list = new ArrayList<>();
 //        String sql = "SELECT * FROM blog\n"
@@ -119,22 +119,22 @@
 //        }
 //        return totalRecord;
 //    }
-//
-//    public int findAllTotalRecord() {
-//        int totalRecord = 0;
-//        String sql = "SELECT count(*) FROM blog";
-//        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-//            try (ResultSet rs = ps.executeQuery()) {
-//                if (rs.next()) {
-//                    totalRecord = rs.getInt(1); // Lấy giá trị đếm từ kết quả truy vấn
-//                }
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return totalRecord;
-//    }
-//
+
+    public int findAllTotalRecord() {
+        int totalRecord = 0;
+        String sql = "SELECT count(*) FROM blog";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    totalRecord = rs.getInt(1); // Lấy giá trị đếm từ kết quả truy vấn
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalRecord;
+    }
+
 //    public List<Blog> getAllBlog() {
 //        List<Blog> list = new ArrayList<>();
 //        String sql = "SELECT * FROM blog";
@@ -156,4 +156,4 @@
 //        }
 //        return list;
 //    }
-//}
+}

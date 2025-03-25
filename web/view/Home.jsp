@@ -16,8 +16,14 @@
         <form action="<%= request.getContextPath() %>/logout" method="get">
             <button type="submit" class="logout-btn">Logout</button>
         </form>
-        <form action="<%= request.getContextPath() %>/profile" method="get">
-            <button type="submit" class="logout-btn">Profile</button>
-        </form>
+        <a href="<%= request.getContextPath() %>/profile">
+            <button type="button" class="logout-btn">Profile</button>
+        </a>
+            
+        <a href="<%= request.getContextPath() %>/historyBooking">
+            <button type="button" class="logout-btn">History Booking</button>
+        </a>
+
+        <p>Xin chào: ${sessionScope.username}</p>
     </body>
 </html>

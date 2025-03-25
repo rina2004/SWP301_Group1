@@ -9,27 +9,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Seat;
+import model.TicketType;
 
 /**
  *
  * @author A A
  */
-public class SeatDAO extends DBContext{
-    public Seat get(String id) {
-        CompartmentDAO cd = new CompartmentDAO();
-        String sql = "SELECT * FROM swp301.seat WHERE id = ?";
+public class TicketTypeDAO extends DBContext{
+    public TicketType get(String id) {
+        String sql = "SELECT * FROM swp301.tickettype WHERE id = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
-                return new Seat(rs.getString("id"),
-                        cd.get(rs.getString("compartmentID")),
-                        rs.getString("status"),
-                        rs.getString("reason"));
+                return new TicketType(rs.getString("type"),
+                        rs.getString("description"),
+                        rs.getDouble("price"),
+                        rs.getDouble("checkedweightneed"),
+                        rs.getDouble("handedweightneed"));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(SeatDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TicketTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

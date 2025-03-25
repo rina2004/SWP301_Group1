@@ -7,7 +7,6 @@ package Controller;
 
 import dal.FlightDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,15 +25,10 @@ public class ViewFlightServlet extends HttpServlet {
     throws ServletException, IOException {
         String id = request.getParameter("id");
         FlightDAO dao = new FlightDAO();
-        Flight f;
-        try {
-            f = dao.getFlightById(id);
-            if (f != null) {
-                request.setAttribute("flight", f);
-                request.getRequestDispatcher("flight-detail.jsp").forward(request, response);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(ViewFlightServlet.class.getName()).log(Level.SEVERE, null, ex);
+        Flight f = dao.getFlightById(id);
+        if (f != null) {
+            request.setAttribute("flight", f);
+            request.getRequestDispatcher("flight-detail.jsp").forward(request, response);
         }
     }
 }

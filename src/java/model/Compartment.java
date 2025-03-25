@@ -55,4 +55,7 @@ public class Compartment {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
+    
+    
+    
 }

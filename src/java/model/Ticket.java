@@ -11,18 +11,18 @@ package model;
 public class Ticket {
     private String id;
     private Order order;
+    private Flight flight;
     private Seat seat;
-    private String type;
     private String status;
 
     public Ticket() {
     }
 
-    public Ticket(String id, Order order, Seat seat, String type, String status) {
+    public Ticket(String id, Order order, Flight flight, Seat seat, String status) {
         this.id = id;
         this.order = order;
+        this.flight = flight;
         this.seat = seat;
-        this.type = type;
         this.status = status;
     }
 
@@ -42,20 +42,20 @@ public class Ticket {
         this.order = order;
     }
 
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
     public Seat getSeat() {
         return seat;
     }
 
     public void setSeat(Seat seat) {
         this.seat = seat;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getStatus() {
