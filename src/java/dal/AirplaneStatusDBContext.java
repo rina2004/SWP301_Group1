@@ -18,7 +18,7 @@ public class AirplaneStatusDBContext extends DBContext{
     
     public ArrayList<AirplaneStatus> list() {
         ArrayList<AirplaneStatus> statuses = new ArrayList<>();
-        String sql = "SELECT * FROM AirplaneStatus";
+        String sql = "SELECT * FROM swp301.airplanestatus";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {

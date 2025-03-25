@@ -225,7 +225,6 @@
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
-                        <img src="/img/logo.jpg" alt="Logo" class="me-2" style="height: 40px;">
                         <h2 class="mb-0">Flight Management</h2>
                     </div>
                     <a href="add-flight" class="btn btn-primary">

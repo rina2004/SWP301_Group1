@@ -46,9 +46,9 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="airplaneID" class="form-label">Airplane ID</label>
-                                    <input readonly type="text" class="form-control" id="airplaneID" name="airplaneID" 
-                                           value="${flight.getAirplaneID().getId()}" required>
+                                    <label for="airplane" class="form-label">Airplane ID</label>
+                                    <input readonly type="text" class="form-control" id="airplane" name="airplane" 
+                                           value="${flight.getAirplane().getId()}" required>
                                 </div>
                             </div>
 

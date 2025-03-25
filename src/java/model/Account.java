@@ -11,45 +11,24 @@ import java.sql.Date;
  * @author anhbu
  */
 public class Account {
-
     private String id;
     private String username;
     private String password;
-    private String role;
-    private int roleID;
+    private Role roleID;
     private boolean status;
     private String citizenID;
     private String name;
-    private int entityID; 
     private Date dob;
     private String phone;
     private String address;
     private String email;
 
-    public Account() {
-    
-    }
-
-    public Account(String id, String username, String password, String role, boolean status, String citizenID, String name, int roleID, int entityID, Date dob, String phone, String address, String email) {
+    public Account() {}
+    public Account(String id, String username, String password, Role roleID, boolean status, String citizenID, String name, Date dob, String phone, String address, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.role = role;
-        this.status = status;
-        this.citizenID = citizenID;
-        this.name = name;
         this.roleID = roleID;
-        this.entityID = entityID;
-        this.dob = dob;
-        this.phone = phone;
-        this.address = address;
-        this.email = email;
-    }
-
-    public Account(String id, String username, String password, boolean status, String citizenID, String name, Date dob, String phone, String address, String email, int entityID, int roleID) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
         this.status = status;
         this.citizenID = citizenID;
         this.name = name;
@@ -57,8 +36,6 @@ public class Account {
         this.phone = phone;
         this.address = address;
         this.email = email;
-        this.entityID = entityID;
-        this.roleID = roleID;
     }
 
     public String getId() {
@@ -85,12 +62,12 @@ public class Account {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public Role getRoleID() {
+        return roleID;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleID(Role roleID) {
+        this.roleID = roleID;
     }
 
     public boolean isStatus() {
@@ -115,22 +92,6 @@ public class Account {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getRoleID() {
-        return roleID;
-    }
-
-    public void setRoleID(int roleID) {
-        this.roleID = roleID;
-    }
-
-    public int getEntityID() {
-        return entityID;
-    }
-
-    public void setEntityID(int entityID) {
-        this.entityID = entityID;
     }
 
     public Date getDob() {

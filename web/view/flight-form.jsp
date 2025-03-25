@@ -50,11 +50,11 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Airplane</label>
-                                <select class="form-select" name="airplaneID" required>
+                                <select class="form-select" name="airplane" required>
                                     <option value="">Select Airplane</option>
                                     <c:forEach items="${airplanes}" var="airplane">
                                         <option value="${airplane.id}" 
-                                                ${flight.airplaneID.id == airplane.id ? 'selected' : ''}>
+                                                ${flight.airplane.id == airplane.id ? 'selected' : ''}>
                                             ${airplane.name}
                                         </option>
                                     </c:forEach>

@@ -19,9 +19,7 @@ public class LocationDAO extends DBContext {
     public ArrayList<Location> list() {
         ArrayList<Location> list = new ArrayList<>();
         String sql = "SELECT * FROM swp301.location";
-        
-        try {
-            PreparedStatement stm = connection.prepareStatement(sql);
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 list.add(new Location(
@@ -37,7 +35,6 @@ public class LocationDAO extends DBContext {
     
     public Location getById(int id) {
         String sql = "SELECT * FROM swp301.location WHERE id = ?";
-        
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setInt(1, id);
@@ -56,7 +53,6 @@ public class LocationDAO extends DBContext {
     
     public Location getByName(String name) {
         String sql = "SELECT * FROM swp301.location WHERE name = ?";
-        
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, name);
@@ -76,7 +72,6 @@ public class LocationDAO extends DBContext {
     public ArrayList<Location> searchByName(String keyword) {
         ArrayList<Location> list = new ArrayList<>();
         String sql = "SELECT * FROM swp301.location WHERE name LIKE ?";
-        
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, "%" + keyword + "%");

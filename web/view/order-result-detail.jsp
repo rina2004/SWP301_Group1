@@ -47,7 +47,7 @@
                                 </tr>
                                 <tr>
                                     <th>Airplane ID:</th>
-                                    <td>${flight.getAirplaneID()}</td>
+                                    <td>${flight.getAirplane()}</td>
                                 </tr>
                             </table>
                         </div>

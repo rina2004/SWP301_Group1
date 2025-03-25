@@ -4,24 +4,15 @@
  */
 package controller;
 
-import dal.AirplaneDAO;
-import dal.FlightDAO;
-import dal.LocationDAO;
+import dal.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Airplane;
-import model.Flight;
-import model.Location;
+import java.time.*;
+import java.util.*;
+import model.*;
 
 /**
  *
@@ -39,11 +30,9 @@ public class AddFlightServlet extends HttpServlet {
         List<Location> locationList = locationDao.list();
 
         Collections.sort(locationList, (Location l1, Location l2) -> l1.getName().compareToIgnoreCase(l2.getName()));
-
         request.setAttribute("airplanes", airplaneList);
         request.setAttribute("locations", locationList);
         request.getRequestDispatcher("flight-form.jsp").forward(request, response);
-
     }
 
     @Override
@@ -58,26 +47,19 @@ public class AddFlightServlet extends HttpServlet {
             f.setId(generateFlightId());
             f.setName(request.getParameter("name"));
             f.setCode(generateFlightCode());
-
-            f.setAirplaneID(ad.get(request.getParameter("airplaneID")));
-
-            // Get Location objects based on selected IDs
+            f.setAirplane(ad.get(request.getParameter("airplane")));
             int departureId = Integer.parseInt(request.getParameter("departure"));
             int destinationId = Integer.parseInt(request.getParameter("destination"));
             f.setDeparture(ld.getById(departureId));
             f.setDestination(ld.getById(destinationId));
-
             f.setEntryTime(LocalDateTime.parse(request.getParameter("entryTime")));
             f.setStartingTime(LocalDateTime.parse(request.getParameter("startingTime")));
             f.setLandingTime(LocalDateTime.parse(request.getParameter("landingTime")));
 
             validateFlight(f);
-
             FlightDAO dao = new FlightDAO();
             dao.insert(f);
-
             response.sendRedirect("list-flight");
-
         } catch (Exception e) {
             request.setAttribute("error", "Error adding flight: " + e.getMessage());
             doGet(request, response);
@@ -118,26 +100,29 @@ public class AddFlightServlet extends HttpServlet {
         }
     }
 
-    private void validateFlight(Flight flight) throws Exception {
+    private void validateFlight(Flight f) throws Exception {
         FlightDAO dao = new FlightDAO();
 
-        if (dao.getFlightByName(flight.getName()) != null) {
+        if (dao.getFlightByName(f.getName()) != null) {
             throw new Exception("Flight name already exists.");
         }
 
-        if (flight.getName() == null || flight.getName().trim().isEmpty()) {
+        if (f.getName() == null || f.getName().trim().isEmpty()) {
             throw new Exception("Flight name is required");
         }
 
-        if (flight.getDeparture().getId() == flight.getDestination().getId()) {
+        if (f.getDeparture().getId() == f.getDestination().getId()) {
             throw new Exception("Departure and destination cannot be the same location");
         }
 
-        if (flight.getStartingTime().isBefore(flight.getEntryTime())) {
+        if (f.getStartingTime().isBefore(f.getEntryTime())) {
             throw new Exception("Starting time must be after entry time");
         }
-        if (flight.getLandingTime().isBefore(flight.getStartingTime())) {
+        if (f.getLandingTime().isBefore(f.getStartingTime())) {
             throw new Exception("Landing time must be after starting time");
+        }
+        if(f.getLandingTime().equals(f.getStartingTime())){
+            throw new Exception("Landing time must not be equal to starting time");
         }
     }
 }

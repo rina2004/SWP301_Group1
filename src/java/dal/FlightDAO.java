@@ -22,13 +22,11 @@ public class FlightDAO extends DBContext {
         String sql = "SELECT * FROM swp301.flight";
         AirplaneDAO ad = new AirplaneDAO();
         LocationDAO ld = new LocationDAO();
-        try {
-            PreparedStatement stm = connection.prepareStatement(sql);
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Location departure = ld.getById(rs.getInt("departure"));
                 Location destination = ld.getById(rs.getInt("destination"));
-
                 list.add(new Flight(
                         rs.getString("id"),
                         rs.getString("name"),
@@ -49,12 +47,11 @@ public class FlightDAO extends DBContext {
 
     public Flight getFlightById(String id){
         String sql = "SELECT * FROM Flight WHERE id = ?";
-        PreparedStatement stm = null;
         AirplaneDAO ad = new AirplaneDAO();
         LocationDAO ld = new LocationDAO();
         try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, id); //1 la ? thu 1 trong sql statement
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, id); 
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Location departure = ld.getById(rs.getInt("departure"));
@@ -79,17 +76,15 @@ public class FlightDAO extends DBContext {
 
     public Flight getFlightByName(String name) {
         String sql = "SELECT * FROM Flight WHERE name = ?";
-        PreparedStatement stm = null;
         AirplaneDAO ad = new AirplaneDAO();
         LocationDAO ld = new LocationDAO();
         try {
-            stm = connection.prepareStatement(sql);
+            PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, name);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Location departure = ld.getById(rs.getInt("departure"));
                 Location destination = ld.getById(rs.getInt("destination"));
-
                 return new Flight(
                         rs.getString("id"),
                         rs.getString("name"),
@@ -110,17 +105,15 @@ public class FlightDAO extends DBContext {
 
     public Flight getFlightByCode(String code) {
         String sql = "SELECT * FROM Flight WHERE code = ?";
-        PreparedStatement stm = null;
         AirplaneDAO ad = new AirplaneDAO();
         LocationDAO ld = new LocationDAO();
         try {
-            stm = connection.prepareStatement(sql);
+            PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, code);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Location departure = ld.getById(rs.getInt("departure"));
                 Location destination = ld.getById(rs.getInt("destination"));
-
                 return new Flight(
                         rs.getString("id"),
                         rs.getString("name"),
@@ -147,8 +140,7 @@ public class FlightDAO extends DBContext {
             ORDER BY t.price ASC""";
         AirplaneDAO ad = new AirplaneDAO();
         LocationDAO ld = new LocationDAO();
-        try {
-            PreparedStatement stm = connection.prepareStatement(sql);
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setDouble(1, minPrice);
             stm.setDouble(2, maxPrice);
             ResultSet rs = stm.executeQuery();
@@ -183,11 +175,10 @@ public class FlightDAO extends DBContext {
             LEFT JOIN Location la ON f.destination = la.id
             WHERE f.name LIKE ? OR ld.name LIKE ? OR la.name LIKE ?
             """;
-        PreparedStatement stm = null;
         AirplaneDAO ad = new AirplaneDAO();
         LocationDAO ld = new LocationDAO();
         try {
-            stm = connection.prepareStatement(sql);
+            PreparedStatement stm = connection.prepareStatement(sql);
             String searchPattern = "%" + searchTerm + "%";
             stm.setString(1, searchPattern);
             stm.setString(2, searchPattern);
@@ -219,7 +210,7 @@ public class FlightDAO extends DBContext {
     public ArrayList<Flight> search(String departure, String destination, String startingDate){
         ArrayList<Flight> list = new ArrayList<>();
         String sql = """
-            SELECT f.* FROM flight f 
+            SELECT f.* FROM Flight f 
             LEFT JOIN Location ld ON f.departure = ld.id
             LEFT JOIN Location la ON f.destination = la.id
             WHERE ld.name LIKE ? 
@@ -257,12 +248,12 @@ public class FlightDAO extends DBContext {
     }
 
     public void insert(Flight flight){
-        String sql = "INSERT INTO Flight VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO swp301.flight VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, flight.getId());
             stm.setString(2, flight.getName());
             stm.setString(3, flight.getCode());
-            stm.setString(4, flight.getAirplaneID().getId());
+            stm.setString(4, flight.getAirplane().getId());
             stm.setInt(5, flight.getDeparture().getId());
             stm.setInt(6, flight.getDestination().getId());
             stm.setTimestamp(7, Timestamp.valueOf(flight.getEntryTime()));
@@ -271,17 +262,6 @@ public class FlightDAO extends DBContext {
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-            try {
-                connection.rollback();
-            } catch (SQLException ex1) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
 
@@ -314,9 +294,7 @@ public class FlightDAO extends DBContext {
     public void update(Flight flight){
         String sql = "UPDATE Flight SET departure=?, "
                 + "destination=?, entryTime=?, startingTime=?, landingTime=? WHERE id=?";
-        PreparedStatement stm = null;
-        try {
-            stm = connection.prepareStatement(sql);
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setInt(1, flight.getDeparture().getId());
             stm.setInt(2, flight.getDestination().getId());
             stm.setTimestamp(3, Timestamp.valueOf(flight.getEntryTime()));
@@ -326,20 +304,6 @@ public class FlightDAO extends DBContext {
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-            try {
-                connection.rollback();
-            } catch (SQLException ex1) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        } finally {
-            try {
-                if (stm != null) {
-                    stm.close();
-                }
-                connection.setAutoCommit(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        }   
     }
 }
