@@ -268,7 +268,7 @@
                     <div class="text-section">
                         <h1>Sky Airlines: <br> Soar <span>Beyond</span> <br> <span>the Clouds</span></h1>
                         <p>Soaring High, Connecting Dreams Across the Skies</p>
-                        <a href="flights" class="book-now">Book Now</a>
+                        <a href="view/flights" class="book-now">Book Now</a>
                     </div>
                     <div class="plane-image">
                         <img src="img/art.jpg" alt="Airplane"/>

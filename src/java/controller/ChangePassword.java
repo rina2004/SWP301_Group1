@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller;
+package Controller;
 
 import dal.AccountDAO;
 import java.io.IOException;
@@ -88,7 +88,7 @@ public class ChangePassword extends HttpServlet {
             request.getRequestDispatcher("view/ChangePassword.jsp").forward(request, response);
         } else {
             acc.updatePasswordByUsername(username, newpass);
-            response.sendRedirect("view/home.jsp");
+            response.sendRedirect("home");
         }
     }
 

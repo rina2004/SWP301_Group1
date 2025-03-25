@@ -112,6 +112,26 @@
         <servlet-name>CancelListTicketController</servlet-name>
         <servlet-class>dal.CancelListTicketController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListSeatAdmin</servlet-name>
+        <servlet-class>controller.ListSeatAdmin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListSeatUser</servlet-name>
+        <servlet-class>controller.ListSeatUser</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateSeat</servlet-name>
+        <servlet-class>controller.UpdateSeat</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DetailSeat</servlet-name>
+        <servlet-class>controller.DetailSeat</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AirplaneViewDetailController</servlet-name>
+        <servlet-class>controller.AirplaneViewDetailController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
         <url-pattern>/airplane/create</url-pattern>
@@ -236,6 +256,26 @@
         <servlet-name>CancelListTicketController</servlet-name>
         <url-pattern>/cancelListTicket</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListSeatAdmin</servlet-name>
+        <url-pattern>/listSeatAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListSeatUser</servlet-name>
+        <url-pattern>/listSeatUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateSeat</servlet-name>
+        <url-pattern>/updateSeat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DetailSeat</servlet-name>
+        <url-pattern>/detailSeat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AirplaneViewDetailController</servlet-name>
+        <url-pattern>/airplane/view/detail</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
     </welcome-file-list>
@@ -326,5 +366,13 @@
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CreateCompartment</servlet-name>
+        <servlet-class>controller.CreateCompartment</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateCompartment</servlet-name>
+        <url-pattern>/createCompartment</url-pattern>
     </servlet-mapping>
 </web-app>

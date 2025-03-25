@@ -1,163 +1,63 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <title>Create Airplane</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f9ff;
-            color: #333;
-        }
-
-        .header-section {
-            background: #ffffff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-section h2 {
-            font-size: 1.8rem;
-            color: #0056b3;
-            margin: 0;
-            text-align: right;
-        }
-
-        .btn-secondary {
-            background-color: #0056b3;
-            color: #fff;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .btn-secondary:hover {
-            background-color: #004494;
-        }
-
-        form {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        input, select, button {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        input:focus, select:focus {
-            border-color: #0056b3;
-            outline: none;
-        }
-
-        button {
-            background-color: #0056b3;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #004494;
-        }
-
-        .error-message {
-            color: red;
-            margin-bottom: 1rem;
-            font-weight: bold;
-        }
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: #0056b3;
-            color: white;
-            border-radius: 50%;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-back:hover {
-            background-color: #004494;
-        }
-
-        .btn-back i {
-            font-size: 16px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>Tạo Máy Bay Mới</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/createAirplane.js"></script>
 </head>
 <body>
-    <div class="header-section">
-        <div class="container">
-            <h2>Create Airplane</h2>
-            <a href="<%= request.getContextPath() %>/airplane/view" class="btn-back">
-                <i class="fas fa-arrow-left"></i>
-            </a>
-        </div>
-    </div>
-
-    <c:if test="${not empty error}">
-        <div class="error-message">${error}</div>
-    </c:if>
-
-    <form action="<%= request.getContextPath() %>/airplane/create" method="POST">
-        <label for="name">Airplane Name:</label>
-        <input type="text" id="name" name="name" required>
+    <div class="container mt-5">
+        <h2 class="mb-4">Tạo Máy Bay Mới</h2>
         
-        <label for="type">Type:</label>
-        <select id="type" name="type" required>
-            <c:forEach items="${types}" var="t">
-                <option value="${t.id}">${t.name}</option>
-            </c:forEach>
-        </select>
+        <form action="<%= request.getContextPath() %>/airplane/create" method="POST" id="airplaneForm">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="airId" class="form-label">Mã Máy Bay</label>
+                    <input type="text" class="form-control" id="airId" name="airId" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="airName" class="form-label">Tên Máy Bay</label>
+                    <input type="text" class="form-control" id="airName" name="airName" required>
+                </div>
+            </div>
 
-        <label for="status">Status:</label>
-        <select id="status" name="status" required>
-            <c:forEach items="${statuses}" var="s">
-                <option value="${s.id}">${s.name}</option>
-            </c:forEach>
-        </select>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="airStatusID" class="form-label">Trạng Thái Máy Bay</label>
+                    <select class="form-select" id="airStatusID" name="airStatusID" required>
+                        <c:forEach items="${requestScope.statuses}" var="status">
+                            <option value="${status.id}">${status.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="numOfComs" class="form-label">Số Khoang</label>
+                    <input type="number" class="form-control" id="numOfComs" name="numOfComs" 
+                           min="1" max="10" value="1" required onchange="updateCompartments()">
+                </div>
+                <div class="col-md-4">
+                    <label for="maintainanceTime" class="form-label">Thời Gian Bảo Dưỡng</label>
+                    <input type="datetime-local" class="form-control" id="maintainanceTime" name="maintainanceTime">
+                </div>
+            </div>
 
-        <label for="maintainanceTime">Maintenance Time:</label>
-        <input type="datetime-local" id="maintainanceTime" name="maintainanceTime" required>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="usedTime" class="form-label">Thời Gian Sử Dụng</label>
+                    <input type="datetime-local" class="form-control" id="usedTime" name="usedTime" required>
+                </div>
+            </div>
 
-        <label for="usedTime">Used Time:</label>
-        <input type="datetime-local" id="usedTime" name="usedTime" required>
+            <div id="compartmentsContainer">
+                <!-- Các khoang sẽ được động thêm vào đây -->
+            </div>
 
-        <label for="actID">Air Traffic Control:</label>
-        <select id="actID" name="actID" required>
-            <c:forEach items="${atcs}" var="a">
-                <option value="${a.id}">${a.name}</option>
-            </c:forEach>
-        </select>
-
-        <button type="submit">Add Airplane</button>
-    </form>
+            <button type="submit" class="btn btn-primary">Tạo Máy Bay</button>
+        </form>
+    </div>
 </body>
 </html>

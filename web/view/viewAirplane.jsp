@@ -5,6 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Airplane List</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -106,7 +107,7 @@
         <div class="header-section">
             <div class="title">
                 <img src="/api/placeholder/40/40" alt="Logo" style="height: 40px;">
-                <h2>Flight Management</h2>
+                <h2>Airline Management</h2>
             </div>
             <a href="create" class="btn">
                 <i class="fas fa-plus"></i> Add New Airplane
@@ -119,11 +120,10 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Type</th>
                     <th>Status</th>
+                    <th>Compartments</th>
                     <th>Maintenance Time</th>
                     <th>Used Time</th>
-                    <th>ATC</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -132,16 +132,16 @@
                     <tr>
                         <td>${pl.id}</td>
                         <td>${pl.name}</td>
-                        <td>${pl.type.name}</td>
                         <td>${pl.status.name}</td>
+                        <td>${pl.numOfComs}</td>
                         <td>${pl.maintainanceTime}</td>
                         <td>${pl.usedTime}</td>
-                        <td>${pl.atc.name}</td>
                         <td>
-                            <a href="update?id=${pl.id}" class="btn-edit">
-                                <i class="fas fa-edit"></i> Edit
+                            <a href="${pageContext.request.contextPath}/airplane/view/detail?id=${pl.id}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> View Detail
                             </a>
                         </td>
+
                     </tr> 
                 </c:forEach>
             </tbody>
