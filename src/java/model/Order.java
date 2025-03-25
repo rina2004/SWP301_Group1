@@ -23,6 +23,15 @@ public class Order {
     public Order() {
     }
 
+    public Order(String id, String status, double finalPrice, int finalNum) {
+        this.id = id;
+        this.status = status;
+        this.finalPrice = finalPrice;
+        this.finalNum = finalNum;
+    }
+    
+    
+
     public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum) {
         this.id = id;
         this.customer = customer;

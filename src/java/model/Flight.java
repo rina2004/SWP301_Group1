@@ -22,17 +22,27 @@ public class Flight {
 
     public Flight() {}
 
-    public Flight(String id, String name, String code, Airplane airplane, Location departure, Location destination, LocalDateTime entryTime, LocalDateTime startingTime, LocalDateTime landingTime) {
+    public Flight(String id, String name, String code, LocalDateTime entryTime, LocalDateTime startingTime, LocalDateTime landingTime) {
         this.id = id;
         this.name = name;
         this.code = code;
-        this.airplane = airplane;
-        this.departure = departure;
-        this.destination = destination;
         this.entryTime = entryTime;
         this.startingTime = startingTime;
         this.landingTime = landingTime;
     }
+
+    
+
+    public Flight(String name, String code, Location departure, Location destination, LocalDateTime startingTime, LocalDateTime landingTime) {
+        this.name = name;
+        this.code = code;
+        this.departure = departure;
+        this.destination = destination;
+        this.startingTime = startingTime;
+        this.landingTime = landingTime;
+    }
+    
+    
 
     public String getId() {
         return id;

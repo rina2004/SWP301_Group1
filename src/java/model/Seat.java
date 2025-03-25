@@ -22,6 +22,8 @@ public class Seat {
         this.status = status;
         this.reason = reason;
     }
+    
+    
 
     public String getId() {
         return id;

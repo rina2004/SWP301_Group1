@@ -9,7 +9,7 @@ import java.sql.*;
  * @author A A
  */
 public class OrderPassenger {
-    private int id;
+    private String id;
     private Order order;
     private PassengerType passengerType;
     private String name;
@@ -19,7 +19,12 @@ public class OrderPassenger {
     public OrderPassenger() {
     }
 
-    public OrderPassenger(int id, Order order, PassengerType passengerType, String name, Date dob, Nation nation) {
+    public OrderPassenger(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public OrderPassenger(String id, Order order, PassengerType passengerType, String name, Date dob, Nation nation) {
         this.id = id;
         this.order = order;
         this.passengerType = passengerType;
@@ -28,11 +33,11 @@ public class OrderPassenger {
         this.nation = nation;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -75,5 +80,6 @@ public class OrderPassenger {
     public void setNation(Nation nation) {
         this.nation = nation;
     }
-    
+
+   
 }

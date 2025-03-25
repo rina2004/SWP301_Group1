@@ -173,13 +173,13 @@ VALUES
 ('ORD003-1', 'ORD003', 1, 'Robert Johnson', '1988-11-30', 3),
 ('ORD004-1', 'ORD004', 1, 'Sarah Williams', '1992-04-12', 4);
 
-INSERT INTO Ticket (orderID, seatID, type, status) VALUES
-('ORD001', 'VN-A001-1', 'Business', 'Confirmed'),
-('ORD002', 'VN-A001-4', 'Economy', 'Pending'),
-('ORD002', 'VN-A001-5', 'Economy', 'Confirmed'),
-('ORD002', 'VN-A001-6', 'Economy', 'Cancelled'),
-('ORD003', 'VN-A001-7', 'First Class', 'Checked-In'),
-('ORD004', 'VN-A001-8', 'First Class', 'Confirmed');
+INSERT INTO Ticket (orderID, flightID, seatID, status) VALUES
+('ORD001', 'FL001', 'VN-A001-1', 'Confirmed'),
+('ORD002', 'FL001', 'VN-A001-4', 'Pending'),
+('ORD002', 'FL001', 'VN-A001-5', 'Confirmed'),
+('ORD002', 'FL001', 'VN-A001-6', 'Cancelled'),
+('ORD003', 'FL001', 'VN-A001-7', 'Checked-In'),
+('ORD004', 'FL001', 'VN-A001-8', 'Confirmed');
 
 INSERT INTO Luggage (id, customerID, orderID, type, checkedweight , handedweight) VALUES
 ('ORD001-1', (SELECT id FROM Account WHERE username = 'user1'), 'ORD001', 'Checked', 20.0, 5.0),
@@ -230,141 +230,71 @@ INSERT INTO ChatMessage (senderAccountID, receiverAccountID, message, timestamp,
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user3'), 'Sarah, could you check if there are any window seats available on flight VN303?', '2024-03-16 14:30:00', TRUE),
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user4'), 'I just checked and there are 3 window seats available. Would you like me to book one for you?', '2024-03-16 14:45:00', TRUE);
 
-Select * from `Order`;
+Select * from Account;
 
 SELECT 
-    t.*, 
-    f.name AS flightName, 
-    f.code AS flightCode, 
-    f.startingTime, 
-    f.landingTime, 
-    l1.name AS departureName, 
-    l2.name AS destinationName, 
-    s.id AS seatCode, 
-    c.name AS compartmentName, 
-    tt.handLuggageWeight, 
-    tt.checkedLuggageWeight, 
-    tt.luggageQuantity, 
-    tt.additionalServices, 
-    a.id AS airplaneId, 
-    a.name AS airplaneName 
-FROM 
-    Ticket t
-JOIN 
-    Flight f ON t.flightId = f.id
-JOIN 
-    Location l1 ON f.departure = l1.id
-JOIN 
-    Location l2 ON f.destination = l2.id
-JOIN 
-    Seat s ON t.seatId = s.id
-JOIN 
-    Compartment c ON s.compartmentId = c.id
-JOIN 
-    Airplane a ON c.airplaneId = a.id
-JOIN 
-    TicketType tt ON t.type = tt.type
-WHERE 
-    t.orderId = 'ORD002'; -- Thay 1234 bằng orderId cụ thể
-    
-SELECT t.*, f.name AS flightName, f.code AS flightCode, 
-       f.startingTime, f.landingTime,
-       l1.name AS departureName, l2.name AS destinationName,
-       s.id AS seatCode, c.name AS compartmentName,
-       ap.name AS airplaneName,
-       op.fullName AS passengerName, op.dob AS passengerDob,
-       n.name AS nationName,
-       pt.name AS passengerType,
-       tt.checkedLuggageWeight, tt.handLuggageWeight, tt.luggageQuantity, tt.additionalServices,
-       l.weight AS luggageWeight, l.type AS luggageType
-FROM Ticket t
-JOIN Flight f ON t.flightId = f.id
-JOIN Location l1 ON f.departure = l1.id
-JOIN Location l2 ON f.destination = l2.id
-JOIN Seat s ON t.seatId = s.id
-JOIN Compartment c ON s.compartmentId = c.id
-JOIN Airplane ap ON f.airplaneId = ap.id
-JOIN OrderPassenger op ON op.orderId = t.orderId
-LEFT JOIN Nation n ON op.nationId = n.id
-LEFT JOIN PassengerType pt ON op.passengerTypeId = pt.id
-LEFT JOIN TicketType tt ON t.type = tt.type
-LEFT JOIN Luggage l ON l.orderId = t.orderId
-WHERE t.orderId = 'ORD005';
-
-SELECT t.id, t.orderID, t.orderPassengerID, t.flightID, t.seatID, t.type, t.price, t.status,  
-       op.fullName, n.name AS nation  
-FROM Ticket t  
-LEFT JOIN OrderPassenger op ON t.orderPassengerID = op.id  
-LEFT JOIN Nation n ON op.nationID = n.id  
-WHERE t.orderID = 'ORD002';
-
-SELECT * FROM OrderPassenger WHERE id IN 
-  (SELECT orderPassengerID FROM Ticket WHERE seatID = 'S002B');
-
-SELECT id, orderID, orderPassengerID, COUNT(*) 
-FROM ticket
-GROUP BY id, orderID, orderPassengerID
-HAVING COUNT(*) > 1;
-
-
-SELECT OrderID, COUNT(id) AS TotalTickets
-FROM ticket
-GROUP BY OrderID
-HAVING TotalTickets > 1;
-
-SELECT id, COUNT(*) as count
-FROM Ticket
-GROUP BY id
-HAVING COUNT(*) > 1;
-
-SELECT op.fullName, t.orderPassengerID, t.id AS ticketID
-FROM Ticket t
-JOIN OrderPassenger op ON t.orderPassengerID = op.id;
-
-Select * from `Order`;
-
-SELECT o.id, o.customerID, o.staffID, o.status, o.time, COUNT(t.id) AS ticket_count
-FROM `Order` o
-LEFT JOIN Ticket t ON o.id = t.orderID
-WHERE o.customerID = 'c9978809-08e2-11f0-b095-71802f6a8767' -- Thay 'CUST001' bằng ID khách hàng thực tế
-GROUP BY o.id, o.customerID, o.staffID, o.status, o.time
-ORDER BY o.time DESC;
-
-SELECT o.id AS orderID, o.customerID, o.staffID, o.status, o.time, 
-       t.id AS ticketID, op.fullName, op.id AS orderPassengerID
-FROM `Order` o
-JOIN Ticket t ON o.id = t.orderID
-JOIN OrderPassenger op ON t.orderPassengerID = op.id
-WHERE o.customerID = 'c9978809-08e2-11f0-b095-71802f6a8767' -- Thay 'CUST001' bằng ID khách hàng thực tế
-ORDER BY o.time DESC, t.id;
-
-SELECT 
-    o.id AS orderID, 
+    o.id, 
     o.customerID, 
     o.staffID, 
     o.status, 
     o.time, 
-    GROUP_CONCAT(t.id ORDER BY t.id SEPARATOR ', ') AS ticketIDs, 
-    COUNT(t.id) AS ticketCount,
-    op.fullName, 
-    op.id AS orderPassengerID
+    COUNT(t.id) AS finalNum
 FROM `Order` o
-JOIN Ticket t ON o.id = t.orderID
-JOIN OrderPassenger op ON t.orderPassengerID = op.id
-WHERE o.customerID = 'c9978809-08e2-11f0-b095-71802f6a8767' -- Thay 'CUST001' bằng ID khách hàng thực tế
-GROUP BY o.id, o.customerID, o.staffID, o.status, o.time, op.fullName, op.id
+LEFT JOIN Ticket t ON o.id = t.orderId
+WHERE o.customerID = 'ef677639-09b2-11f0-8b27-aecf05ab4866'
+GROUP BY o.id, o.customerID, o.staffID, o.status, o.time
 ORDER BY o.time DESC;
 
+SELECT op.id, op.fullName, op.nationID
+FROM OrderPassenger op
+JOIN `Order` o ON op.orderID = o.id
+JOIN Ticket t ON t.orderID = o.id
+WHERE t.id = ?;
+
+Select * from Ticket;
+
+SELECT op.id, op.fullName, n.id AS nationId, n.name AS nationName
+FROM OrderPassenger op
+JOIN Nation n ON op.nationID = n.id
+JOIN `Order` o ON op.orderID = o.id
+JOIN Ticket t ON t.orderID = o.id
+WHERE t.flightID = 'FL001' AND t.seatID = 'VN-A001-4';
+
 SELECT 
-    op.fullName, 
-    t.orderPassengerID, 
-    t.orderID ,  -- Thêm cột OrderID
-    t.id AS ticketID
+    t.id AS ticketID,
+    f.code AS flightCode,
+    f.name AS flightName,
+    dep.name AS departureName,
+    des.name AS destinationName,
+    f.startingTime,
+    f.landingTime,
+    
+    s.id AS seatCode,
+    c.id AS compartmentID,
+    c.type AS ticketType,
+    tt.price,
+    tt.handedweightneed AS handLuggageWeight,
+    tt.checkedweightneed AS checkedLuggageWeight,
+    
+    a.name AS airplaneName,
+    
+    op.fullName AS passengerName,
+    n.name AS nationName,
+    
+    t.status AS ticketStatus
+
 FROM Ticket t
-JOIN OrderPassenger op ON t.orderPassengerID = op.id;
+JOIN Flight f ON t.flightID = f.id
+JOIN Location dep ON f.departure = dep.id
+JOIN Location des ON f.destination = des.id
+JOIN Seat s ON t.seatID = s.id
+JOIN Compartment c ON s.compartmentID = c.id
+JOIN TicketType tt ON c.type = tt.type
+JOIN Airplane a ON f.airplaneID = a.id
+JOIN `Order` o ON t.orderID = o.id
+LEFT JOIN OrderPassenger op ON o.id = op.orderID
+LEFT JOIN Nation n ON op.nationID = n.id
 
-
-
-
+WHERE t.flightID = 'FL001' AND t.seatID = 'VN-A001-1';
 
 

@@ -87,6 +87,7 @@
                         <th>Order ID</th>
                         <th>Status</th>
                         <th>Time</th>
+                        <th>Price</th>
                         <th>Total Passengers</th>
                         <th>Actions</th>
                     </tr>
@@ -95,10 +96,11 @@
                             <td>${order.id}</td> 
                             <td>${order.status}</td>
                             <td>${order.time}</td>
-                            <td>${order.ticketCount}</td> 
+                            <td>${order.finalPrice}</td>
+                            <td>${order.finalNum}</td> 
                             <td>
                                 <div class="action-group">
-                                    <a class="btn" href="${pageContext.request.contextPath}/orderDetail?orderId=${order.id}">View</a>
+                                    <a class="btn" href="${pageContext.request.contextPath}/historyBookingDetail?orderId=${order.id}">View</a>
 
                                     <c:choose>
                                         <c:when test="${order.status eq 'Canceled' or order.status eq 'Pending'}">

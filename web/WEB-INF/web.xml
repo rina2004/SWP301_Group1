@@ -101,8 +101,8 @@
         <servlet-class>controller.HistoryBookingController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>OrderDetailControl</servlet-name>
-        <servlet-class>controller.OrderDetailControl</servlet-class>
+        <servlet-name>HistoryBookingDetailController</servlet-name>
+        <servlet-class>controller.HistoryBookingDetailController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CancelTicketController</servlet-name>
@@ -225,8 +225,8 @@
         <url-pattern>/historyBooking</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>OrderDetailControl</servlet-name>
-        <url-pattern>/orderDetail</url-pattern>
+        <servlet-name>HistoryBookingDetailController</servlet-name>
+        <url-pattern>/historyBookingDetail</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CancelTicketController</servlet-name>

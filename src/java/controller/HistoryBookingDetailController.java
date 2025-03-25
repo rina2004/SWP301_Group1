@@ -18,7 +18,7 @@ import model.Ticket;
  *
  * @author anhbu
  */
-public class OrderDetailControl extends HttpServlet {
+public class HistoryBookingDetailController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -69,7 +69,7 @@ public class OrderDetailControl extends HttpServlet {
 
         // Đổ data ra view
         request.setAttribute("tickets", tickets);
-        request.getRequestDispatcher("view/OrderDetail.jsp").forward(request, response);
+        request.getRequestDispatcher("view/HistoryBookingDetail.jsp").forward(request, response);
     }
 
     /**

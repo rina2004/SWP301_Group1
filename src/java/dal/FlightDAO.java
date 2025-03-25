@@ -306,4 +306,6 @@ public class FlightDAO extends DBContext {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
         }   
     }
+    
+    
 }

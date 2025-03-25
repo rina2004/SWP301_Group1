@@ -17,6 +17,16 @@ public class Airplane {
     private LocalDateTime maintainanceTime;
     private LocalDateTime usedTime;
 
+    public Airplane() {
+    }
+
+    public Airplane(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+    
+
     public String getId() {
         return id;
     }

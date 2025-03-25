@@ -17,6 +17,12 @@ public class Compartment {
     public Compartment() {
     }
 
+    public Compartment(String id) {
+        this.id = id;
+    }
+    
+    
+
     public Compartment(String id, TicketType type, Airplane airplane, int capacity) {
         this.id = id;
         this.type = type;
