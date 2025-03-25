@@ -43,6 +43,7 @@ CREATE TABLE `Airplane` (
 	`id` varchar(10),
 	`name` varchar(50),
 	`statusID` int,
+    `numOfComs` int,
 	`maintainanceTime` datetime,
 	`usedTime` datetime,
 	  
@@ -51,13 +52,22 @@ CREATE TABLE `Airplane` (
 );
 
 CREATE TABLE `Compartment` (
-	`id` varchar(20),
+	`id` varchar(10),
 	`name` varchar(50),
 	`airplaneID` varchar(10),
 	`capacity` int,
 	  
 	PRIMARY KEY (`id`),
 	foreign key (`airplaneID`) references `Airplane`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Seat` (
+	`id` varchar(10),
+	`compartmentID` varchar(10),
+	`status` varchar(50),
+	  
+	PRIMARY KEY (`id`),
+	foreign key (`compartmentID`) references `Compartment`(`id`)
 );
 
 CREATE TABLE `Flight` (
@@ -73,16 +83,6 @@ CREATE TABLE `Flight` (
 	  
 	PRIMARY KEY (`id`),
 	foreign key (`airplaneID`) references `Airplane`(`id`)
-);
-
-CREATE TABLE `Seat` (
-	`id` varchar(10),
-	`compartmentID` varchar(20),
-	`status` bool,
-    `reason` varchar(250),
-	  
-	PRIMARY KEY (`id`),
-	foreign key (`compartmentID`) references `Compartment`(`id`)
 );
 
 CREATE TABLE `Order` (
@@ -213,3 +213,5 @@ CREATE TABLE `ChatMessage` (
 	FOREIGN KEY (`senderAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE,
 	FOREIGN KEY (`receiverAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
 );
+
+insert into `airplanestatus`(`id`, `name`) values (1, "Active"), (2, "Maintainance"), (3, "Repaired")

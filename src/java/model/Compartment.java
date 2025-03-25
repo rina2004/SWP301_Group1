@@ -4,26 +4,19 @@
  */
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Rinaaaa
  */
 public class Compartment {
-
     private String id;
     private String name;
     private Airplane airplane;
     private int capacity;
-
-    public Compartment() {
-    }
-
-    public Compartment(String id, String name, Airplane airplane, int capacity) {
-        this.id = id;
-        this.name = name;
-        this.airplane = airplane;
-        this.capacity = capacity;
-    }
+    
+    private ArrayList<Seat> seats = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -57,9 +50,11 @@ public class Compartment {
         this.capacity = capacity;
     }
 
-    @Override
-    public String toString() {
-        return "Compartment{" + "id=" + id + ", name=" + name + ", airplane=" + airplane + ", capacity=" + capacity + '}';
+    public ArrayList<Seat> getSeats() {
+        return seats;
     }
 
+    public void setSeats(ArrayList<Seat> seats) {
+        this.seats = seats;
+    }
 }

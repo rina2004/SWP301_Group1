@@ -13,7 +13,6 @@ public class Seat {
     private String id;
     private Compartment compartment;
     private String status;
-    private String reason;
 
     public Seat() {
     }
@@ -22,7 +21,6 @@ public class Seat {
         this.id = id;
         this.compartment = compartment;
         this.status = status;
-        this.reason = reason;
     }
 
     public String getId() {
@@ -47,23 +45,5 @@ public class Seat {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    @Override
-    public String toString() {
-        return "Seat{" + "id=" + id + ", compartment=" + compartment + ", status=" + status + ", reason=" + reason + '}';
-    }
-
-   
-    
-    
-    
+    } 
 }
