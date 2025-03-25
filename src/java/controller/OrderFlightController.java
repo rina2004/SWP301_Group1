@@ -50,7 +50,7 @@ public class OrderFlightController extends HttpServlet {
         // Create a map of tickets for each flight
         Map<String, Ticket> ticketMap = new HashMap<>();
         for (Flight flight : flights) {
-            Ticket ticket = ticketDAO.getTicketByFlightId(flight.getId());
+            Ticket ticket = ticketDAO.getByFlightId(flight.getId());
             if (ticket != null) {
                 ticketMap.put(flight.getId(), ticket);
             }

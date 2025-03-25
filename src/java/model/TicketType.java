@@ -66,6 +66,4 @@ public class TicketType {
         this.handedweightneed = handedweightneed;
     }
 
-    
-    
 }

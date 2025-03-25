@@ -4,9 +4,6 @@
  */
 package model;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 /**
  *
  * @author A A
@@ -14,30 +11,59 @@ import java.util.List;
 public class Ticket {
     private String id;
     private Order order;
+    private Flight flight;
     private Seat seat;
     private String status;
-    
-    // Các trường mở rộng
-    private String flightName;
-    private String flightCode;
-    private LocalDateTime startingTime;
-    private LocalDateTime landingTime;
-    private String departureName;
-    private String destinationName;
-    private String seatCode;
-    private String compartmentName;
-    
-        
-    // Các trường bổ sung từ Airplane (qua Compartment)
-    private String airplaneId;
-    private String airplaneName;
-    
-    //Danh sách hành khách đi cùng vé này (thuộc order)
-    private List<OrderPassenger> passengers;
 
     public Ticket() {
     }
 
-   
+    public Ticket(String id, Order order, Flight flight, Seat seat, String status) {
+        this.id = id;
+        this.order = order;
+        this.flight = flight;
+        this.seat = seat;
+        this.status = status;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+    public Seat getSeat() {
+        return seat;
+    }
+
+    public void setSeat(Seat seat) {
+        this.seat = seat;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
 }

@@ -6,7 +6,7 @@ package model;
 
 /**
  *
- * @author anhbu
+ * @author A A
  */
 public class Seat {
     private String id;
@@ -14,8 +14,7 @@ public class Seat {
     private String status;
     private String reason;
 
-    public Seat() {
-    }
+    public Seat() {}
 
     public Seat(String id, Compartment compartment, String status, String reason) {
         this.id = id;
@@ -55,6 +54,5 @@ public class Seat {
     public void setReason(String reason) {
         this.reason = reason;
     }
-       
     
 }
