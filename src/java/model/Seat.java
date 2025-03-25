@@ -6,30 +6,27 @@ package model;
 
 /**
  *
- * @author tungn
+ * @author A A
  */
 public class Seat {
-    
-    private String id;
+    private int id;
     private Compartment compartment;
-    private String status;
+    private boolean status;
     private String reason;
 
-    public Seat() {
-    }
-
-    public Seat(String id, Compartment compartment, String status, String reason) {
+    public Seat() {}
+    public Seat(int id, Compartment compartment, boolean status, String reason) {
         this.id = id;
         this.compartment = compartment;
         this.status = status;
         this.reason = reason;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -41,11 +38,11 @@ public class Seat {
         this.compartment = compartment;
     }
 
-    public String getStatus() {
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -56,14 +53,4 @@ public class Seat {
     public void setReason(String reason) {
         this.reason = reason;
     }
-
-    @Override
-    public String toString() {
-        return "Seat{" + "id=" + id + ", compartment=" + compartment + ", status=" + status + ", reason=" + reason + '}';
-    }
-
-   
-    
-    
-    
 }

@@ -6,28 +6,24 @@ package model;
 
 /**
  *
- * @author tungn
+ * @author A A
  */
 public class TicketType {
     private String type;
     private String description;
     private double price;
-    private double checkedLuggageWeight;
-    private double handLuggageWeight;
-    private int luggageQuantity;
-    private String  additionalService;
+    private String checkedweightneed;
+    private String handedweightneed;
 
     public TicketType() {
     }
 
-    public TicketType(String type, String description, double price, double checkedLuggageWeight, double handLuggageWeight, int luggageQuantity, String additionalService) {
+    public TicketType(String type, String description, double price, String checkedweightneed, String handedweightneed) {
         this.type = type;
         this.description = description;
         this.price = price;
-        this.checkedLuggageWeight = checkedLuggageWeight;
-        this.handLuggageWeight = handLuggageWeight;
-        this.luggageQuantity = luggageQuantity;
-        this.additionalService = additionalService;
+        this.checkedweightneed = checkedweightneed;
+        this.handedweightneed = handedweightneed;
     }
 
     public String getType() {
@@ -54,40 +50,20 @@ public class TicketType {
         this.price = price;
     }
 
-    public double getCheckedLuggageWeight() {
-        return checkedLuggageWeight;
+    public String getCheckedweightneed() {
+        return checkedweightneed;
     }
 
-    public void setCheckedLuggageWeight(double checkedLuggageWeight) {
-        this.checkedLuggageWeight = checkedLuggageWeight;
+    public void setCheckedweightneed(String checkedweightneed) {
+        this.checkedweightneed = checkedweightneed;
     }
 
-    public double getHandLuggageWeight() {
-        return handLuggageWeight;
+    public String getHandedweightneed() {
+        return handedweightneed;
     }
 
-    public void setHandLuggageWeight(double handLuggageWeight) {
-        this.handLuggageWeight = handLuggageWeight;
+    public void setHandedweightneed(String handedweightneed) {
+        this.handedweightneed = handedweightneed;
     }
-
-    public int getLuggageQuantity() {
-        return luggageQuantity;
-    }
-
-    public void setLuggageQuantity(int luggageQuantity) {
-        this.luggageQuantity = luggageQuantity;
-    }
-
-    public String getAdditionalService() {
-        return additionalService;
-    }
-
-    public void setAdditionalService(String additionalService) {
-        this.additionalService = additionalService;
-    }
-
-    @Override
-    public String toString() {
-        return "TicketType{" + "type=" + type + ", description=" + description + ", price=" + price + ", checkedLuggageWeight=" + checkedLuggageWeight + ", handLuggageWeight=" + handLuggageWeight + ", luggageQuantity=" + luggageQuantity + ", additionalService=" + additionalService + '}';
-    }    
+    
 }

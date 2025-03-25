@@ -47,7 +47,7 @@
                                 </tr>
                                 <tr>
                                     <th>Airplane ID:</th>
-                                    <td>${flight.getAirplaneId()}</td>
+                                    <td>${flight.getAirplane().getId()}</td>
                                 </tr>
                             </table>
                         </div>
@@ -56,13 +56,13 @@
                             <table class="table table-borderless">
                                 <tr>
                                     <th>Departure:</th>
-                                    <td>${flight.getDeparture()}</td>
+                                    <td>${flight.getDeparture().getName()}</td>
                                 </tr>
                                 <tr>
                                     <th>Destination:</th>
-                                    <td>${flight.getDestination()}</td>
+                                    <td>${flight.getDestination().getName()}</td>
                                 </tr>
-                                
+
                                 <tr>
                                     <th>Entry DateTime:</th>
                                     <td>
@@ -70,7 +70,7 @@
                                         <div class="time-display">${flight.getEntryHour()}</div>
                                     </td>
                                 </tr>
-                               
+
                                 <tr>
                                     <th>Starting DateTime:</th>
                                     <td>

@@ -228,7 +228,7 @@
                     <label class="btn btn-outline-primary" for="roundTrip">Round Trip</label>
                 </div>
 
-                <form action="search-flights" method="GET" id="flightSearchForm">
+                <form action="order" method="GET" id="flightSearchForm">
                     <div class="row">
                         <!-- Origin -->
                         <div class="col-md-6 mb-3">

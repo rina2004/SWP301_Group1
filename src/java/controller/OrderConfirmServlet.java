@@ -20,7 +20,7 @@ import model.Flight;
  *
  * @author A A
  */
-public class BookingConfirmationServlet extends HttpServlet {
+public class OrderConfirmServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,13 +46,13 @@ public class BookingConfirmationServlet extends HttpServlet {
             session.setAttribute("passengers", passengers);
             
             // Rediriger vers la page de confirmation
-            response.sendRedirect("booking-confirmation.jsp");
+            response.sendRedirect("order-confirm.jsp");
             
         } catch (Exception ex) {
             // En cas d'erreur, rediriger vers la page d'accueil avec un message d'erreur
             HttpSession session = request.getSession();
-            session.setAttribute("errorMessage", "Une erreur s'est produite lors de la réservation. Veuillez réessayer.");
-            response.sendRedirect("search-flights");
+            session.setAttribute("errorMessage", "An error occurred during booking. Please try again.");
+            response.sendRedirect("order");
         }
     }
 

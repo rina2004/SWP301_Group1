@@ -46,9 +46,9 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="airplaneId" class="form-label">Airplane ID</label>
-                                    <input readonly type="text" class="form-control" id="airplaneId" name="airplaneId" 
-                                           value="${flight.getAirplaneId()}" required>
+                                    <label for="airplane" class="form-label">Airplane ID</label>
+                                    <input readonly type="text" class="form-control" id="airplane" name="airplane" 
+                                           value="${flight.getAirplane().getId()}" required>
                                 </div>
                             </div>
 
@@ -56,14 +56,20 @@
                                 <h4>Route Information</h4>
                                 <div class="mb-3">
                                     <label for="departure" class="form-label">Departure</label>
-                                    <input type="text" class="form-control" id="departure" name="departure" 
-                                           value="${flight.getDeparture()}" required>
+                                    <select class="form-select" id="departure" name="departure" required>
+                                        <c:forEach items="${locationList}" var="loc">
+                                            <option value="${loc.getId()}" ${flight.getDeparture().getId() == loc.getId() ? 'selected' : ''}>${loc.getName()}</option>
+                                        </c:forEach>
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="destination" class="form-label">Destination</label>
-                                    <input type="text" class="form-control" id="destination" name="destination" 
-                                           value="${flight.getDestination()}" required>
+                                    <select class="form-select" id="destination" name="destination" required>
+                                        <c:forEach items="${locationList}" var="loc">
+                                            <option value="${loc.getId()}" ${flight.getDestination().getId() == loc.getId() ? 'selected' : ''}>${loc.getName()}</option>
+                                        </c:forEach>
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">

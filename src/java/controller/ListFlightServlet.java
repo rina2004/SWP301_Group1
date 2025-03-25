@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Flight;
 import model.Ticket;
 
@@ -25,21 +27,20 @@ public class ListFlightServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         FlightDAO dao = new FlightDAO();
-        ArrayList<Flight> list = dao.list();
-        TicketDAO ticketDao = new TicketDAO();
-        Map<String, Ticket> ticketMap = new HashMap<>();
-
-        // Get lowest price ticket for each flight
-        for (Flight flight : list) {
-            Ticket ticket = ticketDao.getTicketByFlightId(flight.getId());
-            ticketMap.put(flight.getId(), ticket);
+        ArrayList<Flight> list = null;
+        try {
+            list = dao.list();
+            TicketDAO ticketDao = new TicketDAO();
+            Map<String, Ticket> ticketMap = new HashMap<>();
+            for (Flight flight : list) {
+                Ticket ticket = ticketDao.getTicketByFlightId(flight.getId());
+                ticketMap.put(flight.getId(), ticket);
+            }
+            request.setAttribute("ticketMap", ticketMap);
+            request.setAttribute("list", list);
+            request.getRequestDispatcher("flight-list.jsp").forward(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(ListFlightServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        request.setAttribute("ticketMap", ticketMap);
-        request.setAttribute("list", list);
-        list.sort(Comparator.comparing(Flight::getName));
-        request.getRequestDispatcher("flight-list.jsp").forward(request, response);
-
     }
-
 }

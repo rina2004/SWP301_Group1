@@ -6,43 +6,44 @@ package model;
 
 /**
  *
- * @author tungn
+ * @author A A
  */
 public class Luggage {
-
-    private String id;
-    private Account acc;
+    private int id;
+    private Account customer;
     private Order order;
     private String type;
-    private double weight;
+    private double checkedweight;
+    private double handedweight;
     private boolean existed;
 
     public Luggage() {
     }
 
-    public Luggage(String id, Account acc, Order order, String type, double weight, boolean existed) {
+    public Luggage(int id, Account customer, Order order, String type, double checkedweight, double handedweight, boolean existed) {
         this.id = id;
-        this.acc = acc;
+        this.customer = customer;
         this.order = order;
         this.type = type;
-        this.weight = weight;
+        this.checkedweight = checkedweight;
+        this.handedweight = handedweight;
         this.existed = existed;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Account getAcc() {
-        return acc;
+    public Account getCustomer() {
+        return customer;
     }
 
-    public void setAcc(Account acc) {
-        this.acc = acc;
+    public void setCustomer(Account customer) {
+        this.customer = customer;
     }
 
     public Order getOrder() {
@@ -61,12 +62,20 @@ public class Luggage {
         this.type = type;
     }
 
-    public double getWeight() {
-        return weight;
+    public double getCheckedweight() {
+        return checkedweight;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    public void setCheckedweight(double checkedweight) {
+        this.checkedweight = checkedweight;
+    }
+
+    public double getHandedweight() {
+        return handedweight;
+    }
+
+    public void setHandedweight(double handedweight) {
+        this.handedweight = handedweight;
     }
 
     public boolean isExisted() {
@@ -76,12 +85,7 @@ public class Luggage {
     public void setExisted(boolean existed) {
         this.existed = existed;
     }
-
-    @Override
-    public String toString() {
-        return "Luggage{" + "id=" + id + ", acc=" + acc + ", order=" + order + ", type=" + type + ", weight=" + weight + ", existed=" + existed + '}';
-    }
-
-   
-
+    
+    
+    
 }

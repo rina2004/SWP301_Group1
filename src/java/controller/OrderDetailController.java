@@ -19,7 +19,7 @@ import model.Flight;
  *
  * @author A A
  */
-public class ViewFlightOrderServlet extends HttpServlet {
+public class OrderDetailController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,7 +40,7 @@ public class ViewFlightOrderServlet extends HttpServlet {
             f = dao.getFlightById(id);
             if (f != null) {
                 request.setAttribute("flight", f);
-                request.getRequestDispatcher("flightorder-detail.jsp").forward(request, response);
+                request.getRequestDispatcher("order-result-detail.jsp").forward(request, response);
             }
         } catch (Exception ex) {
 //            Logger.getLogger(ViewFlightServlet.class.getName()).log(Level.SEVERE, null, ex);

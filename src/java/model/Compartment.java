@@ -9,7 +9,6 @@ package model;
  * @author Rinaaaa
  */
 public class Compartment {
-
     private String id;
     private TicketType type;
     private Airplane airplane;
@@ -56,11 +55,4 @@ public class Compartment {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
-
-    @Override
-    public String toString() {
-        return "Compartment{" + "id=" + id + ", type=" + type + ", airplane=" + airplane + ", capacity=" + capacity + '}';
-    }
-
-   
 }

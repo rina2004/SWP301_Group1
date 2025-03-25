@@ -11,11 +11,10 @@ import java.sql.Date;
  * @author anhbu
  */
 public class Account {
-
     private String id;
     private String username;
     private String password;
-    private Role role;
+    private Role roleID;
     private boolean status;
     private String citizenID;
     private String name;
@@ -24,14 +23,12 @@ public class Account {
     private String address;
     private String email;
 
-    public Account() {
-    }
-
-    public Account(String id, String username, String password, Role role, boolean status, String citizenID, String name, Date dob, String phone, String address, String email) {
+    public Account() {}
+    public Account(String id, String username, String password, Role roleID, boolean status, String citizenID, String name, Date dob, String phone, String address, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.role = role;
+        this.roleID = roleID;
         this.status = status;
         this.citizenID = citizenID;
         this.name = name;
@@ -65,12 +62,12 @@ public class Account {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public Role getRoleID() {
+        return roleID;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoleID(Role roleID) {
+        this.roleID = roleID;
     }
 
     public boolean isStatus() {
@@ -128,11 +125,4 @@ public class Account {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    @Override
-    public String toString() {
-        return "Account{" + "id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + ", status=" + status + ", citizenID=" + citizenID + ", name=" + name + ", dob=" + dob + ", phone=" + phone + ", address=" + address + ", email=" + email + '}';
-    }
-
-    
 }

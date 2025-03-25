@@ -9,21 +9,20 @@ package model;
  * @author A A
  */
 public class Ticket {
-
     private String id;
     private Order order;
-    private TicketType type;
     private Seat seat;
+    private String type;
     private String status;
 
     public Ticket() {
     }
 
-    public Ticket(String id, Order order, TicketType type, Seat seat, String status) {
+    public Ticket(String id, Order order, Seat seat, String type, String status) {
         this.id = id;
         this.order = order;
-        this.type = type;
         this.seat = seat;
+        this.type = type;
         this.status = status;
     }
 
@@ -43,20 +42,20 @@ public class Ticket {
         this.order = order;
     }
 
-    public TicketType getType() {
-        return type;
-    }
-
-    public void setType(TicketType type) {
-        this.type = type;
-    }
-
     public Seat getSeat() {
         return seat;
     }
 
     public void setSeat(Seat seat) {
         this.seat = seat;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getStatus() {
@@ -67,8 +66,4 @@ public class Ticket {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Ticket{" + "id=" + id + ", order=" + order + ", type=" + type + ", seat=" + seat + ", status=" + status + '}';
-    }
 }

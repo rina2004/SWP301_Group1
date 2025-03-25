@@ -1,5 +1,5 @@
 <%-- 
-    Document   : flightorder-detail
+    Document   : order-result-detail
     Created on : 3 Mar 2025, 11:33:51
     Author     : A A
 --%>
@@ -21,7 +21,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3>Flight Details</h3>
-                    <a href="search-flights?departure=${departure}&destination=${destination}&departureDate=${departureDate}" class="btn btn-primary">
+                    <a href="order?departure=${departure}&destination=${destination}&departureDate=${departureDate}" class="btn btn-primary">
                         <i class="fas fa-arrow-left"></i> Back to List
                     </a>
                 </div>
@@ -47,7 +47,7 @@
                                 </tr>
                                 <tr>
                                     <th>Airplane ID:</th>
-                                    <td>${flight.getAirplaneId()}</td>
+                                    <td>${flight.getAirplane()}</td>
                                 </tr>
                             </table>
                         </div>

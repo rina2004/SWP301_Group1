@@ -4,18 +4,15 @@
  */
 package Controller;
 
-import dal.AirplaneDAO;
-import dal.FlightDAO;
+import dal.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.List;
-import model.Airplane;
-import model.Flight;
+import java.time.*;
+import java.util.*;
+import model.*;
 
 /**
  *
@@ -27,8 +24,14 @@ public class AddFlightServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         AirplaneDAO airplaneDao = new AirplaneDAO();
-        List<Airplane> list = airplaneDao.list();
-        request.setAttribute("airplanes", list);
+        List<Airplane> airplaneList;
+        airplaneList = airplaneDao.list();
+        LocationDAO locationDao = new LocationDAO();
+        List<Location> locationList = locationDao.list();
+
+        Collections.sort(locationList, (Location l1, Location l2) -> l1.getName().compareToIgnoreCase(l2.getName()));
+        request.setAttribute("airplanes", airplaneList);
+        request.setAttribute("locations", locationList);
         request.getRequestDispatcher("flight-form.jsp").forward(request, response);
     }
 
@@ -37,77 +40,89 @@ public class AddFlightServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             request.setCharacterEncoding("UTF-8");
+            AirplaneDAO ad = new AirplaneDAO();
+            LocationDAO ld = new LocationDAO();
 
             Flight f = new Flight();
             f.setId(generateFlightId());
             f.setName(request.getParameter("name"));
-//            f.setCode(request.getParameter("code"));
-            f.setCode(generateFlightCode(request.getParameter("name")));
-
-            f.setAirplaneId(request.getParameter("airplaneId"));
-            f.setDeparture(request.getParameter("departure"));
-            f.setDestination(request.getParameter("destination"));
-
+            f.setCode(generateFlightCode());
+            f.setAirplane(ad.get(request.getParameter("airplane")));
+            int departureId = Integer.parseInt(request.getParameter("departure"));
+            int destinationId = Integer.parseInt(request.getParameter("destination"));
+            f.setDeparture(ld.getById(departureId));
+            f.setDestination(ld.getById(destinationId));
             f.setEntryTime(LocalDateTime.parse(request.getParameter("entryTime")));
             f.setStartingTime(LocalDateTime.parse(request.getParameter("startingTime")));
             f.setLandingTime(LocalDateTime.parse(request.getParameter("landingTime")));
 
             validateFlight(f);
-
             FlightDAO dao = new FlightDAO();
             dao.insert(f);
-
             response.sendRedirect("list-flight");
-
         } catch (Exception e) {
             request.setAttribute("error", "Error adding flight: " + e.getMessage());
             doGet(request, response);
         }
     }
 
-    private String generateFlightId() {
-        // Generate a unique flight ID (implement your logic)
-        return "F" + System.currentTimeMillis() % 10000;
-    }
+    private String generateFlightId() throws Exception {
+        FlightDAO dao = new FlightDAO();
+        // Get highest current flight ID number
+        String highestId = dao.getHighestFlightId();
 
-    private String generateFlightCode(String flightName) {
-        // Extract numeric part from flight name
-        String numericPart = flightName.replaceAll("[^0-9]", "");
-
-        // If no numeric part found, use a default number
-        if (numericPart.isEmpty()) {
-            numericPart = String.valueOf(System.currentTimeMillis() % 1000);
+        if (highestId == null) {
+            // If no flights exist, start with FL001
+            return "FL001";
+        } else {
+            // Extract the numeric part
+            String numericPart = highestId.substring(2); // Remove "FL"
+            int nextNumber = Integer.parseInt(numericPart) + 1;
+            // Format with leading zeros (e.g., FL001, FL002, etc.)
+            return String.format("FL%03d", nextNumber);
         }
-
-        return "FL" + numericPart;
     }
 
-    private void validateFlight(Flight flight) throws Exception {
+    private String generateFlightCode() throws Exception {
+        FlightDAO dao = new FlightDAO();
+        // Get highest current flight code number
+        String highestCode = dao.getHighestFlightCode();
+
+        if (highestCode == null) {
+            // If no flights exist, start with VN001
+            return "VN001";
+        } else {
+            // Extract the numeric part
+            String numericPart = highestCode.substring(2); // Remove "VN"
+            int nextNumber = Integer.parseInt(numericPart) + 1;
+            // Format with leading zeros (e.g., VN001, VN002, etc.)
+            return String.format("VN%03d", nextNumber);
+        }
+    }
+
+    private void validateFlight(Flight f) throws Exception {
         FlightDAO dao = new FlightDAO();
 
-        if (dao.getFlightById(flight.getId()) != null) {
-            throw new Exception("Flight ID already exists.");
-        }
-
-        if (dao.getFlightByName(flight.getName()) != null) {
+        if (dao.getFlightByName(f.getName()) != null) {
             throw new Exception("Flight name already exists.");
         }
 
-        if (dao.getFlightByCode(flight.getCode()) != null) {
-            throw new Exception("Flight code already exists.");
-        }
-
-        if (flight.getName() == null || flight.getName().trim().isEmpty()) {
+        if (f.getName() == null || f.getName().trim().isEmpty()) {
             throw new Exception("Flight name is required");
         }
-        if (flight.getCode() == null || flight.getCode().trim().isEmpty()) {
-            throw new Exception("Flight code is required");
+
+        if (f.getDeparture().getId() == f.getDestination().getId()) {
+            throw new Exception("Departure and destination cannot be the same location");
         }
-        if (flight.getStartingTime().isBefore(flight.getEntryTime())) {
+
+        if (f.getStartingTime().isBefore(f.getEntryTime())) {
             throw new Exception("Starting time must be after entry time");
         }
-        if (flight.getLandingTime().isBefore(flight.getStartingTime())) {
+        if (f.getLandingTime().isBefore(f.getStartingTime())) {
             throw new Exception("Landing time must be after starting time");
+        }
+        if(f.getLandingTime().equals(f.getStartingTime())){
+            throw new Exception("Landing time must not be equal to starting time");
         }
     }
 }

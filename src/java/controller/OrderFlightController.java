@@ -23,19 +23,17 @@ import model.Ticket;
  *
  * @author A A
  */
-public class SearchFlightsServlet extends HttpServlet {
+public class OrderFlightController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Get search parameters
         String departure = request.getParameter("departure");
         String destination = request.getParameter("destination");
         String departureDate = request.getParameter("departureDate");
         String passengers = request.getParameter("passengers");
         String travelClass = request.getParameter("class");
 
-        // Check if this is an initial load or a search request
         if (departure == null || destination == null || departureDate == null
                 || departure.isEmpty() || destination.isEmpty() || departureDate.isEmpty()) {
             // If parameters are missing, show the search form
@@ -43,7 +41,6 @@ public class SearchFlightsServlet extends HttpServlet {
             return;
         }
 
-        // Initialize DAOs
         FlightDAO flightDAO = new FlightDAO();
         TicketDAO ticketDAO = new TicketDAO();
 
@@ -59,7 +56,6 @@ public class SearchFlightsServlet extends HttpServlet {
             }
         }
 
-        // Set attributes for the JSP
         request.setAttribute("departure", departure);
         request.setAttribute("destination", destination);
         request.setAttribute("departureDate", departureDate);
@@ -68,8 +64,7 @@ public class SearchFlightsServlet extends HttpServlet {
         request.setAttribute("list", flights);
         request.setAttribute("ticketMap", ticketMap);
 
-        // Forward to the results page
-        request.getRequestDispatcher("flight-search-results.jsp").forward(request, response);
+        request.getRequestDispatcher("order-result.jsp").forward(request, response);
     }
 
     @Override

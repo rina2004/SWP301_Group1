@@ -4,27 +4,29 @@
  */
 package model;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 /**
  *
- * @author tungn
+ * @author A A
  */
 public class Order {
 
     private String id;
-    private Account account;
+    private Account customer;
+    private Account staff;
     private String status;
-    private Date time;
+    private LocalDateTime time;
     private double finalPrice;
     private int finalNum;
 
     public Order() {
     }
 
-    public Order(String id, Account account, String status, Date time, double finalPrice, int finalNum) {
+    public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum) {
         this.id = id;
-        this.account = account;
+        this.customer = customer;
+        this.staff = staff;
         this.status = status;
         this.time = time;
         this.finalPrice = finalPrice;
@@ -39,12 +41,20 @@ public class Order {
         this.id = id;
     }
 
-    public Account getAccount() {
-        return account;
+    public Account getCustomer() {
+        return customer;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setCustomer(Account customer) {
+        this.customer = customer;
+    }
+
+    public Account getStaff() {
+        return staff;
+    }
+
+    public void setStaff(Account staff) {
+        this.staff = staff;
     }
 
     public String getStatus() {
@@ -55,11 +65,11 @@ public class Order {
         this.status = status;
     }
 
-    public Date getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 
@@ -79,12 +89,5 @@ public class Order {
         this.finalNum = finalNum;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" + "id=" + id + ", account=" + account + ", status=" + status + ", time=" + time + ", finalPrice=" + finalPrice + ", finalNum=" + finalNum + '}';
-    }
- 
     
-    
-  
 }
