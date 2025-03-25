@@ -8,12 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import model.Account;
 import model.Airplane;
-import model.Compartment;
-import model.Order;
 import model.Seat;
-import model.Ticket;
 
 
 /**
@@ -162,10 +158,22 @@ public class SeatDAO extends DBContext {
 
     public static void main(String[] args) {
         SeatDAO dao = new SeatDAO();
-        String id = "VN-A001-1";
-        Seat seat = dao.getInformation(id);
 
-        System.out.println(seat.toString());
+            // ID máy bay cần test (thay bằng ID có sẵn trong database)
+            String testAirplaneID = "VN-A001";
+
+            // Gọi hàm showAllSeatByTypeID
+            ArrayList<Seat> seats = dao.showAllSeatByTypeID(testAirplaneID);
+
+            // Kiểm tra kết quả
+            if (seats.isEmpty()) {
+                System.out.println("⚠️ Không tìm thấy ghế nào trong máy bay có ID: " + testAirplaneID);
+            } else {
+                System.out.println("🎯 Danh sách ghế trong máy bay " + testAirplaneID + ":");
+                for (Seat seat : seats) {
+                    System.out.println("📌 Ghế ID: " + seat.getId() + ", Trạng thái: " + seat.getStatus());
+                }
+            }
 
     }
 }

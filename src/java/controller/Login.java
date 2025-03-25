@@ -103,11 +103,11 @@ public class Login extends HttpServlet {
         session.setAttribute("acc", acc);
         session.setAttribute("username", username);
         session.setAttribute("Accid", acc.getId());
-        session.setAttribute("role", acc.getRole().getId());
+        session.setAttribute("role", acc.getRoleID().getId());
         session.setMaxInactiveInterval(60 * 30); // 30 phút
 
         String homePage = "view/home_1.jsp";
-        if (acc.getRole().getId() == 2) {
+        if (acc.getRoleID().getId() == 2) {
             homePage = "view/home_1.jsp";
         }
         request.getRequestDispatcher(homePage).forward(request, response);

@@ -46,7 +46,6 @@ public class OrderDAO extends DBContext {
                 Order order = new Order();
                 order.setId(rs.getString("id"));
                 order.setStatus(rs.getString("status"));
-                order.setTime(rs.getDate("time"));
                 list.add(order);
             }
         } catch (SQLException e) {

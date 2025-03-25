@@ -263,7 +263,7 @@ public class AccountDAO extends DBContext {
                 acc.setId(rs.getString("id"));
                 acc.setUsername(rs.getString("username"));
                 acc.setPassword(rs.getString("password"));
-                acc.setRole(role);
+                acc.setRoleID(role);
                 acc.setStatus(status);
 
                 return acc;

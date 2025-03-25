@@ -14,11 +14,11 @@ import java.util.logging.Logger;
  *
  * @author Rinaaaa
  */
-public class AirplaneDAO extends DBContext{
-    
-    public void insert(Airplane airplane){
+public class AirplaneDAO extends DBContext {
+
+    public void insert(Airplane airplane) {
         String sql = "INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime) "
-                       + "VALUES (?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?)";
         PreparedStatement stm = null;
         try {
             stm = connection.prepareStatement(sql);
@@ -40,17 +40,17 @@ public class AirplaneDAO extends DBContext{
             }
         }
     }
-    
+
     public Airplane get(String id) {
         Airplane airplane = null;
         String sql = "SELECT * FROM swp301.airplane WHERE id = ?";
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
         AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
-        
+
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
-            
+
             if (rs.next()) {
                 airplane = new Airplane();
                 airplane.setId(rs.getString("id"));
@@ -64,15 +64,15 @@ public class AirplaneDAO extends DBContext{
         }
         return airplane;
     }
-    
-    public void update(Airplane airplane) throws Exception{
+
+    public void update(Airplane airplane) throws Exception {
         String sql = "UPDATE Airplane SET statusID = ?, maintainanceTime = ? WHERE id = ?";
-        
+
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setInt(1, airplane.getStatus().getId());
             stm.setTimestamp(2, Timestamp.valueOf(airplane.getMaintainanceTime()));
             stm.setString(3, airplane.getId());
-            
+
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,7 +80,7 @@ public class AirplaneDAO extends DBContext{
         }
     }
 
-    public ArrayList<Airplane> list(){
+    public ArrayList<Airplane> list() {
         ArrayList<Airplane> planes = new ArrayList<>();
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
         String sql = "SELECT * FROM Airplane";
@@ -95,10 +95,46 @@ public class AirplaneDAO extends DBContext{
                 p.setUsedTime(rs.getTimestamp("usedTime").toLocalDateTime());
                 planes.add(p);
             }
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return planes;
+    }
+
+    public String getIdbyID(String id) {
+        PreparedStatement stm;
+        ResultSet rs;
+
+        String sql = "Select id From airplane Where id = ?";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getString("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        AirplaneDAO airplaneDAO = new AirplaneDAO();
+
+        // ID cần test (thay bằng ID có sẵn trong database)
+        String testId = "VN-A001";
+
+        // Gọi hàm getIdbyID
+        String airplaneId = airplaneDAO.getIdbyID(testId);
+
+        // Kiểm tra kết quả
+        if (airplaneId != null) {
+            System.out.println("🎯 Tìm thấy ID máy bay: " + airplaneId);
+        } else {
+            System.out.println("⚠️ Không tìm thấy máy bay nào với ID: " + testId);
+        }
+
     }
 }

@@ -4,7 +4,6 @@
  */
 package Controller;
 
-import dal.PostDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +20,7 @@ import model.Post;
  */
 public class postController extends HttpServlet {
 
-    PostDAO postDAO = new PostDAO();
+  //  PostDAO postDAO = new PostDAO();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -60,15 +59,15 @@ public class postController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
-        
-        Post post = postDAO.findById(id);
-        
-        List<Comment> listCmt = postDAO.findCmt(id);
-        
-        request.setAttribute("post", post);
-        request.setAttribute("listCmt", listCmt);
-        request.getRequestDispatcher("post.jsp").forward(request, response);
+//        String id = request.getParameter("id");
+//        
+//        Post post = postDAO.findById(id);
+//        
+//        List<Comment> listCmt = postDAO.findCmt(id);
+//        
+//        request.setAttribute("post", post);
+//        request.setAttribute("listCmt", listCmt);
+//        request.getRequestDispatcher("post.jsp").forward(request, response);
     }
 
     /**

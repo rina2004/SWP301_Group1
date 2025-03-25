@@ -59,10 +59,10 @@ public class AccountControl extends HttpServlet {
 
         // Sắp xếp danh sách theo RoleID
         if ("asc".equals(sortOrder)) {
-            listA.sort(Comparator.comparing(a -> a.getRole().getId())); // Tăng dần
+            listA.sort(Comparator.comparing(a -> a.getRoleID().getId())); // Tăng dần
 
         } else if ("desc".equals(sortOrder)) {
-            listA.sort(Comparator.comparing((Account a) -> a.getRole().getId()).reversed());
+            listA.sort(Comparator.comparing((Account a) -> a.getRoleID().getId()).reversed());
 
         }
 
@@ -80,7 +80,7 @@ public class AccountControl extends HttpServlet {
             if (listA != null) {
                 Iterator<Account> iterator = listA.iterator();
                 while (iterator.hasNext()) {
-                    if (iterator.next().getRole().getId() != roleID) {
+                    if (iterator.next().getRoleID().getId() != roleID) {
                         iterator.remove();
                     }
                 }

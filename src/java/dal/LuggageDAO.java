@@ -95,14 +95,7 @@ public class LuggageDAO extends DBContext {
             stm.setString(1, customerID);
             rs = stm.executeQuery();
             while (rs.next()) {
-                Account acc = new Account();
-                acc.setId(rs.getString("customerID"));
-                Luggage luggage = new Luggage();
-                luggage.setId(rs.getString("id"));
-                luggage.setAcc(acc);
-                luggage.setType(rs.getString("type"));
-                luggage.setWeight(rs.getDouble("weight"));
-                list.add(luggage);
+              
             }
             
         } catch (SQLException e) {
