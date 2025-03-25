@@ -1,7 +1,6 @@
 CREATE DATABASE `swp301`;
 USE `swp301`;
-
-
+ 
 -------------------------------------------------------------
 -------------------------------------------------------------
 -------------------------------------------------------------
@@ -63,20 +62,29 @@ CREATE TABLE `Airplane` (
     FOREIGN KEY (`statusID`) REFERENCES `AirplaneStatus`(`id`)
 );
 
+CREATE TABLE `TicketType` (
+    `type` VARCHAR(30) PRIMARY KEY,
+    `description` TEXT,
+    `price` DECIMAL(10,2),
+    `checkedweightneed` decimal(10,2),
+    `handedweightneed` decimal(10,2)
+);
+
 CREATE TABLE `Compartment` (
     `id` VARCHAR(20),
-    `name` VARCHAR(50),
+    `type` VARCHAR(30),
     `airplaneID` VARCHAR(10),
     `capacity` INT,
     
     PRIMARY KEY (`id`),
+    FOREIGN KEY (`type`) REFERENCES `TicketType`(`type`),
     FOREIGN KEY (`airplaneID`) REFERENCES `Airplane`(`id`) ON DELETE CASCADE
-);
+); 
 
 CREATE TABLE `Seat` (
     `id` VARCHAR(10),
     `compartmentID` VARCHAR(20),
-    `status` BOOL,
+    `status` VARCHAR(50),
     `reason` VARCHAR(250),
     
     PRIMARY KEY (`id`),
@@ -111,15 +119,6 @@ CREATE TABLE `PassengerType` (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `TicketType` (
-    `type` VARCHAR(30) PRIMARY KEY,
-    `description` VARCHAR(255),
-    `checkedLuggageWeight` DECIMAL(5,2) NOT NULL COMMENT 'Weight in kg',
-    `handLuggageWeight` DECIMAL(5,2) NOT NULL COMMENT 'Weight in kg',
-    `luggageQuantity` INT NOT NULL COMMENT 'Number of luggage pieces allowed',
-    `additionalServices` TEXT
-);
-
 -- Order and Passenger Details Tables
 CREATE TABLE `Order` (
     `id` VARCHAR(10),
@@ -129,9 +128,6 @@ CREATE TABLE `Order` (
     `time` DATETIME,
     `finalPrice` DECIMAL(10,2),
     `finalNum` INT,
-    `ordername` VARCHAR(100) NOT NULL,
-    `phone` VARCHAR(15),
-    `email` VARCHAR(100),
     
     PRIMARY KEY (`id`),
     FOREIGN KEY (`customerID`) REFERENCES `Account`(`id`),
@@ -153,37 +149,26 @@ CREATE TABLE `OrderPassenger` (
 );
 
 CREATE TABLE `Ticket` (
-	`id` varchar(10),
-	`orderID` varchar(10),
-    `orderPassengerID` varchar(36), -- thêm cột mới
-	`flightID` varchar(10),
-	`seatID` varchar(10),
-	`type` varchar(30),
-	`price` decimal(10,2),
-	`status` varchar(20),
-	  
-	PRIMARY KEY (`id`),
-	foreign key (`orderID`) references `Order`(`id`),
-    foreign key (`orderPassengerID`) references `OrderPassenger`(`id`), -- khóa ngoại mới
-	foreign key (`flightID`) references `Flight`(`id`),
-	foreign key (`seatID`) references `Seat`(`id`),
-    foreign key (`type`) references `TicketType`(`type`),
-
-    -- Không cho phép 1 chuyến bay có 2 vé cùng ghế
-    UNIQUE (`flightID`, `seatID`),
-
-    -- Không cho phép 1 passenger nhận 2 vé cho cùng flight
-    UNIQUE (`orderPassengerID`, `flightID`)
+    `id` VARCHAR(50) DEFAULT (UUID()),
+    `orderID` VARCHAR(10),
+    `seatID` VARCHAR(10),
+    `type` VARCHAR(30),
+    `status` VARCHAR(20),
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`orderID`) REFERENCES `Order`(`id`),
+    FOREIGN KEY (`seatID`) REFERENCES `Seat`(`id`),
+    FOREIGN KEY (`type`) REFERENCES `TicketType`(`type`)
 );
-
 
 CREATE TABLE `Luggage` (
     `id` VARCHAR(10),
     `customerID` VARCHAR(36),
     `orderID` VARCHAR(10),
     `type` VARCHAR(30),
-    `weight` DECIMAL(10,2),
-    `existed` BOOLEAN DEFAULT TRUE,
+    `checkedweight` DECIMAL(10,2),
+    `handedweight` DECIMAL(10,2),
+    `existed` BOOL DEFAULT TRUE,
     
     PRIMARY KEY (`id`),
     FOREIGN KEY (`customerID`) REFERENCES `Account`(`id`),
@@ -202,6 +187,7 @@ CREATE TABLE `BlogPost` (
     `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('POST-', UUID())), 
     `title` VARCHAR(255) NOT NULL,
     `content` TEXT NOT NULL,
+    `image` TEXT NOT NULL,
     `authorID` VARCHAR(36) NOT NULL,
     `categoryID` INT NOT NULL,
     `published` BOOLEAN DEFAULT FALSE,
@@ -210,20 +196,6 @@ CREATE TABLE `BlogPost` (
 
     FOREIGN KEY (`authorID`) REFERENCES `Account`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`categoryID`) REFERENCES `BlogCategory`(`id`) ON DELETE CASCADE
-);
-
-CREATE TABLE `Tag` (
-    `id` INT PRIMARY KEY AUTO_INCREMENT,
-    `name` VARCHAR(255) UNIQUE NOT NULL
-);
-
-CREATE TABLE `PostTag` (
-    `postID` VARCHAR(41) NOT NULL,
-    `tagID` INT NOT NULL,
-    PRIMARY KEY (`postID`, `tagID`),
-
-    FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`tagID`) REFERENCES `Tag`(`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE `Comment` (
@@ -238,26 +210,18 @@ CREATE TABLE `Comment` (
     FOREIGN KEY (`accountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
 );
 
-CREATE TABLE `PostLike` (
-    `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('LIKE-', UUID())),
-    `postID` VARCHAR(41) NOT NULL,
-    `accountID` VARCHAR(36) NOT NULL,
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-    FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`accountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
-);
-
 CREATE TABLE `Blog` (
     `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('BLOG-', UUID())),
     `postID` VARCHAR(41) NOT NULL UNIQUE,
     `title` VARCHAR(255) NOT NULL,
-    `short_description` TEXT NOT NULL,
-    `thumbnail` VARCHAR(255),
+    `description` TEXT NOT NULL,
+    `image` VARCHAR(255),
+    `categoryID` int,
     `authorID` VARCHAR(36) NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`categoryID`) REFERENCES `BlogCategory`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`authorID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
 );
 
