@@ -105,7 +105,7 @@ public class TicketDAO extends DBContext {
                 + "JOIN Nation n ON op.nationID = n.id "
                 + "JOIN Ticket t ON op.id = t.orderPassengerID "
                 + // 🔍 Liên kết hành khách với vé
-                "WHERE t.id = ?";  // 🛠️ Chỉ lấy hành khách của vé cụ thể
+                "WHERE t.id = ?";  // Chỉ lấy hành khách của vé cụ thể
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, ticketId);
@@ -198,24 +198,81 @@ public class TicketDAO extends DBContext {
         return tickets;
     }
 
-    public static void main(String[] args) {
-        TicketDAO ticketDAO = new TicketDAO();
+    public boolean cancelTicket(String ticketId) {
+        String updateTicketSQL = "UPDATE swp301.ticket SET status = 'Cancelled' WHERE id = ?";
+        String updateSeatSQL = "UPDATE swp301.seat SET status = TRUE WHERE id = ? AND reason IS NULL"; // Chỉ cập nhật nếu không có lý do bảo trì
+        String checkOrderSQL = "SELECT COUNT(*) FROM swp301.ticket WHERE orderId = ? AND status != 'Cancelled'";
+        String updateOrderSQL = "UPDATE swp301.order SET status = 'Cancelled' WHERE id = ?";
+        String getOrderIdSQL = "SELECT orderId, seatId FROM swp301.ticket WHERE id = ?";
 
-        // Lấy tất cả các vé từ database
-        List<Ticket> tickets = ticketDAO.getAllTicket();
+        try {
+            connection.setAutoCommit(false); // Bắt đầu transaction
 
-        // In ra console để kiểm tra dữ liệu
-        System.out.println("Total tickets found: " + tickets.size());
+            String orderId = null;
+            String seatId = null;
 
-        for (Ticket ticket : tickets) {
-            System.out.println("Ticket ID: " + ticket.getId());
-            System.out.println("Order ID: " + ticket.getOrderId());
-            System.out.println("Flight ID: " + ticket.getFlightId());
-            System.out.println("Seat ID: " + ticket.getSeatId());
-            System.out.println("Type: " + ticket.getType());
-            System.out.println("Price: $" + ticket.getPrice());
-            System.out.println("Status: " + ticket.getStatus());
-            System.out.println("--------------------------------");
+            // 1. Lấy orderId và seatId từ ticket
+            try (PreparedStatement ps = connection.prepareStatement(getOrderIdSQL)) {
+                ps.setString(1, ticketId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        orderId = rs.getString("orderId");
+                        seatId = rs.getString("seatId");
+                    } else {
+                        return false; // Không tìm thấy vé
+                    }
+                }
+            }
+
+            // 2. Cập nhật trạng thái vé
+            try (PreparedStatement ps = connection.prepareStatement(updateTicketSQL)) {
+                ps.setString(1, ticketId);
+                ps.executeUpdate();
+            }
+
+            // 3. Giải phóng ghế (nếu có)
+            if (seatId != null) {
+                try (PreparedStatement ps = connection.prepareStatement(updateSeatSQL)) {
+                    ps.setString(1, seatId);
+                    ps.executeUpdate();
+                }
+            }
+
+            // 4. Kiểm tra xem còn vé nào chưa hoàn trong đơn hàng không
+            boolean allTicketsRefunded = false;
+            try (PreparedStatement ps = connection.prepareStatement(checkOrderSQL)) {
+                ps.setString(1, orderId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) == 0) {
+                        allTicketsRefunded = true;
+                    }
+                }
+            }
+
+            // 5. Nếu tất cả vé trong đơn hàng đã hoàn, cập nhật trạng thái đơn hàng
+            if (allTicketsRefunded) {
+                try (PreparedStatement ps = connection.prepareStatement(updateOrderSQL)) {
+                    ps.setString(1, orderId);
+                    ps.executeUpdate();
+                }
+            }
+
+            connection.commit(); // Xác nhận transaction
+            return true;
+        } catch (SQLException e) {
+            try {
+                connection.rollback(); // Nếu có lỗi, quay lại trạng thái trước đó
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                connection.setAutoCommit(true); // Khôi phục chế độ tự động commit
+            } catch (SQLException autoCommitEx) {
+                autoCommitEx.printStackTrace();
+            }
         }
     }
 

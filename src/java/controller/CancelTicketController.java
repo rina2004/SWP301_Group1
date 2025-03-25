@@ -11,14 +11,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Ticket;
+import jakarta.servlet.http.HttpSession;
+import model.Account;
 
 /**
  *
  * @author anhbu
  */
-public class OrderDetailControl extends HttpServlet {
+public class CancelTicketController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +37,10 @@ public class OrderDetailControl extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OrderDetailControl</title>");
+            out.println("<title>Servlet CancelTicketController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet OrderDetailControl at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CancelTicketController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,18 +58,7 @@ public class OrderDetailControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        // Lấy orderId từ request param
-        String orderId = request.getParameter("orderId");
-
-        // Tương tác trực tiếp DAO
-        TicketDAO ticketDAO = new TicketDAO();
-        List<Ticket> tickets = ticketDAO.getTicketsByOrderId(orderId);
-
-
-        // Đổ data ra view
-        request.setAttribute("tickets", tickets);
-        request.getRequestDispatcher("view/OrderDetail.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -84,7 +73,32 @@ public class OrderDetailControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        
+        HttpSession session = request.getSession();
+        Account currentUser = (Account) session.getAttribute("acc");
+
+        if (currentUser == null) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
+
+        // Chỉ Customer hoặc Staff mới có thể hủy vé
+        String role = currentUser.getRole().getName();
+        if (!role.equals("Staff")) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
+
+        String ticketId = request.getParameter("ticketId");
+        if (ticketId == null || ticketId.trim().isEmpty()) {
+            response.sendRedirect("view/OrderDetail.jsp"); // Không thông báo lỗi, chỉ quay lại trang danh sách vé
+            return;
+        }
+
+        TicketDAO ticketDAO = new TicketDAO();
+        ticketDAO.cancelTicket(ticketId);
+
+        // Quay lại trang danh sách vé sau khi hủy thành công / thất bại
+        response.sendRedirect("view/OrderDetail.jsp");
     }
 
     /**

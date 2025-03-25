@@ -10,7 +10,6 @@ import java.util.List;
 import model.Account;
 import model.Order;
 
-
 /**
  *
  * @author A A
@@ -69,6 +68,48 @@ public class OrderDAO extends DBContext {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public List<Order> getPendingCancelRequests() {
+        String sql = "SELECT id, customerID, staffID, status, time, ticketCount "
+                + "FROM `Order` WHERE status = 'Processing'";
+        List<Order> orders = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getString("id"));
+
+                Account customer = new Account();
+                customer.setId(rs.getString("customerID"));
+                order.setCustomerID(customer);
+
+                Account staff = new Account();
+                staff.setId(rs.getString("staffID"));
+                order.setStaffID(staff);
+
+                order.setStatus(rs.getString("status"));
+                order.setTime(rs.getTimestamp("time").toLocalDateTime());
+                order.setTicketCount(rs.getInt("ticketCount")); // Dùng đúng tên trường
+
+                orders.add(order);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return orders;
+    }
+
+    public boolean approveCancelRequest(String orderId) {
+        String sql = "UPDATE `Order` SET status = 'Cancelled' WHERE id = ? AND status = 'Processing'";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, orderId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
 }

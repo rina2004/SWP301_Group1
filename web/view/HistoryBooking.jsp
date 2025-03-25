@@ -99,7 +99,7 @@
                             <td>
                                 <div class="action-group">
                                     <a class="btn" href="${pageContext.request.contextPath}/orderDetail?orderId=${order.id}">View</a>
-                                    
+
                                     <c:choose>
                                         <c:when test="${order.status eq 'Canceled' or order.status eq 'Pending'}">
                                             <a class="btn btn-secondary btn-disabled">Cancel</a>
@@ -126,7 +126,8 @@
 
         <script>
             function confirmCancel(orderId) {
-                if (!orderId) return; // Bảo vệ tránh lỗi nếu orderId không hợp lệ
+                if (!orderId || orderId.trim() === '')
+                    return; // Kiểm tra orderId hợp lệ
 
                 let confirmAction = confirm("Are you sure you want to cancel this order?");
                 if (confirmAction) {
@@ -134,6 +135,7 @@
                     document.getElementById('cancelForm').submit();
                 }
             }
+
         </script>
     </body>
 </html>

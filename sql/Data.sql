@@ -309,7 +309,7 @@ JOIN
 JOIN 
     TicketType tt ON t.type = tt.type
 WHERE 
-    t.orderId = 1234; -- Thay 1234 bằng orderId cụ thể
+    t.orderId = 'ORD002'; -- Thay 1234 bằng orderId cụ thể
     
 SELECT t.*, f.name AS flightName, f.code AS flightCode, 
        f.startingTime, f.landingTime,
@@ -333,7 +333,7 @@ LEFT JOIN Nation n ON op.nationId = n.id
 LEFT JOIN PassengerType pt ON op.passengerTypeId = pt.id
 LEFT JOIN TicketType tt ON t.type = tt.type
 LEFT JOIN Luggage l ON l.orderId = t.orderId
-WHERE t.orderId = 'ORD002';
+WHERE t.orderId = 'ORD005';
 
 SELECT t.id, t.orderID, t.orderPassengerID, t.flightID, t.seatID, t.type, t.price, t.status,  
        op.fullName, n.name AS nation  
