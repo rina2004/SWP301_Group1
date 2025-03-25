@@ -13,11 +13,9 @@ import java.time.LocalDateTime;
 public class Airplane {
     private String id;
     private String name;
-    private Type type;
     private AirplaneStatus status;
     private LocalDateTime maintainanceTime;
     private LocalDateTime usedTime;
-    private AirTrafficControl atc;
 
     public String getId() {
         return id;
@@ -33,14 +31,6 @@ public class Airplane {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
     public AirplaneStatus getStatus() {
@@ -65,13 +55,5 @@ public class Airplane {
 
     public void setUsedTime(LocalDateTime usedTime) {
         this.usedTime = usedTime;
-    }
-
-    public AirTrafficControl getAtc() {
-        return atc;
-    }
-
-    public void setAtc(AirTrafficControl atc) {
-        this.atc = atc;
     }
 }

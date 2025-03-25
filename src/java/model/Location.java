@@ -3,33 +3,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
-
 /**
  *
  * @author A A
  */
-public class Role {
+public class Location {
     private int id;
     private String name;
-
-    public Role() {}
-    public Role(int id, String name) {
+    public Location() {
+    }
+    public Location(int id, String name) {
         this.id = id;
         this.name = name;
     }
-
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }

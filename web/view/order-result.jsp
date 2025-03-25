@@ -1,5 +1,5 @@
 <%-- 
-    Document   : flight-search-results
+    Document   : order-result
     Created on : 3 Mar 2025, 09:45:09
     Author     : A A
 --%>
@@ -205,7 +205,7 @@
                         <h2 class="mb-0">Flight Booking</h2>
                     </div>
                     <div>
-                        <a href="cart.jsp" class="btn btn-outline-primary position-relative">
+                        <a href="order-cart.jsp" class="btn btn-outline-primary position-relative">
                             <i class="fas fa-shopping-cart"></i> Cart
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
                                 0
@@ -234,7 +234,7 @@
                     </div>
                 </div>
 
-                <form action="search-flights" method="GET">
+                <form action="order" method="GET">
                     <div class="row">
                         <div class="col-md-4 mb-2">
                             <div class="input-group">
@@ -272,17 +272,17 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Filter by Price</h5>
                     <div class="btn-group">
-                        <a href="filter-flightorder?priceRange=cheapest&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
+                        <a href="order-filter?priceRange=cheapest&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
                            class="btn btn-outline-primary ${activeFilter eq 'cheapest' ? 'active' : ''}">
                             Cheapest
                             <small class="d-block">Under 200.000 VND</small>
                         </a>
-                        <a href="filter-flightorder?priceRange=best&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
+                        <a href="order-filter?priceRange=best&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
                            class="btn btn-outline-primary ${activeFilter eq 'best' ? 'active' : ''}">
                             Best
                             <small class="d-block">200.000 - 1.000.000 VND</small>
                         </a>
-                        <a href="filter-flightorder?priceRange=quickest&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
+                        <a href="order-filter?priceRange=quickest&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
                            class="btn btn-outline-primary ${activeFilter eq 'quickest' ? 'active' : ''}">
                             Quickest
                             <small class="d-block">Above 1.000.000 VND</small>
@@ -333,13 +333,10 @@
                                     </div>
 
                                     <div class="action-buttons ms-2">
-                                        <a href="view-flightorder?id=${flight.getId()}&departure=${departure}&destination=${destination}&departureDate=${departureDate}" class="btn btn-light" title="View Details">
+                                        <a href="order-detail?id=${flight.getId()}&departure=${departure}&destination=${destination}&departureDate=${departureDate}" class="btn btn-light" title="View Details">
                                             <i class="fas fa-eye text-primary"></i>
                                         </a>
-                                        <a href="view-account" class="btn btn-light" title="Account Details">
-                                            <i class="fas fa-user text-primary"></i>
-                                        </a>
-                                        <a href="booking-confirmation?flightId=${flight.getId()}&ticketClass=${ticket.type}&passengers=1" class="btn btn-light" title="Book Now">
+                                        <a href="order-confirm?flightId=${flight.getId()}&ticketClass=${ticket.type}&passengers=1" class="btn btn-light" title="Book Now">
                                             <i class="fas fa-ticket-alt text-primary"></i>
                                         </a>
                                         <button onclick="addToCart('${flight.getId()}', '${flight.getName()}', '${ticket.price}', '${ticket.type}')" class="btn btn-light" title="Add to Cart">
@@ -391,7 +388,7 @@
                                                 return new Intl.NumberFormat('vi-VN').format(value);
                                             }
         </script>
-        <!-- Add this script block at the end of your body tag in flight-search-results.jsp -->
+        <!-- Add this script block at the end of your body tag in order-result.jsp -->
         <script>
             // Initialize cart in localStorage if it doesn't exist
             if (!localStorage.getItem('flightCart')) {

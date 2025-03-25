@@ -8,12 +8,14 @@ package model;
  *
  * @author A A
  */
-public class Role {
+public class BlogCategory {
     private int id;
     private String name;
 
-    public Role() {}
-    public Role(int id, String name) {
+    public BlogCategory() {
+    }
+
+    public BlogCategory(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -33,4 +35,6 @@ public class Role {
     public void setName(String name) {
         this.name = name;
     }
+    
+    
 }

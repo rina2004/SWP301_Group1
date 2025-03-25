@@ -13,11 +13,9 @@ import java.util.List;
  */
 public class Ticket {
     private String id;
-    private String orderId;
-    private String flightId;
-    private String seatId;
+    private Order order;
+    private Seat seat;
     private String type;
-    private double price;
     private String status;
     
     // Các trường mở rộng
@@ -44,13 +42,11 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(String id, String orderId, String flightId, String seatId, String type, double price, String status) {
+    public Ticket(String id, Order order, Seat seat, String type, String status) {
         this.id = id;
-        this.orderId = orderId;
-        this.flightId = flightId;
-        this.seatId = seatId;
+        this.order = order;
+        this.seat = seat;
         this.type = type;
-        this.price = price;
         this.status = status;
     }
 
@@ -84,20 +80,20 @@ public class Ticket {
         this.id = id;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
-    public String getFlightId() {
-        return flightId;
+    public Seat getSeat() {
+        return seat;
     }
 
-    public void setFlightId(String flightId) {
-        this.flightId = flightId;
+    public void setSeat(Seat seat) {
+        this.seat = seat;
     }
 
     public String getSeatId() {
@@ -116,14 +112,6 @@ public class Ticket {
         this.type = type;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -132,102 +120,4 @@ public class Ticket {
         this.status = status;
     }
 
-    public String getFlightName() {
-        return flightName;
-    }
-
-    public void setFlightName(String flightName) {
-        this.flightName = flightName;
-    }
-
-    public String getFlightCode() {
-        return flightCode;
-    }
-
-    public void setFlightCode(String flightCode) {
-        this.flightCode = flightCode;
-    }
-
-    public LocalDateTime getStartingTime() {
-        return startingTime;
-    }
-
-    public void setStartingTime(LocalDateTime startingTime) {
-        this.startingTime = startingTime;
-    }
-
-    public LocalDateTime getLandingTime() {
-        return landingTime;
-    }
-
-    public void setLandingTime(LocalDateTime landingTime) {
-        this.landingTime = landingTime;
-    }
-
-    public String getDepartureName() {
-        return departureName;
-    }
-
-    public void setDepartureName(String departureName) {
-        this.departureName = departureName;
-    }
-
-    public String getDestinationName() {
-        return destinationName;
-    }
-
-    public void setDestinationName(String destinationName) {
-        this.destinationName = destinationName;
-    }
-
-    public String getSeatCode() {
-        return seatCode;
-    }
-
-    public void setSeatCode(String seatCode) {
-        this.seatCode = seatCode;
-    }
-
-    public String getCompartmentName() {
-        return compartmentName;
-    }
-
-    public void setCompartmentName(String compartmentName) {
-        this.compartmentName = compartmentName;
-    }
-
-    public TicketType getTicketType() {
-        return ticketType;
-    }
-
-    public void setTicketType(TicketType ticketType) {
-        this.ticketType = ticketType;
-    }
-
-    public String getAirplaneId() {
-        return airplaneId;
-    }
-
-    public void setAirplaneId(String airplaneId) {
-        this.airplaneId = airplaneId;
-    }
-
-    public String getAirplaneName() {
-        return airplaneName;
-    }
-
-    public void setAirplaneName(String airplaneName) {
-        this.airplaneName = airplaneName;
-    }
-
-    public List<OrderPassenger> getPassengers() {
-        return passengers;
-    }
-
-    public void setPassengers(List<OrderPassenger> passengers) {
-        this.passengers = passengers;
-    }
-    
-    
-  
 }

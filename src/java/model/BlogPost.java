@@ -2,36 +2,38 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package model;
+
 import java.time.LocalDateTime;
-import java.util.Date;
+
 /**
  *
- * @author DUCDA
+ * @author A A
  */
-public class Blog {
+public class BlogPost {
     private String id;
-    private BlogPost post;
     private String title;
-    private String description;
+    private String content;
     private String image;
-    private BlogCategory category;
     private Account author;
+    private BlogCategory category;
+    private boolean published;
     private LocalDateTime created_at;
+    private LocalDateTime updated_at;
 
-    public Blog() {
+    public BlogPost() {
     }
 
-    public Blog(String id, BlogPost post, String title, String description, String image, BlogCategory category, Account author, LocalDateTime created_at) {
+    public BlogPost(String id, String title, String content, String image, Account author, BlogCategory category, boolean published, LocalDateTime created_at, LocalDateTime updated_at) {
         this.id = id;
-        this.post = post;
         this.title = title;
-        this.description = description;
+        this.content = content;
         this.image = image;
-        this.category = category;
         this.author = author;
+        this.category = category;
+        this.published = published;
         this.created_at = created_at;
+        this.updated_at = updated_at;
     }
 
     public String getId() {
@@ -42,14 +44,6 @@ public class Blog {
         this.id = id;
     }
 
-    public BlogPost getPost() {
-        return post;
-    }
-
-    public void setPost(BlogPost post) {
-        this.post = post;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -58,12 +52,12 @@ public class Blog {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getContent() {
+        return content;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getImage() {
@@ -74,6 +68,14 @@ public class Blog {
         this.image = image;
     }
 
+    public Account getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Account author) {
+        this.author = author;
+    }
+
     public BlogCategory getCategory() {
         return category;
     }
@@ -82,12 +84,12 @@ public class Blog {
         this.category = category;
     }
 
-    public Account getAuthor() {
-        return author;
+    public boolean isPublished() {
+        return published;
     }
 
-    public void setAuthor(Account author) {
-        this.author = author;
+    public void setPublished(boolean published) {
+        this.published = published;
     }
 
     public LocalDateTime getCreated_at() {
@@ -97,6 +99,13 @@ public class Blog {
     public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
     }
-    
+
+    public LocalDateTime getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(LocalDateTime updated_at) {
+        this.updated_at = updated_at;
+    }
     
 }

@@ -18,7 +18,7 @@ public class AirplaneStatusDBContext extends DBContext{
     
     public ArrayList<AirplaneStatus> list() {
         ArrayList<AirplaneStatus> statuses = new ArrayList<>();
-        String sql = "SELECT * FROM swp301.airplane_status";
+        String sql = "SELECT * FROM swp301.airplanestatus";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
@@ -35,24 +35,17 @@ public class AirplaneStatusDBContext extends DBContext{
 
     
     public AirplaneStatus get(int id) {
-        AirplaneStatus status = null;
-        String sql = "SELECT * FROM swp301.airplane_status WHERE id = ?";
-        PreparedStatement stm = null;
-
-        try {
-            stm = connection.prepareStatement(sql);
+        String sql = "SELECT * FROM swp301.airplanestatus WHERE id = ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
-
             if (rs.next()) {
-                status = new AirplaneStatus();
-                status.setId(rs.getInt("id"));
-                status.setName(rs.getString("name"));
+                return new AirplaneStatus(rs.getInt("id"),
+                        rs.getString("name"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(AirplaneStatusDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        return status;
+        return null;
     }
 }

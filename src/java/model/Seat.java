@@ -55,9 +55,6 @@ public class Seat {
     public void setReason(String reason) {
         this.reason = reason;
     }
-    
-    
-      
-    
+       
     
 }

@@ -4,31 +4,33 @@
  */
 package model;
 
-
 import java.time.LocalDateTime;
 
 /**
  *
- * @author anhbu
+ * @author A A
  */
 public class Order {
+
     private String id;
-    private Account customerID;
-    private Account staffID;
+    private Account customer;
+    private Account staff;
     private String status;
     private LocalDateTime time;
-    private int ticketCount; // thông tin phụ thêm khi join ticket count
+    private double finalPrice;
+    private int finalNum;
 
     public Order() {
     }
 
-    public Order(String id, Account customerID, Account staffID, String status, LocalDateTime time, int ticketCount) {
+    public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum) {
         this.id = id;
-        this.customerID = customerID;
-        this.staffID = staffID;
+        this.customer = customer;
+        this.staff = staff;
         this.status = status;
         this.time = time;
-        this.ticketCount = ticketCount;
+        this.finalPrice = finalPrice;
+        this.finalNum = finalNum;
     }
 
     public String getId() {
@@ -39,20 +41,20 @@ public class Order {
         this.id = id;
     }
 
-    public Account getCustomerID() {
-        return customerID;
+    public Account getCustomer() {
+        return customer;
     }
 
-    public void setCustomerID(Account customerID) {
-        this.customerID = customerID;
+    public void setCustomer(Account customer) {
+        this.customer = customer;
     }
 
-    public Account getStaffID() {
-        return staffID;
+    public Account getStaff() {
+        return staff;
     }
 
-    public void setStaffID(Account staffID) {
-        this.staffID = staffID;
+    public void setStaff(Account staff) {
+        this.staff = staff;
     }
 
     public String getStatus() {
@@ -71,15 +73,21 @@ public class Order {
         this.time = time;
     }
 
-    public int getTicketCount() {
-        return ticketCount;
+    public double getFinalPrice() {
+        return finalPrice;
     }
 
-    public void setTicketCount(int ticketCount) {
-        this.ticketCount = ticketCount;
+    public void setFinalPrice(double finalPrice) {
+        this.finalPrice = finalPrice;
     }
-    
-    
+
+    public int getFinalNum() {
+        return finalNum;
+    }
+
+    public void setFinalNum(int finalNum) {
+        this.finalNum = finalNum;
+    }
 
     
 }

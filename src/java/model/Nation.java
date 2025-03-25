@@ -6,19 +6,18 @@ package model;
 
 /**
  *
- * @author anhbu
+ * @author A A
  */
 public class Nation {
-
     private int id;
     private String name;
+
+    public Nation() {
+    }
 
     public Nation(int id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    public Nation() {
     }
 
     public int getId() {
@@ -36,6 +35,5 @@ public class Nation {
     public void setName(String name) {
         this.name = name;
     }
-    
     
 }

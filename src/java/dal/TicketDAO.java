@@ -24,9 +24,7 @@ public class TicketDAO extends DBContext {
 
     public Ticket getTicketByFlightId(String flightId) {
         String sql = "SELECT * FROM swp301.ticket WHERE flightID = ? ORDER BY price ASC LIMIT 1";
-        PreparedStatement stm = null;
-        try {
-            stm = connection.prepareStatement(sql);
+        try (PreparedStatement stm = connection.prepareStatement(sql)){
             stm.setString(1, flightId);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
@@ -53,9 +51,7 @@ public class TicketDAO extends DBContext {
     public List<Ticket> getAllTicket() {
         List<Ticket> list = new ArrayList<>();
         String sql = "SELECT * FROM swp301.ticket";
-        PreparedStatement stm = null;
-        try {
-            stm = connection.prepareStatement(sql);
+        try (PreparedStatement stm = connection.prepareStatement(sql)){
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 list.add(new Ticket(
@@ -76,9 +72,7 @@ public class TicketDAO extends DBContext {
 
     public Ticket getTicketById(String id) {
         String sql = "SELECT * FROM swp301.ticket WHERE id=?";
-        PreparedStatement stm = null;
-        try {
-            stm = connection.prepareStatement(sql);
+        try (PreparedStatement stm = connection.prepareStatement(sql)){
             stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {

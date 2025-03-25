@@ -1,5 +1,5 @@
 <%-- 
-    Document   : booking-confirmation
+    Document   : order-confirm
     Created on : 3 Mar 2025, 16:15:30
     Author     : A A
 --%>
@@ -109,7 +109,7 @@
                         <h2 class="mb-0">Flight Booking</h2>
                     </div>
                     <div>
-                        <a href="cart.jsp" class="btn btn-outline-primary position-relative">
+                        <a href="order-cart.jsp" class="btn btn-outline-primary position-relative">
                             <i class="fas fa-shopping-cart"></i> Cart
                         </a>
                     </div>

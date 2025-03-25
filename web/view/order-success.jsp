@@ -68,7 +68,7 @@
                         <h2 class="mb-0">Flight Booking</h2>
                     </div>
                     <div>
-                        <a href="search-flights" class="btn btn-outline-primary">
+                        <a href="order" class="btn btn-outline-primary">
                             <i class="fas fa-search me-1"></i> Search Flights
                         </a>
                     </div>
@@ -109,7 +109,7 @@
             </div>
 
             <div class="mt-4">
-                <a href="search-flights" class="btn btn-primary">
+                <a href="order" class="btn btn-primary">
                     <i class="fas fa-search me-2"></i> Book Another Flight
                 </a>
                 <a href="view-bookings" class="btn btn-outline-secondary ms-2">

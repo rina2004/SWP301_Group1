@@ -9,35 +9,35 @@ package model;
  * @author Rinaaaa
  */
 public class Compartment {
-    private char id;
-    private String name;
+    private String id;
+    private TicketType type;
     private Airplane airplane;
     private int capacity;
 
     public Compartment() {
     }
 
-    public Compartment(char id, String name, Airplane airplane, int capacity) {
+    public Compartment(String id, TicketType type, Airplane airplane, int capacity) {
         this.id = id;
-        this.name = name;
+        this.type = type;
         this.airplane = airplane;
         this.capacity = capacity;
     }
 
-    public char getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(char id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public TicketType getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(TicketType type) {
+        this.type = type;
     }
 
     public Airplane getAirplane() {
