@@ -12,22 +12,18 @@ public class Ticket {
 
     private String id;
     private Order order;
-    private Flight flight;
+    private TicketType type;
     private Seat seat;
-    private String type;
-    private double price;
     private String status;
 
     public Ticket() {
     }
 
-    public Ticket(String id, Order order, Flight flight, Seat seat, String type, double price, String status) {
+    public Ticket(String id, Order order, TicketType type, Seat seat, String status) {
         this.id = id;
         this.order = order;
-        this.flight = flight;
-        this.seat = seat;
         this.type = type;
-        this.price = price;
+        this.seat = seat;
         this.status = status;
     }
 
@@ -47,12 +43,12 @@ public class Ticket {
         this.order = order;
     }
 
-    public Flight getFlight() {
-        return flight;
+    public TicketType getType() {
+        return type;
     }
 
-    public void setFlight(Flight flight) {
-        this.flight = flight;
+    public void setType(TicketType type) {
+        this.type = type;
     }
 
     public Seat getSeat() {
@@ -61,22 +57,6 @@ public class Ticket {
 
     public void setSeat(Seat seat) {
         this.seat = seat;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public String getStatus() {
@@ -89,9 +69,6 @@ public class Ticket {
 
     @Override
     public String toString() {
-        return "Ticket{" + "id=" + id + ", order=" + order + ", flight=" + flight + ", seat=" + seat + ", type=" + type + ", price=" + price + ", status=" + status + '}';
+        return "Ticket{" + "id=" + id + ", order=" + order + ", type=" + type + ", seat=" + seat + ", status=" + status + '}';
     }
-
-   
-      
 }

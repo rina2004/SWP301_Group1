@@ -105,11 +105,22 @@ INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTim
 
 select * from Flight;
 Select * From Ticket;
+select * From Airplane;
+Select * From Seat;
+Select * From Flight;
 Select * From Luggage;
-Select * From Account ;
+Select * From `Order` ;
+INSERT INTO `Order` (`id`, `customerID`, `staffID`, `status`, `time`)  
+VALUES ('O1002', 'T799100', NULL, 'Pending', NOW());
+
+Select * From Ticket where 'seatID' = 'A001-B3-3';
+UPDATE `Ticket`  
+SET `orderID` = 'O1001'  
+WHERE `id` = 'T002';
+Select * From `order`;
 delete from Luggage where id = 'L289' ;
-INSERT INTO Ticket ( flightID, type, Price, Status) 
-VALUES ('F001', 'Business', 200.00, 'Available');
+INSERT INTO Ticket ( id,flightID, type, Price, Status) 
+VALUES ('T003','F002', 'Business', 200.00, 'Available');
 DELETE FROM Type WHERE id IN ('A115', 'A116');
 SET SQL_SAFE_UPDATES = 0;
 INSERT INTO `AirplaneStatus` (`name`) VALUES 

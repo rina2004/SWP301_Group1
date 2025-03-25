@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Account;
 import model.Flight;
 import model.Order;
 import model.Ticket;
@@ -20,7 +21,7 @@ import model.Ticket;
  * @author A A
  */
 public class TicketDAO extends DBContext {
-    
+
     public Ticket getTicketByFlightId(String flightId) {
         String sql = "SELECT * FROM swp301.ticket WHERE flightID = ? ORDER BY price ASC LIMIT 1";
         PreparedStatement stm = null;
@@ -33,9 +34,6 @@ public class TicketDAO extends DBContext {
                 flight.setId(rs.getString("flightID"));
                 Ticket ticket = new Ticket();
                 ticket.setId(rs.getString("id"));
-                ticket.setFlight(flight);
-                ticket.setType(rs.getString("type"));
-                ticket.setPrice(rs.getDouble("Price"));
                 ticket.setStatus(rs.getString("Status"));
             }
         } catch (SQLException ex) {
@@ -43,11 +41,9 @@ public class TicketDAO extends DBContext {
         }
         // If no ticket found, return default ticket
         Ticket defaultTicket = new Ticket();
-        defaultTicket.setPrice(0);
-        defaultTicket.setType("Economy");
         return defaultTicket;
     }
-    
+
     public List<Ticket> getAllTicket() {
         List<Ticket> list = new ArrayList<>();
         String sql = "SELECT t.*, f.airplaneID FROM Ticket t JOIN Flight f ON t.flightID = f.id";
@@ -64,9 +60,6 @@ public class TicketDAO extends DBContext {
                 Ticket ticket = new Ticket();
                 ticket.setId(rs.getString("id"));
                 ticket.setOrder(order);
-                ticket.setFlight(flight);
-                ticket.setType(rs.getString("type"));
-                ticket.setPrice(rs.getDouble("Price"));
                 ticket.setStatus(rs.getString("Status"));
                 list.add(ticket);
             }
@@ -75,7 +68,7 @@ public class TicketDAO extends DBContext {
         }
         return list;
     }
-    
+
     public Ticket getTicketById(String id) {
         String sql = "SELECT * FROM Ticket WHERE id=?";
         PreparedStatement stm;
@@ -88,9 +81,6 @@ public class TicketDAO extends DBContext {
                 flight.setId(rs.getString("flightID"));
                 Ticket ticket = new Ticket();
                 ticket.setId(rs.getString("id"));
-                ticket.setFlight(flight);
-                ticket.setType(rs.getString("type"));
-                ticket.setPrice(rs.getDouble("price"));
                 ticket.setStatus(rs.getString("status"));
                 return ticket;
             }
@@ -99,7 +89,7 @@ public class TicketDAO extends DBContext {
         }
         return null;
     }
-    
+
     public String getTypeByID(String id) {
         PreparedStatement stm;
         String sql = "Select Type From Ticket where id = ?";
@@ -108,17 +98,17 @@ public class TicketDAO extends DBContext {
             stm = connection.prepareStatement(sql);
             stm.setString(1, id);
             rs = stm.executeQuery();
-            
+
             if (rs.next()) {
                 return rs.getString("type");
             }
-            
+
         } catch (SQLException e) {
             System.out.println(e);
         }
         return null;
     }
-    
+
     public List<Ticket> getTicketsByOrderID(String orderID) {
         PreparedStatement stm;
         String sql = "SELECT t.*, f.airplaneID FROM Ticket t JOIN Flight f ON t.flightID = f.id where orderID = ?";
@@ -137,9 +127,6 @@ public class TicketDAO extends DBContext {
                 Ticket ticket = new Ticket();
                 ticket.setId(rs.getString("id"));
                 ticket.setOrder(order);
-                ticket.setFlight(flight);
-                ticket.setType(rs.getString("type"));
-                ticket.setPrice(rs.getDouble("Price"));
                 ticket.setStatus(rs.getString("Status"));
                 list.add(ticket);
             }
@@ -148,11 +135,11 @@ public class TicketDAO extends DBContext {
         }
         return list;
     }
-    
+
     public void updateTicketbySeatID(String ticketID, String seatID) {
         PreparedStatement stm;
         String sql = "Update Ticket Set seatID = ? , status = 'Checked' where id = ?";
-        
+
         try {
             stm = connection.prepareStatement(sql);
             stm.setString(1, seatID);
@@ -162,13 +149,56 @@ public class TicketDAO extends DBContext {
             System.out.println(e);
         }
     }
-    
+
+    public Ticket getInfor(String ticketId) {
+        PreparedStatement stm;
+        ResultSet rs;
+
+        String sql = "Select * From Ticket where id = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, ticketId);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getString("orderID"));
+                Ticket ticket = new Ticket();
+                ticket.setId(rs.getString("id"));
+                ticket.setOrder(order);
+                ticket.setStatus(rs.getString("status"));
+
+                return ticket;
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public String getIDbySeat(String seatid) {
+        PreparedStatement stm;
+        ResultSet rs;
+        String ticketId = null;
+        String sql = "Select t.id From Ticket t Join Seat s On s.id = t.seatID where s.id = ? ";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, seatid);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                ticketId = rs.getString("id");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return ticketId;
+    }
+
     public static void main(String[] args) {
         TicketDAO dao = new TicketDAO();
-        String idt = "T001";
-        String ids = "A001-B3-4";
-        
-        dao.updateTicketbySeatID(idt, ids);
-        
+        String idt = "A001-B3-4";
+        String id = dao.getIDbySeat(idt);
+        System.out.println(id);
+
     }
 }

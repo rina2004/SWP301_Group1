@@ -97,18 +97,11 @@ public class LuggageDAO extends DBContext {
             while (rs.next()) {
                 Account acc = new Account();
                 acc.setId(rs.getString("customerID"));
-                
-                Ticket ticket = new Ticket();
-                ticket.setId(rs.getString("ticketID"));
-                
                 Luggage luggage = new Luggage();
                 luggage.setId(rs.getString("id"));
                 luggage.setAcc(acc);
-                luggage.setTicket(ticket);
                 luggage.setType(rs.getString("type"));
                 luggage.setWeight(rs.getDouble("weight"));
-                luggage.setPrice(rs.getDouble("price"));
-                
                 list.add(luggage);
             }
             
@@ -120,7 +113,7 @@ public class LuggageDAO extends DBContext {
     
     public static void main(String[] args) {
         LuggageDAO dao = new LuggageDAO();
-        String customerID = "T799100";
+        String customerID = "f2738d94-097f-11f0-af18-047c163442e4";
         List<Luggage> list = dao.getLuggagebyCustomerID(customerID);
         
         for (Luggage luggage : list) {

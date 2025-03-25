@@ -80,14 +80,12 @@ public class Login extends HttpServlet {
         AccountDAO dao = new AccountDAO();
         Account acc = dao.login(username, password);
 
-// Kiểm tra tài khoản không tồn tại hoặc sai mật khẩu
         if (acc == null) {
             request.setAttribute("error", "Username or password not correct!!!");
             request.getRequestDispatcher("view/Login.jsp").forward(request, response);
             return;
         }
 
-// Kiểm tra tài khoản bị khóa
         if (!acc.isStatus()) {
             request.setAttribute("error", "The account is not allowed to login to the system !!!");
             request.getRequestDispatcher("view/Login.jsp").forward(request, response);
@@ -105,6 +103,7 @@ public class Login extends HttpServlet {
         session.setAttribute("acc", acc);
         session.setAttribute("username", username);
         session.setAttribute("Accid", acc.getId());
+        session.setAttribute("role", acc.getRole().getId());
         session.setMaxInactiveInterval(60 * 30); // 30 phút
 
         String homePage = "view/home_1.jsp";

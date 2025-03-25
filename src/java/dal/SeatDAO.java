@@ -8,10 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import model.Account;
 import model.Airplane;
 import model.Compartment;
+import model.Order;
 import model.Seat;
-import model.Type;
+import model.Ticket;
+
 
 /**
  *
@@ -56,9 +59,9 @@ public class SeatDAO extends DBContext {
                 airplane.setId(airplaneID);
                 String reason = rs.getString("maintainreason");
 
-                Compartment compartment = new Compartment(compartmentID, compartmentName, airplane, 0);
-
-                seat = new Seat(seatID, compartment, status, reason);
+//                Compartment compartment = new Compartment(compartmentID, compartmentName, airplane, 0);
+//
+//                seat = new Seat(seatID, compartment, status, reason);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,45 +69,7 @@ public class SeatDAO extends DBContext {
         return seat;
     }
 
-    public int getCompartmentCapacity(String compartmentID, String typeID) {
-        PreparedStatement stm;
-        ResultSet rs;
-        String sql = "SELECT capacity FROM Compartment WHERE id = ? AND typeID = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, compartmentID);
-            stm.setString(2, typeID);
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("capacity");
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return -1;
-    }
-
-    public boolean checkSeatIDExisted(String seatID, char compartmentID, String typeID) {
-        PreparedStatement stm;
-        ResultSet rs;
-
-        String sql = "SELECT COUNT(*) FROM Seat s "
-                + "JOIN Compartment c ON s.compartmentid = c.id "
-                + "WHERE s.id = ? AND c.id = ? AND c.typeid = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, seatID);
-            stm.setString(2, String.valueOf(compartmentID));
-            stm.setString(3, typeID);
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+    
 
     public ArrayList<Seat> showAllSeatByTypeID(String airplaneID) {
         ArrayList<Seat> seats = new ArrayList<>();
@@ -135,8 +100,8 @@ public class SeatDAO extends DBContext {
                     Airplane airplane = new Airplane();
                     airplane.setId(airplaneID);
 
-                    Compartment compartment = new Compartment(compartmentID, compartmentName, airplane, 0);
-                    seats.add(new Seat(seatID, compartment, status, null));
+                 //   Compartment compartment = new Compartment(compartmentID, compartmentName, airplane, 0);
+                 //   seats.add(new Seat(seatID, compartment, status, null));
                 }
             }
         } catch (SQLException e) {
@@ -160,22 +125,47 @@ public class SeatDAO extends DBContext {
             System.out.println(e);
         }
     }
-    
-    public void updateBookedSeat(String seatID){
-        PreparedStatement stm ;
+
+    public void updateBookedSeat(String seatID) {
+        PreparedStatement stm;
         String sql = "Update Seat Set status = 'Booked' where id  = ? ";
-        try{
+        try {
             stm = connection.prepareStatement(sql);
             stm.setString(1, seatID);
             stm.executeUpdate();
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
         }
     }
 
+    public Seat getInformation(String seatID) {
+        String sql = "Select * From Seat where id = ?";
+        PreparedStatement stm;
+        ResultSet rs;
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, seatID);
+            rs = stm.executeQuery();
+
+            if (rs.next()) {
+                Seat seat = new Seat();
+                seat.setId(rs.getString("id"));        
+                seat.setStatus(rs.getString("status"));
+
+                return seat;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         SeatDAO dao = new SeatDAO();
-         dao.updateBookedSeat("A001-B3-3");
+        String id = "VN-A001-1";
+        Seat seat = dao.getInformation(id);
+
+        System.out.println(seat.toString());
 
     }
 }

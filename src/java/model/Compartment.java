@@ -11,16 +11,16 @@ package model;
 public class Compartment {
 
     private String id;
-    private String name;
+    private TicketType type;
     private Airplane airplane;
     private int capacity;
 
     public Compartment() {
     }
 
-    public Compartment(String id, String name, Airplane airplane, int capacity) {
+    public Compartment(String id, TicketType type, Airplane airplane, int capacity) {
         this.id = id;
-        this.name = name;
+        this.type = type;
         this.airplane = airplane;
         this.capacity = capacity;
     }
@@ -33,12 +33,12 @@ public class Compartment {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public TicketType getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(TicketType type) {
+        this.type = type;
     }
 
     public Airplane getAirplane() {
@@ -59,7 +59,8 @@ public class Compartment {
 
     @Override
     public String toString() {
-        return "Compartment{" + "id=" + id + ", name=" + name + ", airplane=" + airplane + ", capacity=" + capacity + '}';
+        return "Compartment{" + "id=" + id + ", type=" + type + ", airplane=" + airplane + ", capacity=" + capacity + '}';
     }
 
+   
 }

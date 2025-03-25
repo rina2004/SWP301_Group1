@@ -12,21 +12,21 @@ public class Luggage {
 
     private String id;
     private Account acc;
-    private Ticket ticket;
+    private Order order;
     private String type;
     private double weight;
-    private double price;
+    private boolean existed;
 
     public Luggage() {
     }
 
-    public Luggage(String id, Account acc, Ticket ticket, String type, double weight, double price) {
+    public Luggage(String id, Account acc, Order order, String type, double weight, boolean existed) {
         this.id = id;
         this.acc = acc;
-        this.ticket = ticket;
+        this.order = order;
         this.type = type;
         this.weight = weight;
-        this.price = price;
+        this.existed = existed;
     }
 
     public String getId() {
@@ -45,12 +45,12 @@ public class Luggage {
         this.acc = acc;
     }
 
-    public Ticket getTicket() {
-        return ticket;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public String getType() {
@@ -69,17 +69,19 @@ public class Luggage {
         this.weight = weight;
     }
 
-    public double getPrice() {
-        return price;
+    public boolean isExisted() {
+        return existed;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setExisted(boolean existed) {
+        this.existed = existed;
     }
 
     @Override
     public String toString() {
-        return "Luggage{" + "id=" + id + ", acc=" + acc + ", ticket=" + ticket + ", type=" + type + ", weight=" + weight + ", price=" + price + '}';
+        return "Luggage{" + "id=" + id + ", acc=" + acc + ", order=" + order + ", type=" + type + ", weight=" + weight + ", existed=" + existed + '}';
     }
+
+   
 
 }

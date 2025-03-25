@@ -48,7 +48,7 @@ public class AirplaneDAO extends DBContext {
         Airplane airplane = null;
         String sql = "SELECT * FROM swp301.airplane WHERE id = ?";
 
-        TypeDAO tp = new TypeDAO();
+       // TypeDAO tp = new TypeDAO();
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
         AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
 
@@ -87,7 +87,7 @@ public class AirplaneDAO extends DBContext {
 
     public ArrayList<Airplane> list() {
         ArrayList<Airplane> planes = new ArrayList<>();
-        TypeDAO tp = new TypeDAO();
+    //    TypeDAO tp = new TypeDAO();
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
         AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
         String sql = "SELECT * FROM swp301.airplane";
