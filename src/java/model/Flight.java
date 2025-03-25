@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class Flight {
 
-    private String id;
+   private String id;
     private String name;
     private String code;
     private String airplaneId;
@@ -38,6 +38,9 @@ public class Flight {
         this.startingTime = startingTime;
         this.landingTime = landingTime;
     }
+
+   
+   
 
     public String getId() {
         return id;
@@ -70,6 +73,9 @@ public class Flight {
     public void setAirplaneId(String airplaneId) {
         this.airplaneId = airplaneId;
     }
+
+   
+
 
     public String getDeparture() {
         return departure;
@@ -161,4 +167,10 @@ public class Flight {
         return "N/A";
     }
 
+    @Override
+    public String toString() {
+        return "Flight{" + "id=" + id + ", name=" + name + ", code=" + code + ", airplaneId=" + airplaneId + ", departure=" + departure + ", destination=" + destination + ", entryTime=" + entryTime + ", startingTime=" + startingTime + ", landingTime=" + landingTime + ", atcId=" + atcId + '}';
+    }
+ 
+    
 }

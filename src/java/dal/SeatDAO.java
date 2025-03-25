@@ -160,11 +160,22 @@ public class SeatDAO extends DBContext {
             System.out.println(e);
         }
     }
+    
+    public void updateBookedSeat(String seatID){
+        PreparedStatement stm ;
+        String sql = "Update Seat Set status = 'Booked' where id  = ? ";
+        try{
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, seatID);
+            stm.executeUpdate();
+        }catch(SQLException e){
+            System.out.println(e);
+        }
+    }
 
     public static void main(String[] args) {
         SeatDAO dao = new SeatDAO();
-        Seat seat = dao.getSeatByID("A001-B3-3");
+         dao.updateBookedSeat("A001-B3-3");
 
-        System.out.println(seat.toString());
     }
 }

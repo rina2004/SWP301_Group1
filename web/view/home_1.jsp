@@ -15,6 +15,7 @@
         <p>Xin chào: ${sessionScope.username}</p>
         <a href="<%= request.getContextPath() %>/logout">Log out</a><br>
         <a href="<%= request.getContextPath() %>/change">Change Password</a>
-
+        <a href="view/ListOrder">List Order</a>
+        <a href="<%= request.getContextPath() %>/listLuggage?id=${sessionScope.Accid}">List Luggage</a>
     </body>
 </html>

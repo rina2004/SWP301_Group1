@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import model.Account;
 import model.Role;
@@ -141,7 +142,7 @@ public class AccountDAO extends DBContext {
         return false;
     }
 
-   public Account getAccountByUsername(String username) {
+    public Account getAccountByUsername(String username) {
         String sql = "SELECT a.*, r.id AS roleID, r.name AS roleName FROM Account a JOIN Role r ON a.roleID = r.id WHERE a.username = ?";
 
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -250,16 +251,20 @@ public class AccountDAO extends DBContext {
             rs = stm.executeQuery();
 
             if (rs.next()) {
-                boolean status = rs.getBoolean("status"); // Lấy giá trị status từ DB
+                boolean status = rs.getBoolean("status");
 
-                if (!status) { // Nếu status = false (0), không cho phép đăng nhập
+                if (!status) {
                     return null;
                 }
+                Role role = new Role();
+                role.setId(rs.getInt("roleID"));
 
                 Account acc = new Account();
+                acc.setId(rs.getString("id"));
                 acc.setUsername(rs.getString("username"));
                 acc.setPassword(rs.getString("password"));
-                acc.setStatus(status); // Lưu status vào đối tượng Account
+                acc.setRole(role);
+                acc.setStatus(status);
 
                 return acc;
             }
@@ -362,46 +367,26 @@ public class AccountDAO extends DBContext {
     }
 
     public void register(String username, String password, String name, Date dob, String phone, String address, String email) {
-        PreparedStatement accountStmt = null;
-
+        PreparedStatement accountStmt;
+        String accountSQL = "INSERT INTO Account (id,username, password,roleID ,status, name, dob, phone, address, email) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
-            connection.setAutoCommit(false);
-
-            // Chỉ thêm vào bảng Account
-            String accountSQL = "INSERT INTO Account (username, password,roleID ,status, name, dob, phone, address, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            Random random = new Random();
+            String id = "AC"+ random.nextInt(900);
             accountStmt = connection.prepareStatement(accountSQL);
-            accountStmt.setString(1, username);
-            accountStmt.setString(2, password);
-            accountStmt.setInt(3, 2);
-            accountStmt.setBoolean(4, true);
-            accountStmt.setString(5, name);
-            accountStmt.setDate(6, new java.sql.Date(dob.getTime()));
-            accountStmt.setString(7, phone);
-            accountStmt.setString(8, address);
-            accountStmt.setString(9, email);
+            accountStmt.setString(1, id);
+            accountStmt.setString(2, username);
+            accountStmt.setString(3, password);
+            accountStmt.setInt(4, 2);
+            accountStmt.setBoolean(5, true);
+            accountStmt.setString(6, name);
+            accountStmt.setDate(7, new java.sql.Date(dob.getTime()));
+            accountStmt.setString(8, phone);
+            accountStmt.setString(9, address);
+            accountStmt.setString(10, email);
             accountStmt.executeUpdate();
 
-            connection.commit();
-            System.out.println("✅ Tạo tài khoản thành công!");
-
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace();
-            }
             e.printStackTrace();
-
-        } finally {
-            try {
-                if (accountStmt != null) {
-                    accountStmt.close();
-                }
-                connection.setAutoCommit(true);
-            } catch (SQLException closeEx) {
-                closeEx.printStackTrace();
-            }
         }
     }
-
 }

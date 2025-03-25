@@ -9,8 +9,11 @@ package model;
  * @author A A
  */
 public class Ticket {
+
     private String id;
-    private String flightId;
+    private Order order;
+    private Flight flight;
+    private Seat seat;
     private String type;
     private double price;
     private String status;
@@ -18,9 +21,11 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(String id, String flightId, String type, double price, String status) {
+    public Ticket(String id, Order order, Flight flight, Seat seat, String type, double price, String status) {
         this.id = id;
-        this.flightId = flightId;
+        this.order = order;
+        this.flight = flight;
+        this.seat = seat;
         this.type = type;
         this.price = price;
         this.status = status;
@@ -34,12 +39,28 @@ public class Ticket {
         this.id = id;
     }
 
-    public String getFlightId() {
-        return flightId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setFlightId(String flightId) {
-        this.flightId = flightId;
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+    public Seat getSeat() {
+        return seat;
+    }
+
+    public void setSeat(Seat seat) {
+        this.seat = seat;
     }
 
     public String getType() {
@@ -49,7 +70,7 @@ public class Ticket {
     public void setType(String type) {
         this.type = type;
     }
-    
+
     public double getPrice() {
         return price;
     }
@@ -65,5 +86,12 @@ public class Ticket {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Ticket{" + "id=" + id + ", order=" + order + ", flight=" + flight + ", seat=" + seat + ", type=" + type + ", price=" + price + ", status=" + status + '}';
+    }
+
+   
+      
 }

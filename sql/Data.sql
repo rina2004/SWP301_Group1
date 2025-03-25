@@ -11,9 +11,12 @@ VALUES ('C001', 'Business Class', 'A001', 30);
 INSERT INTO `Compartment` (`id`, `name`, `airplaneID`, `capacity`) 
 VALUES ('C002', 'Economy', 'A001', 50);
 Delete  From Compartment where id = 'C002';
-select * From Airplane;
+
+Select * From airplane;
+select * From compartment;
+Delete  From Seat;
 Update  Airplane Set numberOfCompartments = '4' where id = 'A001'; 
-ALTER TABLE Compartment CHANGE COLUMN available status VARCHAR(50);
+ALTER TABLE Seat CHANGE COLUMN available status VARCHAR(50);
 -- Insert into Account
 INSERT INTO Account (username, password, citizenID, name, dob, phone, address, email) VALUES
 ('admin1', 'pass123', '123456789012', 'John Doe', '1990-05-15', '0987654321', '123 Street, City', 'john@example.com'),
@@ -100,21 +103,24 @@ INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTim
 -- INSERT INTO Airplane (id, name, typeID, statusID, maintainanceTime, usedTime, atcID) VALUES 
 -- ('PL001', 'Plane 001', 'TYP001', 1, '2024-02-01 10:00:00', '2024-02-15 10:00:00', 'ATC001');
 
-select * from Account;
-SELECT c.*, t.name AS type_name 
-FROM Compartment c 
-JOIN Type t ON c.typeID= t.id
-WHERE c.id = 'B' AND c.typeID = 'A320';
-
+select * from Flight;
+Select * From Ticket;
+Select * From Luggage;
+Select * From Account ;
+delete from Luggage where id = 'L289' ;
+INSERT INTO Ticket ( flightID, type, Price, Status) 
+VALUES ('F001', 'Business', 200.00, 'Available');
 DELETE FROM Type WHERE id IN ('A115', 'A116');
 SET SQL_SAFE_UPDATES = 0;
 INSERT INTO `AirplaneStatus` (`name`) VALUES 
 ('Active'), 
 ('Maintenance'), 
 ('Decommissioned');
+ALTER TABLE Luggage ADD COLUMN price DECIMAL(10,2) NOT NULL DEFAULT 0;
+Select * From Luggage;
 
 Select s.id, c.name,s.compartmentID,s.available,c.typeID From Seat s Join Compartment c On c.id = s.compartmentID Where s.compartmentID = 'E' And c.typeID = 'A110';
-
+delete From Account where username = 'khanhtungnguyen';
 INSERT INTO `Type` (`id`, `Name`, `manufacture`, `length`, `weight`, `height`) VALUES 
 ('B737', 'Boeing 737-800', 'Boeing', 39.50, 41413.00, 12.50),
 ('A320', 'Airbus A320', 'Airbus', 37.57, 42200.00, 11.76);
@@ -138,7 +144,21 @@ INSERT INTO `Flight` (`id`, `name`, `code`, `airplaneID`, `departure`, `destinat
 ('F001', 'VN001', 'VN001-2025', 'A001', 'Ho Chi Minh', 'Hanoi', '2025-03-15 06:00:00', '2025-03-15 07:00:00', '2025-03-15 09:00:00'),
 ('F002', 'VN002', 'VN002-2025', 'A002', 'Hanoi', 'Da Nang', '2025-03-16 10:00:00', '2025-03-16 11:00:00', '2025-03-16 12:30:00');
 
+INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime) VALUES
+('VN-A001', 'Sky Dragon', 1, '2024-06-15 08:00:00', '2023-12-01 00:00:00'),
+('VN-A002', 'Ocean Star', 2, '2024-07-20 10:30:00', '2024-01-15 00:00:00');
 
+INSERT INTO Compartment (id, name, airplaneID, capacity) VALUES
+('VN-A001-B1', 'Business','VN-A001',20),
+('VN-A001-B2', 'Business','VN-A001',20),
+('VN-A001-B3', 'Business','VN-A001',20),
+('VN-A001-E1', 'Economy','VN-A001',20),
+('VN-A001-E2', 'Economy','VN-A001',20),
+('VN-A001-E3', 'Economy','VN-A001',20),
+('VN-A001-F1','First Class','VN-A001',20),
+('VN-A001-F2', 'First Class','VN-A001',20),
+('VN-A001-F3', 'First Class','VN-A001',20),
+('VN-A002-B1', 'Business','VN-A002',20);
 
 SELECT c.*, t.name AS type_name FROM Compartment c JOIN Type t ON c.typeID = t.id;
 Select * From Compartment ;

@@ -137,13 +137,13 @@ CREATE TABLE `Ticket` (
 CREATE TABLE `Luggage` (	
 	`id` varchar(10),
 	`customerID` varchar(36),
-	`orderID` varchar(10),
+	`ticketID` varchar(10),
 	`type` varchar(30),
 	`weight` decimal(10,2),
 	  
 	PRIMARY KEY (`id`),
 	foreign key (`customerID`) references `Account`(`id`),
-	foreign key (`orderID`) references `Order`(`id`)
+	foreign key (`ticketID`) references `Ticket`(`id`)
 );
 
 -------------------------------------------------------------

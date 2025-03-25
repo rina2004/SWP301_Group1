@@ -4,22 +4,23 @@
  */
 package Controller;
 
-import dal.AccountDAO;
+import dal.LuggageDAO;
+import dal.TicketDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Account;
+import model.Ticket;
 
 /**
  *
  * @author tungn
  */
-public class Login extends HttpServlet {
+public class OrderLuggage extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +39,10 @@ public class Login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");
+            out.println("<title>Servlet OrderLuggage</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet OrderLuggage at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +60,30 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+
+        if (session == null) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
+
+        String accountId = (String) session.getAttribute("Accid");
+
+        if (accountId == null) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
+
+
+        TicketDAO dao = new TicketDAO();
+
+        String id = request.getParameter("id");
+        String type = dao.getTypeByID(id);
+        request.setAttribute("type", type);
+        request.setAttribute("id", id);
+        request.setAttribute("accountid", accountId);
+
+        request.getRequestDispatcher("view/OrderLuggage.jsp").forward(request, response);
     }
 
     /**
@@ -73,45 +97,19 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        boolean rememberMe = "true".equals(request.getParameter("rememberMe"));
+        String customerID = request.getParameter("customerID");
+        String ticketID = request.getParameter("ticketID");
+        String type = request.getParameter("type");
+        String luggagePackage = request.getParameter("luggagePackage");
 
-        AccountDAO dao = new AccountDAO();
-        Account acc = dao.login(username, password);
+        String[] part = luggagePackage.split(",");
+        double weight = Double.parseDouble(part[0].trim());
+        double price = Double.parseDouble(part[1].trim());
 
-// Kiểm tra tài khoản không tồn tại hoặc sai mật khẩu
-        if (acc == null) {
-            request.setAttribute("error", "Username or password not correct!!!");
-            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
-            return;
-        }
-
-// Kiểm tra tài khoản bị khóa
-        if (!acc.isStatus()) {
-            request.setAttribute("error", "The account is not allowed to login to the system !!!");
-            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
-            return;
-        }
-
-        if (rememberMe) {
-            Cookie userCookie = new Cookie("username", username);
-            userCookie.setMaxAge(7 * 24 * 60 * 60); // 7 ngày
-            userCookie.setPath("/"); 
-            response.addCookie(userCookie);
-        }
-
-        HttpSession session = request.getSession();
-        session.setAttribute("acc", acc);
-        session.setAttribute("username", username);
-        session.setAttribute("Accid", acc.getId());
-        session.setMaxInactiveInterval(60 * 30); // 30 phút
-
-        String homePage = "view/home_1.jsp";
-        if (acc.getRole().getId() == 2) {
-            homePage = "view/home_1.jsp";
-        }
-        request.getRequestDispatcher(homePage).forward(request, response);
+        
+        LuggageDAO dao = new LuggageDAO();
+        dao.addExtraLuggage(customerID, ticketID, type, weight, price);
+        request.getRequestDispatcher("view/ListTicket.jsp").forward(request, response);
     }
 
     /**

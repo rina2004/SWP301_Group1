@@ -5,20 +5,21 @@
 
 package Controller;
 
+import dal.LuggageDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import model.Luggage;
 
 /**
  *
  * @author tungn
  */
-public class Logout extends HttpServlet {
+public class ListLuggage extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +36,10 @@ public class Logout extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Logout</title>");  
+            out.println("<title>Servlet ListLuggage</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Logout at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ListLuggage at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,15 +56,11 @@ public class Logout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.invalidate(); 
-
-        Cookie userCookie = new Cookie("username", null);
-        userCookie.setMaxAge(0);
-        userCookie.setPath("/");
-        response.addCookie(userCookie);
-
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+        String customerID = request.getParameter("id");
+        LuggageDAO dao = new LuggageDAO();
+        List<Luggage> list = dao.getLuggagebyCustomerID(customerID);
+        request.setAttribute("list", list);
+        request.getRequestDispatcher("view/ListLuggage.jsp").forward(request, response);
     } 
 
     /** 

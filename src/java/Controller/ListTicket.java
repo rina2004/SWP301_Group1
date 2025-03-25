@@ -4,22 +4,21 @@
  */
 package Controller;
 
-import dal.AccountDAO;
+import dal.TicketDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Account;
+import java.util.List;
+import model.Ticket;
 
 /**
  *
  * @author tungn
  */
-public class Login extends HttpServlet {
+public class ListTicket extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +37,10 @@ public class Login extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Login</title>");
+            out.println("<title>Servlet ListTicket</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ListTicket at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +58,12 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+        TicketDAO dao = new TicketDAO();
+        String id = request.getParameter("orderID");
+        List<Ticket> list = dao.getTicketsByOrderID(id);
+        request.setAttribute("list", list);
+       
+        request.getRequestDispatcher("view/ListTicket.jsp").forward(request, response);
     }
 
     /**
@@ -73,45 +77,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        boolean rememberMe = "true".equals(request.getParameter("rememberMe"));
-
-        AccountDAO dao = new AccountDAO();
-        Account acc = dao.login(username, password);
-
-// Kiểm tra tài khoản không tồn tại hoặc sai mật khẩu
-        if (acc == null) {
-            request.setAttribute("error", "Username or password not correct!!!");
-            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
-            return;
-        }
-
-// Kiểm tra tài khoản bị khóa
-        if (!acc.isStatus()) {
-            request.setAttribute("error", "The account is not allowed to login to the system !!!");
-            request.getRequestDispatcher("view/Login.jsp").forward(request, response);
-            return;
-        }
-
-        if (rememberMe) {
-            Cookie userCookie = new Cookie("username", username);
-            userCookie.setMaxAge(7 * 24 * 60 * 60); // 7 ngày
-            userCookie.setPath("/"); 
-            response.addCookie(userCookie);
-        }
-
-        HttpSession session = request.getSession();
-        session.setAttribute("acc", acc);
-        session.setAttribute("username", username);
-        session.setAttribute("Accid", acc.getId());
-        session.setMaxInactiveInterval(60 * 30); // 30 phút
-
-        String homePage = "view/home_1.jsp";
-        if (acc.getRole().getId() == 2) {
-            homePage = "view/home_1.jsp";
-        }
-        request.getRequestDispatcher(homePage).forward(request, response);
+        processRequest(request, response);
     }
 
     /**
