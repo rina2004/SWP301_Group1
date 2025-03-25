@@ -16,7 +16,6 @@ import model.Location;
  * @author A A
  */
 public class FlightDAO extends DBContext {
-
     public ArrayList<Flight> list(){
         ArrayList<Flight> list = new ArrayList<>();
         String sql = "SELECT * FROM swp301.flight";
@@ -210,7 +209,7 @@ public class FlightDAO extends DBContext {
     public ArrayList<Flight> search(String departure, String destination, String startingDate){
         ArrayList<Flight> list = new ArrayList<>();
         String sql = """
-            SELECT f.* FROM Flight f 
+            SELECT f.* FROM flight f 
             LEFT JOIN Location ld ON f.departure = ld.id
             LEFT JOIN Location la ON f.destination = la.id
             WHERE ld.name LIKE ? 
@@ -228,7 +227,6 @@ public class FlightDAO extends DBContext {
             while (rs.next()) {
                 Location departureLocation = ld.getById(rs.getInt("departure"));
                 Location destinationLocation = ld.getById(rs.getInt("destination"));
-
                 list.add(new Flight(
                         rs.getString("id"),
                         rs.getString("name"),

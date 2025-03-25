@@ -45,12 +45,9 @@ public class AirplaneDAO extends DBContext{
         Airplane airplane = null;
         String sql = "SELECT * FROM swp301.airplane WHERE id = ?";
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
-        AirTrafficControlDBContext airtc = new AirTrafficControlDBContext();
-        
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
-            
             if (rs.next()) {
                 airplane = new Airplane();
                 airplane.setId(rs.getString("id"));

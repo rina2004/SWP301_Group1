@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -78,15 +79,31 @@
             .location-input {
                 position: relative;
             }
+
             .location-input i {
                 position: absolute;
                 left: 15px;
                 top: 50%;
                 transform: translateY(-50%);
                 color: #666;
+                z-index: 3;
+                pointer-events: none;
             }
-            .location-input input {
+
+            .location-input select {
                 padding-left: 40px;
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5'%3E%3Cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 15px center;
+                background-size: 8px 10px;
+            }
+
+            .location-input select:focus {
+                box-shadow: 0 0 0 0.2rem rgba(0,100,210,0.25);
+                border-color: #0064d2;
             }
             .swap-button {
                 width: 40px;
@@ -191,7 +208,6 @@
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
-                        <img src="img/art.jpg" alt="Logo" class="me-2" style="height: 40px;">
                         <h2 class="mb-0"">Sky Airline</h2>
                     </div>
                     <div>
@@ -230,38 +246,31 @@
 
                 <form action="order" method="GET" id="flightSearchForm">
                     <div class="row">
-                        <!-- Origin -->
+                        <!-- Origin Dropdown -->
                         <div class="col-md-6 mb-3">
                             <label for="origin" class="form-label">From</label>
                             <div class="location-input">
                                 <i class="fas fa-plane-departure"></i>
-                                <input type="text" class="form-control" id="origin" name="departure" placeholder="City or Airport" autocomplete="off" required>
-                                <div class="destination-suggestions" id="originSuggestions">
-                                    <div class="destination-item" data-value="Hanoi">Hanoi (HAN)</div>
-                                    <div class="destination-item" data-value="Ho Chi Minh City">Ho Chi Minh City (SGN)</div>
-                                    <div class="destination-item" data-value="Da Nang">Da Nang (DAD)</div>
-                                    <div class="destination-item" data-value="Nha Trang">Nha Trang (CXR)</div>
-                                    <div class="destination-item" data-value="Phu Quoc">Phu Quoc (PQC)</div>
-                                </div>
+                                <select class="form-select" id="origin" name="departure" required>
+                                    <option value="">Select Departure</option>
+                                    <c:forEach var="location" items="${locations}">
+                                        <option value="${location.name}">${location.name}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                         </div>
 
-                        <!-- Destination -->
+                        <!-- Destination Dropdown -->
                         <div class="col-md-6 mb-3">
                             <label for="destination" class="form-label">To</label>
-                            <div class="location-input" name="destination">
+                            <div class="location-input">
                                 <i class="fas fa-plane-arrival"></i>
-                                <input type="text" class="form-control" id="destination" name="destination" placeholder="City or Airport" autocomplete="off" required>
-                                <div class="destination-suggestions" id="destinationSuggestions">
-                                    <div class="destination-item" data-value="Hanoi">Hanoi (HAN)</div>
-                                    <div class="destination-item" data-value="Ho Chi Minh City">Ho Chi Minh City (SGN)</div>
-                                    <div class="destination-item" data-value="Da Nang">Da Nang (DAD)</div>
-                                    <div class="destination-item" data-value="Nha Trang">Nha Trang (CXR)</div>
-                                    <div class="destination-item" data-value="Phu Quoc">Phu Quoc (PQC)</div>
-                                    <div class="destination-item" data-value="Singapore">Singapore (SIN)</div>
-                                    <div class="destination-item" data-value="Bangkok">Bangkok (BKK)</div>
-                                    <div class="destination-item" data-value="Tokyo">Tokyo (HND)</div>
-                                </div>
+                                <select class="form-select" id="destination" name="destination" required>
+                                    <option value="">Select Destination</option>
+                                    <c:forEach var="location" items="${locations}">
+                                        <option value="${location.name}">${location.name}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                         </div>
 
@@ -303,17 +312,6 @@
                                 <option value="5">5 Passengers</option>
                             </select>
                         </div>
-
-                        <!-- Class -->
-                        <div class="col-md-3 mb-3">
-                            <label for="class" class="form-label">Class</label>
-                            <select class="form-select" id="class">
-                                <option value="Economy">Economy</option>
-                                <option value="Premium Economy">Premium Economy</option>
-                                <option value="Business">Business</option>
-                                <option value="First Class">First Class</option>
-                            </select>
-                        </div>
                     </div>
 
                     <div class="card-footer text-center mt-4">
@@ -322,43 +320,6 @@
                         </button>
                     </div>
                 </form>
-            </div>
-
-            <!-- Promotional Section -->
-            <div class="promo-section">
-                <h4 class="mb-4">Special Offers</h4>
-                <div class="row">
-                    <div class="col-md-4 mb-4">
-                        <div class="card promo-card">
-                            <img src="/api/placeholder/400/200" alt="Special Discount" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">Early Bird Discount</h5>
-                                <p class="card-text">Book 30 days in advance and get 15% off on all international flights.</p>
-                                <a href="#" class="btn btn-sm btn-outline-primary">Learn More</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card promo-card">
-                            <img src="/api/placeholder/400/200" alt="Weekend Gateway" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">Weekend Getaway</h5>
-                                <p class="card-text">Special fares for weekend trips to popular destinations.</p>
-                                <a href="#" class="btn btn-sm btn-outline-primary">Learn More</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card promo-card">
-                            <img src="/api/placeholder/400/200" alt="Family Deal" class="card-img-top">
-                            <div class="card-body">
-                                <h5 class="card-title">Family Package</h5>
-                                <p class="card-text">Children under 12 fly at half price on selected routes.</p>
-                                <a href="#" class="btn btn-sm btn-outline-primary">Learn More</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 

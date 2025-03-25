@@ -4,11 +4,9 @@
  */
 package dal;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.logging.*;
 import model.TicketType;
 
 /**
@@ -32,5 +30,23 @@ public class TicketTypeDAO extends DBContext{
             Logger.getLogger(TicketTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    public ArrayList<TicketType> list() {
+        ArrayList<TicketType> list = new ArrayList<>();
+        String sql = "SELECT * FROM TicketType";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new TicketType(
+                    rs.getString("type"),
+                    rs.getString("description"),
+                    rs.getDouble("price"),
+                    rs.getDouble("checkedweightneed"),
+                    rs.getDouble("handedweightneed")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TicketTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
     }
 }
