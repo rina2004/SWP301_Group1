@@ -2,26 +2,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package controller;
 
-import dal.OrderDAO;
-import java.io.IOException;
-import java.io.PrintWriter;
+import dal.BlogDAO;
+import dal.PostDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import model.Account;
-import model.Order;
-
+import java.io.IOException;
+import java.io.PrintWriter;
+import model.Blog;
+import model.Post;
 
 /**
  *
- * @author anhbu
+ * @author DUCDA
  */
-public class HistoryBookingController extends HttpServlet {
+
+public class updateBlogController extends HttpServlet {
+
+    PostDAO postDAO = new PostDAO();
+    BlogDAO blogDAO = new BlogDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +42,10 @@ public class HistoryBookingController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HistoryBookingController</title>");
+            out.println("<title>Servlet updateBlogController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HistoryBookingController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet updateBlogController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,22 +63,17 @@ public class HistoryBookingController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        // Lấy accountId từ session
-        HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("acc");
+        String id = request.getParameter("id");
 
-        if (acc == null) {
-            response.sendRedirect("view/Login.jsp");
-            return;
-        }
+        Post post = postDAO.findById(id);
+        Blog blog = blogDAO.findByPostID(id);
 
-        String accountId = acc.getId(); // hoặc acc.getAccountId() nếu tên là như vậy trong model của bạn
-
-        OrderDAO orderDAO = new OrderDAO();
-        List<Order> orders = orderDAO.getOrderHistory(accountId);
-        request.setAttribute("orders", orders);
-        request.getRequestDispatcher("view/HistoryBooking.jsp").forward(request, response);
+        String description = blog.getDescription();
+        String content = post.getContent();
+        request.setAttribute("description", description);
+        request.setAttribute("content", content);
+        request.setAttribute("post", post);
+        request.getRequestDispatcher("updateblog.jsp").forward(request, response);
     }
 
     /**
@@ -87,11 +84,24 @@ public class HistoryBookingController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
+   @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    }
+        
+        String id = request.getParameter("id");
 
+        String title = request.getParameter("title");
+        String description = request.getParameter("description");
+        String content = request.getParameter("content");
+
+        Post post = new Post(id, title, content);
+        Blog blog = new Blog(id, title, description);
+
+        postDAO.updatePost(post);
+        blogDAO.updateBlog(blog);
+
+        response.sendRedirect("blog-manage");
+    }
     /**
      * Returns a short description of the servlet.
      *

@@ -9,9 +9,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import model.Account;
 import model.Comment;
 import model.Post;
 
@@ -22,6 +24,7 @@ import model.Post;
 public class postController extends HttpServlet {
 
     PostDAO postDAO = new PostDAO();
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,7 +42,7 @@ public class postController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet postController</title>");            
+            out.println("<title>Servlet postController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet postController at " + request.getContextPath() + "</h1>");
@@ -61,11 +64,11 @@ public class postController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id = request.getParameter("id");
-        
+
         Post post = postDAO.findById(id);
-        
+
         List<Comment> listCmt = postDAO.findCmt(id);
-        
+
         request.setAttribute("post", post);
         request.setAttribute("listCmt", listCmt);
         request.getRequestDispatcher("post.jsp").forward(request, response);
@@ -82,7 +85,22 @@ public class postController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        HttpSession session = request.getSession();
+
+        Account acc = (Account) session.getAttribute("acc");
+
+        if (acc == null) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
+
+        String accID = acc.getId();
+        String content = request.getParameter("content");
+        String postID = request.getParameter("postID");
+
+        postDAO.addComment(new Comment(accID, content, postID));
+
+        response.sendRedirect("post?id=" + postID);
     }
 
     /**

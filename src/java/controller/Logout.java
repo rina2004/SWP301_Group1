@@ -64,7 +64,7 @@ public class Logout extends HttpServlet {
         userCookie.setPath("/"); // Đảm bảo áp dụng cho toàn bộ ứng dụng
         response.addCookie(userCookie);
 
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+        request.getRequestDispatcher("/home").forward(request, response);
     } 
 
     /** 

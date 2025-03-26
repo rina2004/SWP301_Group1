@@ -81,7 +81,7 @@
         <form action="<%= request.getContextPath() %>/login" method="post">
             <div class="all">
                 <div class="left">
-                    <img alt="logo" src="img/logo1.jpg">
+                    <img alt="logo" src="img/logo.jpg">
                     <p>Don't have an account?</p>
                     <a href="<%= request.getContextPath() %>/register">Register here</a>
                 </div>

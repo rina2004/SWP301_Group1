@@ -240,10 +240,130 @@
             html {
                 scroll-behavior: smooth;
             }
+            .auth-buttons {
+                position: relative;
+                display: inline-block;
+            }
+
+            .register {
+                cursor: pointer;
+                text-decoration: none;
+                padding: 10px 15px;
+                background-color: #007bff;
+                color: white;
+                border-radius: 5px;
+                display: inline-block;
+            }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background-color: white;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+                border-radius: 5px;
+                min-width: 150px;
+                z-index: 10;
+                overflow: hidden;
+            }
+
+            .dropdown-content a,
+            .dropdown-content button {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                text-align: left;
+                background: none;
+                border: none;
+                font-size: 16px;
+                cursor: pointer;
+                text-decoration: none;
+                color: black;
+                border-bottom: 1px solid #ddd;
+                font-family: inherit;
+            }
+
+            .dropdown-content button {
+                width: 100%;
+                text-align: left;
+            }
+
+            .dropdown-content a:hover,
+            .dropdown-content button:hover {
+                background-color: #f1f1f1;
+            }
+
+            /* Hiện dropdown khi có class "show" */
+            .dropdown-content.show {
+                display: block;
+            }
         </style>
     </head>
     <body>
+
+        <!-- Thanh điều hướng -->
+        <div class="navbar">
+            <div class="logo">
+                <img src="img/logo.jpg" alt="Logo"/>
+                ️Sky Airlines
+            </div>
+            <ul class="menu">
+                <li><a href="flight">Flights</a></li>
+                <li><a href="blog">Blogs</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+            <c:set var="session" value="${sessionScope}" />
+            <c:choose>
+                <c:when test="${not empty session}">
+                    <div class="auth-buttons">
+                        <a href="#" class="register" id="userDropdown">${username}</a>
+                        <div class="dropdown-content" id="dropdownMenu">
+                            <a href="profile">Profile</a>
+                            <form action="logout" method="GET">
+                                <button type="submit">Log out</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <script>
+                        document.getElementById("userDropdown").addEventListener("click", function (event) {
+                            event.preventDefault(); // Ngăn chặn load lại trang
+                            document.getElementById("dropdownMenu").classList.toggle("show");
+                        });
+
+                        // Ẩn dropdown khi click ra ngoài
+                        document.addEventListener("click", function (event) {
+                            if (!event.target.closest(".auth-buttons")) {
+                                document.getElementById("dropdownMenu").classList.remove("show");
+                            }
+                        });
+                    </script>
+                </c:when>
+                <c:otherwise>
+                    <div class="auth-buttons">
+                        <a href="login" class="login">Login</a>
+                        <a href="register" class="register">Register</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
+
+        <!-- Phần quảng cáo -->
+        <div class="top-section">
+            <div class="container">
+                <div class="text-section">
+                    <h1>Sky Airlines: <br> Soar <span>Beyond</span> <br> <span>the Clouds</span></h1>
+                    <p>Soaring High, Connecting Dreams Across the Skies</p>
+                    <a href="flights" class="book-now">Book Now</a>
+                </div>
+                <div class="plane-image">
+                    <img src="img/art.jpg" alt="Airplane"/>
+                </div>
+            </div>
+        </div>
         <form action="home" method="get">
+<<<<<<< HEAD
             <!-- Thanh điều hướng -->
             <div class="navbar">
                 <div class="logo">
@@ -307,6 +427,8 @@
                 </div>
             </div>
 
+=======
+>>>>>>> ducda
             <!-- Phần Blogs -->
             <div class="top-deals">
                 <h2><a href="blog" style="text-decoration: none; color: inherit">Blogs</a></h2>
@@ -323,25 +445,25 @@
                     </c:forEach>
                 </div>
             </div>
+        </form>
 
-            <!-- Phần Contact -->
-            <div class="contact" id="contact">
-                <h2>Contact Us</h2>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <h3>Address</h3>
-                        <p>Ha Noi, Vietnam</p>
-                    </div>
-                    <div class="contact-item">
-                        <h3>Email</h3>
-                        <p>support@skyairlines.com</p>
-                    </div>
-                    <div class="contact-item">
-                        <h3>Phone</h3>
-                        <p>+84 123456789</p>
-                    </div>
+        <!-- Phần Contact -->
+        <div class="contact" id="contact">
+            <h2>Contact Us</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h3>Address</h3>
+                    <p>Ha Noi, Vietnam</p>
+                </div>
+                <div class="contact-item">
+                    <h3>Email</h3>
+                    <p>support@skyairlines.com</p>
+                </div>
+                <div class="contact-item">
+                    <h3>Phone</h3>
+                    <p>+84 123456789</p>
                 </div>
             </div>
-        </form>
+        </div>
     </body>
 </html>

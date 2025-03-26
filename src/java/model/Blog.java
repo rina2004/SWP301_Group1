@@ -2,15 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package model;
+<<<<<<< HEAD
 import java.time.LocalDateTime;
+=======
+
+>>>>>>> ducda
 import java.util.Date;
+
 /**
  *
  * @author DUCDA
  */
 public class Blog {
+<<<<<<< HEAD
     private String id;
     private BlogPost post;
     private String title;
@@ -19,19 +24,56 @@ public class Blog {
     private BlogCategory category;
     private Account author;
     private LocalDateTime created_at;
+=======
+
+    private String id, postID, title, description, image, categoryID, authorID;
+//    private Date  create_at;
+>>>>>>> ducda
+
+    public String getAuthorID() {
+        return authorID;
+    }
+
+    public void setAuthorID(String authorID) {
+        this.authorID = authorID;
+    }
 
     public Blog() {
     }
 
+<<<<<<< HEAD
     public Blog(String id, BlogPost post, String title, String description, String image, BlogCategory category, Account author, LocalDateTime created_at) {
+=======
+    public Blog(String postID, String title, String description) {
+        this.postID = postID;
+        this.title = title;
+        this.description = description;
+    }
+
+    public Blog(String postID, String title, String description, String image, String categoryID, String authorID) {
+        this.postID = postID;
+        this.title = title;
+        this.description = description;
+        this.image = image;
+        this.categoryID = categoryID;
+        this.authorID = authorID;
+    }
+
+    public Blog(String id, String postID, String title, String description, String image, String categoryID, String authorID) {
+>>>>>>> ducda
         this.id = id;
         this.post = post;
         this.title = title;
         this.description = description;
         this.image = image;
+<<<<<<< HEAD
         this.category = category;
         this.author = author;
         this.created_at = created_at;
+=======
+        this.categoryID = categoryID;
+        this.authorID = authorID;
+>>>>>>> ducda
     }
 
     public String getId() {
@@ -82,6 +124,7 @@ public class Blog {
         this.category = category;
     }
 
+<<<<<<< HEAD
     public Account getAuthor() {
         return author;
     }
@@ -99,4 +142,11 @@ public class Blog {
     }
     
     
+=======
+    @Override
+    public String toString() {
+        return "Blog{" + "id=" + id + ", postID=" + postID + ", title=" + title + ", description=" + description + ", image=" + image + ", categoryID=" + categoryID + ", authorID=" + authorID + '}';
+    }
+
+>>>>>>> ducda
 }

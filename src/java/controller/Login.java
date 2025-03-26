@@ -79,10 +79,14 @@ public class Login extends HttpServlet {
         if (acc == null || !acc.getUsername().equals(username) || !acc.getPassword().equals(password)) {
             request.setAttribute("error", "Username or password not correct!!!");
             request.getRequestDispatcher("view/Login.jsp").forward(request, response);
-        } else if (!acc.isStatus()) {
+        } else if (!acc.isStatus() == true) {
             request.setAttribute("error", "The account is not allowed to login to the system !!!");
+<<<<<<< HEAD
             request.getRequestDispatcher("view/Login.jsp").forward(request, response);
             return;
+=======
+            request.getRequestDispatcher("vew/Login.jsp").forward(request, response);
+>>>>>>> ducda
         }
 
         if (acc != null) {
@@ -96,7 +100,11 @@ public class Login extends HttpServlet {
             session.setAttribute("acc", acc);
             session.setAttribute("username", username);
             session.setMaxInactiveInterval(60 * 30);
+<<<<<<< HEAD
             response.sendRedirect("view/Home.jsp");
+=======
+            response.sendRedirect(request.getContextPath() + "/home");
+>>>>>>> ducda
 
         }
     }
