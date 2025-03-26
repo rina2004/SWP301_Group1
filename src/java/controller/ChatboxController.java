@@ -4,7 +4,7 @@
  */
 package Controller;
 
-import dal.ChatDAO;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -22,7 +22,7 @@ import java.sql.Timestamp;
  */
 public class ChatboxController extends HttpServlet {
     
-    private ChatDAO chatDAO = new ChatDAO();
+
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -59,11 +59,11 @@ public class ChatboxController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String senderID = request.getParameter("senderID");
-        String receiverID = request.getParameter("receiverID");
-        List<ChatMessage> messages = chatDAO.getMessages(senderID, receiverID);
-        request.setAttribute("messages", messages);
-        request.getRequestDispatcher("Chatbox.jsp").forward(request, response);
+//        String senderID = request.getParameter("senderID");
+//        String receiverID = request.getParameter("receiverID");
+//        List<ChatMessage> messages = chatDAO.getMessages(senderID, receiverID);
+//        request.setAttribute("messages", messages);
+//        request.getRequestDispatcher("Chatbox.jsp").forward(request, response);
     } 
 
     /** 

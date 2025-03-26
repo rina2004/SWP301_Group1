@@ -56,12 +56,11 @@ public class Logout extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         HttpSession session = request.getSession();
-        session.invalidate(); // Xóa toàn bộ session
-
+        session.invalidate(); 
 
         Cookie userCookie = new Cookie("username", null);
         userCookie.setMaxAge(0);
-        userCookie.setPath("/"); // Đảm bảo áp dụng cho toàn bộ ứng dụng
+        userCookie.setPath("/");
         response.addCookie(userCookie);
 
         request.getRequestDispatcher("/home").forward(request, response);

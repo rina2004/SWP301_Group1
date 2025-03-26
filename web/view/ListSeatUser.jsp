@@ -179,7 +179,6 @@
     </head>
     <body>
         <div class="container">
-            <!-- Khu vực sơ đồ máy bay -->
             <div class="plane-container">
                 <h2>Sơ Đồ Ghế Máy Bay ${id}</h2>
                 <div class="plane-header">
@@ -235,30 +234,28 @@
 
             function selectSeat(seatId, seatElement) {
                 if (seatElement.classList.contains('booked') || seatElement.classList.contains('maintained')) {
-                    return; // Không thể chọn ghế đã đặt hoặc bảo trì
+                    return;
                 }
 
-                // Nếu ghế đã được chọn trước đó → Bỏ chọn
                 if (selectedSeat === seatElement) {
                     seatElement.classList.remove('selected');
                     seatElement.classList.add('available');
                     selectedSeat = null;
+                    selectedSeatId = null;  // Xóa seatId khi bỏ chọn ghế
                     document.getElementById("selectedSeats").innerText = "Chưa chọn ghế";
                     return;
                 }
 
-                // Nếu đã chọn ghế trước đó, bỏ chọn ghế cũ
                 if (selectedSeat) {
                     selectedSeat.classList.remove('selected');
                     selectedSeat.classList.add('available');
                 }
 
-                // Chọn ghế mới
                 seatElement.classList.remove('available');
                 seatElement.classList.add('selected');
                 selectedSeat = seatElement;
+                selectedSeatId = seatId; // Gán seatId khi chọn ghế
 
-                // Cập nhật danh sách ghế đã chọn
                 document.getElementById("selectedSeats").innerText = seatId;
             }
 
@@ -269,16 +266,38 @@
             }
 
             function confirmSelection() {
-                if (!selectedSeat) {
+                if (!selectedSeatId) {
                     alert("Bạn chưa chọn ghế nào!");
                     return;
                 }
-                alert("Bạn đã xác nhận ghế: " + selectedSeat.getAttribute("data-seat-id"));
+
+                // ✅ Lấy ticketId động từ URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const ticketId = urlParams.get("ticketId");
+
+                let requestData = {seatId: selectedSeatId, ticketId: ticketId};
+                console.log("📤 Gửi request: ", requestData); // Debug
+
+                fetch("<%= request.getContextPath() %>/listSeatsUser", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(requestData)
+                })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("📥 Nhận response: ", data); // Log response
+                            if (data.success) {
+                                alert("Đặt ghế thành công!");
+                            } else {
+                                alert("Lỗi: " + data.message);
+                            }
+                        })
+                        .catch(error => console.error("❌ Lỗi khi gửi request:", error));
             }
             function cancelSelection() {
                 if (selectedSeat) {
                     selectedSeat.classList.remove("selected");
-                    selectedSeat.classList.add("available");  
+                    selectedSeat.classList.add("available");
                     selectedSeat = null;
                 }
                 updateSelectedSeat(null);

@@ -4,24 +4,22 @@
  */
 package Controller;
 
-import dal.BlogDAO;
+import dal.SeatDAO;
+import dal.TicketDAO;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-import model.Blog;
-import model.PageControl;
+import model.Seat;
+import model.Ticket;
 
 /**
  *
- * @author DUCDA
+ * @author tungn
  */
-public class blogController extends HttpServlet {
-
-    BlogDAO blogDAO = new BlogDAO();
+public class DetailSeats extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +38,10 @@ public class blogController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet blogController</title>");
+            out.println("<title>Servlet DetailSeats</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet blogController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DetailSeats at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,50 +59,15 @@ public class blogController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String searchQuery = request.getParameter("search");
-        List<Blog> listBlog;
-        PageControl pageControl = new PageControl();
-
-        String requestURL = request.getRequestURL().toString();
-
-        String pageRaw = request.getParameter("page");
-        int page;
-        try {
-            page = Integer.parseInt(pageRaw);
-            if (page <= 0) {
-                page = 1;
-            }
-        } catch (NumberFormatException e) {
-            page = 1;
-        }
-        int totalRecord;
-
-//        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
-//            listBlog = blogDAO.searchBlogs(searchQuery, page); // Gọi DAO để tìm kiếm
-//            pageControl.setUrlPattern(requestURL + "?search=" + searchQuery + "&");
-//            totalRecord = blogDAO.findTotalRecordByKeyWord(searchQuery);
-//        } else {
-//            listBlog = blogDAO.getAllBlogs(page); // Lấy toàn bộ danh sách blog nếu không tìm kiếm
-//            pageControl.setUrlPattern(requestURL + "?");
-//            totalRecord = blogDAO.findAllTotalRecord();
-//        }
-
-//        int record_per_page = 4;
-//        int totalPage;
-//        if (totalRecord % record_per_page == 0) {
-//            totalPage = totalRecord / record_per_page;
-//        } else {
-//            totalPage = (totalRecord / record_per_page) + 1;
-//        }
-//        pageControl.setPage(page);
-//        pageControl.setTotalPage(totalPage);
-//        pageControl.setTotalRecord(totalRecord);
-//
-//        request.setAttribute("searchQuery", searchQuery);
-//        request.setAttribute("listBlog", listBlog);
-//        request.setAttribute("pageControl", pageControl);
-//        request.getRequestDispatcher("blog.jsp").forward(request, response);
-
+        String id = request.getParameter("id");
+        SeatDAO dao = new SeatDAO();
+        TicketDAO ticketDao = new TicketDAO();
+        String ticketID = ticketDao.getIDbySeat(id);
+        Ticket ticket = ticketDao.getInfor(ticketID);
+        Seat seat = dao.getSeatByID(id);
+        request.setAttribute("seat", seat);
+        request.setAttribute("ticket", ticket);
+        request.getRequestDispatcher("view/DetailSeat.jsp").forward(request, response);
     }
 
     /**
@@ -118,7 +81,7 @@ public class blogController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /**
