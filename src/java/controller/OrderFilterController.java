@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 import dal.*;
 import java.io.*;
@@ -15,8 +11,7 @@ import model.*;
  */
 public class OrderFilterController extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LocationDAO locationDAO = new LocationDAO();
         ArrayList<Location> locationList = locationDAO.list();
         request.setAttribute("locationList", locationList);
@@ -24,7 +19,6 @@ public class OrderFilterController extends HttpServlet {
         String departure = request.getParameter("departure");
         String destination = request.getParameter("destination");
         String departureDate = request.getParameter("departureDate");
-
         if (departure == null) {
             departure = (String) request.getSession().getAttribute("departure");
         }
@@ -34,7 +28,6 @@ public class OrderFilterController extends HttpServlet {
         if (departureDate == null) {
             departureDate = (String) request.getSession().getAttribute("departureDate");
         }
-
         request.getSession().setAttribute("departure", departure);
         request.getSession().setAttribute("destination", destination);
         request.getSession().setAttribute("departureDate", departureDate);
@@ -46,9 +39,7 @@ public class OrderFilterController extends HttpServlet {
             request.getSession().removeAttribute("currentFilter");
             if (departure != null && destination != null && departureDate != null) {
                 flights = flightDAO.search(departure, destination, departureDate);
-            } else {
-                flights = flightDAO.list();
-            }
+            } else flights = flightDAO.list();
         } else if (priceRange != null) {
             request.getSession().setAttribute("currentFilter", priceRange);
             ArrayList<Flight> searchResults;

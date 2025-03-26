@@ -1,14 +1,16 @@
+/**
+ *
+ * @author A A
+ */
 package controller;
+
 import dal.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import java.util.*;
 import model.*;
-/**
- *
- * @author A A
- */
+
 public class OrderFlightController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -21,18 +23,14 @@ public class OrderFlightController extends HttpServlet {
         String departureDate = request.getParameter("departureDate");
         String passengers = request.getParameter("passengers");
         String travelClass = request.getParameter("class");
-
         if (departure == null || destination == null || departureDate == null
                 || departure.isEmpty() || destination.isEmpty() || departureDate.isEmpty()) {
             request.getRequestDispatcher("order-home.jsp").forward(request, response);
             return;
         }
-
         FlightDAO flightDAO = new FlightDAO();
         TicketDAO ticketDAO = new TicketDAO();
-        
         ArrayList<Flight> flights = flightDAO.search(departure, destination, departureDate);
-
         Map<String, Ticket> ticketMap = new HashMap<>();
         for (Flight flight : flights) {
             Ticket ticket = ticketDAO.getByFlightId(flight.getId());
@@ -49,7 +47,6 @@ public class OrderFlightController extends HttpServlet {
         request.setAttribute("ticketMap", ticketMap);
         request.getRequestDispatcher("order-result.jsp").forward(request, response);
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -19,7 +19,7 @@ CREATE TABLE `Account` (
     `status` BOOL DEFAULT(TRUE),
     `citizenID` VARCHAR(12),
     `name` VARCHAR(50),
-    `dob` DATE,
+    `dob` DATE, 
     `phone` VARCHAR(10),
     `address` VARCHAR(255),
     `email` VARCHAR(255),

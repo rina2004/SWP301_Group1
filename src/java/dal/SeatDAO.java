@@ -1,21 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dal;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Seat;
-
+import java.sql.*;
+import java.util.*;
+import java.util.logging.*;
+import model.*;
 /**
  *
  * @author A A
  */
-public class SeatDAO extends DBContext{
+public class SeatDAO extends DBContext {
     public Seat get(String id) {
         CompartmentDAO cd = new CompartmentDAO();
         String sql = "SELECT * FROM swp301.seat WHERE id = ?";
