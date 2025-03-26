@@ -455,10 +455,20 @@ JOIN Location des ON f.destination = des.id
 JOIN Airplane a ON f.airplaneID = a.id 
 JOIN OrderPassenger op ON op.orderID = o.id 
 JOIN Nation n ON op.nationID = n.id 
-WHERE t.orderID ='ORD002'
+WHERE t.orderID ='ORD003'
 GROUP BY t.id, op.fullName, op.nationID;
 
-UPDATE `Order` SET status = 'Cancelled' WHERE id = 'ORD002' AND status != 'Cancelled';
+UPDATE `Order` SET status = 'Confirmed' WHERE id = 'ORD004';
 
 Select * from `Order`;
+
+SELECT 
+    o.id AS OrderID, 
+    s.status AS SeatStatus, 
+    t.status AS TicketStatus
+FROM `Order` o
+JOIN Ticket t ON o.id = t.orderID
+JOIN Seat s ON t.seatID = s.id
+WHERE o.id = 'ORD002';
+
 

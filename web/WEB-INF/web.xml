@@ -112,6 +112,10 @@
         <servlet-name>CancelListTicketController</servlet-name>
         <servlet-class>dal.CancelListTicketController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StaffTicketProcessing</servlet-name>
+        <servlet-class>controller.StaffTicketProcessing</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
         <url-pattern>/airplane/create</url-pattern>
@@ -235,6 +239,10 @@
     <servlet-mapping>
         <servlet-name>CancelListTicketController</servlet-name>
         <url-pattern>/cancelListTicket</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StaffTicketProcessing</servlet-name>
+        <url-pattern>/staffTicketProcessing</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

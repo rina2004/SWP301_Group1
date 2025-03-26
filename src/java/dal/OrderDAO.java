@@ -134,4 +134,55 @@ public class OrderDAO extends DBContext {
         return -1; // Trả về -1 nếu có lỗi xảy ra
     }
 
+    public List<Order> getProcessingOrders() {
+        String sql = "SELECT * FROM `Order` WHERE status = 'Processing'";
+        List<Order> orders = new ArrayList<>();
+
+        try (PreparedStatement stm = connection.prepareStatement(sql); ResultSet rs = stm.executeQuery()) {
+
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getString("id"));
+                order.setStatus(rs.getString("status"));
+                order.setFinalPrice(rs.getDouble("finalPrice"));
+                order.setFinalNum(rs.getInt("finalNum"));
+
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching processing orders: " + e.getMessage());
+        }
+
+        return orders;
+    }
+
+    public int cancelOrder(String orderId) {
+        String updateTicketSql = "UPDATE Ticket SET status = 'Cancelled' WHERE orderID = ?";
+        String updateSeatSql = "UPDATE Seat SET status = 'Available', reason = 'Cancelled Ticket' "
+                + "WHERE id IN (SELECT seatID FROM Ticket WHERE orderID = ?)";
+        String updateOrderSql = "UPDATE `Order` SET status = 'Cancelled' WHERE id = ?";
+
+        int affectedRows = 0;
+
+        try (PreparedStatement psTicket = connection.prepareStatement(updateTicketSql); PreparedStatement psSeat = connection.prepareStatement(updateSeatSql); PreparedStatement psOrder = connection.prepareStatement(updateOrderSql)) {
+
+            
+            psTicket.setString(1, orderId);
+            affectedRows += psTicket.executeUpdate();
+
+          
+            psSeat.setString(1, orderId);
+            affectedRows += psSeat.executeUpdate();
+
+            
+            psOrder.setString(1, orderId);
+            affectedRows += psOrder.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error canceling order: " + e.getMessage());
+        }
+
+        return affectedRows;
+    }
+
 }
