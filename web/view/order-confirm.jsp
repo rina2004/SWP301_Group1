@@ -66,21 +66,21 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="firstName" class="form-label">Full Name</label>
-                            <input type="text" class="form-control" id="name" name="firstName" required>
+                            <input type="text" class="form-control" value="A" readonly>
                         </div>
                         <div class="col-md-6">
                             <label for="passportNumber" class="form-label">Passport/ID Number</label>
-                            <input type="text" class="form-control" id="passportNumber" name="passportNumber" required>
+                            <input type="text" class="form-control" value="789012345678s" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
+                            <input type="email" class="form-control" value="user1@example.com" required>
                         </div>
                         <div class="col-md-6">
                             <label for="phone" class="form-label">Phone</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                            <input type="tel" class="form-control" value="0956789012" required>
                         </div>
                     </div>
                     <!-- Passenger Information Form -->
