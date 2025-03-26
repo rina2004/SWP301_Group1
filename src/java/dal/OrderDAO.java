@@ -78,6 +78,20 @@ public class OrderDAO extends DBContext{
         return list;
     }
     
+    public int cancelOrderById(String orderId) {
+        String sql = "UPDATE `Order` SET status = 'Processing' WHERE id = ? AND status != 'Cancelled'";
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, orderId);
+            return stm.executeUpdate(); // Trả về số dòng bị ảnh hưởng
+        } catch (SQLException e) {
+            System.out.println("Error cancelling order: " + e.getMessage());
+        }
+
+        return -1; // Trả về -1 nếu có lỗi xảy ra
+    }
+
+    
     public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();
         String cusID = "f2738d94-097f-11f0-af18-047c163442e4";

@@ -5,6 +5,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,8 +15,11 @@ public class Airplane {
     private String id;
     private String name;
     private AirplaneStatus status;
+    private int numOfComs;
     private LocalDateTime maintainanceTime;
     private LocalDateTime usedTime;
+    
+    private ArrayList<Compartment> compartments = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -39,6 +43,14 @@ public class Airplane {
 
     public void setStatus(AirplaneStatus status) {
         this.status = status;
+    }
+
+    public int getNumOfComs() {
+        return numOfComs;
+    }
+
+    public void setNumOfComs(int numOfComs) {
+        this.numOfComs = numOfComs;
     }
 
     public LocalDateTime getMaintainanceTime() {

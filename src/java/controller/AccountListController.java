@@ -68,7 +68,6 @@ public class AccountListController extends HttpServlet {
 
         //Lọc tài khoản theo roleID
         if (roleFilter != null && !roleFilter.isEmpty()) {
-<<<<<<< HEAD:src/java/controller/AccountListController.java
             int roleID = Integer.parseInt(roleFilter);
             listA.removeIf(acc -> acc.getRole().getId() != roleID);
         }
@@ -80,23 +79,6 @@ public class AccountListController extends HttpServlet {
                 Account acc = iterator.next();
                 if (!acc.getUsername().toLowerCase().contains(keyword.toLowerCase())) {
                     iterator.remove();
-=======
-            int roleID = -1;
-            switch (roleFilter) {
-                case "Staff" ->
-                    roleID = 3;
-                case "Customer" ->
-                    roleID = 2;
-                case "AirTrafficControl" ->
-                    roleID = 4;
-            }
-            if (listA != null) {
-                Iterator<Account> iterator = listA.iterator();
-                while (iterator.hasNext()) {
-                    if (iterator.next().getRole().getId() != roleID) {
-                        iterator.remove();
-                    }
->>>>>>> ducda:src/java/controller/AccountControl.java
                 }
             }
         }
