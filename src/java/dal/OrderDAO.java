@@ -6,6 +6,8 @@ package dal;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Order;
@@ -52,5 +54,26 @@ public class OrderDAO extends DBContext{
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public List<Order> getAll() {
+        String sql = "Select * From `Order`";
+        List<Order> list = new ArrayList<>();
+        PreparedStatement stm;
+        ResultSet rs;
+
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getString("id"));
+                order.setStatus(rs.getString("status"));
+                list.add(order);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);;
+        }
+        return list;
     }
 }

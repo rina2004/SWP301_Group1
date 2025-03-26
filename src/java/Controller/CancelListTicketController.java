@@ -1,13 +1,11 @@
+package Controller;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-<<<<<<<< HEAD:src/java/dal/CancelListTicketController.java
-package dal;
-========
-package controller;
->>>>>>>> main:src/java/controller/LoadAccountControl.java
+
 
 import java.io.IOException;
 import java.io.PrintWriter;

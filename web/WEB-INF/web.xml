@@ -6,71 +6,71 @@
     </context-param>
     <servlet>
         <servlet-name>AirplaneCreateController</servlet-name>
-        <servlet-class>controller.AirplaneCreateController</servlet-class>
+        <servlet-class>Controller.AirplaneCreateController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AirplaneViewController</servlet-name>
-        <servlet-class>controller.AirplaneViewController</servlet-class>
+        <servlet-class>Controller.AirplaneViewController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AirplaneUpdateController</servlet-name>
-        <servlet-class>controller.AirplaneUpdateController</servlet-class>
+        <servlet-class>Controller.AirplaneUpdateController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>OrderFlightController</servlet-name>
-        <servlet-class>controller.OrderFlightController</servlet-class>
+        <servlet-class>Controller.OrderFlightController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChatboxController</servlet-name>
-        <servlet-class>controller.ChatboxController</servlet-class>
+        <servlet-class>Controller.ChatboxController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TypingStatusController</servlet-name>
-        <servlet-class>controller.TypingStatusController</servlet-class>
+        <servlet-class>Controller.TypingStatusController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TypeCreateController</servlet-name>
-        <servlet-class>controller.TypeCreateController</servlet-class>
+        <servlet-class>Controller.TypeCreateController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TypeUpdateController</servlet-name>
-        <servlet-class>controller.TypeUpdateController</servlet-class>
+        <servlet-class>Controller.TypeUpdateController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TypeDeleteController</servlet-name>
-        <servlet-class>controller.TypeDeleteController</servlet-class>
+        <servlet-class>Controller.TypeDeleteController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TypeViewController</servlet-name>
-        <servlet-class>controller.TypeViewController</servlet-class>
+        <servlet-class>Controller.TypeViewController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TypeSearchController</servlet-name>
-        <servlet-class>controller.TypeSearchController</servlet-class>
+        <servlet-class>Controller.TypeSearchController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>OrderDetailController</servlet-name>
-        <servlet-class>controller.OrderDetailController</servlet-class>
+        <servlet-class>Controller.OrderDetailController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>OrderFilterController</servlet-name>
-        <servlet-class>controller.OrderFilterController</servlet-class>
+        <servlet-class>Controller.OrderFilterController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>OrderConfirmServlet</servlet-name>
-        <servlet-class>controller.OrderConfirmServlet</servlet-class>
+        <servlet-class>Controller.OrderConfirmServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Register</servlet-name>
-        <servlet-class>controller.Register</servlet-class>
+        <servlet-class>Controller.Register</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>controller.Login</servlet-class>
+        <servlet-class>Controller.Login</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Logout</servlet-name>
-        <servlet-class>controller.Logout</servlet-class>
+        <servlet-class>Controller.Logout</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ResendOTP</servlet-name>
@@ -78,35 +78,35 @@
     </servlet>
     <servlet>
         <servlet-name>CheckOTP2</servlet-name>
-        <servlet-class>controller.CheckOTP2</servlet-class>
+        <servlet-class>Controller.CheckOTP2</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CreateNewPassword</servlet-name>
-        <servlet-class>controller.CreateNewPassword</servlet-class>
+        <servlet-class>Controller.CreateNewPassword</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ConfirmEmail</servlet-name>
-        <servlet-class>controller.ConfirmEmail</servlet-class>
+        <servlet-class>Controller.ConfirmEmail</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangePassword</servlet-name>
-        <servlet-class>controller.ChangePassword</servlet-class>
+        <servlet-class>Controller.ChangePassword</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangePasswordProfileControl</servlet-name>
-        <servlet-class>controller.ChangePasswordProfileControl</servlet-class>
+        <servlet-class>Controller.ChangePasswordProfileControl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>HistoryBookingController</servlet-name>
-        <servlet-class>controller.HistoryBookingController</servlet-class>
+        <servlet-class>Controller.HistoryBookingController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>OrderDetailControl</servlet-name>
-        <servlet-class>controller.OrderDetailControl</servlet-class>
+        <servlet-class>Controller.OrderDetailControl</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CancelTicketController</servlet-name>
-        <servlet-class>controller.CancelTicketController</servlet-class>
+        <servlet-class>Controller.CancelTicketController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CancelListTicketController</servlet-name>
@@ -126,15 +126,15 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>homeController</servlet-name>
-        <servlet-class>controller.homeController</servlet-class>
+        <servlet-class>Controller.homeController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>blogController</servlet-name>
-        <servlet-class>controller.blogController</servlet-class>
+        <servlet-class>Controller.blogController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>postController</servlet-name>
-        <servlet-class>controller.postController</servlet-class>
+        <servlet-class>Controller.postController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>homeController</servlet-name>
@@ -241,27 +241,27 @@
     </welcome-file-list>
     <servlet>
         <servlet-name>ListFlightServlet</servlet-name>
-        <servlet-class>controller.ListFlightServlet</servlet-class>
+        <servlet-class>Controller.ListFlightServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ViewFlightServlet</servlet-name>
-        <servlet-class>controller.ViewFlightServlet</servlet-class>
+        <servlet-class>Controller.ViewFlightServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SearchFlightServlet</servlet-name>
-        <servlet-class>controller.SearchFlightServlet</servlet-class>
+        <servlet-class>Controller.SearchFlightServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>FilterFlightServlet</servlet-name>
-        <servlet-class>controller.FilterFlightServlet</servlet-class>
+        <servlet-class>Controller.FilterFlightServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateFlightServlet</servlet-name>
-        <servlet-class>controller.UpdateFlightServlet</servlet-class>
+        <servlet-class>Controller.UpdateFlightServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddFlightServlet</servlet-name>
-        <servlet-class>controller.AddFlightServlet</servlet-class>
+        <servlet-class>Controller.AddFlightServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ListFlightServlet</servlet-name>
@@ -289,19 +289,19 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>AccountListController</servlet-name>
-        <servlet-class>controller.AccountListController</servlet-class>
+        <servlet-class>Controller.AccountListController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AccountAddUserController</servlet-name>
-        <servlet-class>controller.AccountAddUserController</servlet-class>
+        <servlet-class>Controller.AccountAddUserController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AccountUpdateController</servlet-name>
-        <servlet-class>controller.AccountUpdateController</servlet-class>
+        <servlet-class>Controller.AccountUpdateController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AccountProfileController</servlet-name>
-        <servlet-class>controller.AccountProfileController</servlet-class>
+        <servlet-class>Controller.AccountProfileController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AccountListController</servlet-name>
