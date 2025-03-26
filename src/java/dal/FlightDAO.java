@@ -8,15 +8,17 @@ import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Airplane;
+import model.Compartment;
 import model.Flight;
 import model.Location;
+import model.TicketType;
 
 /**
  *
  * @author A A
  */
 public class FlightDAO extends DBContext {
-
     public ArrayList<Flight> list(){
         ArrayList<Flight> list = new ArrayList<>();
         String sql = "SELECT * FROM swp301.flight";
@@ -210,7 +212,7 @@ public class FlightDAO extends DBContext {
     public ArrayList<Flight> search(String departure, String destination, String startingDate){
         ArrayList<Flight> list = new ArrayList<>();
         String sql = """
-            SELECT f.* FROM Flight f 
+            SELECT f.* FROM flight f 
             LEFT JOIN Location ld ON f.departure = ld.id
             LEFT JOIN Location la ON f.destination = la.id
             WHERE ld.name LIKE ? 
@@ -228,7 +230,6 @@ public class FlightDAO extends DBContext {
             while (rs.next()) {
                 Location departureLocation = ld.getById(rs.getInt("departure"));
                 Location destinationLocation = ld.getById(rs.getInt("destination"));
-
                 list.add(new Flight(
                         rs.getString("id"),
                         rs.getString("name"),
@@ -306,4 +307,40 @@ public class FlightDAO extends DBContext {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
         }   
     }
+//    public List<Compartment> getCompartmentsByFlightId(String flightId) {
+//        List<Compartment> compartments = new ArrayList<>();
+//        String sql = """
+//            SELECT c.id, c.type, tt.price, c.airplaneID, c.capacity
+//            FROM Flight f
+//            JOIN Airplane a ON f.airplaneID = a.id
+//            JOIN Compartment c ON a.id = c.airplaneID
+//            JOIN TicketType tt ON c.type = tt.type
+//            WHERE f.id = ?;
+//        """;
+//
+//        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+//            ps.setString(1, flightId);
+//            ResultSet rs = ps.executeQuery();
+//
+//            while (rs.next()) {
+//                TicketType ticketType = new TicketType();
+//                ticketType.setType(rs.getString("type"));
+//                ticketType.setPrice(rs.getDouble("price"));
+//
+//                Airplane airplane = new Airplane();
+//                airplane.setId(rs.getString("airplaneID"));
+//
+//                Compartment compartment = new Compartment();
+//                compartment.setId(rs.getString("id"));
+//                compartment.setType(ticketType);
+//                compartment.setAirplane(airplane);
+//                compartment.setCapacity(rs.getInt("capacity"));
+//
+//                compartments.add(compartment);
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        return compartments;
+//    }
 }

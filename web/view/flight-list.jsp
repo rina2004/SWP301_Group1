@@ -308,13 +308,6 @@
                                                 Flight #${flight.getId()}
                                             </span>
                                         </div>
-                                        <div class="text-end">
-                                            <div class="price-display">
-                                                <c:set var="ticket" value="${ticketMap[flight.getId()]}" />
-                                                <fmt:formatNumber value="${ticket.price}" type="currency" currencySymbol="" maxFractionDigits="0"/> VND
-                                            </div>
-                                            <small class="text-muted">${ticket.type}</small>
-                                        </div>
                                     </div>
 
                                     <div class="flight-info mt-4">

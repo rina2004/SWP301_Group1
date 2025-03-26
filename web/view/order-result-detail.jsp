@@ -47,7 +47,7 @@
                                 </tr>
                                 <tr>
                                     <th>Airplane ID:</th>
-                                    <td>${flight.getAirplane()}</td>
+                                    <td>${flight.airplane.id}</td>
                                 </tr>
                             </table>
                         </div>
@@ -56,11 +56,11 @@
                             <table class="table table-borderless">
                                 <tr>
                                     <th>Departure:</th>
-                                    <td>${flight.getDeparture()}</td>
+                                    <td>${flight.departure.name}</td>
                                 </tr>
                                 <tr>
                                     <th>Destination:</th>
-                                    <td>${flight.getDestination()}</td>
+                                    <td>${flight.destination.name}</td>
                                 </tr>
 
                                 <tr>
