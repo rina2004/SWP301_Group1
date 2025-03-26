@@ -297,4 +297,168 @@ LEFT JOIN Nation n ON op.nationID = n.id
 
 WHERE t.flightID = 'FL001' AND t.seatID = 'VN-A001-1';
 
+SELECT 
+    t.id AS ticketId, 
+    t.status AS ticketStatus, 
+    o.id AS orderId, 
+    o.customerID, 
+    o.staffID, 
+    o.status AS orderStatus, 
+    o.time, 
+    o.finalPrice, 
+    o.finalNum, 
+    f.id AS flightId, 
+    f.name AS flightName, 
+    f.code, 
+    f.airplaneID, 
+    f.departure, 
+    f.destination, 
+    f.entryTime, 
+    f.startingTime, 
+    f.landingTime, 
+    s.id AS seatId, 
+    s.status AS seatStatus, 
+    s.reason 
+FROM Ticket t 
+JOIN `Order` o ON t.orderID = o.id 
+JOIN Flight f ON t.flightID = f.id 
+JOIN Seat s ON t.seatID = s.id 
+WHERE t.flightID = 'FL001' 
+AND t.seatID = 'VN-A001-1';
+
+
+SELECT 
+    t.id AS ticketId, 
+    t.status AS ticketStatus, 
+    o.id AS orderId, 
+    o.customerID, 
+    o.staffID, 
+    o.status AS orderStatus, 
+    o.time, 
+    o.finalPrice, 
+    o.finalNum, 
+    f.id AS flightId, 
+    f.name AS flightName, 
+    f.code, 
+    f.airplaneID, 
+    f.departure, 
+    f.destination, 
+    f.entryTime, 
+    f.startingTime, 
+    f.landingTime, 
+    s.id AS seatId, 
+    s.status AS seatStatus, 
+    s.reason 
+FROM Ticket t 
+JOIN `Order` o ON t.orderID = o.id 
+JOIN Flight f ON t.flightID = f.id 
+JOIN Seat s ON t.seatID = s.id 
+WHERE t.orderID = 'ORD002';
+
+SELECT 
+    t.id AS ticketId, 
+    t.status AS ticketStatus, 
+    o.id AS orderId, 
+    o.customerID, 
+    o.staffID, 
+    o.status AS orderStatus, 
+    o.time, 
+    o.finalPrice, 
+    o.finalNum, 
+    f.id AS flightId, 
+    f.name AS flightName, 
+    f.code, 
+    f.airplaneID, 
+    dep.name AS departure,  -- Lấy tên địa điểm thay vì ID
+    des.name AS destination, -- Lấy tên địa điểm thay vì ID
+    f.entryTime, 
+    f.startingTime, 
+    f.landingTime, 
+    s.id AS seatId, 
+    s.status AS seatStatus, 
+    s.reason 
+FROM Ticket t 
+JOIN `Order` o ON t.orderID = o.id 
+JOIN Flight f ON t.flightID = f.id 
+JOIN Seat s ON t.seatID = s.id 
+JOIN Location dep ON f.departure = dep.id  -- Thay ID bằng tên
+JOIN Location des ON f.destination = des.id -- Thay ID bằng tên
+WHERE t.orderID ='ORD002';
+
+SELECT 
+    t.id AS ticketId, 
+    t.status AS ticketStatus, 
+    o.id AS orderId, 
+    o.customerID, 
+    o.staffID, 
+    o.status AS orderStatus, 
+    o.time, 
+    o.finalPrice, 
+    o.finalNum, 
+    f.id AS flightId, 
+    f.name AS flightName, 
+    f.code, 
+    f.airplaneID, 
+    a.name AS airplaneName, 
+    dep.name AS departure,  
+    des.name AS destination, 
+    f.entryTime, 
+    f.startingTime, 
+    f.landingTime, 
+    s.id AS seatId, 
+    s.status AS seatStatus, 
+    s.reason, 
+    op.fullName AS passengerName,  -- Lấy tên hành khách
+    n.name AS nationName  -- Lấy quốc tịch của hành khách
+FROM Ticket t 
+JOIN `Order` o ON t.orderID = o.id 
+JOIN Flight f ON t.flightID = f.id 
+JOIN Seat s ON t.seatID = s.id 
+JOIN Location dep ON f.departure = dep.id  
+JOIN Location des ON f.destination = des.id 
+JOIN Airplane a ON f.airplaneID = a.id 
+JOIN OrderPassenger op ON o.id = op.orderID  -- Liên kết với OrderPassenger để lấy thông tin hành khách
+JOIN Nation n ON op.nationID = n.id  -- Lấy quốc tịch từ bảng Nation
+WHERE t.orderID = 'ORD002';
+
+SELECT 
+    t.id AS ticketId, 
+    t.status AS ticketStatus, 
+    o.id AS orderId, 
+    o.customerID, 
+    o.staffID, 
+    o.status AS orderStatus, 
+    o.time, 
+    o.finalPrice, 
+    o.finalNum, 
+    f.id AS flightId, 
+    f.name AS flightName, 
+    f.code, 
+    f.airplaneID, 
+    a.name AS airplaneName, 
+    dep.name AS departure,  
+    des.name AS destination, 
+    f.entryTime, 
+    f.startingTime, 
+    f.landingTime, 
+    s.id AS seatId, 
+    s.status AS seatStatus, 
+    s.reason, 
+    op.fullName AS passengerName, 
+    n.name AS nationName 
+FROM Ticket t 
+JOIN `Order` o ON t.orderID = o.id 
+JOIN Flight f ON t.flightID = f.id 
+JOIN Seat s ON t.seatID = s.id 
+JOIN Location dep ON f.departure = dep.id 
+JOIN Location des ON f.destination = des.id 
+JOIN Airplane a ON f.airplaneID = a.id 
+JOIN OrderPassenger op ON op.orderID = o.id 
+JOIN Nation n ON op.nationID = n.id 
+WHERE t.orderID ='ORD002'
+GROUP BY t.id, op.fullName, op.nationID;
+
+UPDATE `Order` SET status = 'Cancelled' WHERE id = 'ORD002' AND status != 'Cancelled';
+
+Select * from `Order`;
 

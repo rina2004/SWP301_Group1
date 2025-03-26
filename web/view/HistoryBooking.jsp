@@ -72,6 +72,8 @@
                 gap: 8px;
             }
         </style>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     </head>
     <body>
         <h2>My Orders</h2>
@@ -107,7 +109,7 @@
                                             <a class="btn btn-secondary btn-disabled">Cancel</a>
                                         </c:when>
                                         <c:otherwise>
-                                            <a class="btn btn-secondary" href="#" onclick="confirmCancel(${order.id})">Cancel</a>
+                                            <a class="btn btn-secondary" href="#" onclick="confirmCancel('${order.id}')">Cancel</a>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
@@ -122,22 +124,32 @@
         <a class="btn" href="${pageContext.request.contextPath}/view/Home.jsp">Back to Home</a>
 
         <!-- Form ẩn để gửi yêu cầu hủy bằng POST -->
-        <form id="cancelForm" method="POST" action="${pageContext.request.contextPath}/cancelOrder">
-            <input type="hidden" name="orderId" id="orderIdInput">
+        <form id="cancelForm" method="POST" action="${pageContext.request.contextPath}/cancelTicket">
+            <input type="hidden" name="orderID" id="orderIdInput">
         </form>
 
         <script>
             function confirmCancel(orderId) {
                 if (!orderId || orderId.trim() === '')
-                    return; // Kiểm tra orderId hợp lệ
+                    return;
 
-                let confirmAction = confirm("Are you sure you want to cancel this order?");
-                if (confirmAction) {
-                    document.getElementById('orderIdInput').value = orderId;
-                    document.getElementById('cancelForm').submit();
-                }
+                Swal.fire({
+                    title: "Are you sure you want to cancel your order?",
+                    text: "This action cannot be undone!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, cancel now!",
+                    cancelButtonText: "No"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('orderIdInput').value = orderId;
+                        document.getElementById('cancelForm').submit();
+                    }
+                });
             }
-
         </script>
+
     </body>
 </html>

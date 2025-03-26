@@ -236,4 +236,16 @@ public class TicketDAO extends DBContext {
         return tickets;
     }
 
+    public int updateTicketsByOrder(String orderID, String newStatus) {
+        String sql = "UPDATE Ticket SET status = ? WHERE orderID = ? AND status NOT IN ('Cancelled', 'Pending')";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, newStatus);
+            stm.setString(2, orderID);
+            return stm.executeUpdate(); // Trả về số dòng bị ảnh hưởng
+        } catch (SQLException ex) {
+            Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
 }

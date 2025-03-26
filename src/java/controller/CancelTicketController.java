@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.OrderDAO;
 import dal.TicketDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -73,32 +74,26 @@ public class CancelTicketController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
+        // Lấy orderID từ request
+        String orderID = request.getParameter("orderID");
+
+
+        // Kiểm tra tài khoản đăng nhập
         HttpSession session = request.getSession();
-        Account currentUser = (Account) session.getAttribute("acc");
-
-        if (currentUser == null) {
-            response.sendRedirect("view/Login.jsp");
+        Account user = (Account) session.getAttribute("acc");
+        if (user == null) {
+            response.sendRedirect("Login.jsp");
             return;
         }
 
-        // Chỉ Customer hoặc Staff mới có thể hủy vé
-        String role = currentUser.getRole().getName();
-        if (!role.equals("Staff")) {
-            response.sendRedirect("view/Login.jsp");
-            return;
-        }
+        // Cập nhật trạng thái tất cả vé của order này
+        OrderDAO orderDAO = new OrderDAO();
+        int orderUpdated = orderDAO.cancelOrderById(orderID);
+        
+        
 
-        String ticketId = request.getParameter("ticketId");
-        if (ticketId == null || ticketId.trim().isEmpty()) {
-            response.sendRedirect("view/OrderDetail.jsp"); // Không thông báo lỗi, chỉ quay lại trang danh sách vé
-            return;
-        }
+        response.sendRedirect("historyBooking");
 
-        TicketDAO ticketDAO = new TicketDAO();
-        ticketDAO.cancelTicket(ticketId);
-
-        // Quay lại trang danh sách vé sau khi hủy thành công / thất bại
-        response.sendRedirect("view/OrderDetail.jsp");
     }
 
     /**
