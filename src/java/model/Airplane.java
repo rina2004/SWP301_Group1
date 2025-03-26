@@ -76,4 +76,16 @@ public class Airplane {
     public void setCompartments(ArrayList<Compartment> compartments) {
         this.compartments = compartments;
     }
+    
+    public Compartment getCompartmentById(String compId) {
+        if (compartments == null) {
+            return null;
+        }
+        for (Compartment compartment : compartments) {
+            if (compartment.getId().equals(compId)) {
+                return compartment;
+            }
+        }
+        return null;
+    }
 }

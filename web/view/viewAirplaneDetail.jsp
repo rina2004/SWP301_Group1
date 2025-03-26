@@ -10,7 +10,7 @@
         <div class="header">
             <a href="${pageContext.request.contextPath}/airplane/view" class="back-link">Back to List</a>
             <h1>Airplane Details</h1>
-            <a href="${pageContext.request.contextPath}/airplane/detail/edit" class="edit-link">Edit</a>
+            <a href="${pageContext.request.contextPath}/airplane/edit?id=${airplane.id}" class="edit-link">Edit</a>
         </div>
         <!-- Airplane Information Section -->
         <div class="airplane-info">

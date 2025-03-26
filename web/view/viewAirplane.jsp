@@ -106,7 +106,6 @@
         <!-- Header Section -->
         <div class="header-section">
             <div class="title">
-                <img src="/api/placeholder/40/40" alt="Logo" style="height: 40px;">
                 <h2>Airline Management</h2>
             </div>
             <a href="create" class="btn">

@@ -4,6 +4,9 @@
         <param-name>webapp</param-name>
         <param-value>webapp</param-value>
     </context-param>
+    <welcome-file-list>
+        <welcome-file>home.jsp</welcome-file>
+    </welcome-file-list>
     <servlet>
         <servlet-name>AirplaneCreateController</servlet-name>
         <servlet-class>controller.AirplaneCreateController</servlet-class>
@@ -131,6 +134,10 @@
     <servlet>
         <servlet-name>AirplaneViewDetailController</servlet-name>
         <servlet-class>controller.AirplaneViewDetailController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AirplaneUpdateDetailController</servlet-name>
+        <servlet-class>controller.AirplaneUpdateDetailController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
@@ -276,9 +283,10 @@
         <servlet-name>AirplaneViewDetailController</servlet-name>
         <url-pattern>/airplane/view/detail</url-pattern>
     </servlet-mapping>
-    <welcome-file-list>
-        <welcome-file>home</welcome-file>
-    </welcome-file-list>
+    <servlet-mapping>
+        <servlet-name>AirplaneUpdateDetailController</servlet-name>
+        <url-pattern>/airplane/edit</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>ListFlightServlet</servlet-name>
         <servlet-class>controller.ListFlightServlet</servlet-class>
