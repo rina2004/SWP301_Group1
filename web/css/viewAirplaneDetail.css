@@ -3,6 +3,13 @@ body {
     margin: 20px;
     background-color: #f5f5f5;
 }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .airplane-info {
     background-color: white;
     padding: 20px;
@@ -116,6 +123,14 @@ body {
     font-size: 14px;
 }
 
+.compartment-header {
+    justify-content: center
+}
+
+.compartment-header span{
+    font-weight: bold;
+}
+
 .aisle {
     width: 20px;
     background-color: #ccc;
@@ -166,6 +181,11 @@ body {
     cursor: pointer;
 }
 
+.seat-id {
+    font-size: 10px;
+    font-weight: bold;
+}
+
 .seat-available {
     background-color: #2ecc71; /* Green */
 }
@@ -184,7 +204,6 @@ body {
 
 .back-link {
     display: inline-block;
-    margin-top: 20px;
     background-color: #3498db;
     color: white;
     padding: 10px 15px;
@@ -193,7 +212,21 @@ body {
     font-weight: bold;
 }
 
+.edit-link {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold; 
+}
+
 .back-link:hover {
+    background-color: #2980b9;
+}
+
+.edit-link:hover {
     background-color: #2980b9;
 }
 

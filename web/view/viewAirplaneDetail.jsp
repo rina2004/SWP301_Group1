@@ -7,8 +7,11 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/viewAirplaneDetail.css">
     </head>
     <body>
-        <h1>Airplane Details</h1>
-
+        <div class="header">
+            <a href="${pageContext.request.contextPath}/airplane/view" class="back-link">Back to List</a>
+            <h1>Airplane Details</h1>
+            <a href="${pageContext.request.contextPath}/airplane/detail/edit" class="edit-link">Edit</a>
+        </div>
         <!-- Airplane Information Section -->
         <div class="airplane-info">
             <h2>Aircraft Information</h2>
@@ -31,11 +34,11 @@
                 </div>
                 <div class="info-item">
                     <div class="info-label">Maintenance Time</div>
-                    <div class="info-value">${airplane.maintainanceTime}</div>
+                    <div class="info-value">${airplane.maintainanceTime.toString().replace('T', ' ')}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">Used Time</div>
-                    <div class="info-value">${airplane.usedTime}</div>
+                    <div class="info-value">${airplane.usedTime.toString().replace('T', ' ')}</div>
                 </div>
             </div>
         </div>
@@ -83,8 +86,7 @@
                     <c:forEach items="${airplane.compartments}" var="comp" varStatus="status">
                         <div class="compartment" data-capacity="${comp.capacity}">
                             <div class="compartment-header">
-                                <span>${comp.name}</span>
-                                <span>Capacity: ${comp.capacity}</span>
+                                <span>${comp.type.type}</span>
                             </div>
 
                             <div class="seats-container" data-seats="${comp.capacity}">
@@ -133,8 +135,6 @@
                 </div>
             </div>
         </div>
-
-        <a href="${pageContext.request.contextPath}/airplane/view" class="back-link">Back to List</a>
 
         <script>
             // JavaScript để điều chỉnh kích thước ghế và khoang dựa trên số lượng ghế

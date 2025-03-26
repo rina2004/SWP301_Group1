@@ -49,7 +49,7 @@ public class AirplaneDAO extends DBContext {
             for (Compartment compartment : airplane.getCompartments()) {
                 PreparedStatement stm_insertCompartment = connection.prepareStatement(insertCompartment);
                 stm_insertCompartment.setString(1, compartment.getId());
-                stm_insertCompartment.setString(2, compartment.getType() != null ? compartment.getType().getType() : null);
+                stm_insertCompartment.setString(2, compartment.getType().getType());
                 stm_insertCompartment.setString(3, airplane.getId());
                 stm_insertCompartment.setInt(4, compartment.getCapacity());
                 stm_insertCompartment.executeUpdate();
