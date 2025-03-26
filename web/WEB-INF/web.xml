@@ -104,6 +104,18 @@
         <servlet-name>ChangePassword</servlet-name>
         <servlet-class>controller.ChangePassword</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>blogManageController</servlet-name>
+        <servlet-class>controller.blogManageController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>addBlogController</servlet-name>
+        <servlet-class>controller.addBlogController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>updateBlogController</servlet-name>
+        <servlet-class>controller.updateBlogController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
         <url-pattern>/airplane/create</url-pattern>
@@ -219,6 +231,18 @@
     <servlet-mapping>
         <servlet-name>postController</servlet-name>
         <url-pattern>/post</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>blogManageController</servlet-name>
+        <url-pattern>/blog-manage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addBlogController</servlet-name>
+        <url-pattern>/addblog</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>updateBlogController</servlet-name>
+        <url-pattern>/updateblog</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

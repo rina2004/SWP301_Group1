@@ -4,26 +4,26 @@
  */
 package controller;
 
+import dal.BlogDAO;
 import dal.PostDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import model.Account;
-import model.Comment;
+import model.Blog;
 import model.Post;
 
 /**
  *
  * @author DUCDA
  */
-public class postController extends HttpServlet {
+
+public class updateBlogController extends HttpServlet {
 
     PostDAO postDAO = new PostDAO();
+    BlogDAO blogDAO = new BlogDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +42,10 @@ public class postController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet postController</title>");
+            out.println("<title>Servlet updateBlogController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet postController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet updateBlogController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -66,12 +66,14 @@ public class postController extends HttpServlet {
         String id = request.getParameter("id");
 
         Post post = postDAO.findById(id);
+        Blog blog = blogDAO.findByPostID(id);
 
-        List<Comment> listCmt = postDAO.findCmt(id);
-
+        String description = blog.getDescription();
+        String content = post.getContent();
+        request.setAttribute("description", description);
+        request.setAttribute("content", content);
         request.setAttribute("post", post);
-        request.setAttribute("listCmt", listCmt);
-        request.getRequestDispatcher("post.jsp").forward(request, response);
+        request.getRequestDispatcher("updateblog.jsp").forward(request, response);
     }
 
     /**
@@ -82,27 +84,24 @@ public class postController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
+   @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        
+        String id = request.getParameter("id");
 
-        Account acc = (Account) session.getAttribute("acc");
-
-        if (acc == null) {
-            response.sendRedirect("view/Login.jsp");
-            return;
-        }
-
-        String accID = acc.getId();
+        String title = request.getParameter("title");
+        String description = request.getParameter("description");
         String content = request.getParameter("content");
-        String postID = request.getParameter("postID");
 
-        postDAO.addComment(new Comment(accID, content, postID));
+        Post post = new Post(id, title, content);
+        Blog blog = new Blog(id, title, description);
 
-        response.sendRedirect("post?id=" + postID);
+        postDAO.updatePost(post);
+        blogDAO.updateBlog(blog);
+
+        response.sendRedirect("blog-manage");
     }
-
     /**
      * Returns a short description of the servlet.
      *

@@ -9,15 +9,22 @@ package model;
  * @author DUCDA
  */
 public class Comment {
-    private String id, account, content;
+    private String id, account, content, post;
 
     public Comment() {
     }
 
-    public Comment(String id, String account, String content) {
+    public Comment(String account, String content, String post) {
+        this.account = account;
+        this.content = content;
+        this.post = post;
+    }
+
+    public Comment(String id, String account, String content, String post) {
         this.id = id;
         this.account = account;
         this.content = content;
+        this.post = post;
     }
 
     public String getId() {
@@ -44,9 +51,19 @@ public class Comment {
         this.content = content;
     }
 
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
+    }
+
     @Override
     public String toString() {
-        return "Comment{" + "id=" + id + ", account=" + account + ", content=" + content + '}';
+        return "Comment{" + "id=" + id + ", account=" + account + ", content=" + content + ", post=" + post + '}';
     }
+
+    
     
 }

@@ -4,25 +4,38 @@
  */
 package controller;
 
+import dal.BlogDAO;
 import dal.PostDAO;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Account;
-import model.Comment;
+import model.Blog;
 import model.Post;
 
 /**
  *
  * @author DUCDA
  */
-public class postController extends HttpServlet {
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
+)
+public class addBlogController extends HttpServlet {
 
+    private static final String SAVE_DIR = "E:\\Project_Java\\SWP301_Group1\\web\\img"; // Thư mục có sẵn
+    BlogDAO blogDAO = new BlogDAO();
     PostDAO postDAO = new PostDAO();
 
     /**
@@ -42,10 +55,10 @@ public class postController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet postController</title>");
+            out.println("<title>Servlet addBlogController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet postController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet addBlogController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,15 +76,7 @@ public class postController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
-
-        Post post = postDAO.findById(id);
-
-        List<Comment> listCmt = postDAO.findCmt(id);
-
-        request.setAttribute("post", post);
-        request.setAttribute("listCmt", listCmt);
-        request.getRequestDispatcher("post.jsp").forward(request, response);
+        request.getRequestDispatcher("addblog.jsp").forward(request, response);
     }
 
     /**
@@ -85,22 +90,48 @@ public class postController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        File saveDir = new File(SAVE_DIR);
+        if (!saveDir.exists()) {
+            saveDir.mkdir(); // Tạo thư mục nếu chưa có
+        }
+
         HttpSession session = request.getSession();
 
         Account acc = (Account) session.getAttribute("acc");
+        String accid = acc.getId();
 
-        if (acc == null) {
-            response.sendRedirect("view/Login.jsp");
-            return;
+        String title = request.getParameter("title");
+        String description = request.getParameter("description");
+        String content = request.getParameter("content");
+        String categoryID = "1";
+        String image = null;
+        // Lấy file từ request
+        Part filePart = request.getPart("image");
+        if (filePart != null && filePart.getSize() > 0) {
+            String contentDisp = filePart.getHeader("content-disposition");
+            for (String contentItem : contentDisp.split(";")) {
+                if (contentItem.trim().startsWith("filename")) {
+                    image = contentItem.substring(contentItem.indexOf("=") + 2, contentItem.length() - 1);
+                    break;
+                }
+            }
+
+            // Lưu file ảnh vào thư mục đã chỉ định
+            if (image != null && !image.isEmpty()) {
+                filePart.write(SAVE_DIR + File.separator + image);
+            }
         }
 
-        String accID = acc.getId();
-        String content = request.getParameter("content");
-        String postID = request.getParameter("postID");
+        Post post = new Post(title, content, image, accid, categoryID, true);
+        postDAO.insertPost(post);
 
-        postDAO.addComment(new Comment(accID, content, postID));
+        post = postDAO.findByTitle(title);
+        String postId = post.getId();
 
-        response.sendRedirect("post?id=" + postID);
+        Blog blog = new Blog(postId, title, description, image, categoryID, accid);
+        blogDAO.insertBlog(blog);
+
+        response.sendRedirect("blog-manage");
     }
 
     /**

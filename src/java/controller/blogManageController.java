@@ -4,25 +4,25 @@
  */
 package controller;
 
-import dal.PostDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import model.Account;
-import model.Comment;
-import model.Post;
+import model.Blog;
+import model.PageControl;
+import dal.BlogDAO;
+import dal.PostDAO;
 
 /**
  *
  * @author DUCDA
  */
-public class postController extends HttpServlet {
+public class blogManageController extends HttpServlet {
 
+    BlogDAO blogDAO = new BlogDAO();
     PostDAO postDAO = new PostDAO();
 
     /**
@@ -42,10 +42,10 @@ public class postController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet postController</title>");
+            out.println("<title>Servlet blogManageController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet postController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet blogManageController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,15 +63,49 @@ public class postController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
+        String searchQuery = request.getParameter("search");
+        List<Blog> listBlog;
+        PageControl pageControl = new PageControl();
 
-        Post post = postDAO.findById(id);
+        String requestURL = request.getRequestURL().toString();
 
-        List<Comment> listCmt = postDAO.findCmt(id);
+        String pageRaw = request.getParameter("page");
+        int page;
+        try {
+            page = Integer.parseInt(pageRaw);
+            if (page <= 0) {
+                page = 1;
+            }
+        } catch (NumberFormatException e) {
+            page = 1;
+        }
+        int totalRecord;
 
-        request.setAttribute("post", post);
-        request.setAttribute("listCmt", listCmt);
-        request.getRequestDispatcher("post.jsp").forward(request, response);
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            listBlog = blogDAO.searchBlogs(searchQuery, page); // Gọi DAO để tìm kiếm
+            pageControl.setUrlPattern(requestURL + "?search=" + searchQuery + "&");
+            totalRecord = blogDAO.findTotalRecordByKeyWord(searchQuery);
+        } else {
+            listBlog = blogDAO.getAllBlogs(page); // Lấy toàn bộ danh sách blog nếu không tìm kiếm
+            pageControl.setUrlPattern(requestURL + "?");
+            totalRecord = blogDAO.findAllTotalRecord();
+        }
+
+        int record_per_page = 4;
+        int totalPage;
+        if (totalRecord % record_per_page == 0) {
+            totalPage = totalRecord / record_per_page;
+        } else {
+            totalPage = (totalRecord / record_per_page) + 1;
+        }
+        pageControl.setPage(page);
+        pageControl.setTotalPage(totalPage);
+        pageControl.setTotalRecord(totalRecord);
+
+        request.setAttribute("searchQuery", searchQuery);
+        request.setAttribute("listBlog", listBlog);
+        request.setAttribute("pageControl", pageControl);
+        request.getRequestDispatcher("blog-manage.jsp").forward(request, response);
     }
 
     /**
@@ -85,22 +119,14 @@ public class postController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-
-        Account acc = (Account) session.getAttribute("acc");
-
-        if (acc == null) {
-            response.sendRedirect("view/Login.jsp");
-            return;
+        String action = request.getParameter("action");
+        if ("delete".equals(action)) {
+            String title = request.getParameter("blogTitle");
+            
+            blogDAO.deleteBlog(title);
+            postDAO.deletePost(title);
         }
-
-        String accID = acc.getId();
-        String content = request.getParameter("content");
-        String postID = request.getParameter("postID");
-
-        postDAO.addComment(new Comment(accID, content, postID));
-
-        response.sendRedirect("post?id=" + postID);
+        response.sendRedirect("blog-manage");
     }
 
     /**
