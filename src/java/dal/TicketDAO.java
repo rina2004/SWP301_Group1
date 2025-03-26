@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Airplane;
 import model.Flight;
 import model.Order;
 import model.Ticket;
@@ -110,29 +111,40 @@ public class TicketDAO extends DBContext {
     }
 
     public List<Ticket> getTicketsByOrderID(String orderID) {
-        List<Ticket> list = new ArrayList<>();
-        String sql = "SELECT t.* FROM Ticket t WHERE t.orderID = ?";
+    List<Ticket> list = new ArrayList<>();
+    String sql = "SELECT t.id, t.status, f.airplaneID, t.flightID " +
+                 "FROM Ticket t " +
+                 "JOIN Flight f ON t.flightID = f.id " +
+                 "WHERE t.orderID = ?";
 
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setString(1, orderID);
-            try (ResultSet rs = stm.executeQuery()) {
-                while (rs.next()) {
-                    Order order = new Order();
-                    order.setId(orderID);
+    try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        stm.setString(1, orderID);
+        try (ResultSet rs = stm.executeQuery()) {
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(orderID);
 
-                    Ticket ticket = new Ticket();
-                    ticket.setId(rs.getString("id"));
-                    ticket.setOrder(order);
-                    ticket.setStatus(rs.getString("status"));
+                Airplane airplane = new Airplane();
+                airplane.setId(rs.getString("airplaneID"));
 
-                    list.add(ticket);
-                }
+                Flight flight = new Flight();
+                flight.setId(rs.getString("flightID"));
+                flight.setAirplane(airplane);
+
+                Ticket ticket = new Ticket();
+                ticket.setId(rs.getString("id"));
+                ticket.setOrder(order);
+                ticket.setFlight(flight);
+                ticket.setStatus(rs.getString("status"));
+
+                list.add(ticket);
             }
-        } catch (SQLException e) {
-            Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, "Lỗi khi lấy danh sách vé theo OrderID: " + orderID, e);
         }
-        return list;
+    } catch (SQLException e) {
+        Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, "Lỗi khi lấy danh sách vé theo OrderID: " + orderID, e);
     }
+    return list;
+}
 
     public void updateTicketbySeatID(String ticketID, String seatID) {
         PreparedStatement stm;
@@ -140,6 +152,7 @@ public class TicketDAO extends DBContext {
         try {
             stm = connection.prepareStatement(sql);
             stm.setString(1, seatID);
+            stm.setString(2, ticketID);
             stm.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
@@ -191,18 +204,12 @@ public class TicketDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        TicketDAO ticketDAO = new TicketDAO(); // Cần chắc chắn rằng TicketDAO đã khởi tạo connection đúng cách
-        String orderID = "ORD002"; // Thay bằng OrderID thực tế trong database
-
-        List<Ticket> tickets = ticketDAO.getTicketsByOrderID(orderID);
-
-        if (tickets.isEmpty()) {
-            System.out.println("Không tìm thấy vé nào cho OrderID: " + orderID);
-        } else {
-            System.out.println("Danh sách vé:");
-            for (Ticket t : tickets) {
-                System.out.println("Ticket ID: " + t.getId() + ", Status: " + t.getStatus());
-            }
+        TicketDAO ticketDAO = new TicketDAO();
+        String orderID = "VN-A001-1";
+        List<Ticket> t = ticketDAO.getTicketsByOrderID("ORD11123");
+        
+        for (Ticket ticket : t) {
+            System.out.println(ticket.toString());
         }
     }
 }

@@ -70,13 +70,13 @@ public class HistoryBookingController extends HttpServlet {
             response.sendRedirect("view/Login.jsp");
             return;
         }
-
-        String accountId = acc.getId(); // hoặc acc.getAccountId() nếu tên là như vậy trong model của bạn
-
-        OrderDAO orderDAO = new OrderDAO();
-        List<Order> orders = orderDAO.getOrderHistory(accountId);
-        request.setAttribute("orders", orders);
-        request.getRequestDispatcher("view/HistoryBooking.jsp").forward(request, response);
+//
+//        String accountId = acc.getId(); // hoặc acc.getAccountId() nếu tên là như vậy trong model của bạn
+//
+//        OrderDAO orderDAO = new OrderDAO();
+//        List<Order> orders = orderDAO.getOrderHistory(accountId);
+//        request.setAttribute("orders", orders);
+//        request.getRequestDispatcher("view/HistoryBooking.jsp").forward(request, response);
     }
 
     /**

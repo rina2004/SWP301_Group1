@@ -181,7 +181,6 @@
         <div class="container">
             <div class="plane-container">
                 <h2>Sơ Đồ Ghế Máy Bay ${id}</h2>
-                <p>Ticket ID: ${param.ticketId}</p>
                 <div class="plane-header">
                     <img src="img/ghe-ngoi-may-bay-vietjet-removebg-preview.png" alt="Đầu máy bay">
                 </div>
@@ -279,7 +278,7 @@
                 let requestData = {seatId: selectedSeatId, ticketId: ticketId};
                 console.log("📤 Gửi request: ", requestData); // Debug
 
-                fetch("<%= request.getContextPath() %>/listSeatUser", {
+                fetch("<%= request.getContextPath() %>/listSeatsUser", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(requestData)

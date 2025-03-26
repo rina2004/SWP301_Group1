@@ -251,10 +251,13 @@ public class AccountDAO extends DBContext {
                 }
 
                 Account acc = new Account();
-                acc.setId(rs.getString("id")); // Lấy ID từ DB
+                acc.setId(rs.getString("id")); 
                 acc.setUsername(rs.getString("username"));
                 acc.setPassword(rs.getString("password"));
                 acc.setStatus(status);
+                Role role = new Role();
+                role.setId(rs.getInt("roleID"));
+                acc.setRole(role);
 
                 return acc;
             }

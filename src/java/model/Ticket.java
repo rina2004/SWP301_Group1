@@ -66,4 +66,9 @@ public class Ticket {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "Ticket{" + "id=" + id + ", order=" + order + ", flight=" + flight + ", seat=" + seat + ", status=" + status + '}';
+    }
+
 }

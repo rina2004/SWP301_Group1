@@ -4,22 +4,23 @@
  */
 package Controller;
 
-import dal.SeatDAO;
-import dal.TicketDAO;
+import dal.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Seat;
-import model.Ticket;
+import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import model.Account;
+import model.Order;
 
 /**
  *
  * @author tungn
  */
-public class DetailSeat extends HttpServlet {
+public class ListOrders extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +39,10 @@ public class DetailSeat extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DetailSeat</title>");
+            out.println("<title>Servlet ListOrders</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DetailSeat at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ListOrders at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,15 +60,19 @@ public class DetailSeat extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id = request.getParameter("id");
-        SeatDAO dao = new SeatDAO();
-        TicketDAO ticketDao = new TicketDAO();
-        String ticketID = ticketDao.getIDbySeat(id);
-        Ticket ticket = ticketDao.getInfor(ticketID);
-        Seat seat = dao.getSeatByID(id);
-        request.setAttribute("seat", seat);
-        request.setAttribute("ticket", ticket);
-        request.getRequestDispatcher("view/DetailSeat.jsp").forward(request, response);
+
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("acc"); // Giả sử session đang lưu object User
+
+        if (user != null) {
+            String userId = user.getId(); // Lấy ID của người dùng từ object User
+            OrderDAO dao = new OrderDAO();
+            List<Order> list = dao.getAllbyCustomerID(userId);
+            request.setAttribute("list", list);
+            request.getRequestDispatcher("view/ListOrder.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("view/Login.jsp"); // Nếu chưa đăng nhập thì điều hướng về trang login
+        }
     }
 
     /**

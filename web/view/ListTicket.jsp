@@ -127,8 +127,6 @@
                     <th>ID</th>
                     <th>Order</th>
                     <th>Flight ID</th>
-                    <th>Type</th>
-                    <th>Price</th>
                     <th>Status</th>
                     <th>Action</th>  
                 </tr>
@@ -137,18 +135,17 @@
                         <td>${l.id}</td>
                         <td>${l.order.id}</td>
                         <td>${l.flight.id}</td>
-                        <td>${l.type}</td>
-                        <td>${l.price} VNĐ</td>
                         <td>${l.status}</td>
                         <td>
                             <a href="<%= request.getContextPath() %>/orderLuggage?id=${l.id}" class="btn">
                                 Book Extra Luggage
                             </a>
                             <c:if test="${l.status != 'Checked'}">
-                                <a href="<%= request.getContextPath() %>/listSeatUser?id=${l.flight.airplaneId}&ticketId=${l.id}" class="btn">
+                                <a href="<%= request.getContextPath() %>/listSeatsUser?id=${l.flight.airplane.id}&ticketId=${l.id}" class="btn">
                                     Check - in
                                 </a>
-                            </c:if>                        </td>
+                            </c:if>                        
+                        </td>
                     </tr>
                 </c:forEach>
             </table>

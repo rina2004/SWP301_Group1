@@ -54,5 +54,12 @@ public class Seat {
     public void setReason(String reason) {
         this.reason = reason;
     }
+
+    @Override
+    public String toString() {
+        return "Seat{" + "id=" + id + ", compartment=" + compartment + ", status=" + status + ", reason=" + reason + '}';
+    }
+    
+    
     
 }

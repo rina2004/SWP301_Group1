@@ -55,6 +55,11 @@ public class Compartment {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
+
+    @Override
+    public String toString() {
+        return "Compartment{" + "id=" + id + ", type=" + type + ", airplane=" + airplane + ", capacity=" + capacity + '}';
+    }
     
     
     

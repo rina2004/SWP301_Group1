@@ -112,6 +112,30 @@
         <servlet-name>CancelListTicketController</servlet-name>
         <servlet-class>dal.CancelListTicketController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListTickets</servlet-name>
+        <servlet-class>Controller.ListTickets</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListOrders</servlet-name>
+        <servlet-class>Controller.ListOrders</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListSeatsUser</servlet-name>
+        <servlet-class>Controller.ListSeatsUser</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListSeatsAdmin</servlet-name>
+        <servlet-class>Controller.ListSeatsAdmin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DetailSeats</servlet-name>
+        <servlet-class>Controller.DetailSeats</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateSeats</servlet-name>
+        <servlet-class>Controller.UpdateSeats</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AirplaneCreateController</servlet-name>
         <url-pattern>/airplane/create</url-pattern>
@@ -235,6 +259,30 @@
     <servlet-mapping>
         <servlet-name>CancelListTicketController</servlet-name>
         <url-pattern>/cancelListTicket</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListTickets</servlet-name>
+        <url-pattern>/listTickets</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListOrders</servlet-name>
+        <url-pattern>/listOrders</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListSeatsUser</servlet-name>
+        <url-pattern>/listSeatsUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListSeatsAdmin</servlet-name>
+        <url-pattern>/listSeatsAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DetailSeats</servlet-name>
+        <url-pattern>/detailSeats</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateSeats</servlet-name>
+        <url-pattern>/updateSeats</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

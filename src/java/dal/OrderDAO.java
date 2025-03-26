@@ -56,14 +56,15 @@ public class OrderDAO extends DBContext{
         return null;
     }
     
-    public List<Order> getAll() {
-        String sql = "Select * From `Order`";
+    public List<Order> getAllbyCustomerID(String cusID) {
+        String sql = "Select * From `Order` where customerID = ?";
         List<Order> list = new ArrayList<>();
         PreparedStatement stm;
         ResultSet rs;
-
+       
         try {
             stm = connection.prepareStatement(sql);
+            stm.setString(1, cusID);
             rs = stm.executeQuery();
             while (rs.next()) {
                 Order order = new Order();
@@ -75,5 +76,15 @@ public class OrderDAO extends DBContext{
             System.out.println(e);;
         }
         return list;
+    }
+    
+    public static void main(String[] args) {
+        OrderDAO dao = new OrderDAO();
+        String cusID = "f2738d94-097f-11f0-af18-047c163442e4";
+        List<Order> list = dao.getAllbyCustomerID(cusID);
+        
+        for (Order order : list) {
+            System.out.println(order.toString());
+        }
     }
 }

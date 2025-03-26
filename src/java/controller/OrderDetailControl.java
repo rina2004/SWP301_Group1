@@ -63,13 +63,13 @@ public class OrderDetailControl extends HttpServlet {
         String orderId = request.getParameter("orderId");
 
         // Tương tác trực tiếp DAO
-        TicketDAO ticketDAO = new TicketDAO();
-        List<Ticket> tickets = ticketDAO.getTicketsByOrderId(orderId);
-
-
-        // Đổ data ra view
-        request.setAttribute("tickets", tickets);
-        request.getRequestDispatcher("view/OrderDetail.jsp").forward(request, response);
+//        TicketDAO ticketDAO = new TicketDAO();
+//        List<Ticket> tickets = ticketDAO.getTicketsByOrderId(orderId);
+//
+//
+//        // Đổ data ra view
+//        request.setAttribute("tickets", tickets);
+//        request.getRequestDispatcher("view/OrderDetail.jsp").forward(request, response);
     }
 
     /**

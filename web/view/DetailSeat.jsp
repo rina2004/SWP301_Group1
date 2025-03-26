@@ -88,31 +88,14 @@
         <p>Compartment ID</p>
         <input name="compartmentID" value="${seat.compartment.id}" disabled>
 
-        <p>Compartment Name</p>
-        <input name="compartmentName" value="${seat.compartment.name}" disabled>
-
         <p>Status</p>
         <input name="status" value="${seat.status}" disabled>
-
-        <p>Airplane ID</p>
-        <input name="typeID" value="${seat.compartment.airplane.id}" disabled>
 
         <c:if test="${seat.status eq 'Maintained'}">
             <p>Maintain Reason</p>
             <input name="reason" value="${seat.reason}" disabled>
         </c:if>
-        <c:if test="${seat.status eq 'Booked'}">
-            <p>Ticket ID</p>
-            <input name="ticketID" value="${ticket.id}" disabled>
-            <p>Order ID</p>
-            <input name="orderId" value="${ticket.order.id}" disabled>
-            <p>Type</p>
-             <input name="ticketType" value="${ticket.type}" disabled>
-            <p>Status</p>
-            <input name="statusTicket" value="${ticket.status}" disabled>
-            <p>Price</p>
-             <input name="price" value="${ticket.price}" disabled>
-        </c:if>
+      
         <a href="javascript:history.back()" class="button">Back</a>
     </div>
 </body>
