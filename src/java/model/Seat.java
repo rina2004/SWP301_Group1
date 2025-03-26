@@ -6,7 +6,7 @@ package model;
 
 /**
  *
- * @author A A
+ * @author Rinaaaa
  */
 public class Seat {
     private String id;
@@ -59,7 +59,4 @@ public class Seat {
     public String toString() {
         return "Seat{" + "id=" + id + ", compartment=" + compartment + ", status=" + status + ", reason=" + reason + '}';
     }
-    
-    
-    
 }
