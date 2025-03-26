@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import model.AirplaneStatus;
 import model.Compartment;
 import model.Seat;
+import model.TicketType;
 
 /**
  *
@@ -28,7 +29,7 @@ public class AirplaneDAO extends DBContext {
                                     VALUES (?, ?, ?, ? ,?, ?)
                                     """;
             String insertCompartment = """
-                                       INSERT INTO swp301.compartment (id, name, airplaneID, capacity) 
+                                       INSERT INTO swp301.compartment (id, type, airplaneID, capacity) 
                                        VALUES (?, ?, ?, ?)
                                        """;
             String insertSeat = """
@@ -48,7 +49,7 @@ public class AirplaneDAO extends DBContext {
             for (Compartment compartment : airplane.getCompartments()) {
                 PreparedStatement stm_insertCompartment = connection.prepareStatement(insertCompartment);
                 stm_insertCompartment.setString(1, compartment.getId());
-                stm_insertCompartment.setString(2, compartment.getName());
+                stm_insertCompartment.setString(2, compartment.getType() != null ? compartment.getType().getType() : null);
                 stm_insertCompartment.setString(3, airplane.getId());
                 stm_insertCompartment.setInt(4, compartment.getCapacity());
                 stm_insertCompartment.executeUpdate();
@@ -159,7 +160,7 @@ public class AirplaneDAO extends DBContext {
             }
 
             String queryCompartment = """
-                        SELECT id, name, capacity 
+                        SELECT id, type, capacity 
                         FROM compartment 
                         WHERE airplaneID = ?
                         """;
@@ -171,7 +172,11 @@ public class AirplaneDAO extends DBContext {
             while (rsCompartment.next()) {
                 Compartment compartment = new Compartment();
                 compartment.setId(rsCompartment.getString("id"));
-                compartment.setName(rsCompartment.getString("name"));
+                
+                TicketType ticketType = new TicketType();
+                ticketType.setType(rsCompartment.getString("type"));
+                compartment.setType(ticketType);
+                
                 compartment.setCapacity(rsCompartment.getInt("capacity"));
                 compartment.setAirplane(airplane);
                 compartments.add(compartment);

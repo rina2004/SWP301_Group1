@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Rinaaaa
@@ -13,6 +15,8 @@ public class Compartment {
     private TicketType type;
     private Airplane airplane;
     private int capacity;
+    
+    private ArrayList<Seat> seats = new ArrayList<>();
 
     public Compartment() {
     }
@@ -55,7 +59,12 @@ public class Compartment {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
-    
-    
-    
+
+    public ArrayList<Seat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(ArrayList<Seat> seats) {
+        this.seats = seats;
+    }
 }

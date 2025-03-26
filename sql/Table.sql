@@ -55,6 +55,7 @@ CREATE TABLE `Airplane` (
     `id` VARCHAR(10),
     `name` VARCHAR(50),
     `statusID` INT,
+    `numOfComs` INT,
     `maintainanceTime` DATETIME,
     `usedTime` DATETIME,
     
@@ -77,7 +78,7 @@ CREATE TABLE `Compartment` (
     `capacity` INT,
     
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`type`) REFERENCES `TicketType`(`type`),
+    FOREIGN KEY (`type`) REFERENCES `TicketType`(`type`) ON DELETE CASCADE,
     FOREIGN KEY (`airplaneID`) REFERENCES `Airplane`(`id`) ON DELETE CASCADE
 ); 
 
