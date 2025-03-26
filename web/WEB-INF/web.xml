@@ -109,10 +109,6 @@
         <servlet-class>controller.CancelTicketController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CancelListTicketController</servlet-name>
-        <servlet-class>dal.CancelListTicketController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>StaffTicketProcessing</servlet-name>
         <servlet-class>controller.StaffTicketProcessing</servlet-class>
     </servlet>
@@ -235,10 +231,6 @@
     <servlet-mapping>
         <servlet-name>CancelTicketController</servlet-name>
         <url-pattern>/cancelTicket</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>CancelListTicketController</servlet-name>
-        <url-pattern>/cancelListTicket</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>StaffTicketProcessing</servlet-name>
