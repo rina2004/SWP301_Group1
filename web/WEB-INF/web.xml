@@ -96,7 +96,6 @@
         <servlet-class>controller.ChangePassword</servlet-class>
     </servlet>
     <servlet>
-<<<<<<< HEAD
         <servlet-name>ChangePasswordProfileControl</servlet-name>
         <servlet-class>controller.ChangePasswordProfileControl</servlet-class>
     </servlet>
@@ -135,7 +134,8 @@
     <servlet>
         <servlet-name>AirplaneViewDetailController</servlet-name>
         <servlet-class>controller.AirplaneViewDetailController</servlet-class>
-=======
+    </servlet>
+    <servlet>
         <servlet-name>blogManageController</servlet-name>
         <servlet-class>controller.blogManageController</servlet-class>
     </servlet>
@@ -146,7 +146,6 @@
     <servlet>
         <servlet-name>updateBlogController</servlet-name>
         <servlet-class>controller.updateBlogController</servlet-class>
->>>>>>> ducda
     </servlet>
     <servlet>
         <servlet-name>AirplaneUpdateDetailController</servlet-name>
@@ -257,7 +256,6 @@
         <url-pattern>/post</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-<<<<<<< HEAD
         <servlet-name>ChangePasswordProfileControl</servlet-name>
         <url-pattern>/changePasswordProfile</url-pattern>
     </servlet-mapping>
@@ -296,7 +294,8 @@
     <servlet-mapping>
         <servlet-name>AirplaneViewDetailController</servlet-name>
         <url-pattern>/airplane/view/detail</url-pattern>
-=======
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>blogManageController</servlet-name>
         <url-pattern>/blog-manage</url-pattern>
     </servlet-mapping>
@@ -307,7 +306,6 @@
     <servlet-mapping>
         <servlet-name>updateBlogController</servlet-name>
         <url-pattern>/updateblog</url-pattern>
->>>>>>> ducda
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AirplaneUpdateDetailController</servlet-name>
