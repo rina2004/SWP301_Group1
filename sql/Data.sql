@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-USE `swp301`;
-=======
 CREATE DATABASE `swp301`;
 USE `swp301`;
  
@@ -85,7 +82,7 @@ CREATE TABLE `Compartment` (
 ); 
 
 CREATE TABLE `Seat` (
-    `id` VARCHAR(10),
+    `id` VARCHAR(20),
     `compartmentID` VARCHAR(20),
     `status` VARCHAR(50),
     `reason` VARCHAR(250),
@@ -154,14 +151,14 @@ CREATE TABLE `OrderPassenger` (
 CREATE TABLE `Ticket` (
     `id` VARCHAR(50) DEFAULT (UUID()),
     `orderID` VARCHAR(10),
-    `seatID` VARCHAR(10),
-    `type` VARCHAR(30),
+    `flightID` VARCHAR(10),
+    `seatID` VARCHAR(20),
     `status` VARCHAR(20),
     
     PRIMARY KEY (`id`),
     FOREIGN KEY (`orderID`) REFERENCES `Order`(`id`),
-    FOREIGN KEY (`seatID`) REFERENCES `Seat`(`id`),
-    FOREIGN KEY (`type`) REFERENCES `TicketType`(`type`)
+    FOREIGN KEY (`flightID`) REFERENCES `Flight`(`id`),
+    FOREIGN KEY (`seatID`) REFERENCES `Seat`(`id`)
 );
 
 CREATE TABLE `Luggage` (
@@ -240,7 +237,6 @@ CREATE TABLE `ChatMessage` (
     FOREIGN KEY (`senderAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`receiverAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
 );
->>>>>>> ducda
 
 -- Keep the original Role data
 INSERT INTO Role (name) VALUES 
@@ -264,26 +260,26 @@ INSERT INTO Account (username, password, roleID, status, citizenID, name, dob, p
 ('author1', '123', 2, TRUE, '012345678901', 'Nguyen Van A', '1994-03-17', '0989012345', '707 Redwood Place, Da Lat', 'abc@example.com');
 
 INSERT INTO `Location` (name) VALUES
-('Hà Nội-Sân bay Nội Bài'),
-('TP. Hồ Chí Minh-Sân bay Tân Sơn Nhất'),
-('Đà Nẵng-Sân bay Quốc tế Đà Nẵng'),
-('Nha Trang-Sân bay Cam Ranh'),
-('Phú Quốc-Sân bay Quốc tế Phú Quốc'),
-('Huế-Sân bay Phú Bài'),
-('Hải Phòng-Sân bay Cát Bi'),
-('Đà Lạt-Sân bay Liên Khương'),
-('Cần Thơ-Sân bay Quốc tế Cần Thơ'),
-('Quảng Ninh-Sân bay Vân Đồn'),
-('Nghệ An-Sân bay Vinh'),
-('Buôn Ma Thuột-Sân bay Buôn Ma Thuột'),
-('Quy Nhơn-Sân bay Phù Cát'),
-('Thanh Hóa-Sân bay Thọ Xuân'),
-('Quảng Bình-Sân bay Đồng Hới'),
-('Điện Biên-Sân bay Điện Biên Phủ'),
-('Pleiku-Sân bay Pleiku'),
-('Côn Đảo-Sân bay Côn Sơn'),
-('Tuy Hòa-Sân bay Tuy Hòa'),
-('Cà Mau-Sân bay Cà Mau');
+('Hà Nội-Nội Bài'),
+('TP. Hồ Chí Minh-Tân Sơn Nhất'),
+('Đà Nẵng-Quốc tế Đà Nẵng'),
+('Nha Trang-Cam Ranh'),
+('Phú Quốc-Quốc tế Phú Quốc'),
+('Huế-Phú Bài'),
+('Hải Phòng-Cát Bi'),
+('Đà Lạt-Liên Khương'),
+('Cần Thơ-Quốc tế Cần Thơ'),
+('Quảng Ninh-Vân Đồn'),
+('Nghệ An-Vinh'),
+('Buôn Ma Thuột-Buôn Ma Thuột'),
+('Quy Nhơn-Phù Cát'),
+('Thanh Hóa-Thọ Xuân'),
+('Quảng Bình-Đồng Hới'),
+('Điện Biên-Điện Biên Phủ'),
+('Pleiku-Pleiku'),
+('Côn Đảo-Côn Sơn'),
+('Tuy Hòa-Tuy Hòa'),
+('Cà Mau-Cà Mau');
 
 INSERT INTO Nation (name) VALUES
 ('Vietnam'),
@@ -354,46 +350,46 @@ INSERT INTO Compartment (id, type, airplaneID, capacity) VALUES
 
 -- Seat table (10 records)
 INSERT INTO Seat (id, compartmentID, status, reason) VALUES
-('VN-A001-1', 'VN-A001-B', 'Active', null),
-('VN-A001-2', 'VN-A001-B', 'Active', null),
-('VN-A001-3', 'VN-A001-B', 'Active', null),
-('VN-A001-4', 'VN-A001-E', 'Active', null),
-('VN-A001-5', 'VN-A001-E', 'In Maintenance', 'SUPAIGA'),
-('VN-A001-6', 'VN-A001-E', 'Retired', 'SUPANIGA'),
-('VN-A001-7', 'VN-A001-F', 'Active', null),
-('VN-A001-8', 'VN-A001-F', 'Active', 'SUPAIGA'),
-('VN-A001-9', 'VN-A001-F', 'Active', 'SUPANIGA'),
-('VN-A002-1', 'VN-A002-B', 'Active', null),
-('VN-A002-2', 'VN-A002-B', 'Active', 'SUPAIGA'),
-('VN-A002-3', 'VN-A002-B', 'Active', 'SUPANIGA'),
-('VN-A002-4', 'VN-A002-E', 'Active', null),
-('VN-A002-5', 'VN-A002-E', 'Active', 'SUPAIGA'),
-('VN-A002-6', 'VN-A002-E', 'Active', 'SUPANIGA'),
-('VN-A002-7', 'VN-A002-F', 'Active', null),
-('VN-A002-8', 'VN-A002-F', 'Active', 'SUPAIGA'),
-('VN-A002-9', 'VN-A002-F', 'Active', 'SUPANIGA'),
-('VN-A003-1', 'VN-A003-B', 'Active', null),
-('VN-A003-2', 'VN-A003-B', 'Active', 'SUPAIGA'),
-('VN-A003-3', 'VN-A003-B', 'Active', 'SUPANIGA'),
-('VN-A003-4', 'VN-A003-E', 'Active', null),
-('VN-A003-5', 'VN-A003-E', 'Active', 'SUPAIGA'),
-('VN-A003-6', 'VN-A003-E', 'Active', 'SUPANIGA'),
-('VN-A003-7', 'VN-A003-F', 'Active', null),
-('VN-A003-8', 'VN-A003-F', 'Active', 'SUPAIGA'),
-('VN-A003-9', 'VN-A003-F', 'Active', 'SUPANIGA');
+('VN-A001-B-1', 'VN-A001-B', 'Active', null),
+('VN-A001-B-2', 'VN-A001-B', 'Active', null),
+('VN-A001-B-3', 'VN-A001-B', 'Active', null),
+('VN-A001-E-4', 'VN-A001-E', 'Active', null),
+('VN-A001-E-5', 'VN-A001-E', 'In Maintenance', 'SUPAIGA'),
+('VN-A001-E-6', 'VN-A001-E', 'Retired', 'SUPANIGA'),
+('VN-A001-F-7', 'VN-A001-F', 'Active', null),
+('VN-A001-F-8', 'VN-A001-F', 'Active', 'SUPAIGA'),
+('VN-A001-F-9', 'VN-A001-F', 'Active', 'SUPANIGA'),
+('VN-A002-B-1', 'VN-A002-B', 'Active', null),
+('VN-A002-B-2', 'VN-A002-B', 'Active', 'SUPAIGA'),
+('VN-A002-B-3', 'VN-A002-B', 'Active', 'SUPANIGA'),
+('VN-A002-E-4', 'VN-A002-E', 'Active', null),
+('VN-A002-E-5', 'VN-A002-E', 'Active', 'SUPAIGA'),
+('VN-A002-E-6', 'VN-A002-E', 'Active', 'SUPANIGA'),
+('VN-A002-F-7', 'VN-A002-F', 'Active', null),
+('VN-A002-F-8', 'VN-A002-F', 'Active', 'SUPAIGA'),
+('VN-A002-F-9', 'VN-A002-F', 'Active', 'SUPANIGA'),
+('VN-A003-B-1', 'VN-A003-B', 'Active', null),
+('VN-A003-B-2', 'VN-A003-B', 'Active', 'SUPAIGA'),
+('VN-A003-B-3', 'VN-A003-B', 'Active', 'SUPANIGA'),
+('VN-A003-E-4', 'VN-A003-E', 'Active', null),
+('VN-A003-E-5', 'VN-A003-E', 'Active', 'SUPAIGA'),
+('VN-A003-E-6', 'VN-A003-E', 'Active', 'SUPANIGA'),
+('VN-A003-F-7', 'VN-A003-F', 'Active', null),
+('VN-A003-F-8', 'VN-A003-F', 'Active', 'SUPAIGA'),
+('VN-A003-F-9', 'VN-A003-F', 'Active', 'SUPANIGA');
 
 -- Flight table (10 records)
 INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime) VALUES 
     ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2024-04-11 12:30:00', '2024-04-11 13:30:00', '2024-04-11 14:45:00'),
-    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2024-04-12 18:00:00', '2024-04-12 19:00:00', '2024-04-12 20:30:00'),
-    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2024-04-13 09:15:00', '2024-04-13 10:15:00', '2024-04-13 12:45:00'),
-    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2024-04-14 22:00:00', '2024-04-14 23:00:00', '2024-04-15 00:30:00'),
-    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2024-04-15 10:45:00', '2024-04-15 11:45:00', '2024-04-15 13:00:00'),
-    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2024-04-16 08:30:00', '2024-04-16 09:30:00', '2024-04-16 14:00:00'),
-    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2024-04-17 14:15:00', '2024-04-17 15:15:00', '2024-04-17 19:45:00'),
-    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2024-04-18 11:30:00', '2024-04-18 12:30:00', '2024-04-18 15:15:00'),
-    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2024-04-19 16:45:00', '2024-04-19 17:45:00', '2024-04-19 19:30:00');
+    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
+    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
+    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
+    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
+    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
+    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
+    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
+    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
+    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00');
 
 INSERT INTO PassengerType (name, ageMin, ageMax, discountPercentage) VALUES
 ('Người lớn', 12, 100, 0),
@@ -415,13 +411,13 @@ VALUES
 ('ORD003-1', 'ORD003', 1, 'Robert Johnson', '1988-11-30', 3),
 ('ORD004-1', 'ORD004', 1, 'Sarah Williams', '1992-04-12', 4);
 
-INSERT INTO Ticket (orderID, seatID, type, status) VALUES
-('ORD001', 'VN-A001-1', 'Business', 'Confirmed'),
-('ORD002', 'VN-A001-4', 'Economy', 'Pending'),
-('ORD002', 'VN-A001-5', 'Economy', 'Confirmed'),
-('ORD002', 'VN-A001-6', 'Economy', 'Cancelled'),
-('ORD003', 'VN-A001-7', 'First Class', 'Checked-In'),
-('ORD004', 'VN-A001-8', 'First Class', 'Confirmed');
+INSERT INTO Ticket (orderID, flightID, seatID, status) VALUES
+('ORD001', 'FL001', 'VN-A001-B-1', 'Confirmed'),
+('ORD002', 'FL001', 'VN-A001-E-4', 'Pending'),
+('ORD002', 'FL001', 'VN-A001-E-5', 'Confirmed'),
+('ORD002', 'FL001', 'VN-A001-E-6', 'Cancelled'),
+('ORD003', 'FL001', 'VN-A001-F-7', 'Checked-In'),
+('ORD004', 'FL001', 'VN-A001-F-8', 'Confirmed');
 
 INSERT INTO Luggage (id, customerID, orderID, type, checkedweight , handedweight) VALUES
 ('ORD001-1', (SELECT id FROM Account WHERE username = 'user1'), 'ORD001', 'Checked', 20.0, 5.0),
@@ -471,147 +467,3 @@ INSERT INTO ChatMessage (senderAccountID, receiverAccountID, message, timestamp,
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user2'), 'Sure John, how can I help you?', '2024-03-15 10:18:00', TRUE),
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user3'), 'Sarah, could you check if there are any window seats available on flight VN303?', '2024-03-16 14:30:00', TRUE),
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user4'), 'I just checked and there are 3 window seats available. Would you like me to book one for you?', '2024-03-16 14:45:00', TRUE);
-<<<<<<< HEAD
-
-Select * from `Order`;
-
-SELECT 
-    t.*, 
-    f.name AS flightName, 
-    f.code AS flightCode, 
-    f.startingTime, 
-    f.landingTime, 
-    l1.name AS departureName, 
-    l2.name AS destinationName, 
-    s.id AS seatCode, 
-    c.name AS compartmentName, 
-    tt.handLuggageWeight, 
-    tt.checkedLuggageWeight, 
-    tt.luggageQuantity, 
-    tt.additionalServices, 
-    a.id AS airplaneId, 
-    a.name AS airplaneName 
-FROM 
-    Ticket t
-JOIN 
-    Flight f ON t.flightId = f.id
-JOIN 
-    Location l1 ON f.departure = l1.id
-JOIN 
-    Location l2 ON f.destination = l2.id
-JOIN 
-    Seat s ON t.seatId = s.id
-JOIN 
-    Compartment c ON s.compartmentId = c.id
-JOIN 
-    Airplane a ON c.airplaneId = a.id
-JOIN 
-    TicketType tt ON t.type = tt.type
-WHERE 
-    t.orderId = 'ORD002'; -- Thay 1234 bằng orderId cụ thể
-    
-SELECT t.*, f.name AS flightName, f.code AS flightCode, 
-       f.startingTime, f.landingTime,
-       l1.name AS departureName, l2.name AS destinationName,
-       s.id AS seatCode, c.name AS compartmentName,
-       ap.name AS airplaneName,
-       op.fullName AS passengerName, op.dob AS passengerDob,
-       n.name AS nationName,
-       pt.name AS passengerType,
-       tt.checkedLuggageWeight, tt.handLuggageWeight, tt.luggageQuantity, tt.additionalServices,
-       l.weight AS luggageWeight, l.type AS luggageType
-FROM Ticket t
-JOIN Flight f ON t.flightId = f.id
-JOIN Location l1 ON f.departure = l1.id
-JOIN Location l2 ON f.destination = l2.id
-JOIN Seat s ON t.seatId = s.id
-JOIN Compartment c ON s.compartmentId = c.id
-JOIN Airplane ap ON f.airplaneId = ap.id
-JOIN OrderPassenger op ON op.orderId = t.orderId
-LEFT JOIN Nation n ON op.nationId = n.id
-LEFT JOIN PassengerType pt ON op.passengerTypeId = pt.id
-LEFT JOIN TicketType tt ON t.type = tt.type
-LEFT JOIN Luggage l ON l.orderId = t.orderId
-WHERE t.orderId = 'ORD005';
-
-SELECT t.id, t.orderID, t.orderPassengerID, t.flightID, t.seatID, t.type, t.price, t.status,  
-       op.fullName, n.name AS nation  
-FROM Ticket t  
-LEFT JOIN OrderPassenger op ON t.orderPassengerID = op.id  
-LEFT JOIN Nation n ON op.nationID = n.id  
-WHERE t.orderID = 'ORD002';
-
-SELECT * FROM OrderPassenger WHERE id IN 
-  (SELECT orderPassengerID FROM Ticket WHERE seatID = 'S002B');
-
-SELECT id, orderID, orderPassengerID, COUNT(*) 
-FROM ticket
-GROUP BY id, orderID, orderPassengerID
-HAVING COUNT(*) > 1;
-
-
-SELECT OrderID, COUNT(id) AS TotalTickets
-FROM ticket
-GROUP BY OrderID
-HAVING TotalTickets > 1;
-
-SELECT id, COUNT(*) as count
-FROM Ticket
-GROUP BY id
-HAVING COUNT(*) > 1;
-
-SELECT op.fullName, t.orderPassengerID, t.id AS ticketID
-FROM Ticket t
-JOIN OrderPassenger op ON t.orderPassengerID = op.id;
-
-Select * from `Order`;
-
-SELECT o.id, o.customerID, o.staffID, o.status, o.time, COUNT(t.id) AS ticket_count
-FROM `Order` o
-LEFT JOIN Ticket t ON o.id = t.orderID
-WHERE o.customerID = 'c9978809-08e2-11f0-b095-71802f6a8767' -- Thay 'CUST001' bằng ID khách hàng thực tế
-GROUP BY o.id, o.customerID, o.staffID, o.status, o.time
-ORDER BY o.time DESC;
-
-SELECT o.id AS orderID, o.customerID, o.staffID, o.status, o.time, 
-       t.id AS ticketID, op.fullName, op.id AS orderPassengerID
-FROM `Order` o
-JOIN Ticket t ON o.id = t.orderID
-JOIN OrderPassenger op ON t.orderPassengerID = op.id
-WHERE o.customerID = 'c9978809-08e2-11f0-b095-71802f6a8767' -- Thay 'CUST001' bằng ID khách hàng thực tế
-ORDER BY o.time DESC, t.id;
-
-SELECT 
-    o.id AS orderID, 
-    o.customerID, 
-    o.staffID, 
-    o.status, 
-    o.time, 
-    GROUP_CONCAT(t.id ORDER BY t.id SEPARATOR ', ') AS ticketIDs, 
-    COUNT(t.id) AS ticketCount,
-    op.fullName, 
-    op.id AS orderPassengerID
-FROM `Order` o
-JOIN Ticket t ON o.id = t.orderID
-JOIN OrderPassenger op ON t.orderPassengerID = op.id
-WHERE o.customerID = 'c9978809-08e2-11f0-b095-71802f6a8767' -- Thay 'CUST001' bằng ID khách hàng thực tế
-GROUP BY o.id, o.customerID, o.staffID, o.status, o.time, op.fullName, op.id
-ORDER BY o.time DESC;
-
-SELECT 
-    op.fullName, 
-    t.orderPassengerID, 
-    t.orderID ,  -- Thêm cột OrderID
-    t.id AS ticketID
-FROM Ticket t
-JOIN OrderPassenger op ON t.orderPassengerID = op.id;
-
-
-
-
-
-
-=======
-
-
->>>>>>> ducda
