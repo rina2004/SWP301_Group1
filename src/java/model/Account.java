@@ -15,7 +15,11 @@ public class Account {
    private String id;
     private String username;
     private String password;
+<<<<<<< HEAD
     private Role role; // Thay vì int roleID
+=======
+    private Role role;
+>>>>>>> ducda
     private boolean status;
     private String citizenID;
     private String name;
@@ -128,4 +132,8 @@ public class Account {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    
+
+    
 }

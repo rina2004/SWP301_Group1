@@ -6,13 +6,23 @@ package model;
 
 /**
  *
+<<<<<<< HEAD
  * @author A A
+=======
+ * @author DUCDA
+>>>>>>> ducda
  */
 public class Role {
     private int id;
     private String name;
 
+<<<<<<< HEAD
     public Role() {}
+=======
+    public Role() {
+    }
+
+>>>>>>> ducda
     public Role(int id, String name) {
         this.id = id;
         this.name = name;
@@ -33,4 +43,8 @@ public class Role {
     public void setName(String name) {
         this.name = name;
     }
+<<<<<<< HEAD
+=======
+    
+>>>>>>> ducda
 }

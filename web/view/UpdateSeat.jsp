@@ -83,14 +83,12 @@
     </head>
     <body>
         <h2>Update Seat ${seat.id}</h2>
-        <form action="<%= request.getContextPath() %>/updateSeat" method="post">
+        <form action="<%= request.getContextPath() %>/updateSeats" method="post">
             <input type="hidden" name="seatID" value="${seat.id}">
 
             <label>ID Seat:</label>
             <input type="text" value="${seat.id}" disabled><br>
 
-            <label>Compartment:</label>
-            <input type="text" value="${seat.compartment.name}" disabled><br>
 
             <label>Airplane ID:</label>
             <input type="text" name="airplaneID" value="${seat.compartment.airplane.id}" readonly><br>
@@ -108,7 +106,7 @@
             </div>
 
             <button type="submit">Update</button>
-            <a href="listSeatAdmin?id=${seat.compartment.airplane.id}">Back</a>
+            <a href="listSeatsAdmin?id=${seat.compartment.airplane.id}">Back</a>
         </form>
 
         <script>

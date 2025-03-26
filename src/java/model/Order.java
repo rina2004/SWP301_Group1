@@ -89,5 +89,10 @@ public class Order {
         this.finalNum = finalNum;
     }
 
+    @Override
+    public String toString() {
+        return "Order{" + "id=" + id + ", customer=" + customer + ", staff=" + staff + ", status=" + status + ", time=" + time + ", finalPrice=" + finalPrice + ", finalNum=" + finalNum + '}';
+    }
+
     
 }

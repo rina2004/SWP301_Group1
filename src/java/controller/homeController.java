@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dal.BlogDAO;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +18,7 @@ import model.Blog;
  * @author DUCDA
  */
 public class homeController extends HttpServlet {
-    BlogDAO blogDAO = new BlogDAO();
+   // BlogDAO blogDAO = new BlogDAO();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -57,9 +57,15 @@ public class homeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+<<<<<<< HEAD
 //        List<Blog> listBlog = blogDAO.getAllBlog();
 //        request.setAttribute("listBlog", listBlog);
 //        request.getRequestDispatcher("home.jsp").forward(request, response);
+=======
+        List<Blog> listBlog = blogDAO.get4FirstBlog();
+        request.setAttribute("listBlog", listBlog);
+        request.getRequestDispatcher("home.jsp").forward(request, response);
+>>>>>>> ducda
     }
 
     /**

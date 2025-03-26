@@ -4,24 +4,22 @@
  */
 package Controller;
 
-import dal.OrderDAO;
+import dal.SeatDAO;
+import dal.TicketDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import model.Account;
-import model.Order;
-
+import model.Seat;
+import model.Ticket;
 
 /**
  *
- * @author anhbu
+ * @author tungn
  */
-public class HistoryBookingController extends HttpServlet {
+public class DetailSeats extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +38,10 @@ public class HistoryBookingController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HistoryBookingController</title>");
+            out.println("<title>Servlet DetailSeats</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HistoryBookingController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DetailSeats at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,22 +59,15 @@ public class HistoryBookingController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        // Lấy accountId từ session
-        HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("acc");
-
-        if (acc == null) {
-            response.sendRedirect("view/Login.jsp");
-            return;
-        }
-//
-//        String accountId = acc.getId(); // hoặc acc.getAccountId() nếu tên là như vậy trong model của bạn
-//
-//        OrderDAO orderDAO = new OrderDAO();
-//        List<Order> orders = orderDAO.getOrderHistory(accountId);
-//        request.setAttribute("orders", orders);
-//        request.getRequestDispatcher("view/HistoryBooking.jsp").forward(request, response);
+        String id = request.getParameter("id");
+        SeatDAO dao = new SeatDAO();
+        TicketDAO ticketDao = new TicketDAO();
+        String ticketID = ticketDao.getIDbySeat(id);
+        Ticket ticket = ticketDao.getInfor(ticketID);
+        Seat seat = dao.getSeatByID(id);
+        request.setAttribute("seat", seat);
+        request.setAttribute("ticket", ticket);
+        request.getRequestDispatcher("view/DetailSeat.jsp").forward(request, response);
     }
 
     /**
@@ -90,6 +81,7 @@ public class HistoryBookingController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**
