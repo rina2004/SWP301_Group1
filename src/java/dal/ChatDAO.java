@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dal;
 
 import model.ChatMessage;
@@ -30,7 +26,6 @@ public class ChatDAO extends DBContext {
 //            Logger.getLogger(ChatDAO.class.getName()).log(Level.SEVERE, null, e);
 //        }
 //    }
-
 //    public List<ChatMessage> getMessages(String userID, String contactID) {
 //        List<ChatMessage> messages = new ArrayList<>();
 //        String sql = "SELECT * FROM ChatMessage WHERE (senderID = ? AND receiverID = ?) OR (senderID = ? AND receiverID = ?) ORDER BY timestamp";
@@ -47,20 +42,16 @@ public class ChatDAO extends DBContext {
 //            Logger.getLogger(ChatDAO.class.getName()).log(Level.SEVERE, null, e);
 //        }
 //        return messages;
-//    }
+    //     try (PreparedStatement ps = connection.prepareStatement(sql)) {
+    //         ps.setString(1, senderID);
+    //         ps.setString(2, receiverID);
+    //         ps.executeUpdate();
+    //     } catch (SQLException e) {
+    //         Logger.getLogger(ChatDAO.class.getName()).log(Level.SEVERE, null, e);
+    //     }
+    // }
 
-    public void markMessagesAsRead(String senderID, String receiverID) {
-        String sql = "UPDATE ChatMessage SET isRead = TRUE WHERE senderID = ? AND receiverID = ? AND isRead = FALSE";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, senderID);
-            ps.setString(2, receiverID);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            Logger.getLogger(ChatDAO.class.getName()).log(Level.SEVERE, null, e);
-        }
-    }
-
-    public List<ChatMessage> getMessages(String senderID, String receiverID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    // public List<ChatMessage> getMessages(String senderID, String receiverID) {
+    //     throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    // }
 }

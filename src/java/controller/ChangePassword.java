@@ -88,7 +88,7 @@ public class ChangePassword extends HttpServlet {
             request.getRequestDispatcher("view/ChangePassword.jsp").forward(request, response);
         } else {
             acc.updatePasswordByUsername(username, newpass);
-            response.sendRedirect("view/home.jsp");
+            response.sendRedirect("home");
         }
     }
 

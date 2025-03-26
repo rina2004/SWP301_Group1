@@ -43,7 +43,7 @@ public class OrderDetailController extends HttpServlet {
                 request.getRequestDispatcher("order-result-detail.jsp").forward(request, response);
             }
         } catch (Exception ex) {
-            Logger.getLogger(ViewFlightServlet.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(ViewFlightServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

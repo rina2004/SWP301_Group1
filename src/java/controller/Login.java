@@ -26,6 +26,7 @@ public class Login extends HttpServlet {
         if (acc == null || !acc.getUsername().equals(username) || !acc.getPassword().equals(password)) {
             request.setAttribute("error", "Invalid username or password!");
             request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+            return;
         } 
         if (!acc.isStatus()) {
             request.setAttribute("error", "The account is not allowed to login to the system !!!");

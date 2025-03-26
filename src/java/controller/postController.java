@@ -9,9 +9,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import model.Account;
 import model.Comment;
 import model.Post;
 
@@ -34,5 +36,25 @@ public class postController extends HttpServlet {
 //        request.setAttribute("post", post);
 //        request.setAttribute("listCmt", listCmt);
         request.getRequestDispatcher("post.jsp").forward(request, response);
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        Account acc = (Account) session.getAttribute("acc");
+
+        if (acc == null) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
+
+        // String accID = acc.getId();
+        // String content = request.getParameter("content");
+        // String postID = request.getParameter("postID");
+
+        // postDAO.addComment(new Comment(accID, content, postID));
+
+        // response.sendRedirect("post?id=" + postID);
     }
 }

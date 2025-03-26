@@ -47,7 +47,10 @@ public class CancelTicketController extends HttpServlet {
             return;
         }
 
-        TicketDAO ticketDAO = new TicketDAO();
-        response.sendRedirect("view/OrderDetail.jsp");
+//        TicketDAO ticketDAO = new TicketDAO();
+//        ticketDAO.cancelTicket(ticketId);
+//
+//        // Quay lại trang danh sách vé sau khi hủy thành công / thất bại
+//        response.sendRedirect("view/OrderDetail.jsp");
     }
 }

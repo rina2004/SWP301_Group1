@@ -256,6 +256,102 @@
                 display: inline-block; /* Hoặc display: inline; */
                 margin-right: 10px; /* Khoảng cách giữa các mục */
             }
+            .auth-buttons {
+                position: relative;
+                display: inline-block;
+            }
+
+            .register {
+                cursor: pointer;
+                text-decoration: none;
+                padding: 10px 15px;
+                background-color: #007bff;
+                color: white;
+                border-radius: 5px;
+                display: inline-block;
+            }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background-color: white;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+                border-radius: 5px;
+                min-width: 150px;
+                z-index: 10;
+                overflow: hidden;
+            }
+
+            .dropdown-content a,
+            .dropdown-content button {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                text-align: left;
+                background: none;
+                border: none;
+                font-size: 16px;
+                cursor: pointer;
+                text-decoration: none;
+                color: black;
+                border-bottom: 1px solid #ddd;
+                font-family: inherit;
+            }
+
+            .dropdown-content button {
+                width: 100%;
+                text-align: left;
+            }
+
+            .dropdown-content a:hover,
+            .dropdown-content button:hover {
+                background-color: #f1f1f1;
+            }
+
+            /* Hiện dropdown khi có class "show" */
+            .dropdown-content.show {
+                display: block;
+            }
+            .pagination {
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .pagination ul {
+                list-style: none;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .pagination li {
+                display: inline-block;
+            }
+
+            .pagination a {
+                display: block;
+                padding: 8px 12px;
+                border: 1px solid #007bff;
+                border-radius: 5px;
+                color: #007bff;
+                text-decoration: none;
+                font-weight: bold;
+                transition: all 0.3s ease;
+            }
+
+            .pagination a:hover {
+                background-color: #007bff;
+                color: white;
+            }
+
+            .pagination a.active {
+                background-color: #007bff;
+                color: white;
+                pointer-events: none;
+            }
         </style>
     </head>
     <body>
@@ -269,14 +365,43 @@
             </div>
             <ul class="menu">
                 <li><a href="flights">Flights</a></li>
-                <li><a href="#">Deals</a></li>
                 <li><a href="blog">Blogs</a></li>
                 <li><a href="#contact">Contact Us</a></li>
             </ul>
-            <div class="auth-buttons">
-                <a href="login" class="login">Login</a>
-                <a href="register" class="register">Register</a>
-            </div>
+            <c:set var="session" value="${sessionScope}" />
+            <c:choose>
+                <c:when test="${not empty session}">
+                    <div class="auth-buttons">
+                        <a href="#" class="register" id="userDropdown">${username}</a>
+                        <div class="dropdown-content" id="dropdownMenu">
+                            <a href="profile">Profile</a>
+                            <form action="logout" method="GET">
+                                <button type="submit">Log out</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <script>
+                        document.getElementById("userDropdown").addEventListener("click", function (event) {
+                            event.preventDefault(); // Ngăn chặn load lại trang
+                            document.getElementById("dropdownMenu").classList.toggle("show");
+                        });
+
+                        // Ẩn dropdown khi click ra ngoài
+                        document.addEventListener("click", function (event) {
+                            if (!event.target.closest(".auth-buttons")) {
+                                document.getElementById("dropdownMenu").classList.remove("show");
+                            }
+                        });
+                    </script>
+                </c:when>
+                <c:otherwise>
+                    <div class="auth-buttons">
+                        <a href="login" class="login">Login</a>
+                        <a href="register" class="register">Register</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
 
         <!-- Phần Blogs -->
@@ -309,11 +434,20 @@
                     </div>
                 </div>
             </c:forEach>
-            <div>
+            <div class="pagination">
                 <ul>
                     <c:forEach begin="1" end="${pageControl.getTotalPage()}" var="pageNumber">
-                        <li><a href="${pageControl.getUrlPattern()}page=${pageNumber}">${pageNumber}</a></li>
-                        </c:forEach>
+                        <li>
+                            <c:choose>
+                                <c:when test="${pageNumber == pageControl.getPage()}">
+                                    <a href="${pageControl.getUrlPattern()}page=${pageNumber}" class="active">${pageNumber}</a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${pageControl.getUrlPattern()}page=${pageNumber}">${pageNumber}</a>
+                                </c:otherwise>
+                            </c:choose>
+                        </li>
+                    </c:forEach>
                 </ul>
             </div>
         </div>

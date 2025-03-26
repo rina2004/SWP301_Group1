@@ -14,12 +14,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 /**
  *
  * @author tungn
  */
-@WebServlet(name="ResetPassword", urlPatterns={"/resetpassword"})
 public class ResetPassword extends HttpServlet {
    
     /** 

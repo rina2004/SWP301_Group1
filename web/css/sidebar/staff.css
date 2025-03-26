@@ -1,0 +1,125 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 19 Mar 2025, 21:07:53
+    Author     : Rinaaaa
+*/
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f9ff; /* Light blue background similar to Sky Airlines */
+}
+
+.staff-sidebar-container {
+    width: 250px;
+    background-color: #ffffff; /* White background */
+    color: #333333; /* Dark text */
+    height: 100vh;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    border-right: 1px solid #e0e0e0;
+}
+
+.staff-sidebar-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.staff-sidebar-container li {
+    position: relative;
+}
+
+.staff-sidebar-container > ul > li > a {
+    display: block;
+    padding: 15px 20px;
+    color: #333333; /* Dark text like Sky Airlines nav */
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    border-left: 4px solid transparent;
+}
+
+.staff-sidebar-container > ul > li > a:hover {
+    background-color: #e6f7ff; /* Light blue hover */
+    border-left: 4px solid #0d6efd; /* Blue accent color matching login button */
+}
+
+.staff-sidebar-container .order-sidebar {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    width: 200px;
+    background-color: #ffffff; /* White background */
+    display: none;
+    z-index: 1000;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    border-radius: 0 4px 4px 0;
+    border: 1px solid #e0e0e0;
+}
+
+.staff-sidebar-container .order-sidebar a {
+    display: block;
+    padding: 12px 20px;
+    color: #333333; /* Dark text */
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-size: 14px;
+}
+
+.staff-sidebar-container .order-sidebar a:hover {
+    background-color: #e6f7ff; /* Light blue hover */
+}
+
+/* Thêm biểu tượng mũi tên cho các mục có submenu */
+.staff-sidebar-container > ul > li > a::after {
+    content: "›";
+    position: absolute;
+    right: 20px;
+    font-size: 20px;
+    opacity: 0.7;
+}
+
+/* Logo hoặc tiêu đề của sidebar */
+.sidebar-header {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 15px;
+    background-color: #f0f9ff; /* Light blue background */
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    color: #333333; /* Dark text */
+    font-size: 18px;
+}
+
+/* Thêm một số hiệu ứng hover */
+.staff-sidebar-container > ul > li:hover > a {
+    background-color: #e6f7ff; /* Light blue hover */
+    border-left: 4px solid #0d6efd; /* Blue accent color */
+}
+
+/* Book Now button style */
+.action-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #0d6efd; /* Blue button color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.action-button:hover {
+    background-color: #0b5ed7; /* Slightly darker blue on hover */
+}

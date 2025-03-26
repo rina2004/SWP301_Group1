@@ -4,30 +4,27 @@
  */
 package model;
 
-import java.time.LocalDateTime;
-
 /**
  *
  * @author DUCDA
  */
 public class Comment {
-    private String id;
-    private BlogPost post;
-    private Account account;
-    private String content;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private String id, account, content, post;
 
     public Comment() {
     }
 
-    public Comment(String id, BlogPost post, Account account, String content, LocalDateTime created_at, LocalDateTime updated_at) {
-        this.id = id;
-        this.post = post;
+    public Comment(String account, String content, String post) {
         this.account = account;
         this.content = content;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.post = post;
+    }
+
+    public Comment(String id, String account, String content, String post) {
+        this.id = id;
+        this.account = account;
+        this.content = content;
+        this.post = post;
     }
 
     public String getId() {
@@ -38,19 +35,11 @@ public class Comment {
         this.id = id;
     }
 
-    public BlogPost getPost() {
-        return post;
-    }
-
-    public void setPost(BlogPost post) {
-        this.post = post;
-    }
-
-    public Account getAccount() {
+    public String getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
+    public void setAccount(String account) {
         this.account = account;
     }
 
@@ -62,20 +51,16 @@ public class Comment {
         this.content = content;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public String getPost() {
+        return post;
     }
 
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
+    public void setPost(String post) {
+        this.post = post;
     }
 
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
+    @Override
+    public String toString() {
+        return "Comment{" + "id=" + id + ", account=" + account + ", content=" + content + ", post=" + post + '}';
     }
-
-    public void setUpdated_at(LocalDateTime updated_at) {
-        this.updated_at = updated_at;
-    }
-    
 }

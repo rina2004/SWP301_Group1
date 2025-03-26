@@ -2,13 +2,13 @@ package model;
 import java.sql.Date;
 /**
  *
- * @author anhbu
+ * @author Rinaaaa
  */
 public class Account {
     private String id;
     private String username;
     private String password;
-    private Role role; // Thay vì int roleID
+    private Role role;
     private boolean status;
     private String citizenID;
     private String name;
