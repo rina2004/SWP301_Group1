@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dal.OrderDAO;
@@ -13,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import model.Account;
 import model.Order;
 
 /**
@@ -20,34 +20,37 @@ import model.Order;
  * @author anhbu
  */
 public class StaffTicketProcessing extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet StaffTicketProcessing</title>");  
+            out.println("<title>Servlet StaffTicketProcessing</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet StaffTicketProcessing at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet StaffTicketProcessing at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -55,17 +58,26 @@ public class StaffTicketProcessing extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         //processRequest(request, response);
+
+        Account account = (Account) request.getSession().getAttribute("acc");
+        
+        // Kiểm tra quyền (chỉ cho phép role ID = 3)
+        if (account == null || account.getRole() == null || account.getRole().getId() != 3) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
         OrderDAO dao = new OrderDAO();
         List<Order> processingOrders = dao.getProcessingOrders();
 
         request.setAttribute("processingOrders", processingOrders);
         request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
-    } 
+    }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -73,24 +85,33 @@ public class StaffTicketProcessing extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         //processRequest(request, response);
         String orderId = request.getParameter("orderID");
+        
+        Account account = (Account) request.getSession().getAttribute("acc");
+        
+        // Kiểm tra quyền (chỉ cho phép role ID = 3)
+        if (account == null || account.getRole() == null || account.getRole().getId() != 3) {
+            response.sendRedirect("view/Login.jsp");
+            return;
+        }
 
-    if (orderId != null && !orderId.trim().isEmpty()) {
-        OrderDAO dao = new OrderDAO();
-        dao.cancelOrder(orderId); // Gọi hủy đơn hàng nhưng không xử lý thông báo
+        if (orderId != null && !orderId.trim().isEmpty()) {
+            OrderDAO dao = new OrderDAO();
+            dao.cancelOrder(orderId); // Gọi hủy đơn hàng nhưng không xử lý thông báo
+        }
+
+        // Load lại danh sách đơn hàng và chuyển hướng
+        List<Order> processingOrders = new OrderDAO().getProcessingOrders();
+        request.setAttribute("processingOrders", processingOrders);
+
+        request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
     }
 
-    // Load lại danh sách đơn hàng và chuyển hướng
-    List<Order> processingOrders = new OrderDAO().getProcessingOrders();
-    request.setAttribute("processingOrders", processingOrders);
-    
-    request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
-    }
-
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

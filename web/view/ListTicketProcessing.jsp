@@ -96,6 +96,6 @@
         </c:otherwise>
     </c:choose>
 </div>
-
+     <a class="btn" href="${pageContext.request.contextPath}/view/Home.jsp">Back to Home</a>
 </body>
 </html>

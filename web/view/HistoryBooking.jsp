@@ -120,7 +120,7 @@
             </c:if>
         </div>
 
-        <br>
+       
         <a class="btn" href="${pageContext.request.contextPath}/view/Home.jsp">Back to Home</a>
 
         <!-- Form ẩn để gửi yêu cầu hủy bằng POST -->

@@ -192,15 +192,16 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
                         <img src="img/art.jpg" alt="Logo" class="me-2" style="height: 40px;">
-                        <h2 class="mb-0"">Sky Airline</h2>
+                        <h2 class="mb-0">Sky Airline</h2>
                     </div>
                     <div>
-                        <a href="#" class="btn btn-outline-primary me-2">Sign In</a>
-                        <a href="#" class="btn btn-primary">Register</a>
+                        <a href="Login.jsp" class="btn btn-outline-primary me-2">Sign In</a>
+                        <a href="Register.jsp" class="btn btn-primary">Register</a>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <!-- Banner Section -->
         <div class="banner-section">
