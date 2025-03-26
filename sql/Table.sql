@@ -310,7 +310,7 @@ INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime) VALUES
 ('VN-A009', 'Sky Voyager', 4, '2024-06-05 08:30:00', '2023-12-15 00:00:00'),
 ('VN-A010', 'Cloud Dancer', 5, '2024-07-28 09:45:00', '2024-01-05 00:00:00');
 
-INSERT INTO `TicketType` (`type`, `description`, `price`, `checkedweightneed`, `handedweightneed` ) VALUES
+INSERT INTO `TicketType` (`type`, `description`, `price`, `checkedweightneed`, `handedweightneed`) VALUES
 ('Economy', 'Standard seating and basic amenities. Additional services: Priority boarding, extra legroom, complimentary beverage service.', 200000.00, 23.0, 7.0),
 ('Business', 'Full business class experience. Additional services: Lie-flat seats, lounge access, premium meals and beverages.', 800000.00, 40.0, 10.0),
 ('First Class', 'Luxury air travel experience. Additional services: Private suites, personalized service, gourmet dining, exclusive lounge access.', 1500000.00, 50.0, 10.0);
@@ -355,7 +355,7 @@ INSERT INTO Seat (id, compartmentID, status, reason) VALUES
 ('VN-A001-B-3', 'VN-A001-B', 'Active', null),
 ('VN-A001-E-4', 'VN-A001-E', 'Active', null),
 ('VN-A001-E-5', 'VN-A001-E', 'In Maintenance', 'SUPAIGA'),
-('VN-A001-E-6', 'VN-A001-E', 'Retired', 'SUPANIGA'),
+('VN-A001-E-6', 'VN-A001-E', 'Active', 'SUPANIGA'),
 ('VN-A001-F-7', 'VN-A001-F', 'Active', null),
 ('VN-A001-F-8', 'VN-A001-F', 'Active', 'SUPAIGA'),
 ('VN-A001-F-9', 'VN-A001-F', 'Active', 'SUPANIGA'),
@@ -425,7 +425,7 @@ INSERT INTO Luggage (id, customerID, orderID, type, checkedweight , handedweight
 ('ORD002-2', (SELECT id FROM Account WHERE username = 'user2'), 'ORD002', 'Checked', 18.2, 3.0),
 ('ORD002-3', (SELECT id FROM Account WHERE username = 'user2'), 'ORD002', 'Checked', 25.0, 3.0),
 ('ORD003-1', (SELECT id FROM Account WHERE username = 'user3'), 'ORD003', 'Cabin', 8.5, 3.0),
-('ORD004-1', (SELECT id FROM Account WHERE username = 'user4'), 'ORD003', 'Checked', 20.7, 3.0);
+('ORD004-1', (SELECT id FROM Account WHERE username = 'user4'), 'ORD004', 'Checked', 20.7, 3.0);
 
 -- BlogCategory table (10 records)
 INSERT INTO BlogCategory (name) VALUES 

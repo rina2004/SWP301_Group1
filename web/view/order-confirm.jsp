@@ -22,11 +22,6 @@
                     <div class="d-flex align-items-center">
                         <h2 class="mb-0">Flight Booking</h2>
                     </div>
-                    <div>
-                        <a href="order-cart.jsp" class="btn btn-outline-primary position-relative">
-                            <i class="fas fa-shopping-cart"></i> Cart
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -70,17 +65,17 @@
                         </div>
                         <div class="col-md-6">
                             <label for="passportNumber" class="form-label">Passport/ID Number</label>
-                            <input type="text" class="form-control" value="789012345678s" required>
+                            <input type="text" class="form-control" value="789012345678s" readonly>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" value="user1@example.com" required>
+                            <input type="email" class="form-control" value="user1@example.com" readonly>
                         </div>
                         <div class="col-md-6">
                             <label for="phone" class="form-label">Phone</label>
-                            <input type="tel" class="form-control" value="0956789012" required>
+                            <input type="tel" class="form-control" value="0956789012" readonly>
                         </div>
                     </div>
                     <!-- Passenger Information Form -->
@@ -95,20 +90,6 @@
                                     <label for="firstName" class="form-label">Full Name</label>
                                     <input type="text" class="form-control" id="name" name="firstName" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="passportNumber" class="form-label">Passport/ID Number</label>
-                                    <input type="text" class="form-control" id="passportNumber" name="passportNumber" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="phone" class="form-label">Phone</label>
-                                    <input type="tel" class="form-control" id="phone" name="phone" required>
-                                </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-6">
@@ -118,6 +99,8 @@
                                 <div class="col-md-6">
                                     <label for="nationality" class="form-label">Nationality</label>
                                     <input type="text" class="form-control" id="nationality" name="nationality" required>
+
+                                    </input>
                                 </div>
                             </div>
                         </form>
@@ -195,9 +178,12 @@
                                 Cancellation fees may apply.
                             </small>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100 mt-3">
-                            <i class="fas fa-check-circle me-2"></i> Complete Booking
-                        </button>
+
+                        <form id="bookingForm" action="order-confirm" method="POST">
+                            <button type="submit" class="btn btn-primary w-100 mt-3">
+                                <i class="fas fa-check-circle me-2"></i> Complete Booking
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -210,20 +196,14 @@
                 const baseFareDisplay = document.getElementById('baseFareDisplay');
                 const taxesDisplay = document.getElementById('taxesDisplay');
                 const totalPriceDisplay = document.getElementById('totalPriceDisplay');
-
                 compartmentRadios.forEach(radio => {
                     radio.addEventListener('change', function () {
                         const price = parseFloat(this.value);
                         const className = this.getAttribute('data-type');
-
-                        // Update displays
                         selectedClassDisplay.textContent = className;
-
                         const baseFare = price * 0.8;
                         const taxes = price * 0.2;
                         const totalPrice = price;
-
-                        // Format numbers with comma as thousand separator
                         baseFareDisplay.textContent = Math.round(baseFare).toLocaleString() + ' VND';
                         taxesDisplay.textContent = Math.round(taxes).toLocaleString() + ' VND';
                         totalPriceDisplay.textContent = Math.round(totalPrice).toLocaleString() + ' VND';

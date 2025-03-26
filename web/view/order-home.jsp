@@ -13,7 +13,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link rel="icon" type="image/png" href="img/logo.jpg">
-        
     </head>
     <body>
         <!-- Header Section -->
@@ -21,11 +20,21 @@
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
-                        <h2 class="mb-0"">Sky Airline</h2>
+                        <h2 class="mb-0">Sky Airline</h2>
                     </div>
                     <div>
-                        <a href="#" class="btn btn-outline-primary me-2">Sign In</a>
-                        <a href="#" class="btn btn-primary">Register</a>
+                        <c:if test="${empty user}">
+                            <a href="Login.jsp" class="btn btn-outline-primary me-2">Sign In</a>
+                            <a href="register" class="btn btn-primary">Register</a>
+                        </c:if>
+                        <c:if test="${not empty user}">
+                            <div class="d-flex align-items-center">
+                                <p class="me-3 mb-0">${user}</p>
+                                <form action="${pageContext.request.contextPath}/logout" method="get" class="mb-0">
+                                    <button type="submit" class="btn btn-secondary">Logout</button>
+                                </form>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
             </div>
@@ -126,5 +135,29 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Existing JavaScript code for trip type toggle
+            document.addEventListener('DOMContentLoaded', function () {
+                const oneWayRadio = document.getElementById('oneWay');
+                const roundTripRadio = document.getElementById('roundTrip');
+                const returnDateContainer = document.getElementById('returnDateContainer');
+                const returnDateInput = document.getElementById('returnDate');
+
+                roundTripRadio.addEventListener('change', function () {
+                    if (this.checked) {
+                        returnDateContainer.style.display = 'block';
+                        returnDateInput.required = true;
+                    }
+                });
+
+                oneWayRadio.addEventListener('change', function () {
+                    if (this.checked) {
+                        returnDateContainer.style.display = 'none';
+                        returnDateInput.required = false;
+                        returnDateInput.value = '';
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
