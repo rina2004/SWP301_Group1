@@ -383,7 +383,7 @@ public class TicketDAO extends DBContext {
                 + "LEFT JOIN Flight f ON t.flightID = f.id "
                 + "LEFT JOIN Compartment c ON t.comID = c.id "
                 + "LEFT JOIN Seat s ON t.seatID = s.id "
-                + "WHERE t.status = 'Cancelled' OR t.status = 'Processing'";
+                + "WHERE t.status = 'Cancelled' OR t.status = 'Processing' OR t.status = 'Rejected'";
 
         List<Ticket> tickets = new ArrayList<>();
 

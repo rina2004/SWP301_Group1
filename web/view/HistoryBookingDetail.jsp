@@ -3,6 +3,7 @@
 <%@page import="model.Ticket"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+
 <html>
     <head>
         <title>History Booking Detail</title>
@@ -121,28 +122,27 @@
                             <div>${ticket.flight.departure.name}</div>
                             <div class="ticket-label">To:</div>
                             <div>${ticket.flight.destination.name}</div>
-                            <div class="ticket-label">Start:</div>
+                            <div class="ticket-label">Starting time:</div>
                             <div>${ticket.flight.startingTime}</div>
-                            <div class="ticket-label">Landing:</div>
+                            <div class="ticket-label">Landing time:</div>
                             <div>${ticket.flight.landingTime}</div>
                             <div class="ticket-label">Price:</div>
-                            <div>${ticket.flight.price}</div>
-                            <div class="ticket-label">Seat:</div>
+                            <div id="ticket-price" data-price="${ticket.flight.price}"></div>                            <div class="ticket-label">Seat:</div>
                             <div>${ticket.seat.id}</div>
                             <div class="ticket-label">Ticket Status:</div>
                             <div>${ticket.status}</div>
-                            
+
                             <div class="ticket-label">Ticket type:</div>
                             <div>${ticket.orderP.order.tt.type}</div>
-                            <div class="ticket-label">Ticket checked weight need:</div>
-                            <div>${ticket.orderP.order.tt.checkedweightneed}</div>
-                            <div class="ticket-label">Ticket handed weight need:</div>
-                            <div>${ticket.orderP.order.tt.handedweightneed}</div>
+                            <div class="ticket-label">Ticket checked weight:</div>
+                            <div>${ticket.orderP.order.tt.checkedweightneed}kg</div>
+                            <div class="ticket-label">Ticket handed weight:</div>
+                            <div>${ticket.orderP.order.tt.handedweightneed}kg</div>
 
                             <div class="ticket-label">Airplane:</div>
                             <div>${ticket.flight.airplane.name}</div>
 
-                            
+
                         </div>
 
                         <div class="ticket-footer">
@@ -152,7 +152,18 @@
                 </c:forEach>
             </div>
         </c:if>
-
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let priceElement = document.getElementById("ticket-price");
+                let price = parseFloat(priceElement.getAttribute("data-price")) || 0;
+                priceElement.innerText = price.toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+            });
+        </script>
 
 
         <div style="text-align: center;">

@@ -135,7 +135,7 @@
                                                         <td>${ticket.status}</td>                                                     
                                                         <td>
                                                             <a class="btn" href="${pageContext.request.contextPath}/historyBookingDetail?OrderPassengerID=${passenger.id}">View</a>
-                                                            <c:if test="${ticket.status ne 'Cancelled' and ticket.status ne 'Pending'}">
+                                                            <c:if test="${ticket.status ne 'Cancelled' and ticket.status ne 'Pending' and ticket.status ne 'Processing' and ticket.status ne 'Rejected'}">
                                                                 <a class="btn btn-secondary" href="#" onclick="confirmCancel('${passenger.id}')">Cancel</a>
                                                             </c:if>
                                                         </td>

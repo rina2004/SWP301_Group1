@@ -5,6 +5,7 @@
     <head>
         <title>Processing Orders</title>
         <link rel="stylesheet" href="styles.css"> <!-- Link CSS nếu có -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -52,25 +53,69 @@
                 border: none;
                 cursor: pointer;
             }
-            .btn-cancel {
-                background-color: #dc3545;
+            .btn-accept {
+                background-color: #28a745; /* Xanh lá */
+            }
+            .btn-reject {
+                background-color: #dc3545; /* Đỏ */
             }
             .btn:hover {
                 opacity: 0.8;
             }
+            .cancelled {
+                color: gray;
+                font-weight: bold;
+            }
+            .rejected {
+                color: red;
+                font-weight: bold;
+            }
         </style>
+        <script>
+            function confirmReject(orderPassengerId) {
+                if (!orderPassengerId || orderPassengerId.trim() === '') return;
+
+                Swal.fire({
+                    title: "Are you sure you want to reject this order?",
+                    text: "This action cannot be undone!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, reject now!",
+                    cancelButtonText: "No"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('orderPassengerIdRejectInput').value = orderPassengerId;
+                        document.getElementById('rejectForm').submit();
+                    }
+                });
+            }
+
+            function confirmAccept(orderPassengerId) {
+                if (!orderPassengerId || orderPassengerId.trim() === '') return;
+
+                Swal.fire({
+                    title: "Are you sure you want to accept this order?",
+                    text: "This will change status to 'Cancelled'!",
+                    icon: "success",
+                    showCancelButton: true,
+                    confirmButtonColor: "#28a745",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, accept now!",
+                    cancelButtonText: "No"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('orderPassengerIdAcceptInput').value = orderPassengerId;
+                        document.getElementById('acceptForm').submit();
+                    }
+                });
+            }
+        </script>
     </head>
     <body>
         <div class="container">
             <h2>Processing Orders</h2>
-
-            <c:if test="${not empty sessionScope.ticketUpdateMessage}">
-                <div class="alert ${sessionScope.ticketUpdateMessageType eq 'success' ? 'alert-success' : 'alert-danger'}">
-                    ${sessionScope.ticketUpdateMessage}
-                </div>
-                <c:remove var="ticketUpdateMessage" scope="session"/>
-                <c:remove var="ticketUpdateMessageType" scope="session"/>
-            </c:if>
 
             <c:choose>
                 <c:when test="${not empty processingOrders}">
@@ -80,24 +125,41 @@
                             <th>Status</th>
                             <th>Flight ID</th>
                             <th>Seat ID</th> 
-                            <th>Order passenger ID</th>
+                            <th>Order Passenger ID</th>
                             <th>Compartment ID</th>
                             <th>Actions</th>
                         </tr>
                         <c:forEach var="ticket" items="${processingOrders}">
                             <tr>
                                 <td>${ticket.id}</td>
-                                <td>${ticket.status}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${ticket.status eq 'Cancelled'}">
+                                            <span class="cancelled">Cancelled</span>
+                                        </c:when>
+                                        <c:when test="${ticket.status eq 'Rejected'}">
+                                            <span class="rejected">Rejected</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            ${ticket.status}
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
                                 <td>${ticket.flight.id}</td>
                                 <td>${ticket.seat.id}</td>
                                 <td>${ticket.orderP.id}</td>
                                 <td>${ticket.compartment.id}</td>
                                 <td>
                                     <c:if test="${ticket.status eq 'Processing'}">
-                                        <form action="staffTicketProcessing" method="post">
-                                            <input type="hidden" name="orderID" value="${ticket.orderP.id}">
-                                            <button type="submit" class="btn btn-cancel">Accept</button>
-                                        </form>
+                                        <!-- Accept Button with SweetAlert2 -->
+                                        <button type="button" class="btn btn-accept" onclick="confirmAccept('${ticket.orderP.id}')">
+                                            Accept
+                                        </button>
+
+                                        <!-- Reject Button with SweetAlert2 -->
+                                        <button type="button" class="btn btn-reject" onclick="confirmReject('${ticket.orderP.id}')">
+                                            Reject
+                                        </button>
                                     </c:if>
                                 </td>
                             </tr>
@@ -110,7 +172,18 @@
             </c:choose>
 
             <a class="btn" href="${pageContext.request.contextPath}/view/Home.jsp">Back to Home</a>
+
+            <!-- Hidden Accept Form -->
+            <form id="acceptForm" action="staffTicketProcessing" method="post" style="display: none;">
+                <input type="hidden" id="orderPassengerIdAcceptInput" name="orderID">
+                <input type="hidden" name="action" value="accept">
+            </form>
+
+            <!-- Hidden Reject Form -->
+            <form id="rejectForm" action="staffTicketProcessing" method="post" style="display: none;">
+                <input type="hidden" id="orderPassengerIdRejectInput" name="orderID">
+                <input type="hidden" name="action" value="reject">
+            </form>
         </div>
     </body>
-
 </html>

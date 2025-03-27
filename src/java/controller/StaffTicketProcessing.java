@@ -80,28 +80,35 @@ public class StaffTicketProcessing extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-       String orderPID = request.getParameter("orderID");
-    String newStatus = "Cancelled";
-    TicketDAO ticketDAO = new TicketDAO();
-    OrderDAO orderDAO = new OrderDAO();
+        String orderPID = request.getParameter("orderID");
+        String action = request.getParameter("action");
 
-    // Cập nhật trạng thái vé thành "Cancelled"
-    int rowsUpdated = ticketDAO.updateTicketStatusByOrderPID(orderPID, newStatus);
-
-    // Lấy OrderID từ OrderPassengerID
-    String orderId = orderDAO.getOrderIdByOrderPassengerId(orderPID);
-
-    if (orderId != null) {
-        // Kiểm tra xem tất cả vé trong Order đã bị hủy chưa
-        if (ticketDAO.hasOnlyCancelledTickets(orderId)) {
-            orderDAO.updateOrderStatus(orderId, "Cancelled");
+        if (orderPID == null || action == null) {
+            response.sendRedirect("view/ListTicketProcessing.jsp");
+            return;
         }
-    }
 
-    // Load lại danh sách đơn hàng và chuyển hướng
-    List<Ticket> processingOrders = ticketDAO.getCancelledOrProcessingTickets();
-    request.setAttribute("processingOrders", processingOrders);
-    request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
+        TicketDAO ticketDAO = new TicketDAO();
+        OrderDAO orderDAO = new OrderDAO();
+
+        if ("accept".equals(action)) {
+            // Chấp nhận vé
+            ticketDAO.updateTicketStatusByOrderPID(orderPID, "Cancelled");
+        } else if ("reject".equals(action)) {
+            // Hủy vé
+            ticketDAO.updateTicketStatusByOrderPID(orderPID, "Rejected");
+
+            // Lấy OrderID từ OrderPassengerID
+            String orderId = orderDAO.getOrderIdByOrderPassengerId(orderPID);
+            if (orderId != null && ticketDAO.hasOnlyCancelledTickets(orderId)) {
+                orderDAO.updateOrderStatus(orderId, "Cancelled");
+            }
+        }
+
+        // Load lại danh sách đơn hàng và chuyển hướng
+        List<Ticket> processingOrders = ticketDAO.getCancelledOrProcessingTickets();
+        request.setAttribute("processingOrders", processingOrders);
+        request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
     }
 
     /**
