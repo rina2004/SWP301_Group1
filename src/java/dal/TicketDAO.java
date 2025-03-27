@@ -157,7 +157,7 @@ public class TicketDAO extends DBContext {
 
     public Ticket getInfor(String ticketId) {
         String sql = "Select * From Ticket where id = ?";
-        try (PreparedStatement stm = connection.prepareStatement(sql);){
+        try (PreparedStatement stm = connection.prepareStatement(sql);) {
             stm.setString(1, ticketId);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
@@ -299,7 +299,6 @@ public class TicketDAO extends DBContext {
 
                     OrderPassenger orderPassenger = new OrderPassenger();
                     orderPassenger.setOrder(order);
-                  
 
                     Ticket ticket = new Ticket();
                     ticket.setId(rs.getString("ticketId"));
@@ -425,7 +424,7 @@ public class TicketDAO extends DBContext {
     }
 
     public int updateTicketStatusByOrderPID(String orderPID, String newStatus) {
-        String sql = "UPDATE Ticket SET status = ? WHERE orderPID = ?";
+        String sql = "UPDATE Ticket SET status = ? WHERE orderPID = ? AND status != 'Cancelled'";
 
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, newStatus);
@@ -436,6 +435,28 @@ public class TicketDAO extends DBContext {
             System.out.println("Error updating ticket status: " + e.getMessage());
             return 0; // Trả về 0 nếu có lỗi xảy ra
         }
+    }
+
+    public boolean hasOnlyCancelledTickets(String orderId) {
+        String sql = """
+        SELECT COUNT(*) 
+        FROM Ticket 
+        WHERE orderPID IN (SELECT id FROM OrderPassenger WHERE orderID = ?) 
+        AND status != 'Cancelled'
+    """;
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, orderId);
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) == 0; 
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking ticket statuses: " + e.getMessage());
+        }
+
+        return false; // Nếu lỗi hoặc còn vé chưa hủy
     }
 
 }

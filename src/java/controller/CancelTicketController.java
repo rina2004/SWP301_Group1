@@ -74,9 +74,7 @@ public class CancelTicketController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        // Lấy orderID từ request
-        String OrderPassengerID = request.getParameter("OrderPassengerID");
-
+        String orderPassengerID = request.getParameter("OrderPassengerID");
 
         // Kiểm tra tài khoản đăng nhập
         HttpSession session = request.getSession();
@@ -86,14 +84,13 @@ public class CancelTicketController extends HttpServlet {
             return;
         }
 
-        // Cập nhật trạng thái tất cả vé của order này
+        // Khởi tạo DAO
         OrderDAO orderDAO = new OrderDAO();
-        int orderUpdated = orderDAO.cancelTicketsByOrderPassengerId(OrderPassengerID);
-        
-        
+
+        // Hủy tất cả vé của hành khách này
+        orderDAO.cancelTicketsByOrderPassengerId(orderPassengerID);
 
         response.sendRedirect("historyBooking");
-
     }
 
     /**

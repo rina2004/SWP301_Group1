@@ -93,10 +93,6 @@
         <servlet-class>controller.ChangePassword</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ChangePasswordProfileControl</servlet-name>
-        <servlet-class>controller.ChangePasswordProfileControl</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>HistoryBookingController</servlet-name>
         <servlet-class>controller.HistoryBookingController</servlet-class>
     </servlet>
@@ -215,10 +211,6 @@
     <servlet-mapping>
         <servlet-name>postController</servlet-name>
         <url-pattern>/post</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ChangePasswordProfileControl</servlet-name>
-        <url-pattern>/changePasswordProfile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>HistoryBookingController</servlet-name>

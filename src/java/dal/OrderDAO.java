@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 import model.Account;
 import model.Order;
 import model.OrderPassenger;
-import model.TicketType;
 
 /**
  *
@@ -42,13 +41,13 @@ public class OrderDAO extends DBContext {
         }
         return null;
     }
-    
+
     public List<Order> getAllbyCustomerID(String cusID) {
         String sql = "Select * From `Order` where customerID = ?";
         List<Order> list = new ArrayList<>();
         PreparedStatement stm;
         ResultSet rs;
-       
+
         try {
             stm = connection.prepareStatement(sql);
             stm.setString(1, cusID);
@@ -64,7 +63,7 @@ public class OrderDAO extends DBContext {
         }
         return list;
     }
-    
+
     public int cancelOrderById(String orderId) {
         String sql = "UPDATE `Order` SET status = 'Processing' WHERE id = ? AND status != 'Cancelled'";
 
@@ -75,7 +74,7 @@ public class OrderDAO extends DBContext {
             System.out.println("Error cancelling order: " + e.getMessage());
         }
 
-        return -1; 
+        return -1;
     }
 
     public List<Order> getOrderHistory(String accountId) {
@@ -153,5 +152,37 @@ public class OrderDAO extends DBContext {
         return -1; // Lỗi xảy ra
     }
 
+   
+
+    public int updateOrderStatus(String orderId, String status) {
+        String sql = "UPDATE `Order` SET status = ? WHERE id = ?";
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, status);
+            stm.setString(2, orderId);
+            return stm.executeUpdate(); // Trả về số Order bị cập nhật
+        } catch (SQLException e) {
+            System.out.println("Error updating order status: " + e.getMessage());
+        }
+
+        return -1; // Lỗi xảy ra
+    }
+
+    public String getOrderIdByOrderPassengerId(String orderPassengerId) {
+        String sql = "SELECT orderID FROM OrderPassenger WHERE id = ?";
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, orderPassengerId);
+            try (ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("orderID"); // Trả về OrderID nếu tìm thấy
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving order ID: " + e.getMessage());
+        }
+
+        return null; // Không tìm thấy OrderID hoặc lỗi xảy ra
+    }
 
 }
