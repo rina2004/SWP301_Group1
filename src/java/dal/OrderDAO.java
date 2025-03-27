@@ -3,13 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dal;
-
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.time.*;
+import java.util.*;
+import java.util.logging.*;
 import model.Order;
 
 /**
@@ -20,6 +17,7 @@ public class OrderDAO extends DBContext{
     
     public Order get(String id) {
         AccountDAO ad = new AccountDAO();
+        TicketTypeDAO ttd = new TicketTypeDAO();
         String sql = "SELECT * FROM swp301.order WHERE id = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, id);
@@ -31,7 +29,8 @@ public class OrderDAO extends DBContext{
                         rs.getString("status"),
                         rs.getTimestamp("time").toLocalDateTime(),
                         rs.getDouble("finalPrice"),
-                        rs.getInt("finalNum"));
+                        rs.getInt("finalNum"),
+                        ttd.get(rs.getString("type")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -56,7 +55,7 @@ public class OrderDAO extends DBContext{
                 list.add(order);
             }
         } catch (SQLException e) {
-            System.out.println(e);;
+            System.out.println(e);
         }
         return list;
     }
@@ -71,17 +70,6 @@ public class OrderDAO extends DBContext{
             System.out.println("Error cancelling order: " + e.getMessage());
         }
 
-        return -1; // Trả về -1 nếu có lỗi xảy ra
-    }
-
-    
-    public static void main(String[] args) {
-        OrderDAO dao = new OrderDAO();
-        String cusID = "f2738d94-097f-11f0-af18-047c163442e4";
-        List<Order> list = dao.getAllbyCustomerID(cusID);
-        
-        for (Order order : list) {
-            System.out.println(order.toString());
-        }
+        return -1; 
     }
 }

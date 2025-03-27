@@ -12,9 +12,11 @@ public class Order {
     private LocalDateTime time;
     private double finalPrice;
     private int finalNum;
+    private TicketType tt;
     public Order() {
     }
-    public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum) {
+
+    public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum, TicketType tt) {
         this.id = id;
         this.customer = customer;
         this.staff = staff;
@@ -22,6 +24,7 @@ public class Order {
         this.time = time;
         this.finalPrice = finalPrice;
         this.finalNum = finalNum;
+        this.tt = tt;
     }
     public String getId() {
         return id;
@@ -78,10 +81,11 @@ public class Order {
         this.finalNum = finalNum;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" + "id=" + id + ", customer=" + customer + ", staff=" + staff + ", status=" + status + ", time=" + time + ", finalPrice=" + finalPrice + ", finalNum=" + finalNum + '}';
+    public TicketType getTt() {
+        return tt;
     }
 
-    
+    public void setTt(TicketType tt) {
+        this.tt = tt;
+    }
 }

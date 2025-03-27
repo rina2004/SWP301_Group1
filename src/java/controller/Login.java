@@ -12,8 +12,9 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
-        request.getRequestDispatcher("Login.jsp").forward(request, response);
+//        String requestedUrl = (String) request.getSession().getAttribute("requestedUrl");
+//        request.setAttribute("requestedUrl", requestedUrl);
+        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -37,13 +38,17 @@ public class Login extends HttpServlet {
         HttpSession session = request.getSession(true);
         session.setAttribute("acc", acc);
         session.setAttribute("user", username);
-        session.setMaxInactiveInterval(60 * 30);
+        session.setMaxInactiveInterval(3600);
+        
         if (rememberMe) {
             Cookie userCookie = new Cookie("username", username);
             userCookie.setMaxAge(7 * 24 * 60 * 60);
             userCookie.setPath("/"); 
             response.addCookie(userCookie);
         }
+//        String requestedUrl = (String) session.getAttribute("requestedUrl");
+//        session.removeAttribute("requestedUrl");
+
         switch (acc.getRole().getId()) {
             case 1: //admin -> ve trang quan ly account
                 response.sendRedirect(request.getContextPath()  + "/account-list");
@@ -54,12 +59,15 @@ public class Login extends HttpServlet {
 //            case 3: //staff 
 //                response.sendRedirect(request.getContextPath() + "/view/order");
 //                break;
-            case 4: // atc ve trang quan ly chuyen bay
+            case 4: // atc -> manage flight
+//                if (requestedUrl != null) {
+//                    response.sendRedirect(requestedUrl);
+//                } else {
                 response.sendRedirect(request.getContextPath() + "/view/list-flight");
                 break;
             default:
                 response.sendRedirect("view/Home.jsp");
-                throw new AssertionError();
+//                throw new AssertionError();
         }
     }
 }

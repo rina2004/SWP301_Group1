@@ -3,18 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package controller;
-import dal.FlightDAO;
-import dal.TicketDAO;
+import dal.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Flight;
-import model.Ticket;
+import model.*;
 
 /**
  *
@@ -25,14 +19,18 @@ public class ListFlightServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         FlightDAO dao = new FlightDAO();
-        ArrayList<Flight> list = dao.list();
-        TicketDAO ticketDao = new TicketDAO();
-        Map<String, Ticket> ticketMap = new HashMap<>();
-        for (Flight flight : list) {
-            Ticket ticket = ticketDao.getByFlightId(flight.getId());
-            ticketMap.put(flight.getId(), ticket);
+        ArrayList<Flight> list;
+        //if sort
+        String order = request.getParameter("order");
+        if (order == null) {
+            list = dao.list();
+        } else {
+            list = switch (order) {
+                case "asc" -> dao.ascendingPrice();
+                case "desc" -> dao.descendingPrice();
+                default -> dao.list();
+            };
         }
-        request.setAttribute("ticketMap", ticketMap);
         request.setAttribute("list", list);
         request.getRequestDispatcher("flight-list.jsp").forward(request, response);
     }

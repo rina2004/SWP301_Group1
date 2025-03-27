@@ -32,19 +32,11 @@ public class OrderFlightController extends HttpServlet {
         FlightDAO flightDAO = new FlightDAO();
         TicketDAO ticketDAO = new TicketDAO();
         ArrayList<Flight> flights = flightDAO.search(departure, destination, departureDate);
-        Map<String, Ticket> ticketMap = new HashMap<>();
-        for (Flight flight : flights) {
-            Ticket ticket = ticketDAO.getByFlightId(flight.getId());
-            if (ticket != null) {
-                ticketMap.put(flight.getId(), ticket);
-            }
-        }
         request.setAttribute("departure", departure);
         request.setAttribute("destination", destination);
         request.setAttribute("departureDate", departureDate);
         request.setAttribute("passengers", passengers);
         request.setAttribute("list", flights);
-        request.setAttribute("ticketMap", ticketMap);
         request.getRequestDispatcher("/view/order-result.jsp").forward(request, response);
     }
 

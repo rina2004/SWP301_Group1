@@ -16,7 +16,6 @@
         <title>Flight Management</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-        <link rel="icon" type="image/png" href="img/logo.jpg"> 
         <style>
             :root {
                 --primary-color: #2563eb;
@@ -25,13 +24,10 @@
                 --text-muted: #6b7280;
                 --border-color: #e5e7eb;
             }
-
             body {
                 background: linear-gradient(to bottom, var(--light-bg) 0%, #ffffff 100%);
                 min-height: 100vh;
             }
-
-            /* Header styles */
             .header-section {
                 background: white;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -41,56 +37,45 @@
                 top: 0;
                 z-index: 1000;
             }
-
-            /* Card styles */
             .card {
                 border: none;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.05);
                 transition: all 0.3s ease;
                 margin-bottom: 1rem;
             }
-
             .card:hover {
                 box-shadow: 0 4px 12px rgba(0,0,0,0.1);
                 transform: translateY(-2px);
             }
-
             .search-section, .filter-section {
                 background: white;
                 border-radius: 8px;
                 padding: 1.5rem;
                 margin-bottom: 1.5rem;
             }
-
-            /* Flight card styling */
             .flight-card {
                 padding: 1.5rem;
             }
-
             .flight-info {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 margin-top: 1rem;
             }
-
             .date-display {
                 font-size: 1.5rem;
                 font-weight: bold;
                 color: #333;
             }
-
             .time-display {
                 font-size: 1.5rem;
                 font-weight: 600;
                 color: var(--primary-color);
             }
-
             .location-display {
                 font-size: 0.875rem;
                 color: var(--text-muted);
             }
-
             .duration-line {
                 position: relative;
                 height: 2px;
@@ -98,7 +83,6 @@
                 flex: 1;
                 margin: 0 1rem;
             }
-
             .duration-text {
                 position: absolute;
                 top: -10px;
@@ -110,24 +94,19 @@
                 font-size: 0.875rem;
                 font-weight: 500;
             }
-
             .price-display {
                 font-size: 1.5rem;
                 font-weight: bold;
                 color: var(--primary-color);
             }
-
-            /* Search box styling */
             .search-box {
                 position: relative;
             }
-
             .search-box .form-control {
                 padding-left: 2.5rem;
                 height: 48px;
                 border-radius: 8px;
             }
-
             .search-icon {
                 position: absolute;
                 left: 1rem;
@@ -135,8 +114,6 @@
                 transform: translateY(-50%);
                 color: var(--text-muted);
             }
-
-            /* Button styling */
             .btn-primary {
                 background-color: var(--primary-color);
                 border-color: var(--primary-color);
@@ -146,12 +123,10 @@
                 background-color: var(--primary-hover);
                 border-color: var(--primary-hover);
             }
-
             .btn-outline-primary {
                 color: var(--primary-color);
                 border-color: var(--primary-color);
             }
-
             .btn-outline-primary:hover,
             .btn-outline-primary.active {
                 background-color: var(--primary-color);
@@ -179,8 +154,6 @@
             .action-buttons .btn:hover {
                 background-color: #f3f4f6;
             }
-
-            /* Empty state styling */
             .no-flights {
                 padding: 3rem;
                 text-align: center;
@@ -189,8 +162,6 @@
                 margin-top: 2rem;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             }
-
-            /* Responsive adjustments */
             @media (max-width: 768px) {
                 .flight-info {
                     flex-direction: column;
@@ -217,6 +188,9 @@
                     border-radius: 0.375rem !important;
                 }
             }
+            .sort-dropdown {
+                min-width: 200px;
+            }
         </style>
     </head>
     <body>
@@ -230,10 +204,28 @@
                     <a href="add-flight" class="btn btn-primary">
                         <i class="fas fa-plus me-2"></i> Add New Flight
                     </a>
+                    <div class="d-flex align-items-center">
+                        <c:if test="${not empty sessionScope.user}">
+                            <div class="d-flex align-items-center">
+                                <p class="me-3 mb-0">
+                                    <i class="fas fa-user me-2"></i>${sessionScope.user}
+                                </p>
+                                <form action="${pageContext.request.contextPath}/logout" method="get" class="mb-0">
+                                    <button type="submit" class="btn btn-secondary">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    </button>
+                                </form>
+                            </div>
+                        </c:if>
+                        <c:if test="${empty sessionScope.user}">
+                            <a href="${pageContext.request.contextPath}/login" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </a>
+                        </c:if>
+                    </div>
                 </div>
             </div>
         </div>
-
         <div class="container">
             <!-- Search Section -->
             <div class="search-section">
@@ -260,31 +252,58 @@
                     </div>
                 </form>
             </div> 
-
-            <!-- Filter Section -->
+            <!-- Filter Section - Thêm dropdown sắp xếp theo giá -->
             <div class="search-section filter-section">
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-                    <h5 class="mb-3 mb-md-0">Filter by Price</h5>
-                    <div class="btn-group">
-                        <a href="filter-flights?priceRange=cheapest" 
-                           class="btn btn-outline-primary ${activeFilter eq 'cheapest' ? 'active' : ''}">
-                            <span>Cheapest</span>
-                            <small class="d-block mt-1">Under 200.000 VND</small>
-                        </a>
-                        <a href="filter-flights?priceRange=best" 
-                           class="btn btn-outline-primary ${activeFilter eq 'best' ? 'active' : ''}">
-                            <span>Best</span>
-                            <small class="d-block mt-1">200.000 - 1.000.000 VND</small>
-                        </a>
-                        <a href="filter-flights?priceRange=quickest" 
-                           class="btn btn-outline-primary ${activeFilter eq 'quickest' ? 'active' : ''}">
-                            <span>Quickest</span>
-                            <small class="d-block mt-1">Above 1.000.000 VND</small>
-                        </a>
+                    <h5 class="mb-3 mb-md-0">Price Filter & Sorting</h5>
+                    <div class="d-flex align-items-center">
+                        <!-- Price Range Buttons -->
+                        <div class="btn-group me-3">
+                            <a href="filter-flights?priceRange=cheap" 
+                               class="btn btn-outline-primary ${activeFilter eq 'cheap' ? 'active' : ''}">
+                                <span>Cheap</span>
+                                <small class="d-block mt-1">Under 1.000.000 VND</small>
+                            </a>
+                            <a href="filter-flights?priceRange=medium" 
+                               class="btn btn-outline-primary ${activeFilter eq 'medium' ? 'active' : ''}">
+                                <span>Medium</span>
+                                <small class="d-block mt-1">1.000.000 - 3.000.000 VND</small>
+                            </a>
+                            <a href="filter-flights?priceRange=expensive" 
+                               class="btn btn-outline-primary ${activeFilter eq 'expensive' ? 'active' : ''}">
+                                <span>Expensive</span>
+                                <small class="d-block mt-1">Above 3.000.000 VND</small>
+                            </a>
+                        </div>
+                        
+                        <!-- Dropdown sắp xếp theo giá -->
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="sortPriceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-sort me-2"></i>
+                                Sort by Price
+                            </button>
+                            <ul class="dropdown-menu sort-dropdown" aria-labelledby="sortPriceDropdown">
+                                <a class="dropdown-item" href="list-flight?order=asc">
+                                    <i class="fas fa-arrow-up me-2"></i>Ascending (Price)
+                                </a>
+                                <a class="dropdown-item" href="list-flight?order=desc">
+                                    <i class="fas fa-arrow-down me-2"></i>Descending (Price)
+                                </a>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-
+                <c:if test="${not empty sessionScope.successMessage}">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        ${sessionScope.successMessage}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <% 
+                            session.removeAttribute("successMessage"); 
+                        %>
+                    </div>
+                </c:if>
             <!-- Flights List -->
             <c:choose>
                 <c:when test="${empty list}">
@@ -310,11 +329,8 @@
                                         </div>
                                         <div class="text-end">
                                             <div class="h4 text-primary mb-0 fw-bold">${flight.getPrice()} VND</div>
-                                            <small class="text-muted">${flight.getSeatType()}</small>
                                         </div>
-                                        
                                     </div>
-
                                     <div class="flight-info mt-4">
                                         <div class="text-center">
                                             <div class="date-display">${flight.getStartingDate()}</div>
@@ -326,14 +342,12 @@
                                                 ${departureCity}
                                             </div>
                                         </div>
-
                                         <div class="duration-line">
                                             <span class="duration-text">
                                                 <i class="fas fa-clock me-1"></i>
                                                 ${flight.getDuration()}
                                             </span>
                                         </div>
-
                                         <div class="text-center">
                                             <div class="date-display">${flight.getLandingDate()}</div>
                                             <div class="time-display">${flight.getLandingHour()}</div>
@@ -344,12 +358,10 @@
                                                 ${destinationCity}
                                             </div>
                                         </div>
-
                                         <div class="action-buttons ms-2">
                                             <a href="view-flight?id=${flight.getId()}" class="btn btn-light" title="View Details">
                                                 <i class="fas fa-eye text-primary"></i>
                                             </a>
-
                                             <a href="update-flight?id=${flight.getId()}" class="btn btn-light" title="Edit">
                                                 <i class="fas fa-edit text-warning"></i>
                                             </a>
@@ -362,7 +374,18 @@
                 </c:otherwise>
             </c:choose>
         </div>
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Optional: Auto-dismiss the alert after 10 seconds
+            document.addEventListener('DOMContentLoaded', function() {
+                var alertElement = document.querySelector('.alert-dismissible');
+                if (alertElement) {
+                    setTimeout(function() {
+                        var bsAlert = new bootstrap.Alert(alertElement);
+                        bsAlert.close();
+                    }, 10000);
+                }
+            });
+        </script>
     </body>
 </html>

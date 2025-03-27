@@ -29,29 +29,30 @@
                 <div class="card-body">
                     <form action="update-flight" method="POST">
                         <input type="hidden" name="id" value="${flight.getId()}">
-
                         <div class="row">
                             <div class="col-md-6">
                                 <h4>Basic Information</h4>
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Flight Name</label>
                                     <input readonly type="text" class="form-control" id="name" name="name" 
-                                           value="${flight.getName()}" required>
+                                           value="${flight.name}" required>
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="code" class="form-label">Flight Code</label>
                                     <input readonly type="text" class="form-control" id="code" name="code" 
-                                           value="${flight.getCode()}" required>
+                                           value="${flight.code}" required>
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="airplane" class="form-label">Airplane ID</label>
                                     <input readonly type="text" class="form-control" id="airplane" name="airplane" 
                                            value="${flight.getAirplane().getId()}" required>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="price" class="form-label">Price</label>
+                                    <input readonly type="text" class="form-control" id="price" name="price" 
+                                           value="${flight.price}" required>
+                                </div>
                             </div>
-
                             <div class="col-md-6">
                                 <h4>Route Information</h4>
                                 <div class="mb-3">
@@ -62,7 +63,6 @@
                                         </c:forEach>
                                     </select>
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="destination" class="form-label">Destination</label>
                                     <select class="form-select" id="destination" name="destination" required>
@@ -71,19 +71,16 @@
                                         </c:forEach>
                                     </select>
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="entryTime" class="form-label">Entry Date</label>
                                     <input type="datetime-local" class="form-control" id="entryTime" name="entryTime" 
                                            value="${flight.getEntryTime()}" required>
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="startingTime" class="form-label">Starting Date</label>
                                     <input type="datetime-local" class="form-control" id="startingTime" name="startingTime" 
                                            value="${flight.getStartingTime()}" required>
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="landingTime" class="form-label">Landing Date</label>
                                     <input type="datetime-local" class="form-control" id="landingTime" name="landingTime" 
@@ -91,7 +88,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="text-center mt-4">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Update Flight
@@ -104,7 +100,6 @@
                 </div>
             </div>
         </div>
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
