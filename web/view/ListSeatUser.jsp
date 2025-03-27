@@ -276,7 +276,7 @@
                 const ticketId = urlParams.get("ticketId");
 
                 let requestData = {seatId: selectedSeatId, ticketId: ticketId};
-                console.log("📤 Gửi request: ", requestData); // Debug
+                console.log("📤 Gửi request: ", requestData); 
 
                 fetch("<%= request.getContextPath() %>/listSeatsUser", {
                     method: "POST",
