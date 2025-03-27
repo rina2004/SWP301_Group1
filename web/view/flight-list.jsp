@@ -25,12 +25,12 @@
                 --text-muted: #6b7280;
                 --border-color: #e5e7eb;
             }
-            
+
             body {
                 background: linear-gradient(to bottom, var(--light-bg) 0%, #ffffff 100%);
                 min-height: 100vh;
             }
-            
+
             /* Header styles */
             .header-section {
                 background: white;
@@ -41,7 +41,7 @@
                 top: 0;
                 z-index: 1000;
             }
-            
+
             /* Card styles */
             .card {
                 border: none;
@@ -49,48 +49,48 @@
                 transition: all 0.3s ease;
                 margin-bottom: 1rem;
             }
-            
+
             .card:hover {
                 box-shadow: 0 4px 12px rgba(0,0,0,0.1);
                 transform: translateY(-2px);
             }
-            
+
             .search-section, .filter-section {
                 background: white;
                 border-radius: 8px;
                 padding: 1.5rem;
                 margin-bottom: 1.5rem;
             }
-            
+
             /* Flight card styling */
             .flight-card {
                 padding: 1.5rem;
             }
-            
+
             .flight-info {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 margin-top: 1rem;
             }
-            
+
             .date-display {
                 font-size: 1.5rem;
                 font-weight: bold;
                 color: #333;
             }
-            
+
             .time-display {
                 font-size: 1.5rem;
                 font-weight: 600;
                 color: var(--primary-color);
             }
-            
+
             .location-display {
                 font-size: 0.875rem;
                 color: var(--text-muted);
             }
-            
+
             .duration-line {
                 position: relative;
                 height: 2px;
@@ -98,7 +98,7 @@
                 flex: 1;
                 margin: 0 1rem;
             }
-            
+
             .duration-text {
                 position: absolute;
                 top: -10px;
@@ -110,24 +110,24 @@
                 font-size: 0.875rem;
                 font-weight: 500;
             }
-            
+
             .price-display {
                 font-size: 1.5rem;
                 font-weight: bold;
                 color: var(--primary-color);
             }
-            
+
             /* Search box styling */
             .search-box {
                 position: relative;
             }
-            
+
             .search-box .form-control {
                 padding-left: 2.5rem;
                 height: 48px;
                 border-radius: 8px;
             }
-            
+
             .search-icon {
                 position: absolute;
                 left: 1rem;
@@ -135,35 +135,35 @@
                 transform: translateY(-50%);
                 color: var(--text-muted);
             }
-            
+
             /* Button styling */
             .btn-primary {
                 background-color: var(--primary-color);
                 border-color: var(--primary-color);
             }
-            
+
             .btn-primary:hover {
                 background-color: var(--primary-hover);
                 border-color: var(--primary-hover);
             }
-            
+
             .btn-outline-primary {
                 color: var(--primary-color);
                 border-color: var(--primary-color);
             }
-            
-            .btn-outline-primary:hover, 
+
+            .btn-outline-primary:hover,
             .btn-outline-primary.active {
                 background-color: var(--primary-color);
                 border-color: var(--primary-color);
                 color: white;
             }
-            
+
             .btn-filter {
                 padding: 0.5rem 1rem;
                 border-radius: 6px;
             }
-            
+
             .action-buttons .btn {
                 padding: 0.5rem;
                 margin: 0 0.25rem;
@@ -175,11 +175,11 @@
                 justify-content: center;
                 transition: all 0.2s ease;
             }
-            
+
             .action-buttons .btn:hover {
                 background-color: #f3f4f6;
             }
-            
+
             /* Empty state styling */
             .no-flights {
                 padding: 3rem;
@@ -189,29 +189,29 @@
                 margin-top: 2rem;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             }
-            
+
             /* Responsive adjustments */
             @media (max-width: 768px) {
                 .flight-info {
                     flex-direction: column;
                     align-items: flex-start;
                 }
-                
+
                 .duration-line {
                     width: 100%;
                     margin: 1rem 0;
                 }
-                
+
                 .action-buttons {
                     margin-top: 1rem;
                     align-self: flex-end;
                 }
-                
+
                 .btn-group {
                     flex-direction: column;
                     width: 100%;
                 }
-                
+
                 .btn-group .btn {
                     margin-bottom: 0.5rem;
                     border-radius: 0.375rem !important;
@@ -308,6 +308,11 @@
                                                 Flight #${flight.getId()}
                                             </span>
                                         </div>
+                                        <div class="text-end">
+                                            <div class="h4 text-primary mb-0 fw-bold">${flight.getPrice()} VND</div>
+                                            <small class="text-muted">${flight.getSeatType()}</small>
+                                        </div>
+                                        
                                     </div>
 
                                     <div class="flight-info mt-4">
@@ -321,14 +326,14 @@
                                                 ${departureCity}
                                             </div>
                                         </div>
-                                        
+
                                         <div class="duration-line">
                                             <span class="duration-text">
                                                 <i class="fas fa-clock me-1"></i>
                                                 ${flight.getDuration()}
                                             </span>
                                         </div>
-                                        
+
                                         <div class="text-center">
                                             <div class="date-display">${flight.getLandingDate()}</div>
                                             <div class="time-display">${flight.getLandingHour()}</div>

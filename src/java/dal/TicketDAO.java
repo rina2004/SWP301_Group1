@@ -3,19 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dal;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Airplane;
-import model.Flight;
-import model.Order;
-import model.Ticket;
-
+import java.sql.*;
+import java.util.*;
+import java.util.logging.*;
+import model.*;
 /**
  *
  * @author A A
@@ -23,7 +14,7 @@ import model.Ticket;
 public class TicketDAO extends DBContext {
 
     public Ticket getByFlightId(String flightID) {
-        OrderDAO od = new OrderDAO();
+        OrderPassengerDAO opd = new OrderPassengerDAO();
         SeatDAO sd = new SeatDAO();
         FlightDAO fd = new FlightDAO();
         String sql = "SELECT * FROM swp301.ticket WHERE flightID = ? ORDER BY price ASC LIMIT 1";
@@ -33,7 +24,7 @@ public class TicketDAO extends DBContext {
             if (rs.next()) {
                 return new Ticket(
                         rs.getString("id"),
-                        od.get(rs.getString("orderID")),
+                        opd.get(rs.getString("orderPID")),
                         fd.getFlightById(rs.getString("flightID")),
                         sd.get(rs.getString("seatID")),
                         rs.getString("status"));
@@ -45,7 +36,7 @@ public class TicketDAO extends DBContext {
     }
 
     public Ticket getByOrderId(String orderID) {
-        OrderDAO od = new OrderDAO();
+        OrderPassengerDAO opd = new OrderPassengerDAO();
         SeatDAO sd = new SeatDAO();
         FlightDAO fd = new FlightDAO();
         String sql = "SELECT * FROM swp301.ticket WHERE orderID = ? ORDER BY price ASC LIMIT 1";
@@ -55,7 +46,7 @@ public class TicketDAO extends DBContext {
             if (rs.next()) {
                 return new Ticket(
                         rs.getString("id"),
-                        od.get(rs.getString("orderID")),
+                        opd.get(rs.getString("orderPID")),
                         fd.getFlightById(rs.getString("flightID")),
                         sd.get(rs.getString("seatID")),
                         rs.getString("status"));
@@ -67,7 +58,7 @@ public class TicketDAO extends DBContext {
     }
 
     public Ticket getBySeatId(String seatID) {
-        OrderDAO od = new OrderDAO();
+        OrderPassengerDAO opd = new OrderPassengerDAO();
         SeatDAO sd = new SeatDAO();
         FlightDAO fd = new FlightDAO();
         String sql = "SELECT * FROM swp301.ticket WHERE seatID = ? ORDER BY price ASC LIMIT 1";
@@ -77,7 +68,7 @@ public class TicketDAO extends DBContext {
             if (rs.next()) {
                 return new Ticket(
                         rs.getString("id"),
-                        od.get(rs.getString("orderID")),
+                        opd.get(rs.getString("orderPID")),
                         fd.getFlightById(rs.getString("flightID")),
                         sd.get(rs.getString("seatID")),
                         rs.getString("status"));
@@ -89,7 +80,7 @@ public class TicketDAO extends DBContext {
     }
 
     public List<Ticket> list() {
-        OrderDAO od = new OrderDAO();
+        OrderPassengerDAO opd = new OrderPassengerDAO();
         SeatDAO sd = new SeatDAO();
         FlightDAO fd = new FlightDAO();
         List<Ticket> list = new ArrayList<>();
@@ -99,7 +90,7 @@ public class TicketDAO extends DBContext {
             while (rs.next()) {
                 list.add(new Ticket(
                         rs.getString("id"),
-                        od.get(rs.getString("orderID")),
+                        opd.get(rs.getString("orderPID")),
                         fd.getFlightById(rs.getString("flightID")),
                         sd.get(rs.getString("seatID")),
                         rs.getString("status")));
@@ -121,8 +112,8 @@ public class TicketDAO extends DBContext {
         stm.setString(1, orderID);
         try (ResultSet rs = stm.executeQuery()) {
             while (rs.next()) {
-                Order order = new Order();
-                order.setId(orderID);
+                OrderPassenger orderP = new OrderPassenger();
+                orderP.setId(orderID);
 
                 Airplane airplane = new Airplane();
                 airplane.setId(rs.getString("airplaneID"));
@@ -133,7 +124,7 @@ public class TicketDAO extends DBContext {
 
                 Ticket ticket = new Ticket();
                 ticket.setId(rs.getString("id"));
-                ticket.setOrder(order);
+                ticket.setOrderP(orderP);
                 ticket.setFlight(flight);
                 ticket.setStatus(rs.getString("status"));
 
@@ -178,38 +169,23 @@ public class TicketDAO extends DBContext {
     }
 
     public Ticket getInfor(String ticketId) {
-        PreparedStatement stm;
-        ResultSet rs;
-
+        ;
         String sql = "Select * From Ticket where id = ?";
-        try {
-            stm = connection.prepareStatement(sql);
+        try (PreparedStatement stm = connection.prepareStatement(sql);){
             stm.setString(1, ticketId);
-            rs = stm.executeQuery();
+            ResultSet rs = stm.executeQuery();
             if (rs.next()) {
-                Order order = new Order();
-                order.setId(rs.getString("orderID"));
+                OrderPassenger orderP = new OrderPassenger();
+                orderP.setId(rs.getString("orderPID"));
                 Ticket ticket = new Ticket();
                 ticket.setId(rs.getString("id"));
-                ticket.setOrder(order);
+                ticket.setOrderP(orderP);
                 ticket.setStatus(rs.getString("status"));
-
                 return ticket;
-
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
         return null;
-    }
-
-    public static void main(String[] args) {
-        TicketDAO ticketDAO = new TicketDAO();
-        String orderID = "VN-A001-1";
-        List<Ticket> t = ticketDAO.getTicketsByOrderID("ORD11123");
-        
-        for (Ticket ticket : t) {
-            System.out.println(ticket.toString());
-        }
     }
 }

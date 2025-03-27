@@ -309,7 +309,7 @@
                 ️Sky Airlines
             </div>
             <ul class="menu">
-                <li><a href="flight">Flights</a></li>
+                <li><a href="view/order">Flights</a></li>
                 <li><a href="blog">Blogs</a></li>
                 <li><a href="#contact">Contact Us</a></li>
             </ul>
@@ -355,7 +355,7 @@
                 <div class="text-section">
                     <h1>Sky Airlines: <br> Soar <span>Beyond</span> <br> <span>the Clouds</span></h1>
                     <p>Soaring High, Connecting Dreams Across the Skies</p>
-                    <a href="flights" class="book-now">Book Now</a>
+                    <a href="view/order" class="book-now">Book Now</a>
                 </div>
                 <div class="plane-image">
                     <img src="img/art.jpg" alt="Airplane"/>
