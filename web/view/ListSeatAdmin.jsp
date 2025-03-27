@@ -250,8 +250,8 @@
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
                 <h2>Chọn một tùy chọn cho ghế</h2>
-                <button onclick="redirectTo('updateSeat')">Cập nhật ghế</button>
-                <button onclick="redirectTo('detailSeat')">Xem chi tiết</button>
+                <button onclick="redirectTo('updateSeats')">Cập nhật ghế</button>
+                <button onclick="redirectTo('detailSeats')">Xem chi tiết</button>
             </div>
         </div>
 

@@ -3,40 +3,39 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
-
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-
 /**
  *
  * @author A A
  */
 public class Flight {
-
     private String id;
     private String name;
     private String code;
-    private String airplaneId;
-    private String departure;
-    private String destination;
+    private Airplane airplane;
+    private Location departure;
+    private Location destination;
     private LocalDateTime entryTime;
     private LocalDateTime startingTime;
     private LocalDateTime landingTime;
-    private byte[] atcId;
+    private String seatType;
+    private int price;
 
-    public Flight() {
-    }
+    public Flight() {}
 
-    public Flight(String id, String name, String code, String airplaneId, String departure, String destination, LocalDateTime entryTime, LocalDateTime startingTime, LocalDateTime landingTime) {
+    public Flight(String id, String name, String code, Airplane airplane, Location departure, Location destination, LocalDateTime entryTime, LocalDateTime startingTime, LocalDateTime landingTime, String seatType, int price) {
         this.id = id;
         this.name = name;
         this.code = code;
-        this.airplaneId = airplaneId;
+        this.airplane = airplane;
         this.departure = departure;
         this.destination = destination;
         this.entryTime = entryTime;
         this.startingTime = startingTime;
         this.landingTime = landingTime;
+        this.seatType = seatType;
+        this.price = price;
     }
 
     public String getId() {
@@ -63,27 +62,27 @@ public class Flight {
         this.code = code;
     }
 
-    public String getAirplaneId() {
-        return airplaneId;
+    public Airplane getAirplane() {
+        return airplane;
     }
 
-    public void setAirplaneId(String airplaneId) {
-        this.airplaneId = airplaneId;
+    public void setAirplane(Airplane airplane) {
+        this.airplane = airplane;
     }
 
-    public String getDeparture() {
+    public Location getDeparture() {
         return departure;
     }
 
-    public void setDeparture(String departure) {
+    public void setDeparture(Location departure) {
         this.departure = departure;
     }
 
-    public String getDestination() {
+    public Location getDestination() {
         return destination;
     }
 
-    public void setDestination(String destination) {
+    public void setDestination(Location destination) {
         this.destination = destination;
     }
 
@@ -107,19 +106,26 @@ public class Flight {
         return landingTime;
     }
 
+    public String getSeatType() {
+        return seatType;
+    }
+
+    public void setSeatType(String seatType) {
+        this.seatType = seatType;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     public void setLandingTime(LocalDateTime landingTime) {
         this.landingTime = landingTime;
     }
 
-    public byte[] getAtcId() {
-        return atcId;
-    }
-
-    public void setAtcId(byte[] atcId) {
-        this.atcId = atcId;
-    }
-
-    //12-2-25 new getset to take distinct date & time
     public String getEntryDate() {
         return entryTime != null ? startingTime.toLocalDate().toString() : "";
     }
@@ -144,7 +150,6 @@ public class Flight {
         return landingTime != null ? landingTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) : "";
     }
 
-    //amount of time to the goal 
     public String getDuration() {
         if (startingTime != null && landingTime != null) {
             Duration duration = Duration.between(startingTime, landingTime);
@@ -160,5 +165,4 @@ public class Flight {
         }
         return "N/A";
     }
-
 }

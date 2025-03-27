@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public class Airplane {
     private String id;
     private String name;
-    private int numOfComs;
     private AirplaneStatus status;
+    private int numOfComs;
     private LocalDateTime maintainanceTime;
     private LocalDateTime usedTime;
     
@@ -37,20 +37,20 @@ public class Airplane {
         this.name = name;
     }
 
-    public int getNumOfComs() {
-        return numOfComs;
-    }
-
-    public void setNumOfComs(int numOfComs) {
-        this.numOfComs = numOfComs;
-    }
-
     public AirplaneStatus getStatus() {
         return status;
     }
 
     public void setStatus(AirplaneStatus status) {
         this.status = status;
+    }
+
+    public int getNumOfComs() {
+        return numOfComs;
+    }
+
+    public void setNumOfComs(int numOfComs) {
+        this.numOfComs = numOfComs;
     }
 
     public LocalDateTime getMaintainanceTime() {
@@ -75,5 +75,17 @@ public class Airplane {
 
     public void setCompartments(ArrayList<Compartment> compartments) {
         this.compartments = compartments;
+    }
+    
+    public Compartment getCompartmentById(String compId) {
+        if (compartments == null) {
+            return null;
+        }
+        for (Compartment compartment : compartments) {
+            if (compartment.getId().equals(compId)) {
+                return compartment;
+            }
+        }
+        return null;
     }
 }

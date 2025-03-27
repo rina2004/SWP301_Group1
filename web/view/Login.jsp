@@ -1,103 +1,129 @@
-<%-- 
-    Document   : Login
-    Created on : Feb 28, 2025, 4:22:46 PM
-    Author     : tungn
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login</title>
-        <style>
-            *{
-                padding: 0px;
-                margin: 0px;
-                box-sizing: border-box;
-            }
-            body{
-                display: flex;
-                height: 100%;
-                background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20221121/pngtree-large-passenger-airplane-boeing-fuselage-blue-photo-image_7404058.jpg");
-                background-repeat: no-repeat;
-                background-size: cover;
-                justify-content: center;
-                align-items: center;
-            }
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-image: url("https://png.pngtree.com/thumb_back/fh260/background/20221121/pngtree-large-passenger-airplane-boeing-fuselage-blue-photo-image_7404058.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+        }
 
-            input{
-                border-radius: 5px;
-                padding: 10px;
-                margin: 10px;
-            }
-            .all {
-                display: flex;
-                width: 600px;
-                background: hsla(205, 100%, 60%, 0.5);
-                padding: 20px;
-                border-radius: 10px;
-                color: black;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-                margin-top: 180px;
-                font-size: 15px;
-            }
+        .login-container {
+            width: 400px;
+            background: rgba(0, 0, 0, 0.7); /* Làm tối khung đăng nhập */
+            padding: 30px;
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: 0.3s;
+        }
 
-            .left, .right {
-                flex: 1;
-                padding: 20px;
-                text-align: center;
-            }
-            .left{
-                margin: 10px;
-            }
-            .left img{
-                width: 60%;
+        .login-container:hover {
+            transform: scale(1.02);
+        }
 
-            }
-            .right input {
-                width: 100%;
-                padding: 10px;
-                margin: 5px 0;
-                border: none;
-                border-radius: 5px;
-            }
+        h3 {
+            color: #f8f9fa;
+            font-weight: bold;
+        }
 
-            .right input[type="submit"] {
-                background: #ff6600;
-                color: black;
-                cursor: pointer;
-            }
-            a:hover{
-                color: blue;
-            }
-            a:active{
-                color: aqua;
-            }
+        .form-label {
+            color: #d1d1d1;
+            font-weight: 500;
+        }
 
-        </style>
-    </head>
-    <body>
-        <form action="<%= request.getContextPath() %>/login" method="post">
-            <div class="all">
-                <div class="left">
-                    <img alt="logo" src="img/logo1.jpg">
-                    <p>Don't have an account?</p>
-                    <a href="<%= request.getContextPath() %>/register">Register here</a>
-                </div>
+        .form-control {
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px;
+        }
 
-                <div class="right">
-                    <p>Username</p>
-                    <input type="text" name="username" required="" placeholder="Enter your username">
-                    <p>Password</p>
-                    <input type="password" name="password" required="" placeholder="Enter your password"><br>
-                    <a href="<%= request.getContextPath()%>/resetpassword">Forgot Password</a>
-                    <p>${error}</p>
-                    <input type="checkbox" name="rememberMe" value="true"> Remember Me
-                    <input type="submit" value="Login">
-                    <p>${error}</p>
-                </div>
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #e06656, #fd9c5d);
+            transform: translateY(-2px);
+        }
+
+        .text-link {
+            color: #ffcc70;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .text-link:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #ff4d4d;
+            margin-top: 10px;
+        }
+
+        .btn-outline-light {
+            border: 1px solid #ffcc70;
+            color: #ffcc70;
+        }
+
+        .btn-outline-light:hover {
+            background: #ffcc70;
+            color: #000;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h3>Login</h3>
+        <form action="<%= request.getContextPath() %>/login" method="post">  
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required placeholder="Enter your username">
             </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            <div class="mb-3 form-check text-start">
+                <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe" value="true">
+                <label class="form-check-label" for="rememberMe" style="color: #d1d1d1;">Remember me</label>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </div>
+            <div>
+                <a href="<%= request.getContextPath()%>/resetpassword" class="text-link">Forgot Password?</a>
+            </div>
+            <p class="error-message">${error}</p>
+            <hr style="border-color: rgba(255, 255, 255, 0.3);">
+            <p style="color: #d1d1d1;">Don't have an account?</p>
+            <a href="<%= request.getContextPath() %>/register" class="btn btn-outline-light w-100">Register here</a>
         </form>
-    </body>
+    </div>
+</body>
 </html>

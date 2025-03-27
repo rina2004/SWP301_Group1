@@ -1,289 +1,494 @@
-INSERT INTO Customer VALUES (NULL), (NULL), (NULL), (NULL), (NULL);
-INSERT INTO Administrator VALUES (NULL, NULL), (NULL, NULL), (NULL, NULL), (NULL, NULL), (NULL, NULL);
-INSERT INTO Staff VALUES (NULL, NOW()), (NULL, NOW()), (NULL, NOW()), (NULL, NOW()), (NULL, NOW());
-INSERT INTO AirTrafficControl VALUES (NULL, NOW()), (NULL, NOW()), (NULL, NOW()), (NULL, NOW()), (NULL, NOW());
-INSERT INTO airplane_status (name) VALUES 
-('Active'), ('Maintenance'), ('Retired'), ('In Use'), ('Under Repair');
+CREATE DATABASE `swp301`;
+USE `swp301`;
+ 
+-------------------------------------------------------------
+-------------------------------------------------------------
+-------------------------------------------------------------
 
-INSERT INTO `Compartment` (`id`, `name`, `airplaneID`, `capacity`) 
-VALUES ('C001', 'Business Class', 'A001', 30);
+CREATE TABLE `Role` (
+    `id` INT AUTO_INCREMENT,
+    `name` VARCHAR(50) UNIQUE NOT NULL,
+    PRIMARY KEY (`id`)
+);
 
-INSERT INTO `Compartment` (`id`, `name`, `airplaneID`, `capacity`) 
-VALUES ('C002', 'Economy', 'A001', 50);
-Delete  From Compartment where id = 'C002';
-select * From Airplane;
-Update  Airplane Set numberOfCompartments = '4' where id = 'A001'; 
-ALTER TABLE Compartment CHANGE COLUMN available status VARCHAR(50);
--- Insert into Account
-INSERT INTO Account (username, password, citizenID, name, dob, phone, address, email) VALUES
-('admin1', 'pass123', '123456789012', 'John Doe', '1990-05-15', '0987654321', '123 Street, City', 'john@example.com'),
-('admin2', 'pass123', '123456789013', 'Jane Smith', '1985-08-21', '0976543210', '456 Avenue, City', 'jane@example.com');
+CREATE TABLE `Account` (
+    `id` VARCHAR(36) DEFAULT (UUID()),
+    `username` VARCHAR(50) UNIQUE NOT NULL,
+    `password` VARCHAR(50) NOT NULL,
+    `roleID` INT,
+    `status` BOOL DEFAULT(TRUE),
+    `citizenID` VARCHAR(12),
+    `name` VARCHAR(50),
+    `dob` DATE,
+    `phone` VARCHAR(10),
+    `address` VARCHAR(255),
+    `email` VARCHAR(255),
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`roleID`) REFERENCES `Role`(`id`)
+);
 
--- Insert dữ liệu cho bảng Role
--- INSERT INTO Role (name) VALUES 
--- ('Admin'), ('Staff'), ('Customer');
+-- Location and Geography Related Tables
+CREATE TABLE `Location` (
+    `id` INT AUTO_INCREMENT,
+    `name` VARCHAR(255) NOT NULL,
+    
+    PRIMARY KEY (`id`)
+);
 
--- Insert dữ liệu cho bảng Account
--- INSERT INTO Account (username, password, citizenID, name, dob, phone, address, email) VALUES 
--- ('admin01', 'password', '123456789012', 'Admin User', '1985-06-15', '0123456789', 'Hanoi', 'admin@example.com'),
--- ('staff01', 'password', '234567890123', 'Staff User', '1990-08-22', '0987654321', 'HCM City', 'staff@example.com'),
--- ('customer01', 'password', '345678901234', 'Customer User', '1995-03-10', '0901234567', 'Da Nang', 'customer@example.com');
+CREATE TABLE `Nation` (
+    `id` INT AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    
+    PRIMARY KEY (`id`)
+);
 
--- Insert dữ liệu cho bảng AccountUserRole
--- INSERT INTO AccountUserRole (accountID, entityID, roleID) VALUES 
--- ('admin01', 1, 1),
--- ('staff01', 2, 2),
--- ('customer01', 3, 3);
+-- Flight and Airplane Related Tables
+CREATE TABLE `AirplaneStatus` (
+    `id` INT AUTO_INCREMENT,
+    `name` VARCHAR(50),
+    
+    PRIMARY KEY (`id`)
+);
 
--- Insert dữ liệu cho bảng Administrator
--- INSERT INTO Administrator (id, roleID) VALUES 
--- ('admin01', 1);
--- Thêm dữ liệu vào bảng Role
-INSERT INTO `Role` (`name`) VALUES
+CREATE TABLE `Airplane` (
+    `id` VARCHAR(10),
+    `name` VARCHAR(50),
+    `statusID` INT,
+    `maintainanceTime` DATETIME,
+    `usedTime` DATETIME,
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`statusID`) REFERENCES `AirplaneStatus`(`id`)
+);
+
+CREATE TABLE `TicketType` (
+    `type` VARCHAR(30) PRIMARY KEY,
+    `description` TEXT,
+    `percent` DECIMAL(10,2),
+    `checkedweightneed` decimal(10,2),
+    `handedweightneed` decimal(10,2)
+);
+
+CREATE TABLE `Compartment` (
+    `id` VARCHAR(20),
+    `type` VARCHAR(30),
+    `airplaneID` VARCHAR(10),
+    `capacity` INT,
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`type`) REFERENCES `TicketType`(`type`),
+    FOREIGN KEY (`airplaneID`) REFERENCES `Airplane`(`id`) ON DELETE CASCADE
+); 
+
+CREATE TABLE `Seat` (
+    `id` VARCHAR(20),
+    `compartmentID` VARCHAR(20),
+    `status` VARCHAR(50),
+    `reason` VARCHAR(250),
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`compartmentID`) REFERENCES `Compartment`(`id`)
+);
+
+CREATE TABLE `Flight` (
+    `id` VARCHAR(10),
+    `name` VARCHAR(50),
+    `code` VARCHAR(50),
+    `airplaneID` VARCHAR(10),
+    `departure` INT NOT NULL,
+    `destination` INT NOT NULL,
+    `entryTime` DATETIME,
+    `startingTime` DATETIME,
+    `landingTime` DATETIME,
+    `seatType` VARCHAR(20),
+    `price` int,
+    
+    PRIMARY KEY (`id`, `seatType`),
+    FOREIGN KEY (`airplaneID`) REFERENCES `Airplane`(`id`),
+    FOREIGN KEY (`departure`) REFERENCES `Location`(`id`),
+    FOREIGN KEY (`destination`) REFERENCES `Location`(`id`)
+);
+
+-- Passenger and Ticket Related Tables
+CREATE TABLE `PassengerType` (
+    `id` INT AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL,
+    `ageMin` INT,
+    `ageMax` INT, 
+    `discountPercentage` DECIMAL(5,2) DEFAULT 0, 
+    
+    PRIMARY KEY (`id`)
+);
+
+-- Order and Passenger Details Tables
+CREATE TABLE `Order` (
+    `id` VARCHAR(10),
+    `customerID` VARCHAR(36),
+    `staffID` VARCHAR(36),
+    `status` VARCHAR(50),
+    `time` DATETIME,
+    `finalPrice` DECIMAL(10,2),
+    `finalNum` INT,
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`customerID`) REFERENCES `Account`(`id`),
+    FOREIGN KEY (`staffID`) REFERENCES `Account`(`id`)
+);
+
+CREATE TABLE `OrderPassenger` (
+    `id` VARCHAR(36),
+    `orderID` VARCHAR(10),
+    `passengerTypeID` INT,
+    `fullName` VARCHAR(100) NOT NULL,
+    `dob` DATE,
+    `nationID` INT,
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`orderID`) REFERENCES `Order`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`passengerTypeID`) REFERENCES `PassengerType`(`id`),
+    FOREIGN KEY (`nationID`) REFERENCES `Nation`(`id`)
+);
+
+CREATE TABLE `Ticket` (
+    `id` VARCHAR(50) DEFAULT (UUID()),
+    `orderPID` VARCHAR(10),
+    `flightID` VARCHAR(10),
+    `seatID` VARCHAR(20),
+    `status` VARCHAR(20),
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`orderPID`) REFERENCES `OrderPassenger`(`id`),
+    FOREIGN KEY (`flightID`) REFERENCES `Flight`(`id`),
+    FOREIGN KEY (`seatID`) REFERENCES `Seat`(`id`)
+);
+
+CREATE TABLE `Luggage` (
+    `id` VARCHAR(10),
+    `customerID` VARCHAR(36),
+    `orderID` VARCHAR(10),
+    `type` VARCHAR(30),
+    `checkedweight` DECIMAL(10,2),
+    `handedweight` DECIMAL(10,2),
+    `existed` BOOL DEFAULT TRUE,
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`customerID`) REFERENCES `Account`(`id`),
+    FOREIGN KEY (`orderID`) REFERENCES `Order`(`id`)
+);
+
+-- Blog and Communication Related Tables
+CREATE TABLE `BlogCategory` (
+    `id` INT AUTO_INCREMENT,
+    `name` VARCHAR(255) UNIQUE,
+    
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `BlogPost` (
+    `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('POST-', UUID())), 
+    `title` VARCHAR(255) NOT NULL,
+    `content` TEXT NOT NULL,
+    `image` TEXT NOT NULL,
+    `authorID` VARCHAR(36) NOT NULL,
+    `categoryID` INT NOT NULL,
+    `published` BOOLEAN DEFAULT FALSE,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (`authorID`) REFERENCES `Account`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`categoryID`) REFERENCES `BlogCategory`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Comment` (
+    `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('CMT-', UUID())),
+    `postID` VARCHAR(41) NOT NULL,
+    `accountID` VARCHAR(36) NOT NULL,
+    `content` TEXT NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`accountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `Blog` (
+    `id` VARCHAR(41) PRIMARY KEY DEFAULT (CONCAT('BLOG-', UUID())),
+    `postID` VARCHAR(41) NOT NULL UNIQUE,
+    `title` VARCHAR(255) NOT NULL,
+    `description` TEXT NOT NULL,
+    `image` VARCHAR(255),
+    `categoryID` int,
+    `authorID` VARCHAR(36) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (`postID`) REFERENCES `BlogPost`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`categoryID`) REFERENCES `BlogCategory`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`authorID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
+);
+
+-- Chat and Messaging Related Tables
+CREATE TABLE `ChatMessage` (
+    `id` VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    `senderAccountID` VARCHAR(36) NOT NULL,
+    `receiverAccountID` VARCHAR(36) NOT NULL,
+    `message` TEXT NOT NULL,
+    `timestamp` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `isRead` BOOLEAN DEFAULT FALSE,
+    
+    FOREIGN KEY (`senderAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`receiverAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
+);
+
+-- Keep the original Role data
+INSERT INTO Role (name) VALUES 
 ('Administrator'),
 ('Customer'),
 ('Staff'),
 ('AirTrafficControl');
 
--- Thêm dữ liệu vào bảng Feature
-INSERT INTO `Feature` (`name`, `url`) VALUES
-('Quản lý tài khoản', '/admin/accounts'),
-('Xem lịch bay', '/customer/flights'),
-('Quản lý chuyến bay', '/staff/flights'),
-('Điều phối không lưu', '/atc/control');
+-- Account table (10 records)
+INSERT INTO Account (username, password, roleID, status, citizenID, name, dob, phone, address, email) VALUES
+('admin1', '123', 1, TRUE, '123456789012', 'Admin 1', '1990-05-15', '0987654321', '123 Main Street, Hanoi', 'admin1@example.com'),
+('admin2', '123', 1, TRUE, '234567890123', 'Admin 2', '1985-08-21', '0976543210', '456 Oak Avenue, Ho Chi Minh City', 'admin2@example.com'),
+('atc1', '123', 4, TRUE, '345678901234', 'Atc 1', '1988-11-30', '0912345678', '789 Pine Road, Da Nang', 'atc1@example.com'),
+('atc2', '123', 4, TRUE, '456789012345', 'Atc 2', '1992-04-12', '0923456789', '101 Maple Lane, Hue', 'atc2@example.com'),
+('staff1', '123', 3, TRUE, '567890123456', 'Staff 1', '1979-07-25', '0934567890', '202 Cedar Street, Nha Trang', 'staff1@example.com'),
+('staff2', '123', 3, FALSE, '678901234567', 'Staff 2', '1995-02-18', '0945678901', '303 Birch Boulevard, Hai Phong', 'staff2@example.com'),
+('user1', '123', 2, TRUE, '789012345678', 'A', '1983-09-09', '0956789012', '404 Elm Circle, Can Tho', 'user1@example.com'),
+('user2', '123', 2, TRUE, '890123456789', 'B', '1991-12-05', '0967890123', '505 Willow Drive, Vung Tau', 'user2@example.com'),
+('user3', '123', 2, TRUE, '901234567890', 'C', '1987-06-28', '0978901234', '606 Spruce Court, Phu Quoc', 'user3@example.com'),
+('user4', '123', 2, TRUE, '012345678901', 'Nguyen Van A', '1994-03-17', '0989012345', '707 Redwood Place, Da Lat', 'abc@example.com'),
+('author1', '123', 2, TRUE, '012345678901', 'Nguyen Van A', '1994-03-17', '0989012345', '707 Redwood Place, Da Lat', 'abc@example.com');
 
--- Thêm dữ liệu vào bảng RoleFeature (Phân quyền cho vai trò)
-INSERT INTO `RoleFeature` (`roleID`, `featureID`) VALUES
-(1, 1), -- Admin có quyền quản lý tài khoản
-(2, 2), -- Customer có quyền xem lịch bay
-(3, 3), -- Staff có quyền quản lý chuyến bay
-(4, 4), -- AirTrafficControl có quyền điều phối không lưu
-(1, 2), -- Admin cũng có thể xem lịch bay
-(3, 2); -- Staff cũng có thể xem lịch bay
+INSERT INTO `Location` (name) VALUES
+('Hà Nội-Nội Bài'),
+('TP. Hồ Chí Minh-Tân Sơn Nhất'),
+('Đà Nẵng-Quốc tế Đà Nẵng'),
+('Nha Trang-Cam Ranh'),
+('Phú Quốc-Quốc tế Phú Quốc'),
+('Huế-Phú Bài'),
+('Hải Phòng-Cát Bi'),
+('Đà Lạt-Liên Khương'),
+('Cần Thơ-Quốc tế Cần Thơ'),
+('Quảng Ninh-Vân Đồn'),
+('Nghệ An-Vinh'),
+('Buôn Ma Thuột-Buôn Ma Thuột'),
+('Quy Nhơn-Phù Cát'),
+('Thanh Hóa-Thọ Xuân'),
+('Quảng Bình-Đồng Hới'),
+('Điện Biên-Điện Biên Phủ'),
+('Pleiku-Pleiku'),
+('Côn Đảo-Côn Sơn'),
+('Tuy Hòa-Tuy Hòa'),
+('Cà Mau-Cà Mau');
 
--- Thêm dữ liệu vào bảng Account (Người dùng mẫu)
-INSERT INTO `Account` (`username`, `password`, `roleID`, `status`, `citizenID`, `name`, `dob`, `phone`, `address`, `email`)
+INSERT INTO Nation (name) VALUES
+('Vietnam'),
+('United States'),
+('Japan'),
+('South Korea'),
+('China'),
+('Singapore'),
+('Thailand'),
+('Malaysia'),
+('Australia'),
+('United Kingdom');
+
+-- AirplaneStatus table already has 5 records, adding 5 more to reach 10
+INSERT INTO AirplaneStatus (name) VALUES 
+('Active'), ('Maintenance'), ('Retired'), ('In Use'), ('Under Repair');
+
+-- Airplane table (10 records)
+INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime) VALUES
+('VN-A001', 'Sky Dragon', 1, '2024-06-15 08:00:00', '2023-12-01 00:00:00'),
+('VN-A002', 'Ocean Star', 2, '2024-07-20 10:30:00', '2024-01-15 00:00:00'),
+('VN-A003', 'Cloud Runner', 3, '2024-05-10 09:15:00', '2023-11-05 00:00:00'),
+('VN-A004', 'Wind Rider', 4, '2024-08-05 11:45:00', '2024-02-20 00:00:00'),
+('VN-A005', 'Sun Chaser', 5, '2024-06-30 13:20:00', '2023-12-25 00:00:00'),
+('VN-A006', 'Moon Walker', 1, '2024-07-12 14:00:00', '2024-01-30 00:00:00'),
+('VN-A007', 'Star Gazer', 2, '2024-05-25 15:30:00', '2023-11-20 00:00:00'),
+('VN-A008', 'Air Master', 3, '2024-08-18 16:45:00', '2024-02-10 00:00:00'),
+('VN-A009', 'Sky Voyager', 4, '2024-06-05 08:30:00', '2023-12-15 00:00:00'),
+('VN-A010', 'Cloud Dancer', 5, '2024-07-28 09:45:00', '2024-01-05 00:00:00');
+
+INSERT INTO `TicketType` (`type`, `description`, `percent`, `checkedweightneed`, `handedweightneed` ) VALUES
+('Basic', 'Standard seating and basic amenities. Additional services: Priority boarding, extra legroom, complimentary beverage service.', 100, 23.0, 7.0),
+('Extra', 'Full business class experience. Additional services: Lie-flat seats, lounge access, premium meals and beverages.', 105, 25.0, 10.0),
+('First Class', 'Luxury air travel experience. Additional services: Private suites, personalized service, gourmet dining, exclusive lounge access.', 150, 50.0, 10.0);
+
+-- Compartment table (10 records)
+INSERT INTO Compartment (id, type, airplaneID, capacity) VALUES
+('VN-A001-B', 'Basic','VN-A001', 40),
+('VN-A001-E', 'Extra','VN-A001', 40),
+('VN-A001-F','First Class','VN-A001', 40),
+('VN-A002-B', 'Basic','VN-A002', 40),
+('VN-A002-E', 'Extra','VN-A002', 40),
+('VN-A002-F','First Class','VN-A002', 40),
+('VN-A003-B', 'Basic','VN-A003', 40),
+('VN-A003-E', 'Extra','VN-A003', 40),
+('VN-A003-F','First Class','VN-A003', 40),
+('VN-A004-B', 'Basic','VN-A004', 40),
+('VN-A004-E', 'Extra','VN-A004', 40),
+('VN-A004-F','First Class','VN-A004', 40),
+('VN-A005-B', 'Basic','VN-A005', 40),
+('VN-A005-E', 'Extra','VN-A005', 40),
+('VN-A005-F','First Class','VN-A005', 40),
+('VN-A006-B', 'Basic','VN-A006', 40),
+('VN-A006-E', 'Extra','VN-A006', 40),
+('VN-A006-F','First Class','VN-A006', 40),
+('VN-A007-B', 'Basic','VN-A007', 40),
+('VN-A007-E', 'Extra','VN-A007', 40),
+('VN-A007-F','First Class','VN-A007', 40),
+('VN-A008-B', 'Basic','VN-A008', 40),
+('VN-A008-E', 'Extra','VN-A008', 40),
+('VN-A008-F','First Class','VN-A008', 40),
+('VN-A009-B', 'Basic','VN-A009', 40),
+('VN-A009-E', 'Extra','VN-A009', 40),
+('VN-A009-F','First Class','VN-A009', 40),
+('VN-A010-B', 'Basic','VN-A010', 40),
+('VN-A010-E', 'Extra','VN-A010', 40),
+('VN-A010-F','First Class','VN-A010', 40);
+
+-- Seat table (10 records)
+INSERT INTO Seat (id, compartmentID, status, reason) VALUES
+('VN-A001-B-1', 'VN-A001-B', 'Active', null),
+('VN-A001-B-2', 'VN-A001-B', 'Active', null),
+('VN-A001-B-3', 'VN-A001-B', 'Active', null),
+('VN-A001-E-4', 'VN-A001-E', 'Active', null),
+('VN-A001-E-5', 'VN-A001-E', 'In Maintenance', 'SUPAIGA'),
+('VN-A001-E-6', 'VN-A001-E', 'Retired', 'SUPANIGA'),
+('VN-A001-F-7', 'VN-A001-F', 'Active', null),
+('VN-A001-F-8', 'VN-A001-F', 'Active', 'SUPAIGA'),
+('VN-A001-F-9', 'VN-A001-F', 'Active', 'SUPANIGA'),
+('VN-A002-B-1', 'VN-A002-B', 'Active', null),
+('VN-A002-B-2', 'VN-A002-B', 'Active', 'SUPAIGA'),
+('VN-A002-B-3', 'VN-A002-B', 'Active', 'SUPANIGA'),
+('VN-A002-E-4', 'VN-A002-E', 'Active', null),
+('VN-A002-E-5', 'VN-A002-E', 'Active', 'SUPAIGA'),
+('VN-A002-E-6', 'VN-A002-E', 'Active', 'SUPANIGA'),
+('VN-A002-F-7', 'VN-A002-F', 'Active', null),
+('VN-A002-F-8', 'VN-A002-F', 'Active', 'SUPAIGA'),
+('VN-A002-F-9', 'VN-A002-F', 'Active', 'SUPANIGA'),
+('VN-A003-B-1', 'VN-A003-B', 'Active', null),
+('VN-A003-B-2', 'VN-A003-B', 'Active', 'SUPAIGA'),
+('VN-A003-B-3', 'VN-A003-B', 'Active', 'SUPANIGA'),
+('VN-A003-E-4', 'VN-A003-E', 'Active', null),
+('VN-A003-E-5', 'VN-A003-E', 'Active', 'SUPAIGA'),
+('VN-A003-E-6', 'VN-A003-E', 'Active', 'SUPANIGA'),
+('VN-A003-F-7', 'VN-A003-F', 'Active', null),
+('VN-A003-F-8', 'VN-A003-F', 'Active', 'SUPAIGA'),
+('VN-A003-F-9', 'VN-A003-F', 'Active', 'SUPANIGA');
+
+-- Flight table (10 records)
+INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime, seatType, price) VALUES 
+    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00', 'Economy', 2100000),
+    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00', 'Premium Economy', 3300000),
+    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00', 'Business', 3500000),
+    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00', 'First Class', 5850000),
+    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2025-05-1 06:00:00', '2025-05-2 07:30:00', '2025-05-2 09:30:00', 'Economy', 2080000),
+    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2025-05-1 06:00:00', '2025-05-2 07:30:00', '2025-05-2 09:30:00', 'Premium Economy', 3280000),
+    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2025-05-1 06:00:00', '2025-05-2 07:30:00', '2025-05-2 09:30:00', 'Business', 3480000),
+    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2025-05-1 06:00:00', '2025-05-2 08:00:00', '2025-05-2 10:00:00', 'Economy', 2150000.00),
+    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2025-05-1 06:00:00', '2025-05-2 08:00:00', '2025-05-2 10:00:00', 'Premium Economy', 3350000),
+    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2025-05-1 06:00:00', '2025-05-2 08:00:00', '2025-05-2 10:00:00', 'Business', 3550000),
+    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2025-05-1 06:00:00', '2025-05-2 09:00:00', '2025-05-2 11:00:00', 'Economy', 2500000),
+    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2025-05-1 06:00:00', '2025-05-2 09:00:00', '2025-05-2 11:00:00', 'Premium Economy', 3700000),
+    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2025-05-1 06:00:00', '2025-05-2 09:00:00', '2025-05-2 11:00:00', 'Business', 3900000),    
+    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2025-05-1 06:00:00', '2025-05-2 10:30:00', '2025-05-2 12:30:00', 'Economy', 2200000),
+    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2025-05-1 06:00:00', '2025-05-2 10:30:00', '2025-05-2 12:30:00', 'Premium Economy', 3400000),
+    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2025-05-1 06:00:00', '2025-05-2 10:30:00', '2025-05-2 12:30:00', 'Business', 3600000),    
+    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2025-05-1 06:00:00', '2025-05-2 07:15:00', '2025-05-2 09:15:00', 'Economy', 2250000),
+    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2025-05-1 06:00:00', '2025-05-2 07:15:00', '2025-05-2 09:15:00', 'Premium Economy', 3450000),
+    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2025-05-1 06:00:00', '2025-05-2 07:15:00', '2025-05-2 09:15:00', 'Business', 3650000),    
+    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2025-05-1 06:00:00', '2025-05-2 07:45:00', '2025-05-2 09:45:00', 'Economy', 2300000),
+    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2025-05-1 06:00:00', '2025-05-2 07:45:00', '2025-05-2 09:45:00', 'Premium Economy', 3500000),
+    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2025-05-1 06:00:00', '2025-05-2 07:45:00', '2025-05-2 09:45:00', 'Business', 3700000),
+    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2025-05-1 06:00:00', '2025-05-2 08:15:00', '2025-05-2 10:15:00', 'Economy', 2250000),
+    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2025-05-1 06:00:00', '2025-05-2 08:15:00', '2025-05-2 10:15:00', 'Premium Economy', 3450000),
+    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2025-05-1 06:00:00', '2025-05-2 08:15:00', '2025-05-2 10:15:00', 'Business', 3650000),
+    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2025-05-1 06:00:00', '2025-05-2 09:30:00', '2025-05-2 11:30:00', 'Economy', 2400000),
+    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2025-05-1 06:00:00', '2025-05-2 09:30:00', '2025-05-2 11:30:00', 'Premium Economy', 3600000),
+    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2025-05-1 06:00:00', '2025-05-2 09:30:00', '2025-05-2 11:30:00', 'Business', 3800000),    
+    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2025-05-1 06:00:00', '2025-05-2 10:00:00', '2025-05-2 12:00:00', 'Economy', 2300000),
+    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2025-05-1 06:00:00', '2025-05-2 10:00:00', '2025-05-2 12:00:00', 'Premium Economy', 3500000),
+    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2025-05-1 06:00:00', '2025-05-2 10:00:00', '2025-05-2 12:00:00', 'Business', 3700000);
+
+INSERT INTO PassengerType (name, ageMin, ageMax, discountPercentage) VALUES
+('Người lớn', 12, 100, 0),
+('Trẻ em', 2, 11, 25),
+('Em bé', 0, 1, 90);
+
+INSERT INTO `Order` (id, customerID, staffID, status, time, finalPrice, finalNum) VALUES
+('ORD001', (SELECT id FROM Account WHERE username = 'user1'), (SELECT id FROM Account WHERE username = 'staff1'), 'Confirmed', '2024-03-15 09:30:00', 0.0, 1),
+('ORD002', (SELECT id FROM Account WHERE username = 'user2'), (SELECT id FROM Account WHERE username = 'staff1'), 'Processing', '2024-03-16 11:45:00', 0.0, 3),
+('ORD003', (SELECT id FROM Account WHERE username = 'user3'), (SELECT id FROM Account WHERE username = 'staff1'), 'Confirmed', '2024-03-17 14:20:00', 0.0, 1),
+('ORD004', (SELECT id FROM Account WHERE username = 'user4'), (SELECT id FROM Account WHERE username = 'staff1'), 'Cancelled', '2024-03-18 16:35:00', 0.0, 1);
+
+INSERT INTO OrderPassenger (id, orderID, passengerTypeID, fullName, dob, nationID)
 VALUES
-('admin', 'admin123', 1, TRUE, '123456789012', 'Nguyễn Văn A', '1985-07-10', '0901234567', 'Hà Nội', 'admin@example.com'),
-('john_doe', 'password123', 2, TRUE, '987654321012', 'John Doe', '1990-03-15', '0912345678', 'TP. Hồ Chí Minh', 'john.doe@example.com'),
-('staff01', 'staffpass', 3, TRUE, '112233445566', 'Trần Thị B', '1988-11-20', '0923456789', 'Đà Nẵng', 'staff01@example.com'),
-('atc01', 'atcpass', 4, TRUE, '667788990011', 'Lê Văn C', '1992-05-25', '0934567890', 'Hải Phòng', 'atc01@example.com');
+('ORD001-1', 'ORD001', 1, 'John Doe', '1990-05-15', 1),
+('ORD002-1', 'ORD002', 1, 'Mary Johnson', '1992-07-22', 2),
+('ORD002-2', 'ORD002', 1, 'Jane Smith', '1985-08-21', 1),
+('ORD002-3', 'ORD002', 2, 'Emily Smith', '2015-03-14', 1),
+('ORD003-1', 'ORD003', 1, 'Robert Johnson', '1988-11-30', 3),
+('ORD004-1', 'ORD004', 1, 'Sarah Williams', '1992-04-12', 4);
 
-Select * From `Account`;
+INSERT INTO Ticket (orderPID, flightID, seatID, status) VALUES
+('ORD001-1', 'FL001', 'VN-A001-B-1', 'Confirmed'),
+('ORD002-1', 'FL001', 'VN-A001-E-4', 'Pending'),
+('ORD002-2', 'FL001', 'VN-A001-E-5', 'Confirmed'),
+('ORD002-3', 'FL001', 'VN-A001-E-6', 'Cancelled'),
+('ORD003-1', 'FL001', 'VN-A001-F-7', 'Checked-In'),
+('ORD004-1', 'FL001', 'VN-A001-F-8', 'Confirmed');
 
-Select * From `Role`;
+INSERT INTO Luggage (id, customerID, orderID, type, checkedweight , handedweight) VALUES
+('ORD001-1', (SELECT id FROM Account WHERE username = 'user1'), 'ORD001', 'Checked', 20.0, 5.0),
+('ORD002-1', (SELECT id FROM Account WHERE username = 'user2'), 'ORD002', 'Cabin', 7.0, 3.0),
+('ORD002-2', (SELECT id FROM Account WHERE username = 'user2'), 'ORD002', 'Checked', 18.2, 3.0),
+('ORD002-3', (SELECT id FROM Account WHERE username = 'user2'), 'ORD002', 'Checked', 25.0, 3.0),
+('ORD003-1', (SELECT id FROM Account WHERE username = 'user3'), 'ORD003', 'Cabin', 8.5, 3.0),
+('ORD004-1', (SELECT id FROM Account WHERE username = 'user4'), 'ORD003', 'Checked', 20.7, 3.0);
 
--- Insert dữ liệu cho bảng Staff
--- INSERT INTO Staff (id, createdDate) VALUES 
--- ('staff01', '2023-05-01 09:00:00');
+-- BlogCategory table (10 records)
+INSERT INTO BlogCategory (name) VALUES 
+('Aviation Technology'),
+('Travel Tips'),
+('Flight Experience'),
+('Airline News'),
+('Destination Guides'),
+('Safety & Security'),
+('Aircraft Reviews'),
+('Customer Service'),
+('Pilot Stories'),
+('Airport Features');
 
--- Insert dữ liệu cho bảng AirTrafficControl
--- INSERT INTO AirTrafficControl (id, name, createdDate) VALUES 
--- ('ATC001', 'Control Tower 1', '2023-01-01 08:00:00');
+-- BlogPost table (10 records)
+INSERT INTO BlogPost (title, content, image, authorID, categoryID, published) VALUES
+('The Future of Aviation Technology', 'Exploring the latest innovations in aviation technology that are reshaping the industry...', 'deal1.jpg', (SELECT id FROM Account WHERE username = 'staff1'), 1, TRUE),
+('Top 10 Travel Tips for First-Time Flyers', 'Essential advice for those taking their first flight, covering everything from booking to landing...', 'deal2.jpg', (SELECT id FROM Account WHERE username = 'staff1'), 2, TRUE),
+('Business Class Experience: Worth the Upgrade?', 'A detailed review of the business class experience and whether the premium price justifies the benefits...', 'deadl3.jpg', (SELECT id FROM Account WHERE username = 'staff1'), 3, TRUE),
+('New Routes Announced for Summer 2024', 'Breaking news about exciting new flight routes being launched for the upcoming summer season...', 'deal4.jpg', (SELECT id FROM Account WHERE username = 'staff1'), 4, TRUE);
 
--- Insert dữ liệu cho bảng Type
--- INSERT INTO Type (id, Name, manufacture, length, weight, height, atcID) VALUES 
--- ('TYP001', 'Boeing 737', 'Boeing', 39.5, 41.4, 12.5, 'ATC001');
--- Insert into Flight
-INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime, atcID) VALUES
-(NULL, 'Flight 101', 'FL101', 'PL1', 'Hanoi', 'Ho Chi Minh City', '2024-03-10 08:00:00', '2025-03-10 09:00:00', '2025-03-10 11:00:00', 'ATC1'),
-(NULL, 'Flight 202', 'FL202', 'PL2', 'Da Nang', 'Singapore', '2024-04-15 10:30:00', '2025-04-15 11:30:00', '2025-04-15 14:00:00', 'ATC2');
--- Insert dữ liệu cho bảng Compartment
--- INSERT INTO Compartment (id, name, typeID, capacity) VALUES 
--- ('C001', 'Business Class', 'TYP001', 50);
+-- Comment table (10 records)
+INSERT INTO Comment (postID, accountID, content) VALUES
+((SELECT id FROM BlogPost WHERE title = 'The Future of Aviation Technology'), (SELECT id FROM Account WHERE username = 'staff1'), 'This article opened my eyes to the amazing innovations coming to aviation!'),
+((SELECT id FROM BlogPost WHERE title = 'Top 10 Travel Tips for First-Time Flyers'), (SELECT id FROM Account WHERE username = 'staff1'), 'Wish I had read this before my first flight. Great advice!'),
+((SELECT id FROM BlogPost WHERE title = 'Business Class Experience: Worth the Upgrade?'), (SELECT id FROM Account WHERE username = 'staff1'), 'Just upgraded on my last flight based on this review and completely agree with your assessment.'),
+((SELECT id FROM BlogPost WHERE title = 'New Routes Announced for Summer 2024'), (SELECT id FROM Account WHERE username = 'staff1'), 'Excited about the new route to Phu Quoc! Already planning my trip.');
 
--- Insert dữ liệu cho bảng Airplane_Status
--- INSERT INTO Airplane_Status (name) VALUES 
--- ('Available'), ('Maintenance'), ('In Use');
+-- Blog table (10 records)
+INSERT INTO Blog (postID, title, description, image, categoryID, authorID) VALUES
+((SELECT id FROM BlogPost WHERE title = 'The Future of Aviation Technology'), 'Aviation Tech Trends', 'Discover the cutting-edge technologies shaping the future of air travel', 'tech_thumb.jpg', 1, (SELECT id FROM Account WHERE username = 'staff1')),
+((SELECT id FROM BlogPost WHERE title = 'Top 10 Travel Tips for First-Time Flyers'), 'First-Time Flyer Guide', 'Essential advice for anyone taking their first flight', 'firstflight_thumb.jpg', 2, (SELECT id FROM Account WHERE username = 'staff1')),
+((SELECT id FROM BlogPost WHERE title = 'Business Class Experience: Worth the Upgrade?'), 'Business Class Analysis', 'Is the premium price worth the luxury experience?', 'business_thumb.jpg', 3, (SELECT id FROM Account WHERE username = 'staff1')),
+((SELECT id FROM BlogPost WHERE title = 'New Routes Announced for Summer 2024'), 'Summer 2024 Routes', 'Exciting new destinations for your summer travel plans', 'routes_thumb.jpg', 4, (SELECT id FROM Account WHERE username = 'staff1'));
 
--- Insert dữ liệu cho bảng Airplane
--- INSERT INTO Airplane (id, name, typeID, statusID, maintainanceTime, usedTime, atcID) VALUES 
--- ('PL001', 'Plane 001', 'TYP001', 1, '2024-02-01 10:00:00', '2024-02-15 10:00:00', 'ATC001');
-
-select * from Account;
-SELECT c.*, t.name AS type_name 
-FROM Compartment c 
-JOIN Type t ON c.typeID= t.id
-WHERE c.id = 'B' AND c.typeID = 'A320';
-
-DELETE FROM Type WHERE id IN ('A115', 'A116');
-SET SQL_SAFE_UPDATES = 0;
-INSERT INTO `AirplaneStatus` (`name`) VALUES 
-('Active'), 
-('Maintenance'), 
-('Decommissioned');
-
-Select s.id, c.name,s.compartmentID,s.available,c.typeID From Seat s Join Compartment c On c.id = s.compartmentID Where s.compartmentID = 'E' And c.typeID = 'A110';
-
-INSERT INTO `Type` (`id`, `Name`, `manufacture`, `length`, `weight`, `height`) VALUES 
-('B737', 'Boeing 737-800', 'Boeing', 39.50, 41413.00, 12.50),
-('A320', 'Airbus A320', 'Airbus', 37.57, 42200.00, 11.76);
-
-INSERT INTO `Type` (`id`, `Name`, `manufacture`, `length`, `weight`, `height`) VALUES 
-('B737', 'Boeing 737-800', 'Boeing', 39.50, 41413.00, 12.50);
-
--- Thêm dữ liệu vào bảng Airplane (giả sử có sẵn Type ID là 'B737' và 'A320')
-INSERT INTO `Airplane` (`id`, `name`, `typeID`, `statusID`, `maintainanceTime`, `usedTime`) VALUES 
-('VN001', 'Boeing 737-800', 'B737', 1, '2025-06-15 12:00:00', '2015-03-10 08:00:00'),
-('VN002', 'Airbus A320', 'A320', 2, '2025-04-10 10:00:00', '2017-07-22 09:30:00');
-
-Select * From AirplaneStatus;
-
--- Thêm máy bay
-INSERT INTO `Airplane` (`id`, `name`, `statusID`, `maintainanceTime`, `usedTime`) VALUES 
-('A003', 'Airbus A320', 2, '2025-03-12 10:00:00', '2022-09-15 14:20:00');
-
--- Thêm chuyến bay
-INSERT INTO `Flight` (`id`, `name`, `code`, `airplaneID`, `departure`, `destination`, `entryTime`, `startingTime`, `landingTime`) VALUES 
-('F001', 'VN001', 'VN001-2025', 'A001', 'Ho Chi Minh', 'Hanoi', '2025-03-15 06:00:00', '2025-03-15 07:00:00', '2025-03-15 09:00:00'),
-('F002', 'VN002', 'VN002-2025', 'A002', 'Hanoi', 'Da Nang', '2025-03-16 10:00:00', '2025-03-16 11:00:00', '2025-03-16 12:30:00');
+-- ChatMessage table (10 records)
+INSERT INTO ChatMessage (senderAccountID, receiverAccountID, message, timestamp, isRead) VALUES
+((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user1'), 'Hi Jane, I have a question about my upcoming flight.', '2024-03-15 10:15:00', TRUE),
+((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user2'), 'Sure John, how can I help you?', '2024-03-15 10:18:00', TRUE),
+((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user3'), 'Sarah, could you check if there are any window seats available on flight VN303?', '2024-03-16 14:30:00', TRUE),
+((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user4'), 'I just checked and there are 3 window seats available. Would you like me to book one for you?', '2024-03-16 14:45:00', TRUE);
 
 
-
-SELECT c.*, t.name AS type_name FROM Compartment c JOIN Type t ON c.typeID = t.id;
-Select * From Compartment ;
-ALTER TABLE Compartment DROP PRIMARY KEY, ADD PRIMARY KEY (id, typeID);
-Select id From `Type` Where id = 'A109';
-Select Name From `Type` Where Name = 'Airbus A109';
-Select * From Seat ;
-
-Select * From Flight;
-
-Select * From Ticket;
-DELETE FROM `Seat` WHERE `id` = 'B1';
-Delete From `Compartment` Where `id` = 'E';
-
-SELECT * FROM Flight;
-SELECT * FROM Seat;
-SELECT * FROM `Order`;
-
-SELECT c.id, c.name AS compartment_name, t.id AS type_id, t.name AS type_name, c.capacity
-FROM Compartment c
-JOIN Type t ON c.typeID = t.id;
-
-ALTER TABLE `Seat` DROP FOREIGN KEY `seat_ibfk_1`;
-ALTER TABLE `Seat` ADD CONSTRAINT `seat_ibfk_1` 
-FOREIGN KEY (`compartmentID`) REFERENCES `Compartment`(`id`) ON DELETE CASCADE;
-
-SELECT * FROM Compartment;
-
-SELECT * FROM Seat Where typeID = 'A112' and compartmentID = 'F';
-Select * FROM Flight;
-DELETE FROM Type;
-drop table type;
-DESCRIBE Type;
-DESCRIBE Compartment;
-DESCRIBE Seat;
-SELECT CONSTRAINT_NAME
-FROM information_schema.KEY_COLUMN_USAGE
-WHERE TABLE_NAME = 'Compartment' AND COLUMN_NAME = 'typeID';
-ALTER TABLE Compartment DROP FOREIGN KEY compartment_ibfk_1;
-drop table Type;
-DESC AirPlane;
-DESC Compartment;
-Select s.id, c.name, s.compartmentID, s.status, c.typeID
-From Seat s
-Join Compartment c On c.id = s.compartmentID
-Where s.compartmentID = 'B739' And c.typeID = 'Economy';
-
-SELECT COLUMN_NAME, CONSTRAINT_NAME, TABLE_NAME 
-FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
-WHERE TABLE_NAME = 'Seat';
-
-Select * From Seat s join Compartment c On c.id = s.compartmentID  Where s.id = 'A115_B_10';
-
-SET SQL_SAFE_UPDATES = 0;
-ALTER TABLE Seat ADD COLUMN typeID VARCHAR(10);
-ALTER TABLE Seat ADD CONSTRAINT fk_seat_type FOREIGN KEY (typeID) REFERENCES Type(id) ON DELETE CASCADE;
-INSERT INTO Type (id, Name, manufacture, length, weight, height) 
-VALUES ('B730', 'Boeing 737-800', 'Boeing', 39.50, 41413.00, 12.50);
-
-INSERT INTO `Airplane` (`id`, `name`, `typeID`, `statusID`, `maintainanceTime`, `usedTime`) VALUES
-('VN-A123', 'Boeing 737-800', 'B738', 1, '2025-06-01 12:00:00', '2023-03-15 08:30:00');
-
-INSERT INTO `Flight` (`id`, `name`, `code`, `airplaneID`, `departure`, `destination`, `entryTime`, `startingTime`, `landingTime`) VALUES
-('FL001', 'VN123', 'VN123-B738', 'VN-A123', 'Hà Nội', 'TP.HCM', '2025-03-20 06:00:00', '2025-03-20 07:30:00', '2025-03-20 09:00:00');
-
-insert into `ticket` (`id`,`flightID`,`type`,`Price`,`Status`) Value('T001','FL001','available','9000','Available');
-
-Select id From `Type` Where id = 'A115';
-ALTER TABLE Seat CHANGE status status VARCHAR(20);
-UPDATE Seat SET status = 'Maintained' WHERE id ='A115_B_2';
-UPDATE Seat SET status = 'Booked' WHERE status = '0'; -- Nếu trước đó 0 là false  
-ALTER TABLE Compartment MODIFY COLUMN id VARCHAR(20);
-ALTER TABLE Seat MODIFY COLUMN compartmentID VARCHAR(20);
-ALTER TABLE Seat ADD CONSTRAINT fk_seat_compartment 
-FOREIGN KEY (compartmentID) REFERENCES Compartment(id) ON DELETE CASCADE;
-INSERT INTO AirplaneStatus (id, name) 
-
-VALUES 
-(1, 'Active'), 
-(2, 'Maintenance'), 
-(3, 'Out of Service');
-ALTER TABLE Airplane ADD COLUMN numberOfCompartments INT NOT NULL DEFAULT 0;
-
-INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime)
-VALUES 
-('A001', 'Boeing 747', 1, '2025-03-18 12:00:00', '2025-03-10 08:00:00'),
-('A002', 'Airbus A320', 2, '2025-03-19 14:00:00', '2025-03-11 10:00:00');
-UPDATE Airplane SET numberOfCompartments = 4 WHERE id = 'A002';
-Select * From Airplane;
-
--- Insert into Luggage
-INSERT INTO Luggage (id, customerID, orderID, type, weight) VALUES
-('O1', 'C1', (SELECT id FROM `Order` ORDER BY time DESC LIMIT 1), 'Checked', 20.5),
-('O2', 'C2', (SELECT id FROM `Order` ORDER BY time DESC LIMIT 1 OFFSET 1), 'Cabin', 7.0);
-
--- Insert dữ liệu cho bảng Flight
--- INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime, atcID) VALUES 
--- ('FL001', 'Hanoi to HCM', 'VN123', 'PL001', 'Hanoi', 'HCM City', '2024-02-25 06:00:00', '2024-02-25 07:00:00', '2024-02-25 09:00:00', 'ATC001');
-
--- Insert dữ liệu cho bảng Seat
--- INSERT INTO Seat (id, compartmentID, available) VALUES 
--- ('S001', 'C001', TRUE);
-
--- Insert dữ liệu cho bảng Order
--- INSERT INTO Order (id, customerID, staffID, status, time) VALUES 
--- ('O001', 'customer01', 'staff01', 'Confirmed', '2024-02-20 14:30:00');
-
--- Insert dữ liệu cho bảng Ticket
--- INSERT INTO Ticket (id, staffID, orderID, flightID, seatID, type, Price, Status) VALUES 
--- ('T001', 'staff01', 'O001', 'FL001', 'S001', 'Economy', 150.00, 'Booked');
-
--- Insert dữ liệu cho bảng Luggage
--- INSERT INTO Luggage (id, customerID, orderID, type, weight) VALUES 
--- ('L001', 'customer01', 'O001', 'Checked', 20.5);
-
--- Insert dữ liệu cho bảng BlogCategory
--- INSERT INTO BlogCategory (name) VALUES 
--- ('Technology'), ('Aviation'), ('Travel');
-
--- Insert dữ liệu cho bảng BlogPost
--- INSERT INTO BlogPost (title, content, image, authorID) VALUES 
--- ('Tech Innovations', 'Latest in aviation technology...', 'tech.jpg', '5394ac40-f85c-11ef-86fb-3c2c30e1270f'),
--- ('New Flight Routes', 'Exciting new travel destinations...', 'travel.jpg', '5394ac40-f85c-11ef-86fb-3c2c30e1270f'),
--- ('Pilot Training', 'Understanding the new pilot training process...', 'pilot.jpg', '5394ac40-f85c-11ef-86fb-3c2c30e1270f'),
--- ('Airplane Maintenance', 'How maintenance is conducted...', 'maintenance.jpg', '5394ac40-f85c-11ef-86fb-3c2c30e1270f'),
--- ('Flight Safety', 'Ensuring passenger safety...', 'safety.jpg', '5394ac40-f85c-11ef-86fb-3c2c30e1270f'),
--- ('Airport Operations', 'Behind the scenes at the airport...', 'operations.jpg', '5394ac40-f85c-11ef-86fb-3c2c30e1270f'),
--- ('Customer Experience', 'Enhancing customer journeys...', 'customer.jpg', '5394ac40-f85c-11ef-86fb-3c2c30e1270f');
-
--- Insert dữ liệu cho bảng Blog
-INSERT INTO Blog (postID, title, description, image, categoryID) VALUES 
-('POST-950d0b80-f86d-11ef-86fb-3c2c30e1270f', 'Tech Innovations', 'A deep dive into the latest aviation tech.', 'deal1.jpg', 1),
-('POST-950d1027-f86d-11ef-86fb-3c2c30e1270f', 'New Flight Routes', 'Discover new airline routes worldwide.', 'deal2.jpg', 2),
-('POST-950d116d-f86d-11ef-86fb-3c2c30e1270f', 'Pilot Training', 'How pilots are trained for modern aircraft.', 'deal3.jpg', 2),
-('POST-950d12df-f86d-11ef-86fb-3c2c30e1270f', 'Airplane Maintenance', 'The crucial process of airplane maintenance.', 'deal4.jpg', 1),
-('POST-950d1513-f86d-11ef-86fb-3c2c30e1270f', 'Flight Safety', 'Measures taken to ensure safe flights.', 'deal2.jpg', 2),
-('POST-950d162f-f86d-11ef-86fb-3c2c30e1270f', 'Airport Operations', 'Insights into daily airport operations.', 'deal3.jpg', 3),
-('POST-950d1729-f86d-11ef-86fb-3c2c30e1270f', 'Customer Experience', 'Improving passenger satisfaction in aviation.', 'deal1.jpg', 3);
-
--- Insert dữ liệu cho bảng Comment
-INSERT INTO Comment (postID, accountID, content) VALUES 
-('POST-950d0b80-f86d-11ef-86fb-3c2c30e1270f', '5394adb9-f85c-11ef-86fb-3c2c30e1270f', 'Great article!'),
-('POST-950d1027-f86d-11ef-86fb-3c2c30e1270f', '5394adb9-f85c-11ef-86fb-3c2c30e1270f', 'Very informative!');
-
--- Insert dữ liệu cho bảng PostLike
-INSERT INTO PostLike (postID, accountID) VALUES 
-('POST-950d0b80-f86d-11ef-86fb-3c2c30e1270f', '5394adb9-f85c-11ef-86fb-3c2c30e1270f'),
-('POST-950d1027-f86d-11ef-86fb-3c2c30e1270f', '5394adb9-f85c-11ef-86fb-3c2c30e1270f');

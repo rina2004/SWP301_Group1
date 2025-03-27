@@ -8,65 +8,64 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Airplane;
 import model.Compartment;
+import model.TicketType;
 
 /**
  *
- * @author tungn
+ * @author A A
  */
-public class CompartmentDAO extends DBContext {
-
-    public void createCompartmentandSeat(Airplane airplane, Map<String, Integer> compartmentData) {
-        String updateAir = "UPDATE Airplane SET numOfComs = ? WHERE id = ?";
-        String insertCom = "INSERT INTO Compartment (id, name, airplaneID, capacity) VALUES (?, ?, ?, ?)";
-        String insertSeat = "INSERT INTO Seat (id, compartmentid, status) VALUES (?, ?, ?)";
-
-        try {
-            PreparedStatement stmUpdate = connection.prepareStatement(updateAir);
-            PreparedStatement stmInsertCom = connection.prepareStatement(insertCom);
-            PreparedStatement stmInsertSeat = connection.prepareStatement(insertSeat);
-
-            // Cập nhật số khoang vào bảng Airplane
-            stmUpdate.setInt(1, airplane.getNumOfComs());
-            stmUpdate.setString(2, airplane.getId());
-            stmUpdate.executeUpdate();
-
-            for (Map.Entry<String, Integer> entry : compartmentData.entrySet()) {
-                String type = entry.getKey();  // "B", "F", "E"
-                int capacity = entry.getValue();
-
-                // ID khoang: A002-B1, A002-F1, A002-E1
-                String compartmentID = airplane.getId() + "-" + type + "1";
-
-                // Thêm khoang
-                stmInsertCom.setString(1, compartmentID);
-                stmInsertCom.setString(2, type);  // "B", "F", "E"
-                stmInsertCom.setString(3, airplane.getId());
-                stmInsertCom.setInt(4, capacity);
-                stmInsertCom.executeUpdate();
-
-                // Thêm ghế vào khoang
-                for (int j = 1; j <= capacity; j++) {
-                    String idSeat = compartmentID + "-" + j;  
-
-                    stmInsertSeat.setString(1, idSeat);
-                    stmInsertSeat.setString(2, compartmentID);
-                    stmInsertSeat.setString(3, "Available");
-                    stmInsertSeat.executeUpdate();
-                }
+public class CompartmentDAO extends DBContext{
+    public Compartment get(String id) {
+        TicketTypeDAO ttd = new TicketTypeDAO();
+        AirplaneDAO ad = new AirplaneDAO();
+        String sql = "SELECT * FROM swp301.compartment WHERE id = ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return new Compartment(rs.getString("id"),
+                        ttd.get(rs.getString("type")),
+                        ad.get(rs.getString("airplaneID")),
+                        rs.getInt("capacity"));
             }
-
-            // Đóng kết nối
-            stmUpdate.close();
-            stmInsertCom.close();
-            stmInsertSeat.close();
-
-        } catch (SQLException e) {
-            System.out.println("❌ Lỗi: " + e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(CompartmentDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
+    }
+    public ArrayList<Compartment> getCompartmentsByFlightId(String flightId) {
+        ArrayList<Compartment> compartments = new ArrayList<>();
+        String sql = """
+            SELECT c.id, c.type, tt.price, c.airplaneID
+            FROM Flight f
+            JOIN Airplane a ON f.airplaneID = a.id
+            JOIN Compartment c ON a.id = c.airplaneID
+            JOIN TicketType tt ON c.type = tt.type
+            WHERE f.id = ?;
+        """;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, flightId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                TicketType ticketType = new TicketType();
+                ticketType.setType(rs.getString("type"));
+                ticketType.setPrice(rs.getDouble("price"));
+                Airplane airplane = new Airplane();
+                airplane.setId(rs.getString("airplaneID"));
+                Compartment compartment = new Compartment();
+                compartment.setId(rs.getString("id"));
+                compartment.setType(ticketType);
+                compartment.setAirplane(airplane);
+                compartments.add(compartment);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return compartments;
     }
 }

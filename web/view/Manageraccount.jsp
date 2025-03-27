@@ -43,21 +43,24 @@
                         </div>
                     </div>
 
-                    <form action="acc" method="GET">
+                    <form action="account-list" method="GET" style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
                         <label for="roleFilter">Filter by Role:</label>
                         <select name="role" id="roleFilter" onchange="this.form.submit()">
                             <option value="">All</option>
-                            <option value="Customer" ${param.role == 'Customer' ? 'selected' : ''}>Customer</option>
-                            <option value="Staff" ${param.role == 'Staff' ? 'selected' : ''}>Staff</option>
-                            <option value="AirTrafficControl" ${param.role == 'AirTrafficControl' ? 'selected' : ''}>Air Traffic Control</option>
+                            <option value="2" ${param.role == '2' ? 'selected' : ''}>Customer</option>
+                            <option value="3" ${param.role == '3' ? 'selected' : ''}>Staff</option>
+                            <option value="4" ${param.role == '4' ? 'selected' : ''}>Air Traffic Control</option>
                         </select>
+
+                        <input type="text" name="search" value="${param.search}" placeholder="Enter username..." class="form-control">
+
+                        <button type="submit" class="btn btn-primary">Search</button>
+
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href = 'account-list'">Reset Filters</button>
                     </form>
 
 
-                    <!-- Form tìm kiếm -->                   
-                    <div class="form-group">
-                        <input  type="text" id="searchInput" class="form-control" placeholder="Enter username..." onkeyup="filterTable()">
-                    </div>
+
 
                     <table class="table table-striped table-hover">
                         <thead>
@@ -66,10 +69,11 @@
                                 <th>Username</th>
                                 <th>Password</th>
                                 <th>
-                                    <a href="?sortOrder=asc">▲</a>
+                                    <a href="?sortOrder=asc&role=${param.role}&search=${param.search}">▲</a>
                                     Role
-                                    <a href="?sortOrder=desc">▼</a>
+                                    <a href="?sortOrder=desc&role=${param.role}&search=${param.search}">▼</a>
                                 </th>
+
 
                                 <th>Status</th>
                                 <th>Actions</th>
@@ -88,7 +92,7 @@
 
                                     <td>${user.status ? 'Active' : 'Inactive'}</td>
                                     <td>
-                                        <a href="loadacc?uid=${user.id}" class="edit" data-toggle="modal">
+                                        <a href="account-update?uid=${user.id}" class="edit" data-toggle="modal">
                                             <i class="material-icons" title="Edit">&#xE254;</i>
                                         </a>
 
@@ -104,7 +108,7 @@
             <div id="addUserModal" class="modal fade">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form action="addUser" method="post">
+                        <form action="account-addUser" method="post">
                             <div class="modal-header">
                                 <h4 class="modal-title">Add User</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -147,18 +151,18 @@
 
             <div class="pagination">
                 <c:if test="${currentPage > 1}">
-                    <a href="?page=1&sortOrder=${param.sortOrder}&role=${param.role}">&laquo; First</a>
-                    <a href="?page=${currentPage - 1}&sortOrder=${param.sortOrder}&role=${param.role}">Previous</a>
+                    <a href="?page=1&sortOrder=${param.sortOrder}&role=${param.role}&search=${param.search}">&laquo; First</a>
+                    <a href="?page=${currentPage - 1}&sortOrder=${param.sortOrder}&role=${param.role}&search=${param.search}">Previous</a>
                 </c:if>
 
                 <c:forEach var="i" begin="1" end="${totalPages}">
-                    <a href="?page=${i}&sortOrder=${param.sortOrder}&role=${param.role}" 
+                    <a href="?page=${i}&sortOrder=${param.sortOrder}&role=${param.role}&search=${param.search}" 
                        class="${i == currentPage ? 'active' : ''}">${i}</a>
                 </c:forEach>
 
                 <c:if test="${currentPage < totalPages}">
-                    <a href="?page=${currentPage + 1}&sortOrder=${param.sortOrder}&role=${param.role}">Next</a>
-                    <a href="?page=${totalPages}&sortOrder=${param.sortOrder}&role=${param.role}">Last &raquo;</a>
+                    <a href="?page=${currentPage + 1}&sortOrder=${param.sortOrder}&role=${param.role}&search=${param.search}">Next</a>
+                    <a href="?page=${totalPages}&sortOrder=${param.sortOrder}&role=${param.role}&search=${param.search}">Last &raquo;</a>
                 </c:if>
             </div>
 
@@ -167,53 +171,8 @@
 
 
 
+
             <script src="js/manager.js" type="text/javascript"></script>
-            <script>
-                            function filterTable() {
-                                var input, filter, table, tr, td, i, txtValue;
-                                input = document.getElementById("searchInput");
-                                filter = input.value;
-                                table = document.querySelector(".table");
-                                tr = table.getElementsByTagName("tr");
-
-                                var noResult = true; // Biến kiểm tra có kết quả hay không
-
-                                for (i = 1; i < tr.length; i++) {
-                                    td = tr[i].getElementsByTagName("td")[1]; // Lấy cột username
-                                    if (td) {
-                                        txtValue = td.textContent || td.innerText;
-                                        if (txtValue.indexOf(filter) > -1) {
-                                            tr[i].style.display = "";
-                                            noResult = false; // Tìm thấy ít nhất một kết quả
-                                        } else {
-                                            tr[i].style.display = "none";
-                                        }
-                                    }
-                                }
-
-                                // Hiển thị thông báo nếu không tìm thấy kết quả
-                                var messageRow = document.getElementById("noResultRow");
-                                if (noResult) {
-                                    if (!messageRow) { // Nếu chưa có hàng thông báo thì thêm vào
-                                        messageRow = document.createElement("tr");
-                                        messageRow.id = "noResultRow";
-                                        var td = document.createElement("td");
-                                        td.colSpan = 6; // Merge cột
-                                        td.style.textAlign = "center";
-                                        td.style.fontWeight = "bold";
-                                        td.innerText = "No matching accounts found!";
-                                        messageRow.appendChild(td);
-                                        table.appendChild(messageRow);
-                                    }
-                                } else {
-                                    if (messageRow) { // Nếu có thông báo thì xoá đi
-                                        messageRow.remove();
-                                    }
-                                }
-                            }
-
-            </script>
-
 
     </body>
 </html>

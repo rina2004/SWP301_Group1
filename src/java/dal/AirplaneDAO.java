@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import model.AirplaneStatus;
 import model.Compartment;
 import model.Seat;
+import model.TicketType;
 
 /**
  *
@@ -28,7 +29,7 @@ public class AirplaneDAO extends DBContext {
                                     VALUES (?, ?, ?, ? ,?, ?)
                                     """;
             String insertCompartment = """
-                                       INSERT INTO swp301.compartment (id, name, airplaneID, capacity) 
+                                       INSERT INTO swp301.compartment (id, type, airplaneID, capacity) 
                                        VALUES (?, ?, ?, ?)
                                        """;
             String insertSeat = """
@@ -48,7 +49,7 @@ public class AirplaneDAO extends DBContext {
             for (Compartment compartment : airplane.getCompartments()) {
                 PreparedStatement stm_insertCompartment = connection.prepareStatement(insertCompartment);
                 stm_insertCompartment.setString(1, compartment.getId());
-                stm_insertCompartment.setString(2, compartment.getName());
+                stm_insertCompartment.setString(2, compartment.getType().getType());
                 stm_insertCompartment.setString(3, airplane.getId());
                 stm_insertCompartment.setInt(4, compartment.getCapacity());
                 stm_insertCompartment.executeUpdate();
@@ -88,11 +89,9 @@ public class AirplaneDAO extends DBContext {
         String sql = "SELECT * FROM swp301.airplane WHERE id = ?";
 
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
-
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
-
             if (rs.next()) {
                 airplane = new Airplane();
                 airplane.setId(rs.getString("id"));
@@ -159,7 +158,7 @@ public class AirplaneDAO extends DBContext {
             }
 
             String queryCompartment = """
-                        SELECT id, name, capacity 
+                        SELECT id, type, capacity 
                         FROM compartment 
                         WHERE airplaneID = ?
                         """;
@@ -171,7 +170,11 @@ public class AirplaneDAO extends DBContext {
             while (rsCompartment.next()) {
                 Compartment compartment = new Compartment();
                 compartment.setId(rsCompartment.getString("id"));
-                compartment.setName(rsCompartment.getString("name"));
+
+                TicketType ticketType = new TicketType();
+                ticketType.setType(rsCompartment.getString("type"));
+                compartment.setType(ticketType);
+
                 compartment.setCapacity(rsCompartment.getInt("capacity"));
                 compartment.setAirplane(airplane);
                 compartments.add(compartment);
@@ -203,5 +206,69 @@ public class AirplaneDAO extends DBContext {
             Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return airplane;
+    }
+
+    public void update(Airplane airplane) {
+        try {
+            connection.setAutoCommit(false);
+
+            String updateAirplane = """
+                                UPDATE swp301.airplane 
+                                SET statusID = ?, numOfComs = ?, 
+                                    maintainanceTime = ?, usedTime = ?
+                                WHERE id = ?
+                                """;
+            PreparedStatement stm_updateAirplane = connection.prepareStatement(updateAirplane);
+            stm_updateAirplane.setInt(1, airplane.getStatus().getId());
+            stm_updateAirplane.setInt(2, airplane.getNumOfComs());
+            stm_updateAirplane.setTimestamp(3, Timestamp.valueOf(airplane.getMaintainanceTime()));
+            stm_updateAirplane.setTimestamp(4, Timestamp.valueOf(airplane.getUsedTime()));
+            stm_updateAirplane.setString(5, airplane.getId());
+            stm_updateAirplane.executeUpdate();
+
+            String updateCompartment = """
+                                       UPDATE swp301.compartment
+                                       SET capacity = ?
+                                       WHERE id = ?
+                                       """;
+            for (Compartment compartment : airplane.getCompartments()) {
+                PreparedStatement stm_updateCompartment = connection.prepareStatement(updateCompartment);
+                stm_updateCompartment.setInt(1, compartment.getCapacity());
+                stm_updateCompartment.setString(2, compartment.getId());
+                stm_updateCompartment.executeUpdate();
+                
+                String updateSeat = """
+                                UPDATE swp301.seat 
+                                SET status = ? 
+                                WHERE id = ?
+                                """;
+                for (Seat seat : compartment.getSeats()) {
+                    PreparedStatement stm_updateSeat = connection.prepareStatement(updateSeat);
+                    stm_updateSeat.setString(1, seat.getStatus());
+                    stm_updateSeat.setString(2, seat.getId());
+                    stm_updateSeat.executeUpdate();
+                }
+            }
+
+            connection.commit();
+        } catch (SQLException ex) {
+            Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }

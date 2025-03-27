@@ -3,7 +3,6 @@
     Created on : 3 Mar 2025, 09:46:14
     Author     : A A
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -68,36 +67,31 @@
                         <h2 class="mb-0">Flight Booking</h2>
                     </div>
                     <div>
-                        <a href="search-flights" class="btn btn-outline-primary">
+                        <a href="order" class="btn btn-outline-primary">
                             <i class="fas fa-search me-1"></i> Search Flights
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="container confirmation-container text-center">
             <div class="success-icon">
                 <i class="fas fa-check-circle"></i>
             </div>
-
             <h2>Booking Confirmed!</h2>
-            <p class="lead">Thank you, ${sessionScope.passengerName}, for your booking.</p>
+            <p class="lead">Thank you for your booking.</p>
 
             <div class="booking-reference">
                 <p class="mb-1">Your Booking Reference</p>
                 <h3>${sessionScope.bookingReference}</h3>
             </div>
-
             <p>A confirmation email has been sent to your registered email address with all the details.</p>
-
             <div class="d-flex justify-content-center mt-4">
                 <div class="text-start">
                     <p><strong>Total Amount:</strong> ${sessionScope.totalAmount} VND</p>
                     <p><strong>Status:</strong> <span class="badge bg-success">Confirmed</span></p>
                 </div>
             </div>
-
             <div class="next-steps">
                 <h4><i class="fas fa-info-circle me-2"></i> What's Next?</h4>
                 <ul class="list-unstyled text-start">
@@ -107,9 +101,8 @@
                     <li><i class="fas fa-id-card me-2 text-primary"></i> Don't forget to bring your passport/ID</li>
                 </ul>
             </div>
-
             <div class="mt-4">
-                <a href="search-flights" class="btn btn-primary">
+                <a href="order" class="btn btn-primary">
                     <i class="fas fa-search me-2"></i> Book Another Flight
                 </a>
                 <a href="view-bookings" class="btn btn-outline-secondary ms-2">
@@ -121,10 +114,7 @@
         </div>
 
         <script>
-            // Clear the cart after successful booking
             localStorage.removeItem('flightCart');
-
-            // Optional: Add this if you want to prevent going back to the checkout page after booking
             window.history.pushState(null, '', window.location.href);
             window.addEventListener('popstate', function () {
                 window.history.pushState(null, '', window.location.href);
