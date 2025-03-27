@@ -62,8 +62,8 @@ public class ChatboxController extends HttpServlet {
     throws ServletException, IOException {
         String senderID = request.getParameter("senderID");
         String receiverID = request.getParameter("receiverID");
-        List<ChatMessage> messages = chatDAO.getMessages(senderID, receiverID);
-        request.setAttribute("messages", messages);
+        //List<ChatMessage> messages = chatDAO.getMessages(senderID, receiverID);
+        //request.setAttribute("messages", messages);
         request.getRequestDispatcher("Chatbox.jsp").forward(request, response);
     } 
 

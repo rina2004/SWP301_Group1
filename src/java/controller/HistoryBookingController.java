@@ -5,6 +5,7 @@
 package controller;
 
 import dal.OrderDAO;
+import dal.TicketDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,9 +13,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.Account;
 import model.Order;
+import model.OrderPassenger;
+import model.Ticket;
 
 
 /**
@@ -63,21 +68,46 @@ public class HistoryBookingController extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         // Lấy accountId từ session
-        HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("acc");
+         HttpSession session = request.getSession();
+    Account acc = (Account) session.getAttribute("acc");
 
-        if (acc == null) {
-            response.sendRedirect("view/Login.jsp");
-            return;
-        }
-
-        String accountId = acc.getId(); // hoặc acc.getAccountId() nếu tên là như vậy trong model của bạn
-
-        OrderDAO orderDAO = new OrderDAO();
-        List<Order> orders = orderDAO.getOrderHistory(accountId);
-        request.setAttribute("orders", orders);
-        request.getRequestDispatcher("view/HistoryBooking.jsp").forward(request, response);
+    if (acc == null) {
+        response.sendRedirect("view/Login.jsp");
+        return;
     }
+
+    String accountId = acc.getId();
+    OrderDAO orderDAO = new OrderDAO();
+    TicketDAO ticketDAO = new TicketDAO();
+
+    // Lấy danh sách Order của tài khoản này
+    List<Order> orders = orderDAO.getOrderHistory(accountId);
+
+    // Map chứa danh sách hành khách theo từng Order
+    Map<String, List<OrderPassenger>> passengersByOrder = new HashMap<>();
+    
+    // Map chứa danh sách vé theo từng OrderPassenger
+    Map<String, List<Ticket>> ticketsByPassenger = new HashMap<>();
+
+    for (Order order : orders) {
+        // Lấy danh sách hành khách của Order này
+        List<OrderPassenger> passengers = orderDAO.getPassengersByOrderId(order.getId());
+        passengersByOrder.put(order.getId(), passengers);
+
+        for (OrderPassenger passenger : passengers) {
+            // Lấy danh sách vé theo PassengerId
+            List<Ticket> tickets = ticketDAO.getTicketsByPassengerId(passenger.getId());
+            ticketsByPassenger.put(passenger.getId(), tickets);
+        }
+    }
+
+    // Đẩy dữ liệu lên JSP
+    request.setAttribute("orders", orders);
+    request.setAttribute("passengersByOrder", passengersByOrder);
+    request.setAttribute("ticketsByPassenger", ticketsByPassenger);
+    request.getRequestDispatcher("view/HistoryBooking.jsp").forward(request, response);
+    }
+  
 
     /**
      * Handles the HTTP <code>POST</code> method.

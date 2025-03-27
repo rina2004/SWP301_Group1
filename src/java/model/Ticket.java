@@ -10,7 +10,7 @@ package model;
  */
 public class Ticket {
     private String id;
-    private Order order;
+    private OrderPassenger orderPassenger;
     private Flight flight;
     private Seat seat;
     private String status;
@@ -18,13 +18,14 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(String id, Order order, Flight flight, Seat seat, String status) {
+    public Ticket(String id, OrderPassenger orderPassenger, Flight flight, Seat seat, String status) {
         this.id = id;
-        this.order = order;
+        this.orderPassenger = orderPassenger;
         this.flight = flight;
         this.seat = seat;
         this.status = status;
-    }
+    }   
+    
 
     public String getId() {
         return id;
@@ -34,12 +35,12 @@ public class Ticket {
         this.id = id;
     }
 
-    public Order getOrder() {
-        return order;
+    public OrderPassenger getOrderPassenger() {
+        return orderPassenger;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrderPassenger(OrderPassenger orderPassenger) {
+        this.orderPassenger = orderPassenger;
     }
 
     public Flight getFlight() {
@@ -65,5 +66,8 @@ public class Ticket {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    
 
+    
 }

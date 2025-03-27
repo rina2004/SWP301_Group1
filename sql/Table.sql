@@ -135,7 +135,7 @@ CREATE TABLE `Order` (
 );
 
 CREATE TABLE `OrderPassenger` (
-    `id` VARCHAR(36) DEFAULT (UUID()),
+    `id` VARCHAR(36),
     `orderID` VARCHAR(10),
     `passengerTypeID` INT,
     `fullName` VARCHAR(100) NOT NULL,

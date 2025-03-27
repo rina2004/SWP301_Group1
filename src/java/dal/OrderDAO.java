@@ -5,13 +5,14 @@
 package dal;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Account;
 import model.Order;
+import model.OrderPassenger;
+
 
 /**
  *
@@ -61,33 +62,35 @@ public class OrderDAO extends DBContext {
         List<Order> list = new ArrayList<>();
         String sql = "SELECT o.id, o.customerID, o.staffID, o.status, o.time, COUNT(t.id) AS finalNum "
                 + "FROM `Order` o "
-                + "LEFT JOIN Ticket t ON o.id = t.orderId "
+                + "LEFT JOIN OrderPassenger op ON o.id = op.orderID "
+                + "LEFT JOIN Ticket t ON op.id = t.orderPID "
                 + "WHERE o.customerID = ? "
                 + "GROUP BY o.id, o.customerID, o.staffID, o.status, o.time "
                 + "ORDER BY o.time DESC";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, accountId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Order order = new Order();
-                order.setId(rs.getString("id"));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Order order = new Order();
+                    order.setId(rs.getString("id"));
 
-                // Set Customer account (chỉ cần ID, có thể lazy load đầy đủ sau)
-                Account customer = new Account();
-                customer.setId(rs.getString("customerID"));
-                order.setCustomer(customer);
+                    // Set Customer account (chỉ cần ID, có thể lazy load đầy đủ sau)
+                    Account customer = new Account();
+                    customer.setId(rs.getString("customerID"));
+                    order.setCustomer(customer);
 
-                // Set Staff account (nếu có)
-                Account staff = new Account();
-                staff.setId(rs.getString("staffID"));
-                order.setStaff(staff);
+                    // Set Staff account (nếu có)
+                    Account staff = new Account();
+                    staff.setId(rs.getString("staffID"));
+                    order.setStaff(staff);
 
-                order.setStatus(rs.getString("status"));
-                order.setTime(rs.getTimestamp("time").toLocalDateTime());
-                order.setFinalNum(rs.getInt("finalNum")); // Đổi từ ticket_count thành finalNum
+                    order.setStatus(rs.getString("status"));
+                    order.setTime(rs.getTimestamp("time").toLocalDateTime());
+                    order.setFinalNum(rs.getInt("finalNum"));
 
-                list.add(order);
+                    list.add(order);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,30 +98,25 @@ public class OrderDAO extends DBContext {
         return list;
     }
 
-    public Order getOrderById(String orderId) {
-        String sql = "SELECT id, customerID, staffID, status, time, finalPrice, finalNum FROM `Order` WHERE id = ?";
+    public List<OrderPassenger> getPassengersByOrderId(String orderId) {
+        String sql = "SELECT * FROM OrderPassenger WHERE orderID = ?";
+        List<OrderPassenger> passengers = new ArrayList<>();
+
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, orderId);
-            ResultSet rs = stm.executeQuery();
-            if (rs.next()) {
-                AccountDAO accountDAO = new AccountDAO();
-                Account customer = accountDAO.getUserByID(rs.getString("customerID"));
-                Account staff = accountDAO.getUserByID(rs.getString("staffID"));
-
-                return new Order(
-                        rs.getString("id"),
-                        customer,
-                        staff,
-                        rs.getString("status"),
-                        rs.getTimestamp("time").toLocalDateTime(),
-                        rs.getDouble("finalPrice"),
-                        rs.getInt("finalNum")
-                );
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    OrderPassenger passenger = new OrderPassenger();
+                    passenger.setId(rs.getString("id"));
+                    passenger.setName(rs.getString("fullName"));
+                    passengers.add(passenger);
+                }
             }
         } catch (SQLException e) {
-            System.out.println("Error getting order: " + e.getMessage());
+            System.out.println("Error fetching passengers: " + e.getMessage());
         }
-        return null;
+
+        return passengers;
     }
 
     public int cancelOrderById(String orderId) {
@@ -166,15 +164,12 @@ public class OrderDAO extends DBContext {
 
         try (PreparedStatement psTicket = connection.prepareStatement(updateTicketSql); PreparedStatement psSeat = connection.prepareStatement(updateSeatSql); PreparedStatement psOrder = connection.prepareStatement(updateOrderSql)) {
 
-            
             psTicket.setString(1, orderId);
             affectedRows += psTicket.executeUpdate();
 
-          
             psSeat.setString(1, orderId);
             affectedRows += psSeat.executeUpdate();
 
-            
             psOrder.setString(1, orderId);
             affectedRows += psOrder.executeUpdate();
 

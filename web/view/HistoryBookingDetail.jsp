@@ -5,7 +5,7 @@
 
 <html>
     <head>
-        <title>History Booking Deatail</title>
+        <title>History Booking Detail</title>
         <style>
             body {
                 font-family: 'Arial', sans-serif;
@@ -105,13 +105,13 @@
     <body>
         <h2>Order Details</h2>
 
-        <c:if test="${empty tickets}">
+        <c:if test="${empty ticketList}">
             <p style="text-align: center; font-size: 18px;">No tickets found for this order.</p>
         </c:if>
 
-        <c:if test="${not empty tickets}">
+        <c:if test="${not empty ticketList}">
             <div class="ticket-container">
-                <c:forEach var="ticket" items="${tickets}">
+                <c:forEach var="ticket" items="${ticketList}">
                     <div class="ticket-card">
                         <div class="ticket-header">
                             ✈️ Flight: ${ticket.flight.code} - ${ticket.flight.name}
@@ -127,8 +127,11 @@
                             <div>${ticket.flight.landingTime}</div>
                             <div class="ticket-label">Seat:</div>
                             <div>${ticket.seat.id}</div>
-                            <div class="ticket-label">Status:</div>
+                            <div class="ticket-label">Ticket Status:</div>
                             <div>${ticket.status}</div>
+                             <div class="ticket-label">Compartment type:</div>
+                            <div>${ticket.seat.compartment.type}</div>
+                            
                             <div class="ticket-label">Airplane:</div>
                             <div>${ticket.flight.airplane.name}</div>
                         </div>

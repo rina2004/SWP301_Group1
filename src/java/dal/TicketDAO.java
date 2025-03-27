@@ -147,7 +147,7 @@ public class TicketDAO extends DBContext {
         return passengers; // Trả về danh sách hành khách
     }
 
-    public List<Ticket> getTicketsByOrderId(String orderId) {
+    public List<Ticket> getTicketsByOrderPassengerId(String orderPassengerId) {
         List<Ticket> tickets = new ArrayList<>();
         String sql = "SELECT \n"
                 + "    t.id AS ticketId, \n"
@@ -163,9 +163,9 @@ public class TicketDAO extends DBContext {
                 + "    f.name AS flightName, \n"
                 + "    f.code, \n"
                 + "    f.airplaneID, \n"
-                + "    a.name AS airplaneName, -- Lấy tên máy bay từ bảng Airplane\n"
-                + "    dep.name AS departure,  -- Lấy tên địa điểm thay vì ID\n"
-                + "    des.name AS destination, -- Lấy tên địa điểm thay vì ID\n"
+                + "    a.name AS airplaneName, \n"
+                + "    dep.name AS departure, \n"
+                + "    des.name AS destination, \n"
                 + "    f.entryTime, \n"
                 + "    f.startingTime, \n"
                 + "    f.landingTime, \n"
@@ -173,16 +173,17 @@ public class TicketDAO extends DBContext {
                 + "    s.status AS seatStatus, \n"
                 + "    s.reason \n"
                 + "FROM Ticket t \n"
-                + "JOIN `Order` o ON t.orderID = o.id \n"
+                + "JOIN OrderPassenger op ON t.orderPID = op.id \n"
+                + "JOIN `Order` o ON op.orderID = o.id \n"
                 + "JOIN Flight f ON t.flightID = f.id \n"
                 + "JOIN Seat s ON t.seatID = s.id \n"
-                + "JOIN Location dep ON f.departure = dep.id  -- Thay ID bằng tên\n"
-                + "JOIN Location des ON f.destination = des.id -- Thay ID bằng tên\n"
-                + "JOIN Airplane a ON f.airplaneID = a.id -- JOIN với Airplane để lấy tên máy bay\n"
-                + "WHERE t.orderID = ?;";
+                + "JOIN Location dep ON f.departure = dep.id \n"
+                + "JOIN Location des ON f.destination = des.id \n"
+                + "JOIN Airplane a ON f.airplaneID = a.id \n"
+                + "WHERE op.id = ?;";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, orderId);
+            ps.setString(1, orderPassengerId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     // Tạo các đối tượng như Airplane, Flight, Location, Compartment, Seat, Order, Ticket
@@ -205,8 +206,10 @@ public class TicketDAO extends DBContext {
                     Location destination = new Location();
                     destination.setName(rs.getString("destination"));
                     flight.setDestination(destination);
-
+                    
+                    
                     Compartment compartment = new Compartment();
+                    
 
                     Seat seat = new Seat();
                     seat.setId(rs.getString("seatId"));
@@ -220,12 +223,16 @@ public class TicketDAO extends DBContext {
                     order.setFinalPrice(rs.getDouble("finalPrice"));
                     order.setFinalNum(rs.getInt("finalNum"));
 
+                    OrderPassenger orderPassenger = new OrderPassenger();
+
                     Ticket ticket = new Ticket();
                     ticket.setId(rs.getString("ticketId"));
-                    ticket.setOrder(order);
+                    ticket.setOrderPassenger(orderPassenger);
                     ticket.setFlight(flight);
                     ticket.setSeat(seat);
                     ticket.setStatus(rs.getString("ticketStatus"));
+                    
+                    
 
                     tickets.add(ticket);
                 }
@@ -246,6 +253,50 @@ public class TicketDAO extends DBContext {
             Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
+    }
+
+    public List<Ticket> getTicketsByPassengerId(String passengerId) {
+        String sql = "SELECT t.*, op.id AS orderPassengerID FROM Ticket t "
+                + "JOIN OrderPassenger op ON t.orderPID = op.id "
+                + "WHERE t.orderPID = ?";
+        List<Ticket> tickets = new ArrayList<>();
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, passengerId);
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Ticket ticket = new Ticket();
+                    ticket.setId(rs.getString("id"));
+                    
+                    Nation nation = new Nation();
+                    
+                    // Gán orderPassenger
+                    OrderPassenger orderPassenger = new OrderPassenger();
+                    orderPassenger.setId(rs.getString("orderPassengerID"));
+                    orderPassenger.setNation(nation);
+                    ticket.setOrderPassenger(orderPassenger);
+
+                    // Gán flight
+                    Flight flight = new Flight();
+                    flight.setId(rs.getString("flightID"));
+                    ticket.setFlight(flight);
+
+                    // Gán seat
+                    Seat seat = new Seat();
+                    seat.setId(rs.getString("seatID"));
+                    ticket.setSeat(seat);
+
+                    // Gán status
+                    ticket.setStatus(rs.getString("status"));
+
+                    tickets.add(ticket);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching tickets: " + e.getMessage());
+        }
+
+        return tickets;
     }
 
 }

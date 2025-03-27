@@ -62,13 +62,13 @@ public class postController extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("id");
         
-        Post post = postDAO.findById(id);
+        //Post post = postDAO.findById(id);
         
-        List<Comment> listCmt = postDAO.findCmt(id);
+        //List<Comment> listCmt = postDAO.findCmt(id);
         
-        request.setAttribute("post", post);
-        request.setAttribute("listCmt", listCmt);
-        request.getRequestDispatcher("post.jsp").forward(request, response);
+//        request.setAttribute("post", post);
+//        request.setAttribute("listCmt", listCmt);
+//        request.getRequestDispatcher("post.jsp").forward(request, response);
     }
 
     /**

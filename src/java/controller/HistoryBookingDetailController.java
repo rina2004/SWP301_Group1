@@ -60,15 +60,15 @@ public class HistoryBookingDetailController extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         // Lấy orderId từ request param
-        String orderId = request.getParameter("orderId");
+        String OrderPassengerID = request.getParameter("OrderPassengerID");
 
         // Tương tác trực tiếp DAO
         TicketDAO ticketDAO = new TicketDAO();
-        List<Ticket> tickets = ticketDAO.getTicketsByOrderId(orderId);
+        List<Ticket> ticketList = ticketDAO.getTicketsByOrderPassengerId(OrderPassengerID);
 
 
         // Đổ data ra view
-        request.setAttribute("tickets", tickets);
+        request.setAttribute("ticketList", ticketList);
         request.getRequestDispatcher("view/HistoryBookingDetail.jsp").forward(request, response);
     }
 

@@ -460,7 +460,20 @@ GROUP BY t.id, op.fullName, op.nationID;
 
 UPDATE `Order` SET status = 'Confirmed' WHERE id = 'ORD004';
 
+UPDATE Ticket
+SET status = 'Confirmed'
+WHERE orderID = 'ORD004';
+
+
 Select * from `Order`;
+SELECT id FROM OrderPassenger;
+
+SELECT o.*
+FROM `OrderPassenger` op
+JOIN `Order` o ON op.orderID = o.id
+WHERE op.id ;
+
+
 
 SELECT 
     o.id AS OrderID, 

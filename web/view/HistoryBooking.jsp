@@ -89,52 +89,83 @@
                         <th>Order ID</th>
                         <th>Status</th>
                         <th>Time</th>
-                        <th>Price</th>
-                        <th>Total Passengers</th>
-                        <th>Actions</th>
+                        <td>Total Passenger</td>
+                        <th>Total Price</th>
                     </tr>
                     <c:forEach var="order" items="${orders}">
-                        <tr>
-                            <td>${order.id}</td> 
+                        <tr class="order-row">
+                            <td>${order.id}</td>
                             <td>${order.status}</td>
                             <td>${order.time}</td>
+                            <td>${order.finalNum}</td>
                             <td>${order.finalPrice}</td>
-                            <td>${order.finalNum}</td> 
-                            <td>
-                                <div class="action-group">
-                                    <a class="btn" href="${pageContext.request.contextPath}/historyBookingDetail?orderId=${order.id}">View</a>
-
-                                    <c:choose>
-                                        <c:when test="${order.status eq 'Canceled' or order.status eq 'Pending'}">
-                                            <a class="btn btn-secondary btn-disabled">Cancel</a>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <a class="btn btn-secondary" href="#" onclick="confirmCancel('${order.id}')">Cancel</a>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                            </td>
                         </tr>
+
+                        <!-- Lấy danh sách hành khách của đơn hàng này -->
+                        <c:set var="passengers" value="${passengersByOrder[order.id]}" />
+
+                        <c:if test="${not empty passengers}">
+                            <tr>
+                                <td colspan="5">
+                                    <table class="ticket-table">
+                                        <tr class="passenger-header">
+                                            <th colspan="5">Passengers</th>
+                                        </tr>
+                                        <c:forEach var="passenger" items="${passengers}">
+                                            <tr>
+                                                <td colspan="5"><strong>Passenger: ${passenger.name}</strong></td>
+                                            </tr>
+
+                                            <!-- Lấy danh sách vé của hành khách này -->
+                                            <c:set var="tickets" value="${ticketsByPassenger[passenger.id]}" />
+
+                                            <c:if test="${not empty tickets}">
+                                                <tr>
+                                                    <th>Ticket ID</th>
+                                                    <th>Flight</th>
+                                                    <th>Seat</th>
+                                                    <th>Status</th>                                                  
+                                                    <th>Actions</th>
+                                                </tr>
+                                                <c:forEach var="ticket" items="${tickets}">
+                                                    <tr>
+                                                        <td>${ticket.id}</td>
+                                                        <td>${ticket.flight.id}</td>
+                                                        <td>${ticket.seat.id}</td>
+                                                        <td>${ticket.status}</td>                                                     
+                                                        <td>
+                                                            <a class="btn" href="${pageContext.request.contextPath}/historyBookingDetail?OrderPassengerID=${passenger.id}">View</a>
+                                                            <c:if test="${ticket.status ne 'Cancelled' and ticket.status ne 'Pending'}">
+                                                                <a class="btn btn-secondary" href="#" onclick="confirmCancel('${ticket.id}')">Cancel</a>
+                                                            </c:if>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:if>
+                                        </c:forEach>
+                                    </table>
+                                </td>
+                            </tr>
+                        </c:if>
                     </c:forEach>
                 </table>
             </c:if>
         </div>
 
-       
         <a class="btn" href="${pageContext.request.contextPath}/view/Home.jsp">Back to Home</a>
 
-        <!-- Form ẩn để gửi yêu cầu hủy bằng POST -->
+        <!-- Form ẩn để gửi yêu cầu hủy vé -->
         <form id="cancelForm" method="POST" action="${pageContext.request.contextPath}/cancelTicket">
-            <input type="hidden" name="orderID" id="orderIdInput">
+            <input type="hidden" name="ticketID" id="ticketIdInput">
         </form>
 
         <script>
-            function confirmCancel(orderId) {
-                if (!orderId || orderId.trim() === '')
+            function confirmCancel(ticketId) {
+                if (!ticketId || ticketId.trim() === '')
                     return;
 
                 Swal.fire({
-                    title: "Are you sure you want to cancel your order?",
+                    title: "Are you sure you want to cancel this ticket?",
                     text: "This action cannot be undone!",
                     icon: "warning",
                     showCancelButton: true,
@@ -144,12 +175,12 @@
                     cancelButtonText: "No"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.getElementById('orderIdInput').value = orderId;
+                        document.getElementById('ticketIdInput').value = ticketId;
                         document.getElementById('cancelForm').submit();
                     }
                 });
             }
         </script>
-
     </body>
+
 </html>

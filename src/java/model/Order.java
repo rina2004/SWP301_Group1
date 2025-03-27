@@ -5,6 +5,8 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,18 +21,30 @@ public class Order {
     private LocalDateTime time;
     private double finalPrice;
     private int finalNum;
+    private List<OrderPassenger> passengers;
 
     public Order() {
+        passengers = new ArrayList<>();
     }
-
+    
     public Order(String id, String status, double finalPrice, int finalNum) {
         this.id = id;
         this.status = status;
         this.finalPrice = finalPrice;
         this.finalNum = finalNum;
     }
-    
-    
+
+    public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum, List<OrderPassenger> passengers) {
+        this.id = id;
+        this.customer = customer;
+        this.staff = staff;
+        this.status = status;
+        this.time = time;
+        this.finalPrice = finalPrice;
+        this.finalNum = finalNum;
+        this.passengers = passengers;
+    }
+       
 
     public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum) {
         this.id = id;
@@ -96,6 +110,14 @@ public class Order {
 
     public void setFinalNum(int finalNum) {
         this.finalNum = finalNum;
+    }
+
+    public List<OrderPassenger> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(List<OrderPassenger> passengers) {
+        this.passengers = passengers;
     }
 
     
