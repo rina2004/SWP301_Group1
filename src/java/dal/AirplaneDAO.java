@@ -134,6 +134,7 @@ public class AirplaneDAO extends DBContext {
 
     public Airplane getDetail(String id) {
         Airplane airplane = null;
+        AirplaneStatusDBContext as = new AirplaneStatusDBContext();
         try {
             String queryAirplane = """
                         SELECT id, name, statusID, numOfComs, maintainanceTime, usedTime 
@@ -148,13 +149,10 @@ public class AirplaneDAO extends DBContext {
                 airplane = new Airplane();
                 airplane.setId(rsAirplane.getString("id"));
                 airplane.setName(rsAirplane.getString("name"));
+                airplane.setStatus(as.get(rsAirplane.getInt("statusID")));
                 airplane.setNumOfComs(rsAirplane.getInt("numOfComs"));
                 airplane.setMaintainanceTime(rsAirplane.getTimestamp("maintainanceTime").toLocalDateTime());
                 airplane.setUsedTime(rsAirplane.getTimestamp("usedTime").toLocalDateTime());
-
-                AirplaneStatus status = new AirplaneStatus();
-                status.setId(rsAirplane.getInt("statusID"));
-                airplane.setStatus(status);
             } else {
                 return null;
             }

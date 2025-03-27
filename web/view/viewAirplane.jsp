@@ -132,7 +132,7 @@
                         <td>${pl.id}</td>
                         <td>${pl.name}</td>
                         <td>${pl.status.name}</td>
-                        <td>${pl.numOfComs}</td>
+                        <td class="comps">${pl.numOfComs}</td>
                         <td>${pl.maintainanceTime.toString().replace('T', ' ')}</td>
                         <td>${pl.usedTime.toString().replace('T', ' ')}</td>
                         <td>
