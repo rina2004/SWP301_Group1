@@ -12,7 +12,8 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+//        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+        request.getRequestDispatcher("Login.jsp").forward(request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -43,7 +44,22 @@ public class Login extends HttpServlet {
             userCookie.setPath("/"); 
             response.addCookie(userCookie);
         }
-        if(acc.getRole().getId() == 2) response.sendRedirect(request.getContextPath() + "/view/order");
-        else response.sendRedirect("view/Home.jsp");
+        switch (acc.getRole().getId()) {
+            case 1: //admin -> ve trang quan ly account
+                response.sendRedirect(request.getContextPath()  + "/account-list");
+                break;
+            case 2: //user -> ve trang dat ve
+                response.sendRedirect(request.getContextPath() + "/view/order");
+                break;
+//            case 3: //staff 
+//                response.sendRedirect(request.getContextPath() + "/view/order");
+//                break;
+            case 4: // atc ve trang quan ly chuyen bay
+                response.sendRedirect(request.getContextPath() + "/view/list-flight");
+                break;
+            default:
+                response.sendRedirect("view/Home.jsp");
+                throw new AssertionError();
+        }
     }
 }

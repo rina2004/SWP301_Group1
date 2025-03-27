@@ -29,4 +29,19 @@ public class NationDAO extends DBContext{
         }
         return list;
     }
+    public Nation get(String id) {
+        String sql = "SELECT * FROM swp301.nation WHERE id = ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return new Nation(
+                        rs.getInt("id"),
+                        rs.getString("name"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(NationDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

@@ -10,7 +10,7 @@ package model;
  */
 public class Ticket {
     private String id;
-    private Order order;
+    private OrderPassenger orderP;
     private Flight flight;
     private Seat seat;
     private String status;
@@ -18,9 +18,9 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(String id, Order order, Flight flight, Seat seat, String status) {
+    public Ticket(String id, OrderPassenger orderP, Flight flight, Seat seat, String status) {
         this.id = id;
-        this.order = order;
+        this.orderP = orderP;
         this.flight = flight;
         this.seat = seat;
         this.status = status;
@@ -34,12 +34,12 @@ public class Ticket {
         this.id = id;
     }
 
-    public Order getOrder() {
-        return order;
+    public OrderPassenger getOrderP() {
+        return orderP;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrderP(OrderPassenger orderP) {
+        this.orderP = orderP;
     }
 
     public Flight getFlight() {
@@ -65,10 +65,4 @@ public class Ticket {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    @Override
-    public String toString() {
-        return "Ticket{" + "id=" + id + ", order=" + order + ", flight=" + flight + ", seat=" + seat + ", status=" + status + '}';
-    }
-
 }

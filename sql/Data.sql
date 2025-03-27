@@ -65,7 +65,7 @@ CREATE TABLE `Airplane` (
 CREATE TABLE `TicketType` (
     `type` VARCHAR(30) PRIMARY KEY,
     `description` TEXT,
-    `price` DECIMAL(10,2),
+    `percent` DECIMAL(10,2),
     `checkedweightneed` decimal(10,2),
     `handedweightneed` decimal(10,2)
 );
@@ -101,8 +101,10 @@ CREATE TABLE `Flight` (
     `entryTime` DATETIME,
     `startingTime` DATETIME,
     `landingTime` DATETIME,
+    `seatType` VARCHAR(20),
+    `price` int,
     
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`id`, `seatType`),
     FOREIGN KEY (`airplaneID`) REFERENCES `Airplane`(`id`),
     FOREIGN KEY (`departure`) REFERENCES `Location`(`id`),
     FOREIGN KEY (`destination`) REFERENCES `Location`(`id`)
@@ -310,42 +312,42 @@ INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime) VALUES
 ('VN-A009', 'Sky Voyager', 4, '2024-06-05 08:30:00', '2023-12-15 00:00:00'),
 ('VN-A010', 'Cloud Dancer', 5, '2024-07-28 09:45:00', '2024-01-05 00:00:00');
 
-INSERT INTO `TicketType` (`type`, `description`, `price`, `checkedweightneed`, `handedweightneed` ) VALUES
-('Economy', 'Standard seating and basic amenities. Additional services: Priority boarding, extra legroom, complimentary beverage service.', 200000.00, 23.0, 7.0),
-('Business', 'Full business class experience. Additional services: Lie-flat seats, lounge access, premium meals and beverages.', 800000.00, 40.0, 10.0),
-('First Class', 'Luxury air travel experience. Additional services: Private suites, personalized service, gourmet dining, exclusive lounge access.', 1500000.00, 50.0, 10.0);
+INSERT INTO `TicketType` (`type`, `description`, `percent`, `checkedweightneed`, `handedweightneed` ) VALUES
+('Basic', 'Standard seating and basic amenities. Additional services: Priority boarding, extra legroom, complimentary beverage service.', 100, 23.0, 7.0),
+('Extra', 'Full business class experience. Additional services: Lie-flat seats, lounge access, premium meals and beverages.', 105, 25.0, 10.0),
+('First Class', 'Luxury air travel experience. Additional services: Private suites, personalized service, gourmet dining, exclusive lounge access.', 150, 50.0, 10.0);
 
 -- Compartment table (10 records)
 INSERT INTO Compartment (id, type, airplaneID, capacity) VALUES
-('VN-A001-B', 'Business','VN-A001', 40),
-('VN-A001-E', 'Economy','VN-A001', 40),
+('VN-A001-B', 'Basic','VN-A001', 40),
+('VN-A001-E', 'Extra','VN-A001', 40),
 ('VN-A001-F','First Class','VN-A001', 40),
-('VN-A002-B', 'Business','VN-A002', 40),
-('VN-A002-E', 'Economy','VN-A002', 40),
+('VN-A002-B', 'Basic','VN-A002', 40),
+('VN-A002-E', 'Extra','VN-A002', 40),
 ('VN-A002-F','First Class','VN-A002', 40),
-('VN-A003-B', 'Business','VN-A003', 40),
-('VN-A003-E', 'Economy','VN-A003', 40),
+('VN-A003-B', 'Basic','VN-A003', 40),
+('VN-A003-E', 'Extra','VN-A003', 40),
 ('VN-A003-F','First Class','VN-A003', 40),
-('VN-A004-B', 'Business','VN-A004', 40),
-('VN-A004-E', 'Economy','VN-A004', 40),
+('VN-A004-B', 'Basic','VN-A004', 40),
+('VN-A004-E', 'Extra','VN-A004', 40),
 ('VN-A004-F','First Class','VN-A004', 40),
-('VN-A005-B', 'Business','VN-A005', 40),
-('VN-A005-E', 'Economy','VN-A005', 40),
+('VN-A005-B', 'Basic','VN-A005', 40),
+('VN-A005-E', 'Extra','VN-A005', 40),
 ('VN-A005-F','First Class','VN-A005', 40),
-('VN-A006-B', 'Business','VN-A006', 40),
-('VN-A006-E', 'Economy','VN-A006', 40),
+('VN-A006-B', 'Basic','VN-A006', 40),
+('VN-A006-E', 'Extra','VN-A006', 40),
 ('VN-A006-F','First Class','VN-A006', 40),
-('VN-A007-B', 'Business','VN-A007', 40),
-('VN-A007-E', 'Economy','VN-A007', 40),
+('VN-A007-B', 'Basic','VN-A007', 40),
+('VN-A007-E', 'Extra','VN-A007', 40),
 ('VN-A007-F','First Class','VN-A007', 40),
-('VN-A008-B', 'Business','VN-A008', 40),
-('VN-A008-E', 'Economy','VN-A008', 40),
+('VN-A008-B', 'Basic','VN-A008', 40),
+('VN-A008-E', 'Extra','VN-A008', 40),
 ('VN-A008-F','First Class','VN-A008', 40),
-('VN-A009-B', 'Business','VN-A009', 40),
-('VN-A009-E', 'Economy','VN-A009', 40),
+('VN-A009-B', 'Basic','VN-A009', 40),
+('VN-A009-E', 'Extra','VN-A009', 40),
 ('VN-A009-F','First Class','VN-A009', 40),
-('VN-A010-B', 'Business','VN-A010', 40),
-('VN-A010-E', 'Economy','VN-A010', 40),
+('VN-A010-B', 'Basic','VN-A010', 40),
+('VN-A010-E', 'Extra','VN-A010', 40),
 ('VN-A010-F','First Class','VN-A010', 40);
 
 -- Seat table (10 records)
@@ -379,17 +381,38 @@ INSERT INTO Seat (id, compartmentID, status, reason) VALUES
 ('VN-A003-F-9', 'VN-A003-F', 'Active', 'SUPANIGA');
 
 -- Flight table (10 records)
-INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime) VALUES 
-    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00');
+INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime, seatType, price) VALUES 
+    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00', 'Economy', 2100000),
+    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00', 'Premium Economy', 3300000),
+    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00', 'Business', 3500000),
+    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00', 'First Class', 5850000),
+    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2025-05-1 06:00:00', '2025-05-2 07:30:00', '2025-05-2 09:30:00', 'Economy', 2080000),
+    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2025-05-1 06:00:00', '2025-05-2 07:30:00', '2025-05-2 09:30:00', 'Premium Economy', 3280000),
+    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2025-05-1 06:00:00', '2025-05-2 07:30:00', '2025-05-2 09:30:00', 'Business', 3480000),
+    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2025-05-1 06:00:00', '2025-05-2 08:00:00', '2025-05-2 10:00:00', 'Economy', 2150000.00),
+    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2025-05-1 06:00:00', '2025-05-2 08:00:00', '2025-05-2 10:00:00', 'Premium Economy', 3350000),
+    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2025-05-1 06:00:00', '2025-05-2 08:00:00', '2025-05-2 10:00:00', 'Business', 3550000),
+    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2025-05-1 06:00:00', '2025-05-2 09:00:00', '2025-05-2 11:00:00', 'Economy', 2500000),
+    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2025-05-1 06:00:00', '2025-05-2 09:00:00', '2025-05-2 11:00:00', 'Premium Economy', 3700000),
+    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2025-05-1 06:00:00', '2025-05-2 09:00:00', '2025-05-2 11:00:00', 'Business', 3900000),    
+    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2025-05-1 06:00:00', '2025-05-2 10:30:00', '2025-05-2 12:30:00', 'Economy', 2200000),
+    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2025-05-1 06:00:00', '2025-05-2 10:30:00', '2025-05-2 12:30:00', 'Premium Economy', 3400000),
+    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2025-05-1 06:00:00', '2025-05-2 10:30:00', '2025-05-2 12:30:00', 'Business', 3600000),    
+    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2025-05-1 06:00:00', '2025-05-2 07:15:00', '2025-05-2 09:15:00', 'Economy', 2250000),
+    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2025-05-1 06:00:00', '2025-05-2 07:15:00', '2025-05-2 09:15:00', 'Premium Economy', 3450000),
+    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2025-05-1 06:00:00', '2025-05-2 07:15:00', '2025-05-2 09:15:00', 'Business', 3650000),    
+    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2025-05-1 06:00:00', '2025-05-2 07:45:00', '2025-05-2 09:45:00', 'Economy', 2300000),
+    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2025-05-1 06:00:00', '2025-05-2 07:45:00', '2025-05-2 09:45:00', 'Premium Economy', 3500000),
+    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2025-05-1 06:00:00', '2025-05-2 07:45:00', '2025-05-2 09:45:00', 'Business', 3700000),
+    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2025-05-1 06:00:00', '2025-05-2 08:15:00', '2025-05-2 10:15:00', 'Economy', 2250000),
+    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2025-05-1 06:00:00', '2025-05-2 08:15:00', '2025-05-2 10:15:00', 'Premium Economy', 3450000),
+    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2025-05-1 06:00:00', '2025-05-2 08:15:00', '2025-05-2 10:15:00', 'Business', 3650000),
+    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2025-05-1 06:00:00', '2025-05-2 09:30:00', '2025-05-2 11:30:00', 'Economy', 2400000),
+    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2025-05-1 06:00:00', '2025-05-2 09:30:00', '2025-05-2 11:30:00', 'Premium Economy', 3600000),
+    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2025-05-1 06:00:00', '2025-05-2 09:30:00', '2025-05-2 11:30:00', 'Business', 3800000),    
+    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2025-05-1 06:00:00', '2025-05-2 10:00:00', '2025-05-2 12:00:00', 'Economy', 2300000),
+    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2025-05-1 06:00:00', '2025-05-2 10:00:00', '2025-05-2 12:00:00', 'Premium Economy', 3500000),
+    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2025-05-1 06:00:00', '2025-05-2 10:00:00', '2025-05-2 12:00:00', 'Business', 3700000);
 
 INSERT INTO PassengerType (name, ageMin, ageMax, discountPercentage) VALUES
 ('Người lớn', 12, 100, 0),

@@ -96,20 +96,20 @@ public class PostDAO extends DBContext {
 //            e.printStackTrace();
 //        }
 //    }
-//    public void insertPost(Post post) {
-//        String sql = "INSERT INTO blogpost (title, content, image, authorID, categoryID, published) VALUES (?, ?, ?, ?, ?, ?)";
-//        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-//            ps.setString(1, post.getTitle());
-//            ps.setString(2, post.getContent());
-//            ps.setString(3, post.getImage());
-//            ps.setString(4, post.getAuthorID());
-//            ps.setString(5, post.getCategoryID());
-//            ps.setBoolean(6, post.isPublished());
-//            ps.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public void insertPost(Post post) {
+        String sql = "INSERT INTO blogpost (title, content, image, authorID, categoryID, published) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, post.getTitle());
+            ps.setString(2, post.getContent());
+            ps.setString(3, post.getImage());
+            ps.setString(4, post.getAuthorID());
+            ps.setString(5, post.getCategoryID());
+            ps.setBoolean(6, post.isPublished());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     public void deletePost(String title) {
         String sql = "DELETE FROM blogpost WHERE title = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {

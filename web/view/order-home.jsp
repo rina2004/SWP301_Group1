@@ -125,6 +125,16 @@
                                 <option value="5">5 Passengers</option>
                             </select>
                         </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="tickettypes" class="form-label">Passengers</label>
+                            <select class="form-select" id="passengers" name="passengers">
+                                <option value="1">1 Passenger</option>
+                                <option value="2">2 Passengers</option>
+                                <option value="3">3 Passengers</option>
+                                <option value="4">4 Passengers</option>
+                                <option value="5">5 Passengers</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="card-footer text-center mt-4">
                         <button type="submit" class="btn btn-search">
