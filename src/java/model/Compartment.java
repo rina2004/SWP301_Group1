@@ -4,31 +4,29 @@
  */
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Rinaaaa
  */
 public class Compartment {
     private String id;
-    private CompartmentType cType;
+    private CompartmentType ct;
     private Airplane airplane;
     private int capacity;
+    
+    private ArrayList<Seat> seats = new ArrayList<>();
 
     public Compartment() {
     }
 
-    public Compartment(String id) {
+    public Compartment(String id, CompartmentType ct, Airplane airplane, int capacity) {
         this.id = id;
-    }
-
-    public Compartment(String id, CompartmentType cType, Airplane airplane, int capacity) {
-        this.id = id;
-        this.cType = cType;
+        this.ct = ct;
         this.airplane = airplane;
         this.capacity = capacity;
     }
-    
-    
 
     public String getId() {
         return id;
@@ -38,12 +36,12 @@ public class Compartment {
         this.id = id;
     }
 
-    public CompartmentType getcType() {
-        return cType;
+    public CompartmentType getCt() {
+        return ct;
     }
 
-    public void setcType(CompartmentType cType) {
-        this.cType = cType;
+    public void setCt(CompartmentType ct) {
+        this.ct = ct;
     }
 
     public Airplane getAirplane() {
@@ -62,6 +60,11 @@ public class Compartment {
         this.capacity = capacity;
     }
 
-    
-    
+    public ArrayList<Seat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(ArrayList<Seat> seats) {
+        this.seats = seats;
+    }
 }

@@ -11,24 +11,6 @@ CREATE TABLE `Role` (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `Account` (
-    `id` VARCHAR(36) DEFAULT (UUID()),
-    `username` VARCHAR(50) UNIQUE NOT NULL,
-    `password` VARCHAR(50) NOT NULL,
-    `roleID` INT,
-    `status` BOOL DEFAULT(TRUE),
-    `citizenID` VARCHAR(12),
-    `name` VARCHAR(50),
-    `dob` DATE,
-    `phone` VARCHAR(10),
-    `address` VARCHAR(255),
-    `email` VARCHAR(255),
-    
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`roleID`) REFERENCES `Role`(`id`)
-);
-
--- Location and Geography Related Tables
 CREATE TABLE `Location` (
     `id` INT AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
@@ -51,10 +33,47 @@ CREATE TABLE `AirplaneStatus` (
     PRIMARY KEY (`id`)
 );
 
+-- Passenger and Ticket Related Tables
+CREATE TABLE `PassengerType` (
+    `id` INT AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL,
+    `ageMin` INT,
+    `ageMax` INT, 
+    `discountPercentage` DECIMAL(5,2) DEFAULT 0, 
+    
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `TicketType` (
+    `type` VARCHAR(30) PRIMARY KEY,
+    `description` TEXT,
+    `percent` DECIMAL(10,2),
+    `checkedweightneed` decimal(10,2),
+    `handedweightneed` decimal(10,2)
+);
+
+CREATE TABLE `Account` (
+    `id` VARCHAR(36) DEFAULT (UUID()),
+    `username` VARCHAR(50) UNIQUE NOT NULL,
+    `password` VARCHAR(50) NOT NULL,
+    `roleID` INT,
+    `status` BOOL DEFAULT(TRUE),
+    `citizenID` VARCHAR(12),
+    `name` VARCHAR(50),
+    `dob` DATE,
+    `phone` VARCHAR(10),
+    `address` VARCHAR(255),
+    `email` VARCHAR(255),
+    
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`roleID`) REFERENCES `Role`(`id`)
+);
+
 CREATE TABLE `Airplane` (
     `id` VARCHAR(10),
     `name` VARCHAR(50),
     `statusID` INT,
+    `numOfComs` INT,
     `maintainanceTime` DATETIME,
     `usedTime` DATETIME,
     
@@ -62,33 +81,22 @@ CREATE TABLE `Airplane` (
     FOREIGN KEY (`statusID`) REFERENCES `AirplaneStatus`(`id`)
 );
 
-CREATE TABLE `TicketType` (
-    `type` VARCHAR(30) PRIMARY KEY,
-    `description` TEXT,
-    `price` DECIMAL(10,2),
-    `checkedweightneed` decimal(10,2),
-    `handedweightneed` decimal(10,2)
+CREATE TABLE `CompartmentType` (
+	`id` varchar(1),
+    `name` varchar(20),
+    
+    PRIMARY KEY(`id`)
 );
 
 CREATE TABLE `Compartment` (
     `id` VARCHAR(20),
-    `type` VARCHAR(30),
+    `typeId` varchar(1),
     `airplaneID` VARCHAR(10),
     `capacity` INT,
     
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`type`) REFERENCES `TicketType`(`type`),
-    FOREIGN KEY (`airplaneID`) REFERENCES `Airplane`(`id`) ON DELETE CASCADE
-); 
-
-CREATE TABLE `Seat` (
-    `id` VARCHAR(10),
-    `compartmentID` VARCHAR(20),
-    `status` VARCHAR(50),
-    `reason` VARCHAR(250),
-    
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`compartmentID`) REFERENCES `Compartment`(`id`)
+    FOREIGN KEY (`typeId`) REFERENCES `CompartmentType`(`id`),
+    FOREIGN KEY (`airplaneID`) REFERENCES `Airplane`(`id`)
 );
 
 CREATE TABLE `Flight` (
@@ -101,6 +109,7 @@ CREATE TABLE `Flight` (
     `entryTime` DATETIME,
     `startingTime` DATETIME,
     `landingTime` DATETIME,
+    `price` int,
     
     PRIMARY KEY (`id`),
     FOREIGN KEY (`airplaneID`) REFERENCES `Airplane`(`id`),
@@ -108,15 +117,14 @@ CREATE TABLE `Flight` (
     FOREIGN KEY (`destination`) REFERENCES `Location`(`id`)
 );
 
--- Passenger and Ticket Related Tables
-CREATE TABLE `PassengerType` (
-    `id` INT AUTO_INCREMENT,
-    `name` VARCHAR(50) NOT NULL,
-    `ageMin` INT,
-    `ageMax` INT, 
-    `discountPercentage` DECIMAL(5,2) DEFAULT 0, 
+CREATE TABLE `Seat` (
+    `id` VARCHAR(20),
+    `compartmentID` VARCHAR(20),
+    `status` VARCHAR(50),
+    `reason` VARCHAR(250),
     
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`compartmentID`) REFERENCES `Compartment`(`id`)
 );
 
 -- Order and Passenger Details Tables
@@ -128,10 +136,12 @@ CREATE TABLE `Order` (
     `time` DATETIME,
     `finalPrice` DECIMAL(10,2),
     `finalNum` INT,
+    `type` varchar(30),
     
     PRIMARY KEY (`id`),
     FOREIGN KEY (`customerID`) REFERENCES `Account`(`id`),
-    FOREIGN KEY (`staffID`) REFERENCES `Account`(`id`)
+    FOREIGN KEY (`staffID`) REFERENCES `Account`(`id`),
+    FOREIGN KEY (`type`) REFERENCES `TicketType`(`type`)
 );
 
 CREATE TABLE `OrderPassenger` (
@@ -150,14 +160,16 @@ CREATE TABLE `OrderPassenger` (
 
 CREATE TABLE `Ticket` (
     `id` VARCHAR(50) DEFAULT (UUID()),
-    `orderID` VARCHAR(10),
+    `orderPID` VARCHAR(10),
     `flightID` VARCHAR(10),
-    `seatID` VARCHAR(10),
+    `comID` varchar(20),
+    `seatID` VARCHAR(20),
     `status` VARCHAR(20),
     
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`orderID`) REFERENCES `Order`(`id`),
+    FOREIGN KEY (`orderPID`) REFERENCES `OrderPassenger`(`id`),
     FOREIGN KEY (`flightID`) REFERENCES `Flight`(`id`),
+    FOREIGN KEY (`comID`) REFERENCES `Compartment`(`id`),
     FOREIGN KEY (`seatID`) REFERENCES `Seat`(`id`)
 );
 
@@ -237,4 +249,3 @@ CREATE TABLE `ChatMessage` (
     FOREIGN KEY (`senderAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`receiverAccountID`) REFERENCES `Account`(`id`) ON DELETE CASCADE
 );
-

@@ -20,25 +20,9 @@ import model.TicketType;
  */
 public class OrderDAO extends DBContext {
 
-    public boolean createOrder(String flightId, String customerName, String customerEmail, String customerPhone) {
-        String sql = "INSERT INTO `Order` (flightID, customerName, customerEmail, customerPhone, status, time) VALUES (?, ?, ?, ?, 'Pending', NOW())";
-        PreparedStatement stm = null;
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, flightId);
-            stm.setString(2, customerName);
-            stm.setString(3, customerEmail);
-            stm.setString(4, customerPhone);
-            int affectedRows = stm.executeUpdate();
-            return affectedRows > 0;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
     public Order get(String id) {
         AccountDAO ad = new AccountDAO();
+        TicketTypeDAO ttd = new TicketTypeDAO();
         String sql = "SELECT * FROM swp301.order WHERE id = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, id);
@@ -50,12 +34,48 @@ public class OrderDAO extends DBContext {
                         rs.getString("status"),
                         rs.getTimestamp("time").toLocalDateTime(),
                         rs.getDouble("finalPrice"),
-                        rs.getInt("finalNum"));
+                        rs.getInt("finalNum"),
+                        ttd.get(rs.getString("type")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public List<Order> getAllbyCustomerID(String cusID) {
+        String sql = "Select * From `Order` where customerID = ?";
+        List<Order> list = new ArrayList<>();
+        PreparedStatement stm;
+        ResultSet rs;
+       
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, cusID);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getString("id"));
+                order.setStatus(rs.getString("status"));
+                list.add(order);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+    
+    public int cancelOrderById(String orderId) {
+        String sql = "UPDATE `Order` SET status = 'Processing' WHERE id = ? AND status != 'Cancelled'";
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, orderId);
+            return stm.executeUpdate(); // Trả về số dòng bị ảnh hưởng
+        } catch (SQLException e) {
+            System.out.println("Error cancelling order: " + e.getMessage());
+        }
+
+        return -1; 
     }
 
     public List<Order> getOrderHistory(String accountId) {
@@ -133,51 +153,5 @@ public class OrderDAO extends DBContext {
         return -1; // Lỗi xảy ra
     }
 
-//    public List<Order> getProcessingOrders() {
-//        String sql = "SELECT * FROM `Order` WHERE status = 'Processing'";
-//        List<Order> orders = new ArrayList<>();
-//
-//        try (PreparedStatement stm = connection.prepareStatement(sql); ResultSet rs = stm.executeQuery()) {
-//
-//            while (rs.next()) {
-//                Order order = new Order();
-//                order.setId(rs.getString("id"));
-//                order.setStatus(rs.getString("status"));
-//                order.setFinalPrice(rs.getDouble("finalPrice"));
-//                order.setFinalNum(rs.getInt("finalNum"));
-//
-//                orders.add(order);
-//            }
-//        } catch (SQLException e) {
-//            System.out.println("Error fetching processing orders: " + e.getMessage());
-//        }
-//
-//        return orders;
-//    }
-    public int cancelOrder(String orderId) {
-        String updateTicketSql = "UPDATE Ticket SET status = 'Cancelled' WHERE orderID = ?";
-        String updateSeatSql = "UPDATE Seat SET status = 'Available', reason = 'Cancelled Ticket' "
-                + "WHERE id IN (SELECT seatID FROM Ticket WHERE orderID = ?)";
-        String updateOrderSql = "UPDATE `Order` SET status = 'Cancelled' WHERE id = ?";
-
-        int affectedRows = 0;
-
-        try (PreparedStatement psTicket = connection.prepareStatement(updateTicketSql); PreparedStatement psSeat = connection.prepareStatement(updateSeatSql); PreparedStatement psOrder = connection.prepareStatement(updateOrderSql)) {
-
-            psTicket.setString(1, orderId);
-            affectedRows += psTicket.executeUpdate();
-
-            psSeat.setString(1, orderId);
-            affectedRows += psSeat.executeUpdate();
-
-            psOrder.setString(1, orderId);
-            affectedRows += psOrder.executeUpdate();
-
-        } catch (SQLException e) {
-            System.out.println("Error canceling order: " + e.getMessage());
-        }
-
-        return affectedRows;
-    }
 
 }

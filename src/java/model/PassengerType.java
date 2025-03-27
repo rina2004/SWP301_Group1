@@ -13,12 +13,12 @@ public class PassengerType {
     private String name;
     private int ageMin;
     private int ageMax;
-    private int discount;
+    private double discount;
 
     public PassengerType() {
     }
 
-    public PassengerType(int id, String name, int ageMin, int ageMax, int discount) {
+    public PassengerType(int id, String name, int ageMin, int ageMax, double discount) {
         this.id = id;
         this.name = name;
         this.ageMin = ageMin;
@@ -58,12 +58,13 @@ public class PassengerType {
         this.ageMax = ageMax;
     }
 
-    public int getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(int discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
+
     
 }

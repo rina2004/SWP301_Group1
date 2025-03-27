@@ -69,17 +69,17 @@ INSERT INTO Account (username, password, roleID, status, citizenID, name, dob, p
 ('author1', '123', 2, TRUE, '012345678901', 'Nguyen Van A', '1994-03-17', '0989012345', '707 Redwood Place, Da Lat', 'abc@example.com');
 
 -- Airplane table (10 records)
-INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime) VALUES
-('VN-A001', 'Sky Dragon', 1, '2024-06-15 08:00:00', '2023-12-01 00:00:00'),
-('VN-A002', 'Ocean Star', 2, '2024-07-20 10:30:00', '2024-01-15 00:00:00'),
-('VN-A003', 'Cloud Runner', 3, '2024-05-10 09:15:00', '2023-11-05 00:00:00'),
-('VN-A004', 'Wind Rider', 4, '2024-08-05 11:45:00', '2024-02-20 00:00:00'),
-('VN-A005', 'Sun Chaser', 5, '2024-06-30 13:20:00', '2023-12-25 00:00:00'),
-('VN-A006', 'Moon Walker', 1, '2024-07-12 14:00:00', '2024-01-30 00:00:00'),
-('VN-A007', 'Star Gazer', 2, '2024-05-25 15:30:00', '2023-11-20 00:00:00'),
-('VN-A008', 'Air Master', 3, '2024-08-18 16:45:00', '2024-02-10 00:00:00'),
-('VN-A009', 'Sky Voyager', 4, '2024-06-05 08:30:00', '2023-12-15 00:00:00'),
-('VN-A010', 'Cloud Dancer', 5, '2024-07-28 09:45:00', '2024-01-05 00:00:00');
+INSERT INTO Airplane (id, name, statusID, numOfComs, maintainanceTime, usedTime) VALUES
+('VN-A001', 'Sky Dragon', 1, 3, '2024-06-15 08:00:00', '2023-12-01 00:00:00'),
+('VN-A002', 'Ocean Star', 2, 3, '2024-07-20 10:30:00', '2024-01-15 00:00:00'),
+('VN-A003', 'Cloud Runner', 3, 3, '2024-05-10 09:15:00', '2023-11-05 00:00:00'),
+('VN-A004', 'Wind Rider', 4, 3, '2024-08-05 11:45:00', '2024-02-20 00:00:00'),
+('VN-A005', 'Sun Chaser', 5, 3, '2024-06-30 13:20:00', '2023-12-25 00:00:00'),
+('VN-A006', 'Moon Walker', 1, 3, '2024-07-12 14:00:00', '2024-01-30 00:00:00'),
+('VN-A007', 'Star Gazer', 2, 3, '2024-05-25 15:30:00', '2023-11-20 00:00:00'),
+('VN-A008', 'Air Master', 3, 3, '2024-08-18 16:45:00', '2024-02-10 00:00:00'),
+('VN-A009', 'Sky Voyager', 4, 3, '2024-06-05 08:30:00', '2023-12-15 00:00:00'),
+('VN-A010', 'Cloud Dancer', 5, 3, '2024-07-28 09:45:00', '2024-01-05 00:00:00');
 
 -- Flight table (10 records)
 INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime, price) VALUES 
@@ -100,7 +100,7 @@ INSERT INTO CompartmentType (id, name) VALUES
 ('F', 'First Class');
 
 -- Compartment table (10 records)
-INSERT INTO Compartment (id, cType, airplaneID, capacity) VALUES
+INSERT INTO Compartment (id, typeId, airplaneID, capacity) VALUES
 ('VN-A001-B', 'B','VN-A001', 40),
 ('VN-A001-E', 'E','VN-A001', 40),
 ('VN-A001-F', 'F','VN-A001', 40),
@@ -233,8 +233,6 @@ INSERT INTO ChatMessage (senderAccountID, receiverAccountID, message, timestamp,
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user2'), 'Sure John, how can I help you?', '2024-03-15 10:18:00', TRUE),
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user3'), 'Sarah, could you check if there are any window seats available on flight VN303?', '2024-03-16 14:30:00', TRUE),
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user4'), 'I just checked and there are 3 window seats available. Would you like me to book one for you?', '2024-03-16 14:45:00', TRUE);
-
-
 
 
 SELECT 
@@ -398,7 +396,7 @@ JOIN Nation n ON op.nationID = n.id
 WHERE t.orderID ='ORD003'
 GROUP BY t.id, op.fullName, op.nationID;
 
-UPDATE `Order` SET status = 'Confirmed' WHERE id = 'ORD004';
+UPDATE `Ticket` SET status = 'Confirmed' WHERE orderPID = 'ORD002-1';
 
 UPDATE Ticket
 SET status = 'Confirmed'
@@ -496,4 +494,86 @@ JOIN Location des ON f.destination = des.id -- Thay ID bằng tên
 JOIN Airplane a ON f.airplaneID = a.id -- JOIN với Airplane để lấy tên máy bay
 WHERE op.id = 'ORD002-1';  -- Lọc theo OrderPassenger.id
 
+SELECT 
+    t.id AS ticketId, 
+    t.status AS ticketStatus, 
+    o.id AS orderId, 
+    o.customerID, 
+    o.staffID, 
+    o.status AS orderStatus, 
+    o.time, 
+    o.finalPrice, 
+    o.finalNum, 
+    o.type, 
+    tt.type AS ticketType,  -- Thêm trường này để gán vào TicketType
+    tt.description, 
+    tt.percent, 
+    tt.checkedweightneed, 
+    tt.handedweightneed, 
+    f.id AS flightId, 
+    f.name AS flightName, 
+    f.code, 
+    f.airplaneID, 
+    f.price,  -- Thêm cột price từ bảng Flight
+    a.name AS airplaneName,  -- Lấy tên máy bay từ bảng Airplane
+    dep.name AS departure,  -- Lấy tên địa điểm thay vì ID
+    des.name AS destination, -- Lấy tên địa điểm thay vì ID
+    f.entryTime, 
+    f.startingTime, 
+    f.landingTime, 
+    s.id AS seatId, 
+    s.status AS seatStatus, 
+    s.reason 
+FROM Ticket t 
+JOIN OrderPassenger op ON t.orderPID = op.id  -- Thay orderID bằng orderPID để lấy theo OrderPassenger
+JOIN `Order` o ON op.orderID = o.id 
+JOIN TicketType tt ON o.type = tt.type 
+JOIN Flight f ON t.flightID = f.id 
+JOIN Seat s ON t.seatID = s.id 
+JOIN Location dep ON f.departure = dep.id  -- Thay ID bằng tên
+JOIN Location des ON f.destination = des.id -- Thay ID bằng tên
+JOIN Airplane a ON f.airplaneID = a.id -- JOIN với Airplane để lấy tên máy bay
+WHERE op.id = 'ORD002-1';  -- Lọc theo OrderPassenger.id
 
+SELECT 
+    t.id AS ticketId, 
+    t.status AS ticketStatus, 
+    o.id AS orderId, 
+    o.customerID, 
+    o.staffID, 
+    o.status AS orderStatus, 
+    o.time, 
+    o.finalPrice, 
+    o.finalNum, 
+    o.type, 
+    tt.type AS ticketType,  -- Thêm trường này để gán vào TicketType
+    tt.description, 
+    tt.percent, 
+    tt.checkedweightneed, 
+    tt.handedweightneed, 
+    f.id AS flightId, 
+    f.name AS flightName, 
+    f.code, 
+    f.airplaneID, 
+    f.price,  -- Thêm cột price từ bảng Flight
+    a.name AS airplaneName,  -- Lấy tên máy bay từ bảng Airplane
+    dep.name AS departure,  -- Lấy tên địa điểm thay vì ID
+    des.name AS destination, -- Lấy tên địa điểm thay vì ID
+    f.entryTime, 
+    f.startingTime, 
+    f.landingTime, 
+    s.id AS seatId, 
+    s.status AS seatStatus, 
+    s.reason 
+FROM Ticket t 
+JOIN OrderPassenger op ON t.orderPID = op.id  -- Thay orderID bằng orderPID để lấy theo OrderPassenger
+JOIN `Order` o ON op.orderID = o.id 
+JOIN TicketType tt ON o.type = tt.type 
+JOIN Flight f ON t.flightID = f.id 
+JOIN Seat s ON t.seatID = s.id 
+JOIN Location dep ON f.departure = dep.id  -- Thay ID bằng tên
+JOIN Location des ON f.destination = des.id -- Thay ID bằng tên
+JOIN Airplane a ON f.airplaneID = a.id -- JOIN với Airplane để lấy tên máy bay
+WHERE op.id = 'ORD002-1';
+
+SELECT * FROM Ticket WHERE status = 'Cancelled' OR status = 'Processing';

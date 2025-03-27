@@ -131,6 +131,13 @@
                             <div>${ticket.seat.id}</div>
                             <div class="ticket-label">Ticket Status:</div>
                             <div>${ticket.status}</div>
+                            
+                            <div class="ticket-label">Ticket type:</div>
+                            <div>${ticket.orderP.order.tt.type}</div>
+                            <div class="ticket-label">Ticket checked weight need:</div>
+                            <div>${ticket.orderP.order.tt.checkedweightneed}</div>
+                            <div class="ticket-label">Ticket handed weight need:</div>
+                            <div>${ticket.orderP.order.tt.handedweightneed}</div>
 
                             <div class="ticket-label">Airplane:</div>
                             <div>${ticket.flight.airplane.name}</div>

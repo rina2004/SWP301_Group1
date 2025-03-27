@@ -47,6 +47,17 @@ public class Order {
         this.passengers = passengers;
     }
 
+    public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum, TicketType tt) {
+        this.id = id;
+        this.customer = customer;
+        this.staff = staff;
+        this.status = status;
+        this.time = time;
+        this.finalPrice = finalPrice;
+        this.finalNum = finalNum;
+        this.tt = tt;
+    }
+
     public String getId() {
         return id;
     }
@@ -103,13 +114,14 @@ public class Order {
         this.finalNum = finalNum;
     }
 
-    public TicketType getType() {
+    public TicketType getTt() {
         return tt;
     }
 
-    public void setType(TicketType tt) {
+    public void setTt(TicketType tt) {
         this.tt = tt;
     }
+    
 
     public List<OrderPassenger> getPassengers() {
         return passengers;

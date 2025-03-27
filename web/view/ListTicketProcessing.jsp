@@ -90,12 +90,12 @@
                                 <td>${ticket.status}</td>
                                 <td>${ticket.flight.id}</td>
                                 <td>${ticket.seat.id}</td>
-                                <td>${ticket.orderPassenger.id}</td>
+                                <td>${ticket.orderP.id}</td>
                                 <td>${ticket.compartment.id}</td>
                                 <td>
                                     <c:if test="${ticket.status eq 'Processing'}">
                                         <form action="staffTicketProcessing" method="post">
-                                            <input type="hidden" name="orderID" value="${ticket.orderPassenger.id}">
+                                            <input type="hidden" name="orderID" value="${ticket.orderP.id}">
                                             <button type="submit" class="btn btn-cancel">Accept</button>
                                         </form>
                                     </c:if>
