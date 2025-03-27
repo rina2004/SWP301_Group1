@@ -11,8 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.AirplaneStatus;
 import model.Compartment;
+import model.CompartmentType;
 import model.Seat;
-import model.TicketType;
 
 /**
  *
@@ -24,17 +24,19 @@ public class AirplaneDAO extends DBContext {
         try {
             connection.setAutoCommit(false);
             String createAirplane = """ 
-                                    INSERT INTO swp301.airplane 
-                                    (id, name, statusID, numOfComs, maintainanceTime, usedTime)
-                                    VALUES (?, ?, ?, ? ,?, ?)
+                                    INSERT INTO `swp301`.`airplane`
+                                    (`id`, `name`, `statusID`, `numOfComs`, `maintainanceTime`, `usedTime`)
+                                    VALUES (?, ?, ?, ?, ?, ?);
                                     """;
             String insertCompartment = """
-                                       INSERT INTO swp301.compartment (id, type, airplaneID, capacity) 
-                                       VALUES (?, ?, ?, ?)
+                                       INSERT INTO `swp301`.`compartment`
+                                       (`id`, `typeId`, `airplaneID`, `capacity`)
+                                       VALUES (?, ?, ?, ?);
                                        """;
             String insertSeat = """
-                                INSERT INTO swp301.seat (id, compartmentid, status) 
-                                VALUES (?, ?, ?)
+                                INSERT INTO `swp301`.`seat`
+                                (`id`, `compartmentID`, `status`)
+                                VALUES (?, ?, ?);
                                 """;
 
             PreparedStatement stm_createAirplane = connection.prepareStatement(createAirplane);
@@ -49,7 +51,7 @@ public class AirplaneDAO extends DBContext {
             for (Compartment compartment : airplane.getCompartments()) {
                 PreparedStatement stm_insertCompartment = connection.prepareStatement(insertCompartment);
                 stm_insertCompartment.setString(1, compartment.getId());
-                stm_insertCompartment.setString(2, compartment.getType().getType());
+                stm_insertCompartment.setString(2, String.valueOf(compartment.getType().getId()));
                 stm_insertCompartment.setString(3, airplane.getId());
                 stm_insertCompartment.setInt(4, compartment.getCapacity());
                 stm_insertCompartment.executeUpdate();
@@ -158,7 +160,7 @@ public class AirplaneDAO extends DBContext {
             }
 
             String queryCompartment = """
-                        SELECT id, type, capacity 
+                        SELECT id, typeId, capacity 
                         FROM compartment 
                         WHERE airplaneID = ?
                         """;
@@ -171,9 +173,8 @@ public class AirplaneDAO extends DBContext {
                 Compartment compartment = new Compartment();
                 compartment.setId(rsCompartment.getString("id"));
 
-                TicketType ticketType = new TicketType();
-                ticketType.setType(rsCompartment.getString("type"));
-                compartment.setType(ticketType);
+                CompartmentType compartmentType = new CompartmentType();
+                compartmentType.setId(rsCompartment.getString("typeId"));
 
                 compartment.setCapacity(rsCompartment.getInt("capacity"));
                 compartment.setAirplane(airplane);
@@ -208,67 +209,25 @@ public class AirplaneDAO extends DBContext {
         return airplane;
     }
 
-    public void update(Airplane airplane) {
-        try {
-            connection.setAutoCommit(false);
-
-            String updateAirplane = """
-                                UPDATE swp301.airplane 
-                                SET statusID = ?, numOfComs = ?, 
-                                    maintainanceTime = ?, usedTime = ?
-                                WHERE id = ?
-                                """;
-            PreparedStatement stm_updateAirplane = connection.prepareStatement(updateAirplane);
-            stm_updateAirplane.setInt(1, airplane.getStatus().getId());
-            stm_updateAirplane.setInt(2, airplane.getNumOfComs());
-            stm_updateAirplane.setTimestamp(3, Timestamp.valueOf(airplane.getMaintainanceTime()));
-            stm_updateAirplane.setTimestamp(4, Timestamp.valueOf(airplane.getUsedTime()));
-            stm_updateAirplane.setString(5, airplane.getId());
-            stm_updateAirplane.executeUpdate();
-
-            String updateCompartment = """
-                                       UPDATE swp301.compartment
-                                       SET capacity = ?
-                                       WHERE id = ?
-                                       """;
+    public void updateSeatStatus(Airplane airplane) {
+        String sql = """
+                     UPDATE `swp301`.`seat`
+                     SET `status` = ?
+                     WHERE `id` = ?;
+                     """;
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
             for (Compartment compartment : airplane.getCompartments()) {
-                PreparedStatement stm_updateCompartment = connection.prepareStatement(updateCompartment);
-                stm_updateCompartment.setInt(1, compartment.getCapacity());
-                stm_updateCompartment.setString(2, compartment.getId());
-                stm_updateCompartment.executeUpdate();
-                
-                String updateSeat = """
-                                UPDATE swp301.seat 
-                                SET status = ? 
-                                WHERE id = ?
-                                """;
                 for (Seat seat : compartment.getSeats()) {
-                    PreparedStatement stm_updateSeat = connection.prepareStatement(updateSeat);
-                    stm_updateSeat.setString(1, seat.getStatus());
-                    stm_updateSeat.setString(2, seat.getId());
-                    stm_updateSeat.executeUpdate();
+                    stm.setString(1, seat.getStatus());
+                    stm.setString(2, seat.getId());
+                    stm.addBatch();
                 }
             }
-
-            connection.commit();
+            
+            stm.executeBatch();
+            
         } catch (SQLException ex) {
             Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
-            try {
-                connection.rollback();
-            } catch (SQLException ex1) {
-                Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(AirplaneDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
 }

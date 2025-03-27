@@ -12,21 +12,11 @@ import java.util.ArrayList;
  */
 public class Compartment {
     private String id;
-    private TicketType type;
+    private CompartmentType type;
     private Airplane airplane;
     private int capacity;
     
     private ArrayList<Seat> seats = new ArrayList<>();
-
-    public Compartment() {
-    }
-
-    public Compartment(String id, TicketType type, Airplane airplane, int capacity) {
-        this.id = id;
-        this.type = type;
-        this.airplane = airplane;
-        this.capacity = capacity;
-    }
 
     public String getId() {
         return id;
@@ -36,11 +26,11 @@ public class Compartment {
         this.id = id;
     }
 
-    public TicketType getType() {
+    public CompartmentType getType() {
         return type;
     }
 
-    public void setType(TicketType type) {
+    public void setType(CompartmentType type) {
         this.type = type;
     }
 
