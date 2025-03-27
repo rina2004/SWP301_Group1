@@ -64,18 +64,6 @@ public class OrderDAO extends DBContext {
         return list;
     }
 
-    public int cancelOrderById(String orderId) {
-        String sql = "UPDATE `Order` SET status = 'Processing' WHERE id = ? AND status != 'Cancelled'";
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setString(1, orderId);
-            return stm.executeUpdate(); // Trả về số dòng bị ảnh hưởng
-        } catch (SQLException e) {
-            System.out.println("Error cancelling order: " + e.getMessage());
-        }
-
-        return -1;
-    }
 
     public List<Order> getOrderHistory(String accountId) {
         List<Order> list = new ArrayList<>();

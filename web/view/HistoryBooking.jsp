@@ -87,7 +87,6 @@
                 <table>
                     <tr>
                         <th>Order ID</th>
-                        <th>Status</th>
                         <th>Time</th>
                         <td>Total Passenger</td>
                         <th>Total Price</th>
@@ -95,7 +94,6 @@
                     <c:forEach var="order" items="${orders}">
                         <tr class="order-row">
                             <td>${order.id}</td>
-                            <td>${order.status}</td>
                             <td>${order.time}</td>
                             <td>${order.finalNum}</td>
                             <td>${order.finalPrice}</td>
