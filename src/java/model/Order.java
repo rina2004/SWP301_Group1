@@ -1,17 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
-
 import java.time.LocalDateTime;
-
 /**
  *
  * @author A A
  */
 public class Order {
-
     private String id;
     private Account customer;
     private Account staff;
@@ -19,10 +12,8 @@ public class Order {
     private LocalDateTime time;
     private double finalPrice;
     private int finalNum;
-
     public Order() {
     }
-
     public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum) {
         this.id = id;
         this.customer = customer;
@@ -32,11 +23,9 @@ public class Order {
         this.finalPrice = finalPrice;
         this.finalNum = finalNum;
     }
-
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }

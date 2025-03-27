@@ -235,30 +235,29 @@ public class AccountDAO extends DBContext {
     public Account login(String username, String password) {
         PreparedStatement stm;
         ResultSet rs;
-
-        String sql = "SELECT * FROM Account WHERE username = ? AND password = ?";
+        String sql = "SELECT a.*, r.id as roleId, r.name as roleName FROM Account a "
+                + "JOIN Role r ON a.roleID = r.id "
+                + "WHERE a.username = ? AND a.password = ?";
         try {
             stm = connection.prepareStatement(sql);
             stm.setString(1, username);
             stm.setString(2, password);
             rs = stm.executeQuery();
-
             if (rs.next()) {
                 boolean status = rs.getBoolean("status");
-
                 if (!status) {
                     return null;
                 }
-
                 Account acc = new Account();
-                acc.setId(rs.getString("id")); 
+                acc.setId(rs.getString("id"));
                 acc.setUsername(rs.getString("username"));
                 acc.setPassword(rs.getString("password"));
                 acc.setStatus(status);
+                
                 Role role = new Role();
-                role.setId(rs.getInt("roleID"));
+                role.setId(rs.getInt("roleId"));
+                role.setName(rs.getString("roleName"));
                 acc.setRole(role);
-
                 return acc;
             }
         } catch (SQLException e) {
@@ -380,8 +379,8 @@ public class AccountDAO extends DBContext {
 
         }
     }
-    
-     public void updatePasswordProfile(String username, String newPassword) {
+
+    public void updatePasswordProfile(String username, String newPassword) {
         PreparedStatement stm;
         String sql = "UPDATE Account SET password = ? WHERE username = ?";
         try {
@@ -393,7 +392,6 @@ public class AccountDAO extends DBContext {
             e.printStackTrace();
         }
     }
-    
 
     public void register(String username, String password, String name, Date dob, String phone, String address, String email) {
         PreparedStatement accountStmt = null;
@@ -453,6 +451,5 @@ public class AccountDAO extends DBContext {
         }
 
     }
-    
-    
+
 }

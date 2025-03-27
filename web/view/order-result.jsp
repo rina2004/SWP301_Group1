@@ -27,14 +27,6 @@
                     <div class="d-flex align-items-center">
                         <h2 class="mb-0">Flight Booking</h2>
                     </div>
-                    <div>
-                        <a href="order-cart.jsp" class="btn btn-outline-primary position-relative">
-                            <i class="fas fa-shopping-cart"></i> Cart
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-count">
-                                0
-                            </span>
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -116,13 +108,6 @@
                                     <div>
                                         <h5 class="card-title">${flight.getName()}</h5>
                                     </div>
-                                    <div class="text-end">
-                                        <div class="price-display">
-                                            <c:set var="ticket" value="${ticketMap[flight.getId()]}" />
-                                            <fmt:formatNumber value="${ticket.seat.compartment.type.price}" type="currency" currencySymbol="" maxFractionDigits="0"/> VND
-                                        </div>
-                                        <small class="text-muted">${ticket.seat.compartment.type.type}</small>
-                                    </div>
                                 </div>
                                 <div class="flight-info">
                                     <div>
@@ -138,17 +123,14 @@
                                         <div class="time-display">${flight.getLandingHour()}</div>
                                         <div class="location-display">${flight.getDestination().getName()}</div>
                                     </div>
-                                    <div class="action-buttons ms-3">
+                                    <div class="action-buttons ms-2">
                                         <a href="order-detail?id=${flight.getId()}&departure=${departure}&destination=${destination}&departureDate=${departureDate}" class="btn btn-light" title="View Details">
-                                            <i class="fas fa-eye text-primary"></i>
+                                            <i class="fas fa-eye text-primary align-items-center"></i>
                                         </a>
-                                        <button onclick="addToCart('${flight.getId()}', '${flight.getName()}', '${ticket.price}', '${ticket.type}')" class="btn btn-light" title="Add to Cart">
-                                            <i class="fas fa-plus text-success"></i>
-                                        </button>
                                         <br><br>
                                         <a href="order-confirm?flightId=${flight.getId()}&ticketClass=${ticket.type}&passengers=1" 
                                            class="btn btn-primary rounded-3 px-4 py-2 w-100" title="Đặt vé ngay">
-                                            Đặt vé ngay
+                                            Đặt vé
                                         </a>
                                     </div>
                                 </div>
@@ -159,5 +141,27 @@
             </c:choose>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+                                            function addToCart(id, name, price, ticketType) {
+                                                let cart = JSON.parse(localStorage.getItem('flightCart')) || [];
+                                                const existingItem = cart.find(item => item.id === id && item.ticketType === ticketType);
+                                                if (existingItem) {
+                                                    showNotification('This flight is already in your cart');
+                                                } else {
+                                                    cart.push({
+                                                        id: id,
+                                                        name: name,
+                                                        price: formatCurrency(price),
+                                                        ticketType: ticketType
+                                                    });
+                                                    localStorage.setItem('flightCart', JSON.stringify(cart));
+                                                    updateCartCount();
+                                                    showNotification('Flight added to cart successfully');
+                                                }
+                                            }
+                                            function formatCurrency(value) {
+                                                return new Intl.NumberFormat('vi-VN').format(value);
+                                            }
+        </script>
     </body>
 </html>
