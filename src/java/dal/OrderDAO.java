@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import model.Account;
 import model.Order;
 import model.OrderPassenger;
-
+import model.TicketType;
 
 /**
  *
@@ -60,12 +60,12 @@ public class OrderDAO extends DBContext {
 
     public List<Order> getOrderHistory(String accountId) {
         List<Order> list = new ArrayList<>();
-        String sql = "SELECT o.id, o.customerID, o.staffID, o.status, o.time, COUNT(t.id) AS finalNum "
+        String sql = "SELECT o.id, o.customerID, o.staffID, o.status, o.time, o.finalPrice, COUNT(t.id) AS finalNum "
                 + "FROM `Order` o "
                 + "LEFT JOIN OrderPassenger op ON o.id = op.orderID "
                 + "LEFT JOIN Ticket t ON op.id = t.orderPID "
                 + "WHERE o.customerID = ? "
-                + "GROUP BY o.id, o.customerID, o.staffID, o.status, o.time "
+                + "GROUP BY o.id, o.customerID, o.staffID, o.status, o.time, o.finalPrice "
                 + "ORDER BY o.time DESC";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -87,6 +87,7 @@ public class OrderDAO extends DBContext {
 
                     order.setStatus(rs.getString("status"));
                     order.setTime(rs.getTimestamp("time").toLocalDateTime());
+                    order.setFinalPrice(rs.getDouble("finalPrice"));
                     order.setFinalNum(rs.getInt("finalNum"));
 
                     list.add(order);
@@ -119,41 +120,40 @@ public class OrderDAO extends DBContext {
         return passengers;
     }
 
-    public int cancelOrderById(String orderId) {
-        String sql = "UPDATE `Order` SET status = 'Processing' WHERE id = ? AND status != 'Cancelled'";
+    public int cancelTicketsByOrderPassengerId(String orderPassengerId) {
+        String sql = "UPDATE Ticket SET status = 'Processing' WHERE orderPID = ? AND status != 'Cancelled'";
 
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setString(1, orderId);
-            return stm.executeUpdate(); // Trả về số dòng bị ảnh hưởng
+            stm.setString(1, orderPassengerId);
+            return stm.executeUpdate(); // Trả về số vé bị hủy
         } catch (SQLException e) {
-            System.out.println("Error cancelling order: " + e.getMessage());
+            System.out.println("Error cancelling tickets: " + e.getMessage());
         }
 
-        return -1; // Trả về -1 nếu có lỗi xảy ra
+        return -1; // Lỗi xảy ra
     }
 
-    public List<Order> getProcessingOrders() {
-        String sql = "SELECT * FROM `Order` WHERE status = 'Processing'";
-        List<Order> orders = new ArrayList<>();
-
-        try (PreparedStatement stm = connection.prepareStatement(sql); ResultSet rs = stm.executeQuery()) {
-
-            while (rs.next()) {
-                Order order = new Order();
-                order.setId(rs.getString("id"));
-                order.setStatus(rs.getString("status"));
-                order.setFinalPrice(rs.getDouble("finalPrice"));
-                order.setFinalNum(rs.getInt("finalNum"));
-
-                orders.add(order);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error fetching processing orders: " + e.getMessage());
-        }
-
-        return orders;
-    }
-
+//    public List<Order> getProcessingOrders() {
+//        String sql = "SELECT * FROM `Order` WHERE status = 'Processing'";
+//        List<Order> orders = new ArrayList<>();
+//
+//        try (PreparedStatement stm = connection.prepareStatement(sql); ResultSet rs = stm.executeQuery()) {
+//
+//            while (rs.next()) {
+//                Order order = new Order();
+//                order.setId(rs.getString("id"));
+//                order.setStatus(rs.getString("status"));
+//                order.setFinalPrice(rs.getDouble("finalPrice"));
+//                order.setFinalNum(rs.getInt("finalNum"));
+//
+//                orders.add(order);
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("Error fetching processing orders: " + e.getMessage());
+//        }
+//
+//        return orders;
+//    }
     public int cancelOrder(String orderId) {
         String updateTicketSql = "UPDATE Ticket SET status = 'Cancelled' WHERE orderID = ?";
         String updateSeatSql = "UPDATE Seat SET status = 'Available', reason = 'Cancelled Ticket' "

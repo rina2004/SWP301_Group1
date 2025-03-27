@@ -10,7 +10,7 @@ package model;
  */
 public class Compartment {
     private String id;
-    private TicketType type;
+    private CompartmentType cType;
     private Airplane airplane;
     private int capacity;
 
@@ -20,15 +20,15 @@ public class Compartment {
     public Compartment(String id) {
         this.id = id;
     }
-    
-    
 
-    public Compartment(String id, TicketType type, Airplane airplane, int capacity) {
+    public Compartment(String id, CompartmentType cType, Airplane airplane, int capacity) {
         this.id = id;
-        this.type = type;
+        this.cType = cType;
         this.airplane = airplane;
         this.capacity = capacity;
     }
+    
+    
 
     public String getId() {
         return id;
@@ -38,12 +38,12 @@ public class Compartment {
         this.id = id;
     }
 
-    public TicketType getType() {
-        return type;
+    public CompartmentType getcType() {
+        return cType;
     }
 
-    public void setType(TicketType type) {
-        this.type = type;
+    public void setcType(CompartmentType cType) {
+        this.cType = cType;
     }
 
     public Airplane getAirplane() {
@@ -61,7 +61,7 @@ public class Compartment {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
-    
+
     
     
 }

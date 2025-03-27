@@ -136,7 +136,7 @@
                                                         <td>
                                                             <a class="btn" href="${pageContext.request.contextPath}/historyBookingDetail?OrderPassengerID=${passenger.id}">View</a>
                                                             <c:if test="${ticket.status ne 'Cancelled' and ticket.status ne 'Pending'}">
-                                                                <a class="btn btn-secondary" href="#" onclick="confirmCancel('${ticket.id}')">Cancel</a>
+                                                                <a class="btn btn-secondary" href="#" onclick="confirmCancel('${passenger.id}')">Cancel</a>
                                                             </c:if>
                                                         </td>
                                                     </tr>
@@ -156,12 +156,13 @@
 
         <!-- Form ẩn để gửi yêu cầu hủy vé -->
         <form id="cancelForm" method="POST" action="${pageContext.request.contextPath}/cancelTicket">
-            <input type="hidden" name="ticketID" id="ticketIdInput">
+            <input type="hidden" name="OrderPassengerID" id="orderPassengerIdInput">
         </form>
 
+
         <script>
-            function confirmCancel(ticketId) {
-                if (!ticketId || ticketId.trim() === '')
+            function confirmCancel(orderPassengerId) {
+                if (!orderPassengerId || orderPassengerId.trim() === '')
                     return;
 
                 Swal.fire({
@@ -175,11 +176,12 @@
                     cancelButtonText: "No"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.getElementById('ticketIdInput').value = ticketId;
+                        document.getElementById('orderPassengerIdInput').value = orderPassengerId;
                         document.getElementById('cancelForm').submit();
                     }
                 });
             }
+
         </script>
     </body>
 

@@ -7,6 +7,53 @@ INSERT INTO Role (name) VALUES
 ('Staff'),
 ('AirTrafficControl');
 
+INSERT INTO Location (name) VALUES
+('Hà Nội-Nội Bài'),
+('TP. Hồ Chí Minh-Tân Sơn Nhất'),
+('Đà Nẵng-Quốc tế Đà Nẵng'),
+('Nha Trang-Cam Ranh'),
+('Phú Quốc-Quốc tế Phú Quốc'),
+('Huế-Phú Bài'),
+('Hải Phòng-Cát Bi'),
+('Đà Lạt-Liên Khương'),
+('Cần Thơ-Quốc tế Cần Thơ'),
+('Quảng Ninh-Vân Đồn'),
+('Nghệ An-Vinh'),
+('Buôn Ma Thuột-Buôn Ma Thuột'),
+('Quy Nhơn-Phù Cát'),
+('Thanh Hóa-Thọ Xuân'),
+('Quảng Bình-Đồng Hới'),
+('Điện Biên-Điện Biên Phủ'),
+('Pleiku-Pleiku'),
+('Côn Đảo-Côn Sơn'),
+('Tuy Hòa-Tuy Hòa'),
+('Cà Mau-Cà Mau');
+
+INSERT INTO Nation (name) VALUES
+('Vietnam'),
+('United States'),
+('Japan'),
+('South Korea'),
+('China'),
+('Singapore'),
+('Thailand'),
+('Malaysia'),
+('Australia'),
+('United Kingdom');
+
+INSERT INTO AirplaneStatus (name) VALUES 
+('Active'), ('Maintenance'), ('Retired'), ('In Use'), ('Under Repair');
+
+INSERT INTO PassengerType (name, ageMin, ageMax, discountPercentage) VALUES
+('Người lớn', 12, 100, 0),
+('Trẻ em', 2, 11, 25),
+('Em bé', 0, 1, 90);
+
+INSERT INTO `TicketType` (`type`, `description`, `percent`, `checkedweightneed`, `handedweightneed` ) VALUES
+('Basic', 'Standard seating and basic amenities. Additional services: Priority boarding, extra legroom, complimentary beverage service.', 100, 23.0, 7.0),
+('Extra', 'Full business class experience. Additional services: Lie-flat seats, lounge access, premium meals and beverages.', 105, 25.0, 10.0),
+('First Class', 'Luxury air travel experience. Additional services: Private suites, personalized service, gourmet dining, exclusive lounge access.', 150, 50.0, 10.0);
+
 -- Account table (10 records)
 INSERT INTO Account (username, password, roleID, status, citizenID, name, dob, phone, address, email) VALUES
 ('admin1', '123', 1, TRUE, '123456789012', 'Admin 1', '1990-05-15', '0987654321', '123 Main Street, Hanoi', 'admin1@example.com'),
@@ -21,44 +68,6 @@ INSERT INTO Account (username, password, roleID, status, citizenID, name, dob, p
 ('user4', '123', 2, TRUE, '012345678901', 'Nguyen Van A', '1994-03-17', '0989012345', '707 Redwood Place, Da Lat', 'abc@example.com'),
 ('author1', '123', 2, TRUE, '012345678901', 'Nguyen Van A', '1994-03-17', '0989012345', '707 Redwood Place, Da Lat', 'abc@example.com');
 
-INSERT INTO `Location` (name) VALUES
-('Hà Nội-Sân bay Nội Bài'),
-('TP. Hồ Chí Minh-Sân bay Tân Sơn Nhất'),
-('Đà Nẵng-Sân bay Quốc tế Đà Nẵng'),
-('Nha Trang-Sân bay Cam Ranh'),
-('Phú Quốc-Sân bay Quốc tế Phú Quốc'),
-('Huế-Sân bay Phú Bài'),
-('Hải Phòng-Sân bay Cát Bi'),
-('Đà Lạt-Sân bay Liên Khương'),
-('Cần Thơ-Sân bay Quốc tế Cần Thơ'),
-('Quảng Ninh-Sân bay Vân Đồn'),
-('Nghệ An-Sân bay Vinh'),
-('Buôn Ma Thuột-Sân bay Buôn Ma Thuột'),
-('Quy Nhơn-Sân bay Phù Cát'),
-('Thanh Hóa-Sân bay Thọ Xuân'),
-('Quảng Bình-Sân bay Đồng Hới'),
-('Điện Biên-Sân bay Điện Biên Phủ'),
-('Pleiku-Sân bay Pleiku'),
-('Côn Đảo-Sân bay Côn Sơn'),
-('Tuy Hòa-Sân bay Tuy Hòa'),
-('Cà Mau-Sân bay Cà Mau');
-
-INSERT INTO Nation (name) VALUES
-('Vietnam'),
-('United States'),
-('Japan'),
-('South Korea'),
-('China'),
-('Singapore'),
-('Thailand'),
-('Malaysia'),
-('Australia'),
-('United Kingdom');
-
--- AirplaneStatus table already has 5 records, adding 5 more to reach 10
-INSERT INTO AirplaneStatus (name) VALUES 
-('Active'), ('Maintenance'), ('Retired'), ('In Use'), ('Under Repair');
-
 -- Airplane table (10 records)
 INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime) VALUES
 ('VN-A001', 'Sky Dragon', 1, '2024-06-15 08:00:00', '2023-12-01 00:00:00'),
@@ -72,97 +81,92 @@ INSERT INTO Airplane (id, name, statusID, maintainanceTime, usedTime) VALUES
 ('VN-A009', 'Sky Voyager', 4, '2024-06-05 08:30:00', '2023-12-15 00:00:00'),
 ('VN-A010', 'Cloud Dancer', 5, '2024-07-28 09:45:00', '2024-01-05 00:00:00');
 
-INSERT INTO `TicketType` (`type`, `description`, `price`, `checkedweightneed`, `handedweightneed` ) VALUES
-('Economy', 'Standard seating and basic amenities. Additional services: Priority boarding, extra legroom, complimentary beverage service.', 200000.00, 23.0, 7.0),
-('Business', 'Full business class experience. Additional services: Lie-flat seats, lounge access, premium meals and beverages.', 800000.00, 40.0, 10.0),
-('First Class', 'Luxury air travel experience. Additional services: Private suites, personalized service, gourmet dining, exclusive lounge access.', 1500000.00, 50.0, 10.0);
+-- Flight table (10 records)
+INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime, price) VALUES 
+    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00', 2100000),
+    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2025-05-1 06:00:00', '2025-05-2 07:30:00', '2025-05-2 09:30:00', 2080000),
+    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2025-05-1 06:00:00', '2025-05-2 08:00:00', '2025-05-2 10:00:00', 2150000.00),
+    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2025-05-1 06:00:00', '2025-05-2 09:00:00', '2025-05-2 11:00:00', 2500000),    
+    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2025-05-1 06:00:00', '2025-05-2 10:30:00', '2025-05-2 12:30:00', 2200000),   
+    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2025-05-1 06:00:00', '2025-05-2 07:15:00', '2025-05-2 09:15:00', 2250000),    
+    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2025-05-1 06:00:00', '2025-05-2 07:45:00', '2025-05-2 09:45:00', 2300000),
+    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2025-05-1 06:00:00', '2025-05-2 08:15:00', '2025-05-2 10:15:00', 2250000),
+    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2025-05-1 06:00:00', '2025-05-2 09:30:00', '2025-05-2 11:30:00', 2400000),    
+    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2025-05-1 06:00:00', '2025-05-2 10:00:00', '2025-05-2 12:00:00', 2300000);
+
+INSERT INTO CompartmentType (id, name) VALUES
+('B', 'Business'),
+('E', 'Economy'),
+('F', 'First Class');
 
 -- Compartment table (10 records)
-INSERT INTO Compartment (id, type, airplaneID, capacity) VALUES
-('VN-A001-B', 'Business','VN-A001', 40),
-('VN-A001-E', 'Economy','VN-A001', 40),
-('VN-A001-F','First Class','VN-A001', 40),
-('VN-A002-B', 'Business','VN-A002', 40),
-('VN-A002-E', 'Economy','VN-A002', 40),
-('VN-A002-F','First Class','VN-A002', 40),
-('VN-A003-B', 'Business','VN-A003', 40),
-('VN-A003-E', 'Economy','VN-A003', 40),
-('VN-A003-F','First Class','VN-A003', 40),
-('VN-A004-B', 'Business','VN-A004', 40),
-('VN-A004-E', 'Economy','VN-A004', 40),
-('VN-A004-F','First Class','VN-A004', 40),
-('VN-A005-B', 'Business','VN-A005', 40),
-('VN-A005-E', 'Economy','VN-A005', 40),
-('VN-A005-F','First Class','VN-A005', 40),
-('VN-A006-B', 'Business','VN-A006', 40),
-('VN-A006-E', 'Economy','VN-A006', 40),
-('VN-A006-F','First Class','VN-A006', 40),
-('VN-A007-B', 'Business','VN-A007', 40),
-('VN-A007-E', 'Economy','VN-A007', 40),
-('VN-A007-F','First Class','VN-A007', 40),
-('VN-A008-B', 'Business','VN-A008', 40),
-('VN-A008-E', 'Economy','VN-A008', 40),
-('VN-A008-F','First Class','VN-A008', 40),
-('VN-A009-B', 'Business','VN-A009', 40),
-('VN-A009-E', 'Economy','VN-A009', 40),
-('VN-A009-F','First Class','VN-A009', 40),
-('VN-A010-B', 'Business','VN-A010', 40),
-('VN-A010-E', 'Economy','VN-A010', 40),
-('VN-A010-F','First Class','VN-A010', 40);
+INSERT INTO Compartment (id, cType, airplaneID, capacity) VALUES
+('VN-A001-B', 'B','VN-A001', 40),
+('VN-A001-E', 'E','VN-A001', 40),
+('VN-A001-F', 'F','VN-A001', 40),
+('VN-A002-B', 'B','VN-A002', 40),
+('VN-A002-E', 'E','VN-A002', 40),
+('VN-A002-F','F','VN-A002', 40),
+('VN-A003-B', 'B','VN-A003', 40),
+('VN-A003-E', 'E','VN-A003', 40),
+('VN-A003-F','F','VN-A003', 40),
+('VN-A004-B', 'B','VN-A004', 40),
+('VN-A004-E', 'E','VN-A004', 40),
+('VN-A004-F','F','VN-A004', 40),
+('VN-A005-B', 'B','VN-A005', 40),
+('VN-A005-E', 'E','VN-A005', 40),
+('VN-A005-F','F','VN-A005', 40),
+('VN-A006-B', 'B','VN-A006', 40),
+('VN-A006-E', 'E','VN-A006', 40),
+('VN-A006-F','F','VN-A006', 40),
+('VN-A007-B', 'B','VN-A007', 40),
+('VN-A007-E', 'E','VN-A007', 40),
+('VN-A007-F','F','VN-A007', 40),
+('VN-A008-B', 'B','VN-A008', 40),
+('VN-A008-E', 'E','VN-A008', 40),
+('VN-A008-F','F','VN-A008', 40),
+('VN-A009-B', 'B','VN-A009', 40),
+('VN-A009-E', 'E','VN-A009', 40),
+('VN-A009-F','F','VN-A009', 40),
+('VN-A010-B', 'B','VN-A010', 40),
+('VN-A010-E', 'E','VN-A010', 40),
+('VN-A010-F','F','VN-A010', 40);
 
 -- Seat table (10 records)
 INSERT INTO Seat (id, compartmentID, status, reason) VALUES
-('VN-A001-1', 'VN-A001-B', 'Active', null),
-('VN-A001-2', 'VN-A001-B', 'Active', null),
-('VN-A001-3', 'VN-A001-B', 'Active', null),
-('VN-A001-4', 'VN-A001-E', 'Active', null),
-('VN-A001-5', 'VN-A001-E', 'In Maintenance', 'SUPAIGA'),
-('VN-A001-6', 'VN-A001-E', 'Retired', 'SUPANIGA'),
-('VN-A001-7', 'VN-A001-F', 'Active', null),
-('VN-A001-8', 'VN-A001-F', 'Active', 'SUPAIGA'),
-('VN-A001-9', 'VN-A001-F', 'Active', 'SUPANIGA'),
-('VN-A002-1', 'VN-A002-B', 'Active', null),
-('VN-A002-2', 'VN-A002-B', 'Active', 'SUPAIGA'),
-('VN-A002-3', 'VN-A002-B', 'Active', 'SUPANIGA'),
-('VN-A002-4', 'VN-A002-E', 'Active', null),
-('VN-A002-5', 'VN-A002-E', 'Active', 'SUPAIGA'),
-('VN-A002-6', 'VN-A002-E', 'Active', 'SUPANIGA'),
-('VN-A002-7', 'VN-A002-F', 'Active', null),
-('VN-A002-8', 'VN-A002-F', 'Active', 'SUPAIGA'),
-('VN-A002-9', 'VN-A002-F', 'Active', 'SUPANIGA'),
-('VN-A003-1', 'VN-A003-B', 'Active', null),
-('VN-A003-2', 'VN-A003-B', 'Active', 'SUPAIGA'),
-('VN-A003-3', 'VN-A003-B', 'Active', 'SUPANIGA'),
-('VN-A003-4', 'VN-A003-E', 'Active', null),
-('VN-A003-5', 'VN-A003-E', 'Active', 'SUPAIGA'),
-('VN-A003-6', 'VN-A003-E', 'Active', 'SUPANIGA'),
-('VN-A003-7', 'VN-A003-F', 'Active', null),
-('VN-A003-8', 'VN-A003-F', 'Active', 'SUPAIGA'),
-('VN-A003-9', 'VN-A003-F', 'Active', 'SUPANIGA');
+('VN-A001-B-1', 'VN-A001-B', 'Active', null),
+('VN-A001-B-2', 'VN-A001-B', 'Active', null),
+('VN-A001-B-3', 'VN-A001-B', 'Active', null),
+('VN-A001-E-4', 'VN-A001-E', 'Active', null),
+('VN-A001-E-5', 'VN-A001-E', 'In Maintenance', 'SUPAIGA'),
+('VN-A001-E-6', 'VN-A001-E', 'Retired', 'SUPANIGA'),
+('VN-A001-F-7', 'VN-A001-F', 'Active', null),
+('VN-A001-F-8', 'VN-A001-F', 'Active', 'SUPAIGA'),
+('VN-A001-F-9', 'VN-A001-F', 'Active', 'SUPANIGA'),
+('VN-A002-B-1', 'VN-A002-B', 'Active', null),
+('VN-A002-B-2', 'VN-A002-B', 'Active', 'SUPAIGA'),
+('VN-A002-B-3', 'VN-A002-B', 'Active', 'SUPANIGA'),
+('VN-A002-E-4', 'VN-A002-E', 'Active', null),
+('VN-A002-E-5', 'VN-A002-E', 'Active', 'SUPAIGA'),
+('VN-A002-E-6', 'VN-A002-E', 'Active', 'SUPANIGA'),
+('VN-A002-F-7', 'VN-A002-F', 'Active', null),
+('VN-A002-F-8', 'VN-A002-F', 'Active', 'SUPAIGA'),
+('VN-A002-F-9', 'VN-A002-F', 'Active', 'SUPANIGA'),
+('VN-A003-B-1', 'VN-A003-B', 'Active', null),
+('VN-A003-B-2', 'VN-A003-B', 'Active', 'SUPAIGA'),
+('VN-A003-B-3', 'VN-A003-B', 'Active', 'SUPANIGA'),
+('VN-A003-E-4', 'VN-A003-E', 'Active', null),
+('VN-A003-E-5', 'VN-A003-E', 'Active', 'SUPAIGA'),
+('VN-A003-E-6', 'VN-A003-E', 'Active', 'SUPANIGA'),
+('VN-A003-F-7', 'VN-A003-F', 'Active', null),
+('VN-A003-F-8', 'VN-A003-F', 'Active', 'SUPAIGA'),
+('VN-A003-F-9', 'VN-A003-F', 'Active', 'SUPANIGA');
 
--- Flight table (10 records)
-INSERT INTO Flight (id, name, code, airplaneID, departure, destination, entryTime, startingTime, landingTime) VALUES 
-    ('FL001', 'Morning Express', 'VN001', 'VN-A001', 1, 2, '2025-05-1 06:00:00', '2025-05-2 07:00:00', '2025-05-2 09:00:00'),
-    ('FL002', 'Afternoon Shuttle', 'VN002', 'VN-A002', 2, 3, '2024-04-11 12:30:00', '2024-04-11 13:30:00', '2024-04-11 14:45:00'),
-    ('FL003', 'Evening Direct', 'VN003', 'VN-A003', 3, 1, '2024-04-12 18:00:00', '2024-04-12 19:00:00', '2024-04-12 20:30:00'),
-    ('FL004', 'International Route', 'VN004', 'VN-A004', 2, 11, '2024-04-13 09:15:00', '2024-04-13 10:15:00', '2024-04-13 12:45:00'),
-    ('FL005', 'Night Flight', 'VN005', 'VN-A005', 1, 12, '2024-04-14 22:00:00', '2024-04-14 23:00:00', '2024-04-15 00:30:00'),
-    ('FL006', 'Weekend Special', 'VN006', 'VN-A006', 3, 5, '2024-04-15 10:45:00', '2024-04-15 11:45:00', '2024-04-15 13:00:00'),
-    ('FL007', 'Business Express', 'VN007', 'VN-A007', 1, 13, '2024-04-16 08:30:00', '2024-04-16 09:30:00', '2024-04-16 14:00:00'),
-    ('FL008', 'Tourist Delight', 'VN008', 'VN-A008', 2, 14, '2024-04-17 14:15:00', '2024-04-17 15:15:00', '2024-04-17 19:45:00'),
-    ('FL009', 'Express Connection', 'VN009', 'VN-A009', 3, 15, '2024-04-18 11:30:00', '2024-04-18 12:30:00', '2024-04-18 15:15:00'),
-    ('FL010', 'Domestic Link', 'VN010', 'VN-A010', 4, 7, '2024-04-19 16:45:00', '2024-04-19 17:45:00', '2024-04-19 19:30:00');
-
-INSERT INTO PassengerType (name, ageMin, ageMax, discountPercentage) VALUES
-('Người lớn', 12, 100, 0),
-('Trẻ em', 2, 11, 25),
-('Em bé', 0, 1, 90);
-
-INSERT INTO `Order` (id, customerID, staffID, status, time, finalPrice, finalNum) VALUES
-('ORD001', (SELECT id FROM Account WHERE username = 'user1'), (SELECT id FROM Account WHERE username = 'staff1'), 'Confirmed', '2024-03-15 09:30:00', 0.0, 1),
-('ORD002', (SELECT id FROM Account WHERE username = 'user2'), (SELECT id FROM Account WHERE username = 'staff1'), 'Processing', '2024-03-16 11:45:00', 0.0, 3),
-('ORD003', (SELECT id FROM Account WHERE username = 'user3'), (SELECT id FROM Account WHERE username = 'staff1'), 'Confirmed', '2024-03-17 14:20:00', 0.0, 1),
-('ORD004', (SELECT id FROM Account WHERE username = 'user4'), (SELECT id FROM Account WHERE username = 'staff1'), 'Cancelled', '2024-03-18 16:35:00', 0.0, 1);
+INSERT INTO `Order` (id, customerID, staffID, status, time, finalPrice, finalNum, type) VALUES
+('ORD001', (SELECT id FROM Account WHERE username = 'user1'), (SELECT id FROM Account WHERE username = 'staff1'), 'Confirmed', '2024-03-15 09:30:00', 0.0, 1, 'Extra'),
+('ORD002', (SELECT id FROM Account WHERE username = 'user2'), (SELECT id FROM Account WHERE username = 'staff1'), 'Processing', '2024-03-16 11:45:00', 0.0, 3, 'Basic'),
+('ORD003', (SELECT id FROM Account WHERE username = 'user3'), (SELECT id FROM Account WHERE username = 'staff1'), 'Confirmed', '2024-03-17 14:20:00', 0.0, 1, 'Extra'),
+('ORD004', (SELECT id FROM Account WHERE username = 'user4'), (SELECT id FROM Account WHERE username = 'staff1'), 'Cancelled', '2024-03-18 16:35:00', 0.0, 1, 'First Class');
 
 INSERT INTO OrderPassenger (id, orderID, passengerTypeID, fullName, dob, nationID)
 VALUES
@@ -173,13 +177,13 @@ VALUES
 ('ORD003-1', 'ORD003', 1, 'Robert Johnson', '1988-11-30', 3),
 ('ORD004-1', 'ORD004', 1, 'Sarah Williams', '1992-04-12', 4);
 
-INSERT INTO Ticket (orderID, flightID, seatID, status) VALUES
-('ORD001', 'FL001', 'VN-A001-1', 'Confirmed'),
-('ORD002', 'FL001', 'VN-A001-4', 'Pending'),
-('ORD002', 'FL001', 'VN-A001-5', 'Confirmed'),
-('ORD002', 'FL001', 'VN-A001-6', 'Cancelled'),
-('ORD003', 'FL001', 'VN-A001-7', 'Checked-In'),
-('ORD004', 'FL001', 'VN-A001-8', 'Confirmed');
+INSERT INTO Ticket (orderPID, flightID, comID, seatID, status) VALUES
+('ORD001-1', 'FL001', 'VN-A001-B', 'VN-A001-B-1', 'Confirmed'),
+('ORD002-1', 'FL001', 'VN-A001-E', 'VN-A001-E-4', 'Pending'),
+('ORD002-2', 'FL001', 'VN-A001-E', 'VN-A001-E-5', 'Confirmed'),
+('ORD002-3', 'FL001', 'VN-A001-E', 'VN-A001-E-6', 'Cancelled'),
+('ORD003-1', 'FL001', 'VN-A002-F', 'VN-A001-F-7', 'Checked-In'),
+('ORD004-1', 'FL001', 'VN-A002-F', 'VN-A001-F-8', 'Confirmed');
 
 INSERT INTO Luggage (id, customerID, orderID, type, checkedweight , handedweight) VALUES
 ('ORD001-1', (SELECT id FROM Account WHERE username = 'user1'), 'ORD001', 'Checked', 20.0, 5.0),
@@ -230,72 +234,8 @@ INSERT INTO ChatMessage (senderAccountID, receiverAccountID, message, timestamp,
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user3'), 'Sarah, could you check if there are any window seats available on flight VN303?', '2024-03-16 14:30:00', TRUE),
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user4'), 'I just checked and there are 3 window seats available. Would you like me to book one for you?', '2024-03-16 14:45:00', TRUE);
 
-Select * from Account;
 
-SELECT 
-    o.id, 
-    o.customerID, 
-    o.staffID, 
-    o.status, 
-    o.time, 
-    COUNT(t.id) AS finalNum
-FROM `Order` o
-LEFT JOIN Ticket t ON o.id = t.orderId
-WHERE o.customerID = 'ef677639-09b2-11f0-8b27-aecf05ab4866'
-GROUP BY o.id, o.customerID, o.staffID, o.status, o.time
-ORDER BY o.time DESC;
 
-SELECT op.id, op.fullName, op.nationID
-FROM OrderPassenger op
-JOIN `Order` o ON op.orderID = o.id
-JOIN Ticket t ON t.orderID = o.id
-WHERE t.id = ?;
-
-Select * from Ticket;
-
-SELECT op.id, op.fullName, n.id AS nationId, n.name AS nationName
-FROM OrderPassenger op
-JOIN Nation n ON op.nationID = n.id
-JOIN `Order` o ON op.orderID = o.id
-JOIN Ticket t ON t.orderID = o.id
-WHERE t.flightID = 'FL001' AND t.seatID = 'VN-A001-4';
-
-SELECT 
-    t.id AS ticketID,
-    f.code AS flightCode,
-    f.name AS flightName,
-    dep.name AS departureName,
-    des.name AS destinationName,
-    f.startingTime,
-    f.landingTime,
-    
-    s.id AS seatCode,
-    c.id AS compartmentID,
-    c.type AS ticketType,
-    tt.price,
-    tt.handedweightneed AS handLuggageWeight,
-    tt.checkedweightneed AS checkedLuggageWeight,
-    
-    a.name AS airplaneName,
-    
-    op.fullName AS passengerName,
-    n.name AS nationName,
-    
-    t.status AS ticketStatus
-
-FROM Ticket t
-JOIN Flight f ON t.flightID = f.id
-JOIN Location dep ON f.departure = dep.id
-JOIN Location des ON f.destination = des.id
-JOIN Seat s ON t.seatID = s.id
-JOIN Compartment c ON s.compartmentID = c.id
-JOIN TicketType tt ON c.type = tt.type
-JOIN Airplane a ON f.airplaneID = a.id
-JOIN `Order` o ON t.orderID = o.id
-LEFT JOIN OrderPassenger op ON o.id = op.orderID
-LEFT JOIN Nation n ON op.nationID = n.id
-
-WHERE t.flightID = 'FL001' AND t.seatID = 'VN-A001-1';
 
 SELECT 
     t.id AS ticketId, 
@@ -471,17 +411,89 @@ SELECT id FROM OrderPassenger;
 SELECT o.*
 FROM `OrderPassenger` op
 JOIN `Order` o ON op.orderID = o.id
-WHERE op.id ;
+WHERE op.id = 'ORD002-2' ;
+
+SELECT t.id AS ticketID, t.flightID, t.seatID, t.status,
+       o.id AS orderID, o.status AS orderStatus, o.time, o.finalPrice
+FROM Ticket t
+JOIN `Order` o ON t.orderID = o.id
+WHERE o.customerID = '1f0d2653-0a7e-11f0-a521-dda8ae72319d';  -- Thay bằng ID của khách hàng hiện tại
 
 
+
+SELECT o.id, o.customerID, o.staffID, o.status, o.time, COUNT(t.id) AS finalNum
+FROM `Order` o
+LEFT JOIN OrderPassenger op ON o.id = op.orderID
+LEFT JOIN Ticket t ON op.id = t.orderPID
+WHERE o.customerID = '1b6660ae-0a8b-11f0-a521-dda8ae72319d'
+GROUP BY o.id, o.customerID, o.staffID, o.status, o.time
+ORDER BY o.time DESC;
 
 SELECT 
-    o.id AS OrderID, 
-    s.status AS SeatStatus, 
-    t.status AS TicketStatus
-FROM `Order` o
-JOIN Ticket t ON o.id = t.orderID
-JOIN Seat s ON t.seatID = s.id
-WHERE o.id = 'ORD002';
+    t.id AS ticketId, 
+    t.status AS ticketStatus, 
+    o.id AS orderId, 
+    o.customerID, 
+    o.staffID, 
+    o.status AS orderStatus, 
+    o.time, 
+    o.finalPrice, 
+    o.finalNum, 
+    f.id AS flightId, 
+    f.name AS flightName, 
+    f.code, 
+    f.airplaneID, 
+    a.name AS airplaneName, -- Lấy tên máy bay từ bảng Airplane
+    dep.name AS departure,  -- Lấy tên địa điểm thay vì ID
+    des.name AS destination, -- Lấy tên địa điểm thay vì ID
+    f.entryTime, 
+    f.startingTime, 
+    f.landingTime, 
+    s.id AS seatId, 
+    s.status AS seatStatus, 
+    s.reason 
+FROM Ticket t 
+JOIN OrderPassenger op ON t.orderPID = op.id  -- Thay orderID bằng orderPID để lấy theo OrderPassenger
+JOIN `Order` o ON op.orderID = o.id 
+JOIN Flight f ON t.flightID = f.id 
+JOIN Seat s ON t.seatID = s.id 
+JOIN Location dep ON f.departure = dep.id  -- Thay ID bằng tên
+JOIN Location des ON f.destination = des.id -- Thay ID bằng tên
+JOIN Airplane a ON f.airplaneID = a.id -- JOIN với Airplane để lấy tên máy bay
+WHERE op.id = 'ORD002-1';  -- Lọc theo OrderPassenger.id
+
+SELECT 
+    t.id AS ticketId, 
+    t.status AS ticketStatus, 
+    o.id AS orderId, 
+    o.customerID, 
+    o.staffID, 
+    o.status AS orderStatus, 
+    o.time, 
+    o.finalPrice, 
+    o.finalNum, 
+    f.id AS flightId, 
+    f.name AS flightName, 
+    f.code, 
+    f.airplaneID, 
+    a.name AS airplaneName, -- Lấy tên máy bay từ bảng Airplane
+    dep.name AS departure,  -- Lấy tên địa điểm thay vì ID
+    des.name AS destination, -- Lấy tên địa điểm thay vì ID
+    f.entryTime, 
+    f.startingTime, 
+    f.landingTime, 
+    f.price, -- Thêm giá của chuyến bay
+    s.id AS seatId, 
+    s.status AS seatStatus, 
+    s.reason 
+FROM Ticket t 
+JOIN OrderPassenger op ON t.orderPID = op.id  -- Thay orderID bằng orderPID để lấy theo OrderPassenger
+JOIN `Order` o ON op.orderID = o.id 
+JOIN Flight f ON t.flightID = f.id 
+JOIN Seat s ON t.seatID = s.id 
+JOIN Location dep ON f.departure = dep.id  -- Thay ID bằng tên
+JOIN Location des ON f.destination = des.id -- Thay ID bằng tên
+JOIN Airplane a ON f.airplaneID = a.id -- JOIN với Airplane để lấy tên máy bay
+WHERE op.id = 'ORD002-1';  -- Lọc theo OrderPassenger.id
 
 

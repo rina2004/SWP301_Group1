@@ -27,8 +27,8 @@ public class FlightDAO extends DBContext {
                         destination,
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime()
-                ));
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getInt("price")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -56,8 +56,8 @@ public class FlightDAO extends DBContext {
                         destination,
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime()
-                );
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getInt("price"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,8 +85,8 @@ public class FlightDAO extends DBContext {
                         destination,
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime()
-                );
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getInt("price"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -114,8 +114,8 @@ public class FlightDAO extends DBContext {
                         destination,
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime()
-                );
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getInt("price"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -148,8 +148,8 @@ public class FlightDAO extends DBContext {
                         destination,
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime()
-                ));
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getInt("price")));
             }
             rs.close();
         } catch (SQLException ex) {
@@ -189,8 +189,8 @@ public class FlightDAO extends DBContext {
                         destination,
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime()
-                ));
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getInt("price")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -228,8 +228,8 @@ public class FlightDAO extends DBContext {
                         destinationLocation,
                         rs.getTimestamp("entryTime").toLocalDateTime(),
                         rs.getTimestamp("startingTime").toLocalDateTime(),
-                        rs.getTimestamp("landingTime").toLocalDateTime()
-                ));
+                        rs.getTimestamp("landingTime").toLocalDateTime(),
+                        rs.getInt("price")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -238,7 +238,7 @@ public class FlightDAO extends DBContext {
     }
 
     public void insert(Flight flight){
-        String sql = "INSERT INTO swp301.flight VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO swp301.flight VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, flight.getId());
             stm.setString(2, flight.getName());
@@ -249,6 +249,7 @@ public class FlightDAO extends DBContext {
             stm.setTimestamp(7, Timestamp.valueOf(flight.getEntryTime()));
             stm.setTimestamp(8, Timestamp.valueOf(flight.getStartingTime()));
             stm.setTimestamp(9, Timestamp.valueOf(flight.getLandingTime()));
+            stm.setInt(10, flight.getPrice());
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -283,14 +284,15 @@ public class FlightDAO extends DBContext {
 
     public void update(Flight flight){
         String sql = "UPDATE Flight SET departure=?, "
-                + "destination=?, entryTime=?, startingTime=?, landingTime=? WHERE id=?";
+                + "destination=?, entryTime=?, startingTime=?, landingTime=?, price=? WHERE id=?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setInt(1, flight.getDeparture().getId());
             stm.setInt(2, flight.getDestination().getId());
             stm.setTimestamp(3, Timestamp.valueOf(flight.getEntryTime()));
             stm.setTimestamp(4, Timestamp.valueOf(flight.getStartingTime()));
             stm.setTimestamp(5, Timestamp.valueOf(flight.getLandingTime()));
-            stm.setString(6, flight.getId());
+            stm.setInt(6, flight.getPrice());
+            stm.setString(7, flight.getId());
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);

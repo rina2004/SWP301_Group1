@@ -125,15 +125,17 @@
                             <div>${ticket.flight.startingTime}</div>
                             <div class="ticket-label">Landing:</div>
                             <div>${ticket.flight.landingTime}</div>
+                            <div class="ticket-label">Price:</div>
+                            <div>${ticket.flight.price}</div>
                             <div class="ticket-label">Seat:</div>
                             <div>${ticket.seat.id}</div>
                             <div class="ticket-label">Ticket Status:</div>
                             <div>${ticket.status}</div>
-                             <div class="ticket-label">Compartment type:</div>
-                            <div>${ticket.seat.compartment.type}</div>
-                            
+
                             <div class="ticket-label">Airplane:</div>
                             <div>${ticket.flight.airplane.name}</div>
+
+                            
                         </div>
 
                         <div class="ticket-footer">
@@ -141,9 +143,9 @@
                         </div>
                     </div>
                 </c:forEach>
-
             </div>
         </c:if>
+
 
 
         <div style="text-align: center;">

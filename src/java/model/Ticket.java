@@ -12,20 +12,21 @@ public class Ticket {
     private String id;
     private OrderPassenger orderPassenger;
     private Flight flight;
+    private Compartment compartment;
     private Seat seat;
     private String status;
 
     public Ticket() {
     }
 
-    public Ticket(String id, OrderPassenger orderPassenger, Flight flight, Seat seat, String status) {
+    public Ticket(String id, OrderPassenger orderPassenger, Flight flight, Compartment compartment, Seat seat, String status) {
         this.id = id;
         this.orderPassenger = orderPassenger;
         this.flight = flight;
+        this.compartment = compartment;
         this.seat = seat;
         this.status = status;
-    }   
-    
+    }
 
     public String getId() {
         return id;
@@ -51,6 +52,14 @@ public class Ticket {
         this.flight = flight;
     }
 
+    public Compartment getCompartment() {
+        return compartment;
+    }
+
+    public void setCompartment(Compartment compartment) {
+        this.compartment = compartment;
+    }
+
     public Seat getSeat() {
         return seat;
     }
@@ -66,8 +75,7 @@ public class Ticket {
     public void setStatus(String status) {
         this.status = status;
     }
-    
-    
 
+   
     
 }

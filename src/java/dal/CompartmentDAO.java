@@ -3,29 +3,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dal;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Compartment;
-
+import java.sql.*;
+import java.util.*;
+import java.util.logging.*;
+import model.*;
 /**
  *
  * @author A A
  */
 public class CompartmentDAO extends DBContext{
     public Compartment get(String id) {
-        TicketTypeDAO ttd = new TicketTypeDAO();
         AirplaneDAO ad = new AirplaneDAO();
+        CompartmentTypeDAO ctd = new CompartmentTypeDAO();
         String sql = "SELECT * FROM swp301.compartment WHERE id = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 return new Compartment(rs.getString("id"),
-                        ttd.get(rs.getString("type")),
+                        ctd.get(rs.getString("cType")),
                         ad.get(rs.getString("airplaneID")),
                         rs.getInt("capacity"));
             }
@@ -34,4 +30,35 @@ public class CompartmentDAO extends DBContext{
         }
         return null;
     }
+    public ArrayList<Compartment> getCompartmentsByFlightId(String flightId) {
+        ArrayList<Compartment> compartments = new ArrayList<>();
+        String sql = """
+            SELECT c.id, c.cType, c.capacity, a.id AS airplaneID, a.name AS airplaneName
+            FROM Flight f
+            JOIN Airplane a ON f.airplaneID = a.id
+            JOIN Compartment c ON a.id = c.airplaneID
+            WHERE f.id = ?;
+        """;
+        CompartmentTypeDAO ctd = new CompartmentTypeDAO();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, flightId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Compartment compartment = new Compartment();
+                compartment.setId(rs.getString("id"));
+                CompartmentType ct = ctd.get(rs.getString("cType"));
+                compartment.setCt(ct);
+                
+                Airplane airplane = new Airplane();
+                airplane.setId(rs.getString("airplaneID"));
+                airplane.setName(rs.getString("airplaneName"));
+                compartment.setAirplane(airplane);
+                compartment.setCapacity(rs.getInt("capacity"));
+                compartments.add(compartment);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return compartments;
+    } 
 }

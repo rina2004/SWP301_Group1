@@ -19,19 +19,11 @@ public class Flight {
     private LocalDateTime entryTime;
     private LocalDateTime startingTime;
     private LocalDateTime landingTime;
+    private int price;
 
     public Flight() {}
 
-    public Flight(String id, String name, String code, LocalDateTime entryTime, LocalDateTime startingTime, LocalDateTime landingTime) {
-        this.id = id;
-        this.name = name;
-        this.code = code;
-        this.entryTime = entryTime;
-        this.startingTime = startingTime;
-        this.landingTime = landingTime;
-    }
-
-    public Flight(String id, String name, String code, Airplane airplane, Location departure, Location destination, LocalDateTime entryTime, LocalDateTime startingTime, LocalDateTime landingTime) {
+    public Flight(String id, String name, String code, Airplane airplane, Location departure, Location destination, LocalDateTime entryTime, LocalDateTime startingTime, LocalDateTime landingTime, int price) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -41,11 +33,8 @@ public class Flight {
         this.entryTime = entryTime;
         this.startingTime = startingTime;
         this.landingTime = landingTime;
+        this.price = price;
     }
-
-    
-    
-    
 
     public String getId() {
         return id;
@@ -113,6 +102,13 @@ public class Flight {
 
     public LocalDateTime getLandingTime() {
         return landingTime;
+    }
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public void setLandingTime(LocalDateTime landingTime) {
