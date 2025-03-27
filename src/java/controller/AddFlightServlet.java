@@ -7,34 +7,28 @@ package controller;
 import dal.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import java.time.*;
 import java.util.*;
 import model.*;
-
 /**
  *
  * @author A A
  */
 public class AddFlightServlet extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AirplaneDAO airplaneDao = new AirplaneDAO();
-        List<Airplane> airplaneList;
-        airplaneList = airplaneDao.list();
-        LocationDAO locationDao = new LocationDAO();
-        List<Location> locationList = locationDao.list();
+        AirplaneDAO ad = new AirplaneDAO();
+        List<Airplane> airplaneList = ad.list();
+        LocationDAO ld = new LocationDAO();
+        List<Location> locationList = ld.list();
 
         Collections.sort(locationList, (Location l1, Location l2) -> l1.getName().compareToIgnoreCase(l2.getName()));
         request.setAttribute("airplanes", airplaneList);
         request.setAttribute("locations", locationList);
         request.getRequestDispatcher("flight-form.jsp").forward(request, response);
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,10 +49,17 @@ public class AddFlightServlet extends HttpServlet {
             f.setEntryTime(LocalDateTime.parse(request.getParameter("entryTime")));
             f.setStartingTime(LocalDateTime.parse(request.getParameter("startingTime")));
             f.setLandingTime(LocalDateTime.parse(request.getParameter("landingTime")));
+            f.setPrice(Integer.parseInt(request.getParameter("price")));
 
             validateFlight(f);
             FlightDAO dao = new FlightDAO();
             dao.insert(f);
+            
+            // success message
+            HttpSession session = request.getSession();
+            session.setAttribute("successMessage", "Flight '" + f.getName() + "' added successfully!");
+            session.setMaxInactiveInterval(10);
+            
             response.sendRedirect("list-flight");
         } catch (Exception e) {
             request.setAttribute("error", "Error adding flight: " + e.getMessage());
@@ -68,14 +69,10 @@ public class AddFlightServlet extends HttpServlet {
 
     private String generateFlightId() throws Exception {
         FlightDAO dao = new FlightDAO();
-        // Get highest current flight ID number
         String highestId = dao.getHighestFlightId();
-
         if (highestId == null) {
-            // If no flights exist, start with FL001
             return "FL001";
         } else {
-            // Extract the numeric part
             String numericPart = highestId.substring(2); // Remove "FL"
             int nextNumber = Integer.parseInt(numericPart) + 1;
             // Format with leading zeros (e.g., FL001, FL002, etc.)
@@ -85,14 +82,10 @@ public class AddFlightServlet extends HttpServlet {
 
     private String generateFlightCode() throws Exception {
         FlightDAO dao = new FlightDAO();
-        // Get highest current flight code number
         String highestCode = dao.getHighestFlightCode();
-
         if (highestCode == null) {
-            // If no flights exist, start with VN001
             return "VN001";
         } else {
-            // Extract the numeric part
             String numericPart = highestCode.substring(2); // Remove "VN"
             int nextNumber = Integer.parseInt(numericPart) + 1;
             // Format with leading zeros (e.g., VN001, VN002, etc.)
@@ -102,19 +95,18 @@ public class AddFlightServlet extends HttpServlet {
 
     private void validateFlight(Flight f) throws Exception {
         FlightDAO dao = new FlightDAO();
-
         if (dao.getFlightByName(f.getName()) != null) {
             throw new Exception("Flight name already exists.");
         }
-
         if (f.getName() == null || f.getName().trim().isEmpty()) {
             throw new Exception("Flight name is required");
         }
-
+        if(f.getPrice() < 100000){
+            throw new Exception("Price cannot smaller than 100.000");
+        }
         if (f.getDeparture().getId() == f.getDestination().getId()) {
             throw new Exception("Departure and destination cannot be the same location");
         }
-
         if (f.getStartingTime().isBefore(f.getEntryTime())) {
             throw new Exception("Starting time must be after entry time");
         }

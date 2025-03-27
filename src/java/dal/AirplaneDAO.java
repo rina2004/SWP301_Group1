@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.AirplaneStatus;
 import model.Compartment;
+import model.CompartmentType;
 import model.Seat;
 import model.TicketType;
 
@@ -49,7 +50,7 @@ public class AirplaneDAO extends DBContext {
             for (Compartment compartment : airplane.getCompartments()) {
                 PreparedStatement stm_insertCompartment = connection.prepareStatement(insertCompartment);
                 stm_insertCompartment.setString(1, compartment.getId());
-                stm_insertCompartment.setString(2, compartment.getType().getType());
+//                stm_insertCompartment.setString(2, compartment.getType());
                 stm_insertCompartment.setString(3, airplane.getId());
                 stm_insertCompartment.setInt(4, compartment.getCapacity());
                 stm_insertCompartment.executeUpdate();
@@ -87,7 +88,6 @@ public class AirplaneDAO extends DBContext {
     public Airplane get(String id) {
         Airplane airplane = null;
         String sql = "SELECT * FROM swp301.airplane WHERE id = ?";
-
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, id);
@@ -171,9 +171,9 @@ public class AirplaneDAO extends DBContext {
                 Compartment compartment = new Compartment();
                 compartment.setId(rsCompartment.getString("id"));
 
-                TicketType ticketType = new TicketType();
-                ticketType.setType(rsCompartment.getString("type"));
-                compartment.setType(ticketType);
+//                CompartmentType ct = new CompartmentType();
+//                ct.setType(rsCompartment.getString("type"));
+//                compartment.setType("type");
 
                 compartment.setCapacity(rsCompartment.getInt("capacity"));
                 compartment.setAirplane(airplane);

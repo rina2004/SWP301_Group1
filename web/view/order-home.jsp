@@ -29,7 +29,9 @@
                         </c:if>
                         <c:if test="${not empty user}">
                             <div class="d-flex align-items-center">
-                                <p class="me-3 mb-0">${user}</p>
+                                <p class="me-3 mb-0">
+                                    <i class="fas fa-user me-2"></i>${sessionScope.user}
+                                </p>
                                 <form action="${pageContext.request.contextPath}/logout" method="get" class="mb-0">
                                     <button type="submit" class="btn btn-secondary">Logout</button>
                                 </form>

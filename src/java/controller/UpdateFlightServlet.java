@@ -1,27 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
-
 import dal.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import java.time.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 import model.*;
-
 /**
  *
  * @author A A
  */
 public class UpdateFlightServlet extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -30,12 +20,10 @@ public class UpdateFlightServlet extends HttpServlet {
         LocationDAO locationDAO = new LocationDAO();
         Flight f = dao.getFlightById(id);
         request.setAttribute("flight", f);
-
         ArrayList<Location> locationList = locationDAO.list();
         request.setAttribute("locationList", locationList);
         request.getRequestDispatcher("flight-update.jsp").forward(request, response);
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -46,7 +34,8 @@ public class UpdateFlightServlet extends HttpServlet {
             String airplane = request.getParameter("airplane");
             int departureId = Integer.parseInt(request.getParameter("departure"));
             int destinationId = Integer.parseInt(request.getParameter("destination"));
-
+            int price = Integer.parseInt(request.getParameter("price"));
+            
             AirplaneDAO ad = new AirplaneDAO();
             LocationDAO locationDAO = new LocationDAO();
             Flight f = new Flight();
@@ -63,6 +52,7 @@ public class UpdateFlightServlet extends HttpServlet {
             f.setEntryTime(LocalDateTime.parse(entryTimeStr));
             f.setStartingTime(LocalDateTime.parse(startingTimeStr));
             f.setLandingTime(LocalDateTime.parse(landingTimeStr));
+            f.setPrice(price);
 
             validateFlight(f);
             FlightDAO dao = new FlightDAO();
@@ -101,6 +91,9 @@ public class UpdateFlightServlet extends HttpServlet {
         }
         if(f.getLandingTime().equals(f.getStartingTime())){
             throw new Exception("Landing time must not be equal to starting time");
+        }
+        if(f.getPrice() < 100000){
+            throw new Exception("Price cannot smaller than 100.000");
         }
     }
 }

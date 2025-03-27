@@ -17,6 +17,7 @@ public class TicketDAO extends DBContext {
         OrderPassengerDAO opd = new OrderPassengerDAO();
         SeatDAO sd = new SeatDAO();
         FlightDAO fd = new FlightDAO();
+        CompartmentDAO cd = new CompartmentDAO();
         String sql = "SELECT * FROM swp301.ticket WHERE flightID = ? ORDER BY price ASC LIMIT 1";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, flightID);
@@ -26,6 +27,7 @@ public class TicketDAO extends DBContext {
                         rs.getString("id"),
                         opd.get(rs.getString("orderPID")),
                         fd.getFlightById(rs.getString("flightID")),
+                        cd.get(rs.getString("comID")),
                         sd.get(rs.getString("seatID")),
                         rs.getString("status"));
             }
@@ -39,6 +41,7 @@ public class TicketDAO extends DBContext {
         OrderPassengerDAO opd = new OrderPassengerDAO();
         SeatDAO sd = new SeatDAO();
         FlightDAO fd = new FlightDAO();
+        CompartmentDAO cd = new CompartmentDAO();
         String sql = "SELECT * FROM swp301.ticket WHERE orderID = ? ORDER BY price ASC LIMIT 1";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, orderID);
@@ -48,6 +51,7 @@ public class TicketDAO extends DBContext {
                         rs.getString("id"),
                         opd.get(rs.getString("orderPID")),
                         fd.getFlightById(rs.getString("flightID")),
+                        cd.get(rs.getString("comID")),
                         sd.get(rs.getString("seatID")),
                         rs.getString("status"));
             }
@@ -61,6 +65,7 @@ public class TicketDAO extends DBContext {
         OrderPassengerDAO opd = new OrderPassengerDAO();
         SeatDAO sd = new SeatDAO();
         FlightDAO fd = new FlightDAO();
+        CompartmentDAO cd = new CompartmentDAO();
         String sql = "SELECT * FROM swp301.ticket WHERE seatID = ? ORDER BY price ASC LIMIT 1";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, seatID);
@@ -70,6 +75,7 @@ public class TicketDAO extends DBContext {
                         rs.getString("id"),
                         opd.get(rs.getString("orderPID")),
                         fd.getFlightById(rs.getString("flightID")),
+                        cd.get(rs.getString("comID")),
                         sd.get(rs.getString("seatID")),
                         rs.getString("status"));
             }
@@ -83,6 +89,7 @@ public class TicketDAO extends DBContext {
         OrderPassengerDAO opd = new OrderPassengerDAO();
         SeatDAO sd = new SeatDAO();
         FlightDAO fd = new FlightDAO();
+        CompartmentDAO cd = new CompartmentDAO();
         List<Ticket> list = new ArrayList<>();
         String sql = "SELECT * FROM swp301.ticket";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
@@ -92,6 +99,7 @@ public class TicketDAO extends DBContext {
                         rs.getString("id"),
                         opd.get(rs.getString("orderPID")),
                         fd.getFlightById(rs.getString("flightID")),
+                        cd.get(rs.getString("comID")),
                         sd.get(rs.getString("seatID")),
                         rs.getString("status")));
             }
@@ -100,42 +108,6 @@ public class TicketDAO extends DBContext {
         }
         return list;
     }
-
-    public List<Ticket> getTicketsByOrderID(String orderID) {
-    List<Ticket> list = new ArrayList<>();
-    String sql = "SELECT t.id, t.status, f.airplaneID, t.flightID " +
-                 "FROM Ticket t " +
-                 "JOIN Flight f ON t.flightID = f.id " +
-                 "WHERE t.orderID = ?";
-
-    try (PreparedStatement stm = connection.prepareStatement(sql)) {
-        stm.setString(1, orderID);
-        try (ResultSet rs = stm.executeQuery()) {
-            while (rs.next()) {
-                OrderPassenger orderP = new OrderPassenger();
-                orderP.setId(orderID);
-
-                Airplane airplane = new Airplane();
-                airplane.setId(rs.getString("airplaneID"));
-
-                Flight flight = new Flight();
-                flight.setId(rs.getString("flightID"));
-                flight.setAirplane(airplane);
-
-                Ticket ticket = new Ticket();
-                ticket.setId(rs.getString("id"));
-                ticket.setOrderP(orderP);
-                ticket.setFlight(flight);
-                ticket.setStatus(rs.getString("status"));
-
-                list.add(ticket);
-            }
-        }
-    } catch (SQLException e) {
-        Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, "Lỗi khi lấy danh sách vé theo OrderID: " + orderID, e);
-    }
-    return list;
-}
 
     public void updateTicketbySeatID(String ticketID, String seatID) {
         PreparedStatement stm;
@@ -169,7 +141,6 @@ public class TicketDAO extends DBContext {
     }
 
     public Ticket getInfor(String ticketId) {
-        ;
         String sql = "Select * From Ticket where id = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql);){
             stm.setString(1, ticketId);

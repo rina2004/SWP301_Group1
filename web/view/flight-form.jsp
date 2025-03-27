@@ -15,7 +15,6 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <link rel="icon" type="image/png" href="https://tomcat.apache.org/res/images/asf_logo.svg">
         <style>
-            /* Style for select dropdowns with limited size */
             select.form-select-scrollable {
                 max-height: 200px;
                 overflow-y: auto;
@@ -34,12 +33,10 @@
                             ${error}
                         </div>
                     </c:if>
-
                     <form action="${pageContext.request.contextPath}/view/add-flight" method="POST">
                         <c:if test="${flight != null}">
                             <input type="hidden" name="id" value="${flight.id}">
                         </c:if>
-                            
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Flight Name</label>
@@ -60,8 +57,12 @@
                                     </c:forEach>
                                 </select>
                             </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Price</label>
+                                <input type="number" class="form-control" name="price" 
+                                       value="${flight.price}" required>
+                            </div>
                         </div>
-
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Departure</label>
@@ -88,7 +89,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label class="form-label">Entry Time</label>
@@ -119,7 +119,6 @@
                 </div>
             </div>
         </div>
-
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
