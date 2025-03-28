@@ -201,7 +201,7 @@
                     <div class="d-flex align-items-center">
                         <h2 class="mb-0">Flight Management</h2>
                     </div>
-                    <a href="add-flight" class="btn btn-primary">
+                    <a href="${pageContext.request.contextPath}/view/add-flight" class="btn btn-primary">
                         <i class="fas fa-plus me-2"></i> Add New Flight
                     </a>
                     <div class="d-flex align-items-center">
@@ -244,7 +244,7 @@
                                 Search Flight
                             </button>
                             <c:if test="${not empty searchTerm}">
-                                <a href="search-flight" class="btn btn-outline-secondary ms-2">
+                                <a href="${pageContext.request.contextPath}/view/search-flight" class="btn btn-outline-secondary ms-2">
                                     <i class="fas fa-times"></i> Clear
                                 </a>
                             </c:if>
@@ -259,17 +259,17 @@
                     <div class="d-flex align-items-center">
                         <!-- Price Range Buttons -->
                         <div class="btn-group me-3">
-                            <a href="filter-flights?priceRange=cheap" 
+                            <a href="${pageContext.request.contextPath}/view/filter-flights?priceRange=cheap" 
                                class="btn btn-outline-primary ${activeFilter eq 'cheap' ? 'active' : ''}">
                                 <span>Cheap</span>
                                 <small class="d-block mt-1">Under 1.000.000 VND</small>
                             </a>
-                            <a href="filter-flights?priceRange=medium" 
+                            <a href="${pageContext.request.contextPath}/view/filter-flights?priceRange=medium" 
                                class="btn btn-outline-primary ${activeFilter eq 'medium' ? 'active' : ''}">
                                 <span>Medium</span>
                                 <small class="d-block mt-1">1.000.000 - 3.000.000 VND</small>
                             </a>
-                            <a href="filter-flights?priceRange=expensive" 
+                            <a href="${pageContext.request.contextPath}/view/filter-flights?priceRange=expensive" 
                                class="btn btn-outline-primary ${activeFilter eq 'expensive' ? 'active' : ''}">
                                 <span>Expensive</span>
                                 <small class="d-block mt-1">Above 3.000.000 VND</small>
@@ -283,10 +283,10 @@
                                 Sort by Price
                             </button>
                             <ul class="dropdown-menu sort-dropdown" aria-labelledby="sortPriceDropdown">
-                                <a class="dropdown-item" href="list-flight?order=asc">
+                                <a class="dropdown-item" href="${pageContext.request.contextPath}/view/list-flight?order=asc">
                                     <i class="fas fa-arrow-up me-2"></i>Ascending (Price)
                                 </a>
-                                <a class="dropdown-item" href="list-flight?order=desc">
+                                <a class="dropdown-item" href="${pageContext.request.contextPath}/view/list-flight?order=desc">
                                     <i class="fas fa-arrow-down me-2"></i>Descending (Price)
                                 </a>
                             </ul>
@@ -311,7 +311,7 @@
                         <i class="fas fa-plane-slash fa-3x mb-3 text-muted"></i>
                         <h3>No flights found</h3>
                         <p class="text-muted">Try adjusting your search criteria or filter selection.</p>
-                        <a href="search-flight" class="btn btn-primary mt-3">View All Flights</a>
+                        <a href="${pageContext.request.contextPath}/view/search-flight" class="btn btn-primary mt-3">View All Flights</a>
                     </div>
                 </c:when>
                 <c:otherwise>
@@ -359,10 +359,10 @@
                                             </div>
                                         </div>
                                         <div class="action-buttons ms-2">
-                                            <a href="view-flight?id=${flight.getId()}" class="btn btn-light" title="View Details">
+                                            <a href="${pageContext.request.contextPath}/view/view-flight?id=${flight.getId()}" class="btn btn-light" title="View Details">
                                                 <i class="fas fa-eye text-primary"></i>
                                             </a>
-                                            <a href="update-flight?id=${flight.getId()}" class="btn btn-light" title="Edit">
+                                            <a href="${pageContext.request.contextPath}/view/update-flight?id=${flight.getId()}" class="btn btn-light" title="Edit">
                                                 <i class="fas fa-edit text-warning"></i>
                                             </a>
                                         </div>

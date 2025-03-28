@@ -26,6 +26,7 @@ public class Ticket {
         this.seat = seat;
         this.status = status;
     }
+    
 
     public String getId() {
         return id;

@@ -49,8 +49,11 @@
 
                                 <div class="form-group">
                                     <label>Password</label>
-                                    <input value="${updateAccount.password}" name="password" type="text" class="form-control" required>
+                                    <input value="${updateAccount.password}" name="password" type="text" class="form-control" required 
+                                           pattern="^(?=.*[A-Za-z])(?=.*\d).{6,50}$" 
+                                           title="Password must be 6-50 characters, include at least one letter and one number.">
                                 </div>
+
 
 
 

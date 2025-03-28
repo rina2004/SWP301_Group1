@@ -164,6 +164,22 @@ public class AccountProfileController extends HttpServlet {
         Account acc = (Account) session.getAttribute("acc");
 
         if (acc != null) {
+            AccountDAO dao = new AccountDAO();
+
+            // Kiểm tra email hoặc phone có bị trùng không, nhưng bỏ qua chính email/phone của user đang đăng nhập
+            if (!email.equals(acc.getEmail()) && dao.checkEmailExist(email)) {
+                session.setAttribute("error", "Email already exists!");
+                response.sendRedirect("profile");
+                return;
+            }
+
+            if (!phone.equals(acc.getPhone()) && dao.checkPhoneExist(phone)) {
+                session.setAttribute("error", "Phone number already exists!");
+                response.sendRedirect("profile");
+                return;
+            }
+
+            // Cập nhật thông tin tài khoản
             acc.setName(name);
             acc.setCitizenID((citizenID != null && !citizenID.trim().isEmpty()) ? citizenID : acc.getCitizenID());
             acc.setDob(dob != null ? dob : acc.getDob());
@@ -172,7 +188,6 @@ public class AccountProfileController extends HttpServlet {
             acc.setEmail((email != null && !email.trim().isEmpty()) ? email : acc.getEmail());
 
             // Cập nhật vào database
-            AccountDAO dao = new AccountDAO();
             dao.updateProfile(acc);
 
             // Lấy lại thông tin theo username để cập nhật session

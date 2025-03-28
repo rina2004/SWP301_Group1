@@ -4,21 +4,22 @@
  */
 package controller;
 
-import dal.AccountDAO;
+import dal.OrderDAO;
+import dal.TicketDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Account;
+import java.util.List;
+import model.Ticket;
 
 /**
  *
  * @author anhbu
  */
-public class ChangePasswordProfileControl extends HttpServlet {
+public class StaffTicketProcessing extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +38,10 @@ public class ChangePasswordProfileControl extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ChangePasswordProfileControl</title>");
+            out.println("<title>Servlet StaffTicketProcessing</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ChangePasswordProfileControl at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet StaffTicketProcessing at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,7 +59,12 @@ public class ChangePasswordProfileControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        TicketDAO dao = new TicketDAO();
+        List<Ticket> processingOrders = dao.getCancelledOrProcessingTickets();
+
+        request.setAttribute("processingOrders", processingOrders);
+        request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
     }
 
     /**
@@ -73,40 +79,35 @@ public class ChangePasswordProfileControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("acc");
+        String orderPID = request.getParameter("orderID");
+        String action = request.getParameter("action");
 
-        if (acc == null) {
-            session.setAttribute("error", "You must be logged in to change your password.");
-            response.sendRedirect("login.jsp");
+        if (orderPID == null || action == null) {
+            response.sendRedirect("view/ListTicketProcessing.jsp");
             return;
         }
 
-        String currentPassword = request.getParameter("currentPassword");
-        String newPassword = request.getParameter("newPassword");
-        String confirmPassword = request.getParameter("confirmPassword");
+        TicketDAO ticketDAO = new TicketDAO();
+        OrderDAO orderDAO = new OrderDAO();
 
-        AccountDAO dao = new AccountDAO();
+        if ("accept".equals(action)) {
+            // Chấp nhận vé
+            ticketDAO.updateTicketStatusByOrderPID(orderPID, "Cancelled");
+        } else if ("reject".equals(action)) {
+            // Hủy vé
+            ticketDAO.updateTicketStatusByOrderPID(orderPID, "Rejected");
 
-        // Kiểm tra mật khẩu hiện tại
-        if (!dao.checkPassword(acc.getUsername(), currentPassword)) {
-            session.setAttribute("error", "Current password is incorrect!");
-            response.sendRedirect("changePasswordProfile");
-            return;
+            // Lấy OrderID từ OrderPassengerID
+            String orderId = orderDAO.getOrderIdByOrderPassengerId(orderPID);
+            if (orderId != null && ticketDAO.hasOnlyCancelledTickets(orderId)) {
+                orderDAO.updateOrderStatus(orderId, "Cancelled");
+            }
         }
 
-        // Kiểm tra mật khẩu mới có khớp không
-        if (!newPassword.equals(confirmPassword)) {
-            session.setAttribute("error", "New password and confirm password do not match!");
-            response.sendRedirect("changePasswordProfile");
-            return;
-        }
-
-        // Cập nhật mật khẩu mới
-        dao.updatePasswordProfile(acc.getUsername(), newPassword);
-        session.setAttribute("success", "Password changed successfully!");
-        response.sendRedirect("changePasswordProfile");
-
+        // Load lại danh sách đơn hàng và chuyển hướng
+        List<Ticket> processingOrders = ticketDAO.getCancelledOrProcessingTickets();
+        request.setAttribute("processingOrders", processingOrders);
+        request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
     }
 
     /**

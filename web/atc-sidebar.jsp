@@ -109,6 +109,7 @@
             <div class="sidebar">
                 <h2>Menu</h2>
                 <a onclick="loadPage('/airplane/view')">Manage Airplane</a>
+                <a onclick="loadPage('/view/list-flight')">Manage Flight</a>
             </div>
 
             <!-- Nội dung động -->

@@ -4,6 +4,8 @@
  */
 package model;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author A A
@@ -15,8 +17,11 @@ public class OrderPassenger {
     private String name;
     private Date dob;
     private Nation nation;
-
+    private List<Ticket> tickets;
+    
+    
     public OrderPassenger() {
+        this.tickets = new ArrayList<>(); // Khởi tạo danh sách tránh NullPointerException
     }
 
     public OrderPassenger(String id, Order order, PassengerType passengerType, String name, Date dob, Nation nation) {
@@ -75,5 +80,15 @@ public class OrderPassenger {
     public void setNation(Nation nation) {
         this.nation = nation;
     }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
+    }
     
+    
+   
 }

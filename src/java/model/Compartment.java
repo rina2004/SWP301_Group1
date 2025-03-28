@@ -18,6 +18,16 @@ public class Compartment {
     
     private ArrayList<Seat> seats = new ArrayList<>();
 
+    public Compartment() {
+    }
+
+    public Compartment(String id, CompartmentType type, Airplane airplane, int capacity) {
+        this.id = id;
+        this.type = type;
+        this.airplane = airplane;
+        this.capacity = capacity;
+    }
+
     public String getId() {
         return id;
     }

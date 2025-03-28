@@ -3,7 +3,6 @@ import java.sql.*;
 import java.util.*;
 import java.util.logging.*;
 import model.*;
-
 /**
  *
  * @author A A
