@@ -4,6 +4,7 @@
  */
 package dal;
 import java.sql.*;
+import java.util.*;
 import java.util.logging.*;
 import model.*;
 /**
@@ -24,5 +25,19 @@ public class CompartmentTypeDAO extends DBContext{
             Logger.getLogger(CompartmentTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    public ArrayList<CompartmentType> list() {
+        ArrayList<CompartmentType> list = new ArrayList<>();
+        String sql = "SELECT * FROM swp301.compartmenttype";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new CompartmentType(rs.getString("id"),
+                        rs.getString("name")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CompartmentTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
     }
 }
