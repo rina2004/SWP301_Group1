@@ -4,21 +4,23 @@
  */
 package controller;
 
-import dal.AccountDAO;
-import java.io.IOException;
-import java.io.PrintWriter;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import model.Account;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  *
- * @author anhbu
+ * @author DUCDA
  */
-public class ChangePasswordProfileControl extends HttpServlet {
+<<<<<<<< HEAD:src/java/controller/adminSidebarController.java
+public class adminSidebarController extends HttpServlet {
+========
+public class HistoryBookingDetailController extends HttpServlet {
+>>>>>>>> H:src/java/controller/HistoryBookingDetailController.java
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +39,10 @@ public class ChangePasswordProfileControl extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ChangePasswordProfileControl</title>");
+            out.println("<title>Servlet adminSidebarController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ChangePasswordProfileControl at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet adminSidebarController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,7 +60,29 @@ public class ChangePasswordProfileControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+<<<<<<<< HEAD:src/java/controller/adminSidebarController.java
+        String page = request.getParameter("page");
+
+        if (page != null) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+            dispatcher.forward(request, response);
+        } else {
+            response.getWriter().write("Lỗi: Không tìm thấy trang!");
+        }
+========
+        //processRequest(request, response);
+        // Lấy orderId từ request param
+        String OrderPassengerID = request.getParameter("OrderPassengerID");
+
+        // Tương tác trực tiếp DAO
+        TicketDAO ticketDAO = new TicketDAO();
+        List<Ticket> ticketList = ticketDAO.getTicketsByOrderPassengerId(OrderPassengerID);
+
+
+        // Đổ data ra view
+        request.setAttribute("ticketList", ticketList);
+        request.getRequestDispatcher("view/HistoryBookingDetail.jsp").forward(request, response);
+>>>>>>>> H:src/java/controller/HistoryBookingDetailController.java
     }
 
     /**
@@ -72,41 +96,7 @@ public class ChangePasswordProfileControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("acc");
-
-        if (acc == null) {
-            session.setAttribute("error", "You must be logged in to change your password.");
-            response.sendRedirect("login.jsp");
-            return;
-        }
-
-        String currentPassword = request.getParameter("currentPassword");
-        String newPassword = request.getParameter("newPassword");
-        String confirmPassword = request.getParameter("confirmPassword");
-
-        AccountDAO dao = new AccountDAO();
-
-        // Kiểm tra mật khẩu hiện tại
-        if (!dao.checkPassword(acc.getUsername(), currentPassword)) {
-            session.setAttribute("error", "Current password is incorrect!");
-            response.sendRedirect("changePasswordProfile");
-            return;
-        }
-
-        // Kiểm tra mật khẩu mới có khớp không
-        if (!newPassword.equals(confirmPassword)) {
-            session.setAttribute("error", "New password and confirm password do not match!");
-            response.sendRedirect("changePasswordProfile");
-            return;
-        }
-
-        // Cập nhật mật khẩu mới
-        dao.updatePasswordProfile(acc.getUsername(), newPassword);
-        session.setAttribute("success", "Password changed successfully!");
-        response.sendRedirect("changePasswordProfile");
-
+        processRequest(request, response);
     }
 
     /**

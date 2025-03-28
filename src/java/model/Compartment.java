@@ -15,13 +15,15 @@ public class Compartment {
     private CompartmentType type;
     private Airplane airplane;
     private int capacity;
+    
+    private ArrayList<Seat> seats = new ArrayList<>();
 
     public Compartment() {
     }
 
     public Compartment(String id, CompartmentType type, Airplane airplane, int capacity) {
         this.id = id;
-        this.type = type;
+        this.ct = ct;
         this.airplane = airplane;
         this.capacity = capacity;
     }

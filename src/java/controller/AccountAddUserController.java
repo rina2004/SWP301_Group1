@@ -96,6 +96,20 @@ public class AccountAddUserController extends HttpServlet {
             return;
         }
 
+        // Kiểm tra username hợp lệ
+        if (username == null || username.trim().isEmpty() || username.length() > 50 || !username.matches("^[a-zA-Z0-9_]+$")) {
+            session.setAttribute("errorMessage", "Invalid username! Must be 1-50 characters, only letters, numbers, and underscores.");
+            response.sendRedirect("account-list");
+            return;
+        }
+
+        // Kiểm tra password hợp lệ
+        if (password == null || password.length() < 6 || password.length() > 50 || !password.matches("^(?=.*[A-Za-z])(?=.*\\d).{6,}$")) {
+            session.setAttribute("errorMessage", "Invalid password! Must be 6-50 characters, include at least one letter and one number.");
+            response.sendRedirect("account-list");
+            return;
+        }
+
         // Tạo đối tượng Role từ roleID
         Role role = new Role(roleID, ""); // Role chưa có roleName, chỉ có roleID
 

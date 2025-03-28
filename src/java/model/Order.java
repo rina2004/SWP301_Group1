@@ -1,5 +1,8 @@
 package model;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author A A
@@ -13,7 +16,17 @@ public class Order {
     private double finalPrice;
     private int finalNum;
     private TicketType tt;
+    private List<OrderPassenger> passengers;
+
     public Order() {
+        passengers = new ArrayList<>();
+    }
+    
+    public Order(String id, String status, double finalPrice, int finalNum) {
+        this.id = id;
+        this.status = status;
+        this.finalPrice = finalPrice;
+        this.finalNum = finalNum;
     }
 
     public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum, TicketType tt) {
@@ -88,4 +101,15 @@ public class Order {
     public void setTt(TicketType tt) {
         this.tt = tt;
     }
+    
+
+    public List<OrderPassenger> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(List<OrderPassenger> passengers) {
+        this.passengers = passengers;
+    }
+
+   
 }
