@@ -29,16 +29,5 @@ public class DBContext {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    public static void main(String[] args) {
-        DBContext db = new DBContext();
-        Connection conn = db.connection;
-
-        if (conn != null) {
-            System.out.println("Kết nối database thành công!");
-        } else {
-            System.out.println("Kết nối database thất bại!");
-        }
-    }
+    }  
 }
