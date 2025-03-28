@@ -4,9 +4,14 @@
         <param-name>webapp</param-name>
         <param-value>webapp</param-value>
     </context-param>
-
-    
-
+    <servlet>
+        <servlet-name>HistoryBookingController</servlet-name>
+        <servlet-class>controller.HistoryBookingController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HistoryBookingController</servlet-name>
+        <url-pattern>/historyBooking</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ListSeatsAdmin</servlet-name>
         <url-pattern>/listSeatsAdmin</url-pattern>
@@ -429,28 +434,12 @@
         <url-pattern>/changePasswordProfile</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>HistoryBookingController</servlet-name>
-        <servlet-class>controller.HistoryBookingController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>HistoryBookingController</servlet-name>
-        <url-pattern>/historyBooking</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>CancelTicketController</servlet-name>
         <servlet-class>controller.CancelTicketController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CancelTicketController</servlet-name>
         <url-pattern>/cancelTicket</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>DetailSeats</servlet-name>
-        <servlet-class>controller.DetailSeats</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>DetailSeats</servlet-name>
-        <url-pattern>/detailSeat</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>AirplaneViewDetailController</servlet-name>
