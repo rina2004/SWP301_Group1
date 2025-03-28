@@ -21,7 +21,7 @@ public class DBContext {
     public DBContext() {
         try {
             String user = "root";
-            String pass = "1234";
+            String pass = "12345678";
             String url = "jdbc:mysql://localhost:3306/swp301?useSSL=false&serverTimezone=UTC";
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, user, pass);

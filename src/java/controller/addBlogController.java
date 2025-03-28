@@ -65,7 +65,7 @@ public class addBlogController extends HttpServlet {
         Post post = new Post(title, content, image, accid, categoryID, true);
         postDAO.insertPost(post);
 
-//        post = postDAO.findByTitle(title);
+        post = postDAO.findByTitle(title);
         String postId = post.getId();
 
         Blog blog = new Blog(postId, title, description, image, categoryID, accid);
