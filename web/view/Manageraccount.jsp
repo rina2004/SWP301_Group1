@@ -116,12 +116,17 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label>Username</label>
-                                    <input name="username" type="text" class="form-control" required>
+                                    <input name="username" type="text" class="form-control" required 
+                                           pattern="^[a-zA-Z0-9_]{1,50}$" 
+                                           title="Username must be 1-50 characters, only letters, numbers, and underscores.">
                                 </div>
+
                                 <div class="form-group">
                                     <label>Password</label>
-                                    <input name="password" type="password" class="form-control" required>
-                                </div>   
+                                    <input name="password" type="password" class="form-control" required 
+                                           pattern="^(?=.*[A-Za-z])(?=.*\d).{6,50}$" 
+                                           title="Password must be 6-50 characters, including at least one letter and one number.">
+                                </div>  
 
                                 <div class="form-group">
                                     <label>Role</label>

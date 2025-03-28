@@ -327,6 +327,24 @@ public class AccountDAO extends DBContext {
         return false;
     }
 
+    public boolean checkPhoneExist(String phone) {
+        PreparedStatement stm;
+        ResultSet rs;
+
+        String sql = "SELECT COUNT(phone) FROM account WHERE phone = ?";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, phone);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Nếu số lượng > 0, nghĩa là phone đã tồn tại
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public void updatePasswordByUsername(String username, String password) {
         PreparedStatement stm;
         ResultSet rs;
@@ -377,8 +395,8 @@ public class AccountDAO extends DBContext {
 
         }
     }
-    
-     public void updatePasswordProfile(String username, String newPassword) {
+
+    public void updatePasswordProfile(String username, String newPassword) {
         PreparedStatement stm;
         String sql = "UPDATE Account SET password = ? WHERE username = ?";
         try {
@@ -390,7 +408,6 @@ public class AccountDAO extends DBContext {
             e.printStackTrace();
         }
     }
-    
 
     public void register(String username, String password, String name, Date dob, String phone, String address, String email) {
         PreparedStatement accountStmt = null;
@@ -450,6 +467,5 @@ public class AccountDAO extends DBContext {
         }
 
     }
-    
-    
+
 }
