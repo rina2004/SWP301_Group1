@@ -15,6 +15,16 @@ public class Compartment {
     private CompartmentType type;
     private Airplane airplane;
     private int capacity;
+
+    public Compartment() {
+    }
+
+    public Compartment(String id, CompartmentType type, Airplane airplane, int capacity) {
+        this.id = id;
+        this.type = type;
+        this.airplane = airplane;
+        this.capacity = capacity;
+    }
     
     private ArrayList<Seat> seats = new ArrayList<>();
 

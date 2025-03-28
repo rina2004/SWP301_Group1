@@ -20,7 +20,7 @@ public class OrderFlightController extends HttpServlet {
         request.setAttribute("locations", locations); 
         
         CompartmentTypeDAO ctd = new CompartmentTypeDAO();
-        ArrayList<CompartmentType> cts = ctd.list();
+        List<CompartmentType> cts = ctd.list();
         request.setAttribute("cts", cts);
         
         String departure = request.getParameter("departure");

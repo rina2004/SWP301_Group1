@@ -34,18 +34,25 @@ public class CompartmentTypeDAO extends DBContext{
         }
         return null;
     }
-    public ArrayList<CompartmentType> list() {
-        ArrayList<CompartmentType> list = new ArrayList<>();
-        String sql = "SELECT * FROM swp301.compartmenttype";
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            ResultSet rs = stm.executeQuery();
+    public List<CompartmentType> list() {
+        List<CompartmentType> compartmentTypes = new ArrayList<>();
+        String query = """
+            SELECT * FROM swp301.compartmenttype;
+            """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
+             
+            ResultSet rs = preparedStatement.executeQuery();
+
             while (rs.next()) {
-                list.add(new CompartmentType(rs.getString("id"),
-                        rs.getString("name")));
+                CompartmentType compartmentType = new CompartmentType();
+                compartmentType.setId(rs.getString("id"));
+                compartmentType.setName(rs.getString("name"));
+                compartmentTypes.add(compartmentType);
             }
         } catch (SQLException ex) {
             Logger.getLogger(CompartmentTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return list;
+        return compartmentTypes;
     }
 }
