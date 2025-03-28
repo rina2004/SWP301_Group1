@@ -20,6 +20,7 @@ public class Flight {
     private LocalDateTime startingTime;
     private LocalDateTime landingTime;
     private int price;
+    private String compartmentTypeName;
     public Flight() {}
     public Flight(String id, String name, String code, Airplane airplane, Location departure, Location destination, LocalDateTime entryTime, LocalDateTime startingTime, LocalDateTime landingTime, int price) {
         this.id = id;
@@ -110,6 +111,12 @@ public class Flight {
     }
     public String getLandingHour() {
         return landingTime != null ? landingTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) : "";
+    }
+    public void setCompartmentTypeName(String compartmentTypeName) {
+        this.compartmentTypeName = compartmentTypeName;
+    }
+    public String getCompartmentTypeName() {
+        return compartmentTypeName;
     }
     public String getDuration() {
         if (startingTime != null && landingTime != null) {

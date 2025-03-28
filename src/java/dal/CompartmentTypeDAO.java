@@ -5,13 +5,9 @@
 package dal;
 
 import java.sql.*;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.CompartmentType;
-
+import java.util.*;
+import java.util.logging.*;
+import model.*;
 /**
  *
  * @author Rinaaaa
@@ -38,26 +34,18 @@ public class CompartmentTypeDAO extends DBContext{
         }
         return null;
     }
-    
-    public List<CompartmentType> list() {
-        List<CompartmentType> compartmentTypes = new ArrayList<>();
-        String query = """
-            SELECT * FROM swp301.compartmenttype;
-            """;
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
-             
-            ResultSet rs = preparedStatement.executeQuery();
-
+    public ArrayList<CompartmentType> list() {
+        ArrayList<CompartmentType> list = new ArrayList<>();
+        String sql = "SELECT * FROM swp301.compartmenttype";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                CompartmentType compartmentType = new CompartmentType();
-                compartmentType.setId(rs.getString("id"));
-                compartmentType.setName(rs.getString("name"));
-                compartmentTypes.add(compartmentType);
+                list.add(new CompartmentType(rs.getString("id"),
+                        rs.getString("name")));
             }
         } catch (SQLException ex) {
             Logger.getLogger(CompartmentTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return compartmentTypes;
+        return list;
     }
 }

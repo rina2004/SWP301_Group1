@@ -349,4 +349,102 @@ public class FlightDAO extends DBContext {
         }
         return list;
     }
+    public ArrayList<Flight> searchTest(String departure, String destination, String departureDate, String compartmentType) {
+        ArrayList<Flight> list = new ArrayList<>();
+        String sql = "SELECT f.*, ct.name AS compartmentTypeName " +
+                     "FROM swp301.flight f " +
+                     "JOIN swp301.Location depLoc ON f.departure = depLoc.id " +
+                     "JOIN swp301.Location destLoc ON f.destination = destLoc.id " +
+                     "CROSS JOIN swp301.CompartmentType ct " +
+                     "WHERE depLoc.name = ? AND destLoc.name = ? " +
+                     "AND DATE(f.startingTime) = ?";
+
+        AirplaneDAO ad = new AirplaneDAO();
+        LocationDAO ld = new LocationDAO();
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, departure);
+            stm.setString(2, destination);
+            stm.setString(3, departureDate);
+
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                int originalPrice = rs.getInt("price");
+                double priceMultiplier = 1.0;
+                switch (compartmentType) {
+                    case "b": // Business
+                        priceMultiplier = 1.5;
+                        break;
+                    case "f": // First Class
+                        priceMultiplier = 2.0;
+                        break;
+                    case "e": // Economy (default)
+                    default:
+                        priceMultiplier = 1.0;
+                }
+                int adjustedPrice = (int) Math.round(originalPrice * priceMultiplier);
+                Flight flight = new Flight(
+                    rs.getString("id"),
+                    rs.getString("name"),
+                    rs.getString("code"),
+                    ad.get(rs.getString("airplaneID")),
+                    ld.getById(rs.getInt("departure")),
+                    ld.getById(rs.getInt("destination")),
+                    rs.getTimestamp("entryTime").toLocalDateTime(),
+                    rs.getTimestamp("startingTime").toLocalDateTime(),
+                    rs.getTimestamp("landingTime").toLocalDateTime(),
+                    adjustedPrice
+                );
+                flight.setCompartmentTypeName(rs.getString("compartmentTypeName"));
+                list.add(flight);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    public ArrayList<Flight> orderResultSort(String departure, String destination, String startingDate, String sortOrder) { 
+        ArrayList<Flight> list = new ArrayList<>(); 
+        String sql = """ 
+            SELECT f.* FROM flight f 
+            LEFT JOIN Location ld ON f.departure = ld.id 
+            LEFT JOIN Location la ON f.destination = la.id 
+            WHERE ld.name LIKE ? AND la.name LIKE ? AND DATE(f.startingTime) LIKE ? 
+        """; 
+        if (sortOrder != null) {
+            if ("asc".equalsIgnoreCase(sortOrder)) {
+                sql += " ORDER BY f.price ASC";
+            } else if ("desc".equalsIgnoreCase(sortOrder)) {
+                sql += " ORDER BY f.price DESC";
+            }
+        }
+        AirplaneDAO ad = new AirplaneDAO(); 
+        LocationDAO ld = new LocationDAO(); 
+        try { 
+            PreparedStatement stm = connection.prepareStatement(sql); 
+            stm.setString(1, "%" + departure + "%"); 
+            stm.setString(2, "%" + destination + "%"); 
+            stm.setString(3, "%" + startingDate + "%"); 
+            ResultSet rs = stm.executeQuery(); 
+            while (rs.next()) { 
+                Location departureLocation = ld.getById(rs.getInt("departure")); 
+                Location destinationLocation = ld.getById(rs.getInt("destination")); 
+                list.add(new Flight( 
+                    rs.getString("id"), 
+                    rs.getString("name"), 
+                    rs.getString("code"), 
+                    ad.get(rs.getString("airplaneID")), 
+                    departureLocation, 
+                    destinationLocation, 
+                    rs.getTimestamp("entryTime").toLocalDateTime(), 
+                    rs.getTimestamp("startingTime").toLocalDateTime(), 
+                    rs.getTimestamp("landingTime").toLocalDateTime(), 
+                    rs.getInt("price")
+                )); 
+            } 
+        } catch (SQLException ex) { 
+            Logger.getLogger(FlightDAO.class.getName()).log(Level.SEVERE, null, ex); 
+        } 
+        return list; 
+    }
 }

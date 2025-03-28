@@ -22,7 +22,7 @@ public class TicketTypeDAO extends DBContext{
             if (rs.next()) {
                 return new TicketType(rs.getString("type"),
                         rs.getString("description"),
-                        rs.getDouble("price"),
+                        rs.getDouble("percent"),
                         rs.getDouble("checkedweightneed"),
                         rs.getDouble("handedweightneed"));
             }
@@ -40,7 +40,7 @@ public class TicketTypeDAO extends DBContext{
                 list.add(new TicketType(
                     rs.getString("type"),
                     rs.getString("description"),
-                    rs.getDouble("price"),
+                    rs.getDouble("percent"),
                     rs.getDouble("checkedweightneed"),
                     rs.getDouble("handedweightneed")));
             }

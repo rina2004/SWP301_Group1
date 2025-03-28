@@ -17,15 +17,25 @@ import java.util.logging.Logger;
 public class DBContext {
 
     protected Connection connection;
+    
+    public boolean isConnectionValid() {
+        try {
+            return connection != null && !connection.isClosed() && connection.isValid(2);
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 
     public DBContext() {
         try {
             String user = "root";
-            String pass = "26122004";
+            String pass = "1234";
             String url = "jdbc:mysql://localhost:3306/swp301?useSSL=false&serverTimezone=UTC";
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(url, user, pass);
-
+//            connection = DriverManager.getConnection(url, user, pass);
+            if (!isConnectionValid()) {
+                connection = DriverManager.getConnection(url, user, pass);
+            }
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -25,11 +25,34 @@
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
-                        <h2 class="mb-0">Flight Booking</h2>
+                        <h2 class="mb-0">Sky Airline</h2>
+                    </div>
+                    <div>
+                        <c:if test="${empty user}">
+                            <a href="Login.jsp" class="btn btn-outline-primary me-2">Sign In</a>
+                            <a href="register" class="btn btn-primary">Register</a>
+                        </c:if>
+                        <c:if test="${not empty user}">
+                            <div class="d-flex align-items-center">
+                                <p class="me-3 mb-0">
+                                    <i class="fas fa-user me-2"></i>${sessionScope.user}
+                                </p>
+                                <form action="${pageContext.request.contextPath}/logout" method="get" class="mb-0">
+                                    <button type="submit" class="btn btn-secondary">Logout</button>
+                                </form>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
             </div>
         </div>
+
+        <c:if test="${not empty sessionScope.successMessage}">
+            <div class="alert alert-success text-center">
+                ${sessionScope.successMessage}
+            </div>
+            <c:remove var="successMessage" scope="session"/>
+        </c:if>
         <div class="container">
             <div class="search-section">
                 <div class="row mb-4">
@@ -78,20 +101,54 @@
             </div>
             <div class="search-section">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Filter by Type</h5>
+                    <div class="passenger-details mb-3">
+                        <div class="d-flex justify-content-start align-items-center">
+                            <div class="badge bg-info p-2 me-2">
+                                <i class="fas fa-users me-1"></i> 
+                                Total Passengers: ${passengers}
+                            </div>
+                            <c:if test="${not empty param.adult and param.adult ne '0'}">
+                                <div class="badge bg-light text-dark p-2 me-2">
+                                    <i class="fas fa-user me-1"></i> 
+                                    Adults: ${param.adult}
+                                </div>
+                            </c:if>
+                            <c:if test="${not empty param.child and param.child ne '0'}">
+                                <div class="badge bg-light text-dark p-2 me-2">
+                                    <i class="fas fa-child me-1"></i> 
+                                    Children: ${param.child}
+                                </div>
+                            </c:if>
+                            <c:if test="${not empty param.baby and param.baby ne '0'}">
+                                <div class="badge bg-light text-dark p-2">
+                                    <i class="fas fa-baby me-1"></i> 
+                                    Babies: ${param.baby}
+                                </div>
+                            </c:if>
+                        </div>
+                    </div>
                     <div class="btn-group">
-                        <a href="order-filter?priceRange=cheapest&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
-                           class="btn btn-outline-primary ${activeFilter eq 'cheapest' ? 'active' : ''}">Business
-                        </a>
-                        <a href="order-filter?priceRange=best&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
-                           class="btn btn-outline-primary ${activeFilter eq 'best' ? 'active' : ''}">Economy
-                        </a>
-                        <a href="order-filter?priceRange=quickest&departure=${departure}&destination=${destination}&departureDate=${departureDate}" 
-                           class="btn btn-outline-primary ${activeFilter eq 'quickest' ? 'active' : ''}">First Class
-                        </a>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="sortPriceDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-sort me-2"></i> Sort by Price
+                            </button>
+                            <ul class="dropdown-menu sort-dropdown" aria-labelledby="sortPriceDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="order-filter?departure=${departure}&destination=${destination}&departureDate=${departureDate}&order=asc">
+                                        <i class="fas fa-arrow-up me-2"></i>Ascending (Price)
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="order-filter?departure=${departure}&destination=${destination}&departureDate=${departureDate}&order=desc">
+                                        <i class="fas fa-arrow-down me-2"></i>Descending (Price)
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
+            
             <c:choose>
                 <c:when test="${empty list}">
                     <div class="no-flights">
@@ -107,6 +164,14 @@
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
                                         <h5 class="card-title">${flight.getName()}</h5>
+                                        <%--p class="text-muted">
+                                            <i class="fas fa-chair me-2"></i>${flight.getCompartmentTypeName()} Seat
+                                        </p--%>
+                                    </div>
+                                    <div class="flight-price">
+                                        <h4 class="text-primary">
+                                            <fmt:formatNumber value="${flight.getPrice()}"/> VND
+                                        </h4>
                                     </div>
                                 </div>
                                 <div class="flight-info">
@@ -128,7 +193,7 @@
                                             <i class="fas fa-eye text-primary align-items-center"></i>
                                         </a>
                                         <br><br>
-                                        <a href="order-confirm?flightId=${flight.getId()}&ticketClass=${ticket.type}&passengers=1" 
+                                        <a href="order-confirm?flightId=${flight.getId()}&ticketClass=${ticket.type}&passengers=${passengers}&adult=${param.adult}&child=${param.child}&baby=${param.baby}" 
                                            class="btn btn-primary rounded-3 px-4 py-2 w-100" title="Đặt vé ngay">
                                             Đặt vé
                                         </a>
@@ -141,27 +206,5 @@
             </c:choose>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-                                            function addToCart(id, name, price, ticketType) {
-                                                let cart = JSON.parse(localStorage.getItem('flightCart')) || [];
-                                                const existingItem = cart.find(item => item.id === id && item.ticketType === ticketType);
-                                                if (existingItem) {
-                                                    showNotification('This flight is already in your cart');
-                                                } else {
-                                                    cart.push({
-                                                        id: id,
-                                                        name: name,
-                                                        price: formatCurrency(price),
-                                                        ticketType: ticketType
-                                                    });
-                                                    localStorage.setItem('flightCart', JSON.stringify(cart));
-                                                    updateCartCount();
-                                                    showNotification('Flight added to cart successfully');
-                                                }
-                                            }
-                                            function formatCurrency(value) {
-                                                return new Intl.NumberFormat('vi-VN').format(value);
-                                            }
-        </script>
     </body>
 </html>
