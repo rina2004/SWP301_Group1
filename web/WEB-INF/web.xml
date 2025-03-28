@@ -93,10 +93,6 @@
         <url-pattern>/type/search</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>postController</servlet-name>
-        <url-pattern>/post</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>HistoryBookingDetailController</servlet-name>
         <url-pattern>/historyBookingDetail</url-pattern>
     </servlet-mapping>

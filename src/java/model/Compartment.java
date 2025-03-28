@@ -23,12 +23,10 @@ public class Compartment {
 
     public Compartment(String id, CompartmentType type, Airplane airplane, int capacity) {
         this.id = id;
-        this.ct = ct;
+        this.type = type;
         this.airplane = airplane;
         this.capacity = capacity;
     }
-    
-    private ArrayList<Seat> seats = new ArrayList<>();
 
     public String getId() {
         return id;

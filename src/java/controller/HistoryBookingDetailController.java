@@ -4,23 +4,21 @@
  */
 package controller;
 
-import jakarta.servlet.RequestDispatcher;
+import dal.TicketDAO;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
+import model.Ticket;
 
 /**
  *
- * @author DUCDA
+ * @author anhbu
  */
-<<<<<<<< HEAD:src/java/controller/adminSidebarController.java
-public class adminSidebarController extends HttpServlet {
-========
 public class HistoryBookingDetailController extends HttpServlet {
->>>>>>>> H:src/java/controller/HistoryBookingDetailController.java
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +37,10 @@ public class HistoryBookingDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet adminSidebarController</title>");            
+            out.println("<title>Servlet OrderDetailControl</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet adminSidebarController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet OrderDetailControl at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,16 +58,6 @@ public class HistoryBookingDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-<<<<<<<< HEAD:src/java/controller/adminSidebarController.java
-        String page = request.getParameter("page");
-
-        if (page != null) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-            dispatcher.forward(request, response);
-        } else {
-            response.getWriter().write("Lỗi: Không tìm thấy trang!");
-        }
-========
         //processRequest(request, response);
         // Lấy orderId từ request param
         String OrderPassengerID = request.getParameter("OrderPassengerID");
@@ -82,7 +70,6 @@ public class HistoryBookingDetailController extends HttpServlet {
         // Đổ data ra view
         request.setAttribute("ticketList", ticketList);
         request.getRequestDispatcher("view/HistoryBookingDetail.jsp").forward(request, response);
->>>>>>>> H:src/java/controller/HistoryBookingDetailController.java
     }
 
     /**
@@ -96,7 +83,8 @@ public class HistoryBookingDetailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        
     }
 
     /**

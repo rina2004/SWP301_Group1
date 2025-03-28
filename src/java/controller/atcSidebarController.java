@@ -4,35 +4,19 @@
  */
 package controller;
 
-<<<<<<<< HEAD:src/java/controller/atcSidebarController.java
 import jakarta.servlet.RequestDispatcher;
-========
-import dal.OrderDAO;
-import dal.TicketDAO;
-import java.io.IOException;
-import java.io.PrintWriter;
->>>>>>>> H:src/java/controller/StaffTicketProcessing.java
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-<<<<<<<< HEAD:src/java/controller/atcSidebarController.java
 import java.io.IOException;
 import java.io.PrintWriter;
-========
-import java.util.List;
-import model.Ticket;
->>>>>>>> H:src/java/controller/StaffTicketProcessing.java
 
 /**
  *
  * @author DUCDA
  */
-<<<<<<<< HEAD:src/java/controller/atcSidebarController.java
 public class atcSidebarController extends HttpServlet {
-========
-public class StaffTicketProcessing extends HttpServlet {
->>>>>>>> H:src/java/controller/StaffTicketProcessing.java
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,17 +35,10 @@ public class StaffTicketProcessing extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-<<<<<<<< HEAD:src/java/controller/atcSidebarController.java
             out.println("<title>Servlet atcSidebarController</title>");            
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet atcSidebarController at " + request.getContextPath() + "</h1>");
-========
-            out.println("<title>Servlet StaffTicketProcessing</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet StaffTicketProcessing at " + request.getContextPath() + "</h1>");
->>>>>>>> H:src/java/controller/StaffTicketProcessing.java
             out.println("</body>");
             out.println("</html>");
         }
@@ -79,7 +56,6 @@ public class StaffTicketProcessing extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-<<<<<<<< HEAD:src/java/controller/atcSidebarController.java
         String page = request.getParameter("page");
 
         if (page != null) {
@@ -88,14 +64,6 @@ public class StaffTicketProcessing extends HttpServlet {
         } else {
             response.getWriter().write("Lỗi: Không tìm thấy trang!");
         }
-========
-        //processRequest(request, response);
-        TicketDAO dao = new TicketDAO();
-        List<Ticket> processingOrders = dao.getCancelledOrProcessingTickets();
-
-        request.setAttribute("processingOrders", processingOrders);
-        request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
->>>>>>>> H:src/java/controller/StaffTicketProcessing.java
     }
 
     /**
@@ -109,40 +77,7 @@ public class StaffTicketProcessing extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-<<<<<<<< HEAD:src/java/controller/atcSidebarController.java
         processRequest(request, response);
-========
-        //processRequest(request, response);
-        String orderPID = request.getParameter("orderID");
-        String action = request.getParameter("action");
-
-        if (orderPID == null || action == null) {
-            response.sendRedirect("view/ListTicketProcessing.jsp");
-            return;
-        }
-
-        TicketDAO ticketDAO = new TicketDAO();
-        OrderDAO orderDAO = new OrderDAO();
-
-        if ("accept".equals(action)) {
-            // Chấp nhận vé
-            ticketDAO.updateTicketStatusByOrderPID(orderPID, "Cancelled");
-        } else if ("reject".equals(action)) {
-            // Hủy vé
-            ticketDAO.updateTicketStatusByOrderPID(orderPID, "Rejected");
-
-            // Lấy OrderID từ OrderPassengerID
-            String orderId = orderDAO.getOrderIdByOrderPassengerId(orderPID);
-            if (orderId != null && ticketDAO.hasOnlyCancelledTickets(orderId)) {
-                orderDAO.updateOrderStatus(orderId, "Cancelled");
-            }
-        }
-
-        // Load lại danh sách đơn hàng và chuyển hướng
-        List<Ticket> processingOrders = ticketDAO.getCancelledOrProcessingTickets();
-        request.setAttribute("processingOrders", processingOrders);
-        request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
->>>>>>>> H:src/java/controller/StaffTicketProcessing.java
     }
 
     /**

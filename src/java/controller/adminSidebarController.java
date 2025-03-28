@@ -16,11 +16,7 @@ import java.io.PrintWriter;
  *
  * @author DUCDA
  */
-<<<<<<<< HEAD:src/java/controller/adminSidebarController.java
 public class adminSidebarController extends HttpServlet {
-========
-public class HistoryBookingDetailController extends HttpServlet {
->>>>>>>> H:src/java/controller/HistoryBookingDetailController.java
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -60,7 +56,6 @@ public class HistoryBookingDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-<<<<<<<< HEAD:src/java/controller/adminSidebarController.java
         String page = request.getParameter("page");
 
         if (page != null) {
@@ -69,20 +64,6 @@ public class HistoryBookingDetailController extends HttpServlet {
         } else {
             response.getWriter().write("Lỗi: Không tìm thấy trang!");
         }
-========
-        //processRequest(request, response);
-        // Lấy orderId từ request param
-        String OrderPassengerID = request.getParameter("OrderPassengerID");
-
-        // Tương tác trực tiếp DAO
-        TicketDAO ticketDAO = new TicketDAO();
-        List<Ticket> ticketList = ticketDAO.getTicketsByOrderPassengerId(OrderPassengerID);
-
-
-        // Đổ data ra view
-        request.setAttribute("ticketList", ticketList);
-        request.getRequestDispatcher("view/HistoryBookingDetail.jsp").forward(request, response);
->>>>>>>> H:src/java/controller/HistoryBookingDetailController.java
     }
 
     /**
