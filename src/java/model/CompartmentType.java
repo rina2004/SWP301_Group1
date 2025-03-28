@@ -1,7 +1,7 @@
 package model;
 /**
  *
- * @author A A
+ * @author Rinaaaa
  */
 public class CompartmentType {
     private String id;

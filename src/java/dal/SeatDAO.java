@@ -8,13 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Airplane;
 import model.Compartment;
 import model.Seat;
-import model.TicketType;
 
 /**
  *
@@ -40,20 +40,23 @@ public class SeatDAO extends DBContext {
         return null;
     }
 
-    public void updateSeatStatus(String id, String status, String reason) {
-        PreparedStatement stm;
-        ResultSet rs;
+    public boolean updateSeats(List<Seat> seats) {
+        String query = "UPDATE seat SET status = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query);) {
+            
 
-        String sql = "Update Seat Set status = ? , reason = ? Where id = ? ";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, status);
-            stm.setString(2, reason);
-            stm.setString(3, id);
-            stm.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e);
+            for (Seat seat : seats) {
+                ps.setString(1, seat.getStatus());
+                ps.setString(2, seat.getId());
+                ps.addBatch();
+            }
+
+            int[] results = ps.executeBatch();
+            return Arrays.stream(results).allMatch(r -> r > 0);
+        } catch (SQLException ex) {
+            Logger.getLogger(SeatDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return false;
     }
 
     public Seat getSeatByID(String seatID) {
@@ -140,8 +143,8 @@ public class SeatDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        SeatDAO seatDAO = new SeatDAO(); 
-        String testAirplaneID = "VN-A001"; 
+        SeatDAO seatDAO = new SeatDAO();
+        String testAirplaneID = "VN-A001";
 
         List<Seat> list = seatDAO.showAllSeatByTypeID(testAirplaneID);
         for (Seat seat : list) {

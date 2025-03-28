@@ -280,7 +280,7 @@
                 </a>
             </div>
             <ul class="menu">
-                <li><a href="flights">Flights</a></li>
+                <li><a href="view/order">Flights</a></li>
                 <li><a href="blog">Blogs</a></li>
                 <li><a href="#contact">Contact Us</a></li>
             </ul>
@@ -288,7 +288,7 @@
             <c:choose>
                 <c:when test="${not empty session}">
                     <div class="auth-buttons">
-                        <a href="#" class="register" id="userDropdown">${username}</a>
+                        <a href="#" class="register" id="userDropdown">${user}</a>
                         <div class="dropdown-content" id="dropdownMenu">
                             <a href="profile">Profile</a>
                             <form action="logout" method="GET">

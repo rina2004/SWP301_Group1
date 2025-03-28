@@ -4,10 +4,42 @@
         <param-name>webapp</param-name>
         <param-value>webapp</param-value>
     </context-param>
+    
+    <servlet>
+        <servlet-name>AirplaneUpdateSeatsController</servlet-name>
+        <servlet-class>controller.AirplaneUpdateSeatsController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AirplaneUpdateSeatsController</servlet-name>
+        <url-pattern>/airplane/updateSeats</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>staffSidebarController</servlet-name>
+        <servlet-class>controller.staffSidebarController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>adminSidebarController</servlet-name>
+        <servlet-class>controller.adminSidebarController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>atcSidebarController</servlet-name>
+        <servlet-class>controller.atcSidebarController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>staffSidebarController</servlet-name>
+        <url-pattern>/staff-sidebar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>adminSidebarController</servlet-name>
+        <url-pattern>/admin-sidebar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>atcSidebarController</servlet-name>
+        <url-pattern>/atc-sidebar</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
     </welcome-file-list>
-
     <servlet>
         <servlet-name>AccountListController</servlet-name>
         <servlet-class>controller.AccountListController</servlet-class>
@@ -48,6 +80,7 @@
         <servlet-name>homeController</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>blogController</servlet-name>
         <servlet-class>controller.blogController</servlet-class>
@@ -56,6 +89,7 @@
         <servlet-name>blogController</servlet-name>
         <url-pattern>/blog</url-pattern>
     </servlet-mapping>
+
     <servlet>
         <servlet-name>postController</servlet-name>
         <servlet-class>controller.postController</servlet-class>
