@@ -142,6 +142,22 @@ public class SeatDAO extends DBContext {
         }
         return seats;
     }
+    
+    public void updateSeatStatus(String id, String status, String reason) {
+        PreparedStatement stm;
+        ResultSet rs;
+
+        String sql = "Update Seat Set status = ? , reason = ? Where id = ? ";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, status);
+            stm.setString(2, reason);
+            stm.setString(3, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
 
     public static void main(String[] args) {
         SeatDAO seatDAO = new SeatDAO();
