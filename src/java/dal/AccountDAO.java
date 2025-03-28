@@ -253,7 +253,7 @@ public class AccountDAO extends DBContext {
                 acc.setUsername(rs.getString("username"));
                 acc.setPassword(rs.getString("password"));
                 acc.setStatus(status);
-                
+
                 Role role = new Role();
                 role.setId(rs.getInt("roleId"));
                 role.setName(rs.getString("roleName"));
@@ -396,60 +396,23 @@ public class AccountDAO extends DBContext {
     public void register(String username, String password, String name, Date dob, String phone, String address, String email) {
         PreparedStatement accountStmt = null;
         PreparedStatement roleStmt = null;
-
-        String id = createCustomerID();
-        if (id == null) {
-            System.out.println("Không thể khởi tạo ID");
-            return;
-        }
+        String accountSQL = "INSERT INTO Account ( username, password,roleID,status ,name, dob, phone, address, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
-            connection.setAutoCommit(false); // Bắt đầu transaction
-
-            // 1️⃣ Thêm vào bảng Account
-            String accountSQL = "INSERT INTO Account (id, username, password, name, dob, phone, address, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             accountStmt = connection.prepareStatement(accountSQL);
-            accountStmt.setString(1, id);
-            accountStmt.setString(2, username);
-            accountStmt.setString(3, password);
-            accountStmt.setString(4, name);
-            accountStmt.setDate(5, new java.sql.Date(dob.getTime()));
-            accountStmt.setString(6, phone);
-            accountStmt.setString(7, address);
-            accountStmt.setString(8, email);
+            accountStmt.setString(1, username);
+            accountStmt.setString(2, password);
+            accountStmt.setInt(3, 2);
+            accountStmt.setInt(4, 1);
+            accountStmt.setString(5, name);
+            accountStmt.setDate(6, new java.sql.Date(dob.getTime()));
+            accountStmt.setString(7, phone);
+            accountStmt.setString(8, address);
+            accountStmt.setString(9, email);
             accountStmt.executeUpdate();
 
-            String roleSQL = "INSERT INTO AccountUserRole (accountID,entityID,roleID) VALUES (?,?,?)";
-            roleStmt = connection.prepareStatement(roleSQL);
-            roleStmt.setString(1, id);
-            roleStmt.setInt(2, 1);
-            roleStmt.setInt(3, 3);
-            roleStmt.executeUpdate();
-
-            connection.commit();
-            System.out.println("✅ Tạo tài khoản thành công!");
-
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace();
-            }
-            e.printStackTrace();
-
-        } finally {
-            try {
-                if (accountStmt != null) {
-                    accountStmt.close();
-                }
-                if (roleStmt != null) {
-                    roleStmt.close();
-                }
-                connection.setAutoCommit(true);
-            } catch (SQLException closeEx) {
-                closeEx.printStackTrace();
-            }
+            System.out.println(e);
         }
-
     }
 
 }

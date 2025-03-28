@@ -1,10 +1,13 @@
 package model;
+
 import java.time.LocalDateTime;
+
 /**
  *
  * @author A A
  */
 public class Order {
+
     private String id;
     private Account customer;
     private Account staff;
@@ -12,9 +15,12 @@ public class Order {
     private LocalDateTime time;
     private double finalPrice;
     private int finalNum;
+    private TicketType tt;
+
     public Order() {
     }
-    public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum) {
+
+    public Order(String id, Account customer, Account staff, String status, LocalDateTime time, double finalPrice, int finalNum, TicketType tt) {
         this.id = id;
         this.customer = customer;
         this.staff = staff;
@@ -22,10 +28,13 @@ public class Order {
         this.time = time;
         this.finalPrice = finalPrice;
         this.finalNum = finalNum;
+        this.tt = tt;
     }
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -78,10 +87,17 @@ public class Order {
         this.finalNum = finalNum;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" + "id=" + id + ", customer=" + customer + ", staff=" + staff + ", status=" + status + ", time=" + time + ", finalPrice=" + finalPrice + ", finalNum=" + finalNum + '}';
+    public TicketType getTt() {
+        return tt;
     }
 
-    
+    public void setTt(TicketType tt) {
+        this.tt = tt;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" + "id=" + id + ", customer=" + customer + ", staff=" + staff + ", status=" + status + ", time=" + time + ", finalPrice=" + finalPrice + ", finalNum=" + finalNum + ", tt=" + tt + '}';
+    }
+
 }

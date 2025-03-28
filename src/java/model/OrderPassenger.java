@@ -75,5 +75,10 @@ public class OrderPassenger {
     public void setNation(Nation nation) {
         this.nation = nation;
     }
+
+    @Override
+    public String toString() {
+        return "OrderPassenger{" + "id=" + id + ", order=" + order + ", passengerType=" + passengerType + ", name=" + name + ", dob=" + dob + ", nation=" + nation + '}';
+    }
     
 }

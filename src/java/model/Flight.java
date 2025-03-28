@@ -165,4 +165,11 @@ public class Flight {
         }
         return "N/A";
     }
+
+    @Override
+    public String toString() {
+        return "Flight{" + "id=" + id + ", name=" + name + ", code=" + code + ", airplane=" + airplane + ", departure=" + departure + ", destination=" + destination + ", entryTime=" + entryTime + ", startingTime=" + startingTime + ", landingTime=" + landingTime + ", seatType=" + seatType + ", price=" + price + '}';
+    }
+    
+    
 }

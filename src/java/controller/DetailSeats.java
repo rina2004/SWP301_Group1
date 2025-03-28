@@ -5,20 +5,22 @@
 
 package controller;
 
-import dal.AccountDAO;
+import dal.SeatDAO;
+import dal.TicketDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import model.Seat;
+import model.Ticket;
 
 /**
  *
  * @author tungn
  */
-public class ResetPassword extends HttpServlet {
+public class DetailSeats extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,10 +37,10 @@ public class ResetPassword extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ResetPassword</title>");  
+            out.println("<title>Servlet DetailSeats</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ResetPassword at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet DetailSeats at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +57,15 @@ public class ResetPassword extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.getRequestDispatcher("view/ResetPassword.jsp").forward(request, response);
+        String id = request.getParameter("id");
+        SeatDAO dao = new SeatDAO();
+        TicketDAO ticketDao = new TicketDAO();
+        String ticketID = ticketDao.getIDbySeat(id);
+        Ticket ticket = ticketDao.getInfor(ticketID);
+        Seat seat = dao.getSeatByID(id);
+        request.setAttribute("seat", seat);
+        request.setAttribute("ticket", ticket);
+        request.getRequestDispatcher("view/DetailSeat.jsp").forward(request, response);
     } 
 
     /** 
@@ -68,23 +78,7 @@ public class ResetPassword extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         String email = request.getParameter("email");
-
-        AccountDAO dao = new AccountDAO();
-        boolean exist = dao.checkEmailExist(email);
-
-        if (exist) {
-            HttpSession session = request.getSession();
-            session.setAttribute("email", email);
-            String otp = JavaMail.createOTP();
-            JavaMail.sendOTP(email, otp);
-            session.setAttribute("otp", otp);
-            session.setAttribute("timeOtp", System.currentTimeMillis() + 2 * 60 * 1000);
-            request.getRequestDispatcher("view/OTPResetPassword.jsp").forward(request, response);
-        } else {
-            request.setAttribute("error", "Email không tồn tại!");
-            request.getRequestDispatcher("view/ResetPassword.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /** 

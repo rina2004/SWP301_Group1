@@ -125,7 +125,6 @@
             <table>
                 <tr>
                     <th>ID</th>
-                    <th>Order</th>
                     <th>Flight ID</th>
                     <th>Status</th>
                     <th>Action</th>  
@@ -133,13 +132,9 @@
                 <c:forEach var="l" items="${list}">
                     <tr>
                         <td>${l.id}</td>
-                        <td>${l.order.id}</td>
                         <td>${l.flight.id}</td>
                         <td>${l.status}</td>
                         <td>
-                            <a href="<%= request.getContextPath() %>/orderLuggage?id=${l.id}" class="btn">
-                                Book Extra Luggage
-                            </a>
                             <c:if test="${l.status != 'Checked'}">
                                 <a href="<%= request.getContextPath() %>/listSeatsUser?id=${l.flight.airplane.id}&ticketId=${l.id}" class="btn">
                                     Check - in

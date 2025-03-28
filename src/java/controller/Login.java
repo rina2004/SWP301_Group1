@@ -12,8 +12,8 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
-        request.getRequestDispatcher("Login.jsp").forward(request, response);
+       request.getRequestDispatcher("/view/Login.jsp").forward(request, response);
+       // request.getRequestDispatcher("Login.jsp").forward(request, response);
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -37,6 +37,7 @@ public class Login extends HttpServlet {
         HttpSession session = request.getSession(true);
         session.setAttribute("acc", acc);
         session.setAttribute("user", username);
+        session.setAttribute("id", acc.getId());
         session.setMaxInactiveInterval(60 * 30);
         if (rememberMe) {
             Cookie userCookie = new Cookie("username", username);

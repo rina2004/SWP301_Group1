@@ -117,7 +117,7 @@
                 <button type="submit" class="btn btn-primary w-100">Login</button>
             </div>
             <div>
-                <a href="<%= request.getContextPath()%>/resetpassword" class="text-link">Forgot Password?</a>
+                <a href="<%= request.getContextPath()%>/resetPassword" class="text-link">Forgot Password?</a>
             </div>
             <p class="error-message">${error}</p>
             <hr style="border-color: rgba(255, 255, 255, 0.3);">

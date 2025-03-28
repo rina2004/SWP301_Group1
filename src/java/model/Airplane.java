@@ -88,4 +88,11 @@ public class Airplane {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "Airplane{" + "id=" + id + ", name=" + name + ", status=" + status + ", numOfComs=" + numOfComs + ", maintainanceTime=" + maintainanceTime + ", usedTime=" + usedTime + ", compartments=" + compartments + '}';
+    }
+    
+    
 }

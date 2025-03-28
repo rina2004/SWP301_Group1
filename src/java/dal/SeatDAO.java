@@ -58,9 +58,10 @@ public class SeatDAO extends DBContext {
 
     public Seat getSeatByID(String seatID) {
         Seat seat = null;
-        String sql = "SELECT s.id, c.id AS compartmentID, c.type AS compartmentType, s.status, s.reason, c.airplaneID "
+        String sql = "SELECT s.id, c.id AS compartmentID, ct.id AS compartmentType, s.status, s.reason, c.airplaneID "
                 + "FROM Seat s "
                 + "JOIN Compartment c ON c.id = s.compartmentID "
+                + "JOIN CompartmentType ct ON c.typeId = ct.id "
                 + "WHERE s.id = ?";
 
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
@@ -70,7 +71,7 @@ public class SeatDAO extends DBContext {
                     String compartmentID = rs.getString("compartmentID");
                     String status = rs.getString("status");
                     String reason = rs.getString("reason");
-                    String airplaneID = rs.getString("airplaneID"); // Lấy airplaneID
+                    String airplaneID = rs.getString("airplaneID");
 
                     Airplane airplane = new Airplane();
                     airplane.setId(airplaneID);
@@ -101,15 +102,16 @@ public class SeatDAO extends DBContext {
 
     public ArrayList<Seat> showAllSeatByTypeID(String airplaneID) {
         ArrayList<Seat> seats = new ArrayList<>();
-        String sql = "SELECT s.id, c.id AS compartmentID, c.type AS compartmentType, s.status, c.airplaneID "
+        String sql = "SELECT s.id, c.id AS compartmentID, s.status, c.airplaneID, ct.id AS typeID "
                 + "FROM Seat s "
                 + "JOIN Compartment c ON c.id = s.compartmentID "
+                + "JOIN CompartmentType ct ON c.typeId = ct.id "
                 + "WHERE c.airplaneID = ? "
                 + "ORDER BY "
                 + "  CASE "
-                + "    WHEN LEFT(c.type, 1) = 'B' THEN 1 "
-                + "    WHEN LEFT(c.type, 1) = 'F' THEN 2 "
-                + "    WHEN LEFT(c.type, 1) = 'E' THEN 3 "
+                + "    WHEN LEFT(ct.id, 1) = 'B' THEN 1 "
+                + "    WHEN LEFT(ct.id, 1) = 'F' THEN 2 "
+                + "    WHEN LEFT(ct.id, 1) = 'E' THEN 3 "
                 + "    ELSE 4 "
                 + "  END, "
                 + "  CAST(SUBSTRING_INDEX(s.id, '-', -1) AS UNSIGNED);";
@@ -120,7 +122,6 @@ public class SeatDAO extends DBContext {
             try (ResultSet rs = stm.executeQuery()) {
                 while (rs.next()) {
                     String seatID = rs.getString("id");
-
                     String status = rs.getString("status");
                     String airplaneIDFromDB = rs.getString("airplaneID");
 
@@ -140,13 +141,11 @@ public class SeatDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        SeatDAO seatDAO = new SeatDAO(); 
-        String testAirplaneID = "VN-A001"; 
+        SeatDAO seatDAO = new SeatDAO();
+        String testAirplaneID = "VN-A001-B-1";
 
-        List<Seat> list = seatDAO.showAllSeatByTypeID(testAirplaneID);
-        for (Seat seat : list) {
-            System.out.println(seat.toString());
-        }
+       Seat s = seatDAO.getSeatByID(testAirplaneID);
+        System.out.println(s.toString());
     }
 
 }

@@ -6,25 +6,25 @@ package model;
 
 /**
  *
- * @author A A
+ * @author tungn
  */
-public class Nation {
-    private int id;
+public class CompartmentType {
+    private char id;
     private String name;
 
-    public Nation() {
+    public CompartmentType() {
     }
 
-    public Nation(int id, String name) {
+    public CompartmentType(char id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public int getId() {
+    public char getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(char id) {
         this.id = id;
     }
 
@@ -38,7 +38,10 @@ public class Nation {
 
     @Override
     public String toString() {
-        return "Nation{" + "id=" + id + ", name=" + name + '}';
+        return "CompartmentType{" + "id=" + id + ", name=" + name + '}';
     }
+
+    
+    
     
 }
