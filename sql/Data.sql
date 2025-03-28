@@ -82,7 +82,7 @@ CREATE TABLE `Airplane` (
 );
 
 CREATE TABLE `CompartmentType` (
-	`id` varchar(1),
+	`id` char,
     `name` varchar(20),
     
     PRIMARY KEY(`id`)
@@ -90,7 +90,7 @@ CREATE TABLE `CompartmentType` (
 
 CREATE TABLE `Compartment` (
     `id` VARCHAR(20),
-    `typeId` varchar(1),
+    `typeId` char,
     `airplaneID` VARCHAR(10),
     `capacity` INT,
     
@@ -483,4 +483,8 @@ INSERT INTO ChatMessage (senderAccountID, receiverAccountID, message, timestamp,
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user2'), 'Sure John, how can I help you?', '2024-03-15 10:18:00', TRUE),
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user3'), 'Sarah, could you check if there are any window seats available on flight VN303?', '2024-03-16 14:30:00', TRUE),
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user4'), 'I just checked and there are 3 window seats available. Would you like me to book one for you?', '2024-03-16 14:45:00', TRUE);
+
+INSERT INTO `swp301`.`compartment`
+(`id`, `typeId`, `airplaneID`, `capacity`)
+VALUES (?, ?, ?, ?);
 

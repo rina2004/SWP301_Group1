@@ -6,6 +6,7 @@ package controller;
 
 import dal.AirplaneDAO;
 import dal.AirplaneStatusDBContext;
+import dal.CompartmentTypeDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -18,40 +19,15 @@ import java.util.List;
 import model.Airplane;
 import model.AirplaneStatus;
 import model.Compartment;
+import model.CompartmentType;
 import model.Seat;
-import model.TicketType;
+import com.google.gson.Gson;
 
 /**
  *
  * @author Rinaaaa
  */
 public class AirplaneCreateController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AirplaneCreateController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AirplaneCreateController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -67,8 +43,8 @@ public class AirplaneCreateController extends HttpServlet {
             throws ServletException, IOException {
         AirplaneStatusDBContext statusDB = new AirplaneStatusDBContext();
         List<AirplaneStatus> statuses = statusDB.list();
-        request.setAttribute("statuses", statuses);
 
+        request.setAttribute("statuses", statuses);
         request.getRequestDispatcher("/view/createAirplane.jsp").forward(request, response);
     }
 
@@ -84,12 +60,13 @@ public class AirplaneCreateController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         AirplaneDAO airplaneDAO = new AirplaneDAO();
+        CompartmentTypeDAO compartmentTypeDAO = new CompartmentTypeDAO();
 
         try {
             // Nhận thông tin máy bay
-            String id = request.getParameter("airId");
-            String name = request.getParameter("airName");
-            int statusID = Integer.parseInt(request.getParameter("airStatusID"));
+            String id = request.getParameter("id");
+            String name = request.getParameter("name");
+            int statusID = Integer.parseInt(request.getParameter("statusId"));
             int numOfComs = Integer.parseInt(request.getParameter("numOfComs"));
             LocalDateTime maintainanceTime = LocalDateTime.parse(request.getParameter("maintainanceTime"));
             LocalDateTime usedTime = LocalDateTime.parse(request.getParameter("usedTime"));
@@ -108,18 +85,16 @@ public class AirplaneCreateController extends HttpServlet {
             airplane.setCompartments(new ArrayList<>());
 
             for (int i = 0; i < numOfComs; i++) {
-                String compName = request.getParameter("compartment" + i + ".name");
+                String compType = request.getParameter("compartment" + i + ".type");
                 int capacity = Integer.parseInt(request.getParameter("compartment" + i + ".capacity"));
 
-                String compId = airplane.getId() + "-" + compName.charAt(0);
+                String compId = airplane.getId() + "-" + compType;
 
                 Compartment compartment = new Compartment();
                 compartment.setId(compId);
-                
-                TicketType ticketType = new TicketType();
-                ticketType.setType(compName);
-                compartment.setType(ticketType);
-                
+
+                compartment.setType(compartmentTypeDAO.get(compType));
+
                 compartment.setCapacity(capacity);
 
                 // Danh sách seats trong compartment

@@ -5,16 +5,18 @@
     <head>
         <title>Airplane Details</title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/viewAirplaneDetail.css">
+        <script src ="${pageContext.request.contextPath}/js/viewAirplaneDetails.js" defer=""></script>
     </head>
     <body>
         <div class="header">
             <a href="${pageContext.request.contextPath}/airplane/view" class="back-link">Back to List</a>
-            <h1>Airplane Details</h1>
-            <a href="${pageContext.request.contextPath}/airplane/edit?id=${airplane.id}" class="edit-link">Edit</a>
+            <button id="edit-btn" class="edit-link">Edit</button>
+            <button id="save-btn" style="display: none;" class="edit-link">Save Changes</button>
+            <button id="cancel-btn" style="display: none;" class="edit-link">Cancel</button>
         </div>
         <!-- Airplane Information Section -->
         <div class="airplane-info">
-            <h2>Aircraft Information</h2>
+            <h2>Airplane Details</h2>
             <div class="info-grid">
                 <div class="info-item">
                     <div class="info-label">ID</div>
@@ -26,7 +28,7 @@
                 </div>
                 <div class="info-item">
                     <div class="info-label">Status</div>
-                    <div class="info-value">${airplane.status.id}</div>
+                    <div class="info-value">${airplane.status.name}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">Number of Compartments</div>
@@ -102,7 +104,7 @@
                                                          <c:otherwise>seat-not-available</c:otherwise>
                                                      </c:choose>
                                                      ">
-                                                    <div class="seat-id">${seat.id}</div>
+                                                    <div class="seat-id" data-id="${seat.id}" data-status="${seat.status}">${seat.id}</div>
                                                 </div>
                                             </c:if>
                                         </c:forEach>
@@ -135,48 +137,5 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            // JavaScript để điều chỉnh kích thước ghế và khoang dựa trên số lượng ghế
-            document.addEventListener('DOMContentLoaded', function () {
-            // Thiết lập các biến CSS cho kích thước và khoảng cách ghế
-            const root = document.documentElement;
-                    const seatsContainer = compartment.querySelector('.seats-container');
-                    const seatRows = compartment.querySelectorAll('.seat-row');
-                    const capacity = parseInt(compartment.dataset.capacity) || 0;
-                    root.style.setProperty('--seat-size', `${seatSize}px`);
-                    root.style.setProperty('--seat-x-spacing', `${seatXSpacing}px`);
-                    root.style.setProperty('--seat-y-spacing', `${seatYSpacing}px`);
-                    const compartments = document.querySelectorAll('.compartment');
-                    compartments.forEach(compartment => {
-                    const seatsContainer = compartment.querySelector('.seats-container');
-                            const seatRows = compartment.querySelectorAll('.seat-row');
-                            const capacity = parseInt(compartment.dataset.capacity) || 0;
-                            seatRows.forEach(row => {
-                            const seatsInRow = row.querySelectorAll('.seat').length;
-                                    const rowWidth = seatsInRow * seatSize + (seatsInRow - 1) * seatXSpacing;
-                                    row.style.width = `${rowWidth}px`;
-                            });
-                            const compartmentWidth = rowWidth;
-                            compartment.style.width = `${compartmentWidth}px`;
-                            const compartmentHeight = 6 * seatSize + 5 * seatYSpacing + 60;
-                            compartment.style.height = `${compartmentHeight}px`;
-                            // Điều chỉnh kích thước máy bay dựa trên tổng số ghế
-                            const airplaneBody = document.querySelector('.airplane-body');
-                            // Điều chỉnh chiều rộng của máy bay dựa trên chiều rộng tổng cộng của các khoang
-                            const totalCompartmentWidth = Array.from(compartments).reduce((total, comp) => {
-                    return total + comp.offsetWidth;
-                    }, 0);
-                            // Thêm khoảng cách giữa các khoang và padding
-                            const aisles = document.querySelectorAll('.aisle');
-                            const aisleWidth = aisles.length * 20;
-                            const minAirplaneWidth = totalCompartmentWidth + aisleWidth + 120; // 120px cho mũi và đuôi
-
-                            // Đảm bảo máy bay đủ rộng để chứa tất cả khoang
-                            if (minAirplaneWidth > airplaneBody.offsetWidth) {
-                    airplaneBody.style.width = `${minAirplaneWidth}px`;
-                    }
-                    });
-        </script>
     </body>
 </html>

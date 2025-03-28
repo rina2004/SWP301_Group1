@@ -8,14 +8,17 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 20px;
 }
 
 .airplane-info {
+    display: block;
     background-color: white;
-    padding: 20px;
+    padding: 15px 15px 15px 25px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 30px;
+    font-size: 18px;
 }
 .info-grid {
     display: grid;
@@ -23,6 +26,7 @@ body {
     gap: 15px;
 }
 .info-item {
+    display: inline-block;
     background-color: #f9f9f9;
     padding: 10px;
     border-radius: 4px;
@@ -37,9 +41,10 @@ body {
 }
 .airplane-layout {
     background-color: white;
-    padding: 20px;
+    padding: 15px 15px 15px 25px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 18px;
 }
 
 /* New airplane styling */
@@ -152,8 +157,8 @@ body {
 .seats-container {
     display: grid;
     grid-template-rows: repeat(6, 1fr);
-    row-gap: var(--seat-y-spacing, 10px);
-    column-gap: var(--seat-x-spacing, 10px);
+    row-gap: var(--seat-y-spacing);
+    column-gap: var(--seat-x-spacing);
 }
 
 .seat-row {
@@ -162,44 +167,46 @@ body {
 }
 
 .seat {
-    width: var(--seat-size, 35px);
-    height: var(--seat-size, 35px);
+    width: var(--seat-size);
+    height: var(--seat-size);
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 5px;
+    border-radius: 8px;
     font-weight: bold;
     color: white;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    font-size: 11px;
+    font-size: 12px;
     transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
 }
 
 .seat:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     cursor: pointer;
 }
 
 .seat-id {
+    display: inline-block;
     font-size: 10px;
     font-weight: bold;
+    color: white;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
 }
 
 .seat-available {
-    background-color: #2ecc71; /* Green */
+    background-color: #2ecc71;
 }
 
 .seat-in-progress {
-    background-color: #f1c40f; /* Yellow */
+    background-color: #f1c40f;
 }
 
 .seat-not-available {
-    background-color: #e74c3c; /* Red */
-}
-
-.seat-id {
-    text-align: center;
+    background-color: #e74c3c;
 }
 
 .back-link {
@@ -213,13 +220,12 @@ body {
 }
 
 .edit-link {
-    display: inline-block;
     background-color: #3498db;
     color: white;
     padding: 10px 15px;
     text-decoration: none;
     border-radius: 4px;
-    font-weight: bold; 
+    font-weight: bold;
 }
 
 .back-link:hover {
@@ -329,9 +335,8 @@ body {
     padding: 40px;
 }
 
-/* CSS Variables for seat sizing and spacing */
 :root {
-    --seat-size: 35px; /* Kích thước ghế */
-    --seat-x-spacing: 10px; /* Khoảng cách ngang */
-    --seat-y-spacing: 12px; /* Khoảng cách dọc */
+    --seat-size: 50px;
+    --seat-x-spacing: 15px;
+    --seat-y-spacing: 15px;
 }
