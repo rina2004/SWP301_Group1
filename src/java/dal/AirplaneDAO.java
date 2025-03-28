@@ -135,6 +135,7 @@ public class AirplaneDAO extends DBContext {
     public Airplane getDetail(String id) {
         Airplane airplane = null;
         AirplaneStatusDBContext as = new AirplaneStatusDBContext();
+        CompartmentTypeDAO ct = new CompartmentTypeDAO();
         try {
             String queryAirplane = """
                         SELECT id, name, statusID, numOfComs, maintainanceTime, usedTime 
@@ -171,8 +172,7 @@ public class AirplaneDAO extends DBContext {
                 Compartment compartment = new Compartment();
                 compartment.setId(rsCompartment.getString("id"));
 
-                CompartmentType compartmentType = new CompartmentType();
-                compartmentType.setId(rsCompartment.getString("typeId"));
+                compartment.setType(ct.get(rsCompartment.getString("typeId")));
 
                 compartment.setCapacity(rsCompartment.getInt("capacity"));
                 compartment.setAirplane(airplane);

@@ -87,8 +87,8 @@
                 <div class="compartments-row">
                     <c:forEach items="${airplane.compartments}" var="comp" varStatus="status">
                         <div class="compartment" data-capacity="${comp.capacity}">
-                            <div class="compartment-header">
-                                <span>${comp.type.type}</span>
+                            <div class="compartment-header" data-type-name="${comp.type.name}">
+                                <span>${comp.type.name}</span>
                             </div>
 
                             <div class="seats-container" data-seats="${comp.capacity}">
