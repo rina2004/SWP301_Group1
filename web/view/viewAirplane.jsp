@@ -108,7 +108,7 @@
             <div class="title">
                 <h2>Airline Management</h2>
             </div>
-            <a href="create" class="btn">
+            <a href="${pageContext.request.contextPath}/airplane/create" class="btn">
                 <i class="fas fa-plus"></i> Add New Airplane
             </a>
         </div>
