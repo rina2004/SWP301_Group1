@@ -1,4 +1,5 @@
 package model;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
  * @author A A
  */
 public class Order {
+
     private String id;
     private Account customer;
     private Account staff;
@@ -39,9 +41,11 @@ public class Order {
         this.finalNum = finalNum;
         this.tt = tt;
     }
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }

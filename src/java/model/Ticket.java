@@ -8,6 +8,7 @@ package model;
  * @author A A
  */
 public class Ticket {
+
     private String id;
     private OrderPassenger orderP;
     private Flight flight;
@@ -74,4 +75,11 @@ public class Ticket {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Ticket{" + "id=" + id + ", orderP=" + orderP + ", flight=" + flight + ", compartment=" + compartment + ", seat=" + seat + ", status=" + status + '}';
+    }
+
+    
 }

@@ -444,4 +444,50 @@ public class TicketDAO extends DBContext {
         return false; // Nếu lỗi hoặc còn vé chưa hủy
     }
 
+    
+     public List<Ticket> getTicketsByOrderPassID(String orderID) {
+        List<Ticket> list = new ArrayList<>();
+        String sql = "SELECT t.id, t.status, f.airplaneID, t.flightID "
+                + "FROM Ticket t "
+                + "JOIN Flight f ON t.flightID = f.id "
+                + "WHERE t.orderPID = ? " ;
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, orderID);
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    OrderPassenger orderP = new OrderPassenger();
+                    orderP.setId(orderID);
+
+                    Airplane airplane = new Airplane();
+                    airplane.setId(rs.getString("airplaneID"));
+
+                    Flight flight = new Flight();
+                    flight.setId(rs.getString("flightID"));
+                    flight.setAirplane(airplane);
+
+                    Ticket ticket = new Ticket();
+                    ticket.setId(rs.getString("id"));
+                    ticket.setOrderP(orderP);
+                    ticket.setFlight(flight);
+                    ticket.setStatus(rs.getString("status"));
+
+                    list.add(ticket);
+                }
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, "Lỗi khi lấy danh sách vé theo OrderID: " + orderID, e);
+        }
+        return list;
+    }
+    
+    public static void main(String[] args) {
+        TicketDAO dao = new TicketDAO();
+        List<Ticket> list = dao.getTicketsByOrderPassID("ORD001-1");
+        
+        for (Ticket ticket : list) {
+            System.out.println(ticket.toString());
+        }
+        
+    }
 }

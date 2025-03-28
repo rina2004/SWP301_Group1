@@ -9,6 +9,7 @@ package model;
  * @author A A
  */
 public class PassengerType {
+
     private int id;
     private String name;
     private int ageMin;
@@ -64,6 +65,11 @@ public class PassengerType {
 
     public void setDiscount(double discount) {
         this.discount = discount;
+    }
+
+    @Override
+    public String toString() {
+        return "PassengerType{" + "id=" + id + ", name=" + name + ", ageMin=" + ageMin + ", ageMax=" + ageMax + ", discount=" + discount + '}';
     }
 
 }

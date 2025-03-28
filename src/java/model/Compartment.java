@@ -67,4 +67,11 @@ public class Compartment {
     public void setSeats(ArrayList<Seat> seats) {
         this.seats = seats;
     }
+
+    @Override
+    public String toString() {
+        return "Compartment{" + "id=" + id + ", type=" + type + ", airplane=" + airplane + ", capacity=" + capacity + ", seats=" + seats + '}';
+    }
+
+   
 }

@@ -3,14 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dal;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import model.*;
 import java.util.logging.*;
+
 /**
  *
  * @author A A
  */
-public class OrderPassengerDAO extends DBContext{
+public class OrderPassengerDAO extends DBContext {
+
     public OrderPassenger get(String id) {
         OrderDAO od = new OrderDAO();
         PassengerTypeDAO ptd = new PassengerTypeDAO();
@@ -32,5 +37,44 @@ public class OrderPassengerDAO extends DBContext{
             Logger.getLogger(OrderPassengerDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public List<OrderPassenger> getAllByOrderID(String orderID) {
+        PreparedStatement stm;
+        ResultSet rs;
+        String sql = "Select * From OrderPassenger where orderID = ? ";
+        List<OrderPassenger> list = new ArrayList<>();
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, orderID);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                Nation nation = new Nation();
+                nation.setId(rs.getInt("nationID"));
+                PassengerType type = new PassengerType();
+                type.setId(rs.getInt("passengerTypeID"));
+                OrderPassenger pass = new OrderPassenger();
+                pass.setId(rs.getString("id"));
+                pass.setName(rs.getString("fullname"));
+                pass.setDob(rs.getDate("dob"));
+                pass.setNation(nation);
+                pass.setPassengerType(type);
+                list.add(pass);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+    
+    public static void main(String[] args) {
+        OrderPassengerDAO dao = new OrderPassengerDAO();
+        List<OrderPassenger> list = dao.getAllByOrderID("ORD001");
+        
+        for (OrderPassenger orderPassenger : list) {
+            System.out.println(orderPassenger.toString());
+        }
+        
     }
 }

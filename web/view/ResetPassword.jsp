@@ -89,7 +89,7 @@
         <div class="container">
             <h2>Quên Mật Khẩu</h2>
             <p>Vui lòng nhập email của bạn để đặt lại mật khẩu.</p>
-            <form action="<%= request.getContextPath() %>/resetpassword" method="post">
+            <form action="<%= request.getContextPath() %>/resetPassword" method="post">
                 <input type="text" name="email" placeholder="Nhập email của bạn" required>
                 <p class="error-message">${error}</p>
                 <input type="submit" value="Tiếp Tục">

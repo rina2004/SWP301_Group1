@@ -94,9 +94,9 @@
             <input type="text" name="airplaneID" value="${seat.compartment.airplane.id}" readonly><br>
 
             <label>Status:</label>
-            <select name="status" id="seatStatus" onchange="toggleReasonInput()">
+            <select name="status" id="seatStatus" onchange="toggleReasonInput()" 
+                    ${seat.status eq 'Booked' ? 'disabled' : ''}>
                 <option value="Available" ${seat.status eq 'Available' ? 'selected' : ''}>Available</option>
-                <option value="Booked" ${seat.status eq 'Booked' ? 'selected' : ''}>Booked</option>
                 <option value="Maintained" ${seat.status eq 'Maintained' ? 'selected' : ''}>Maintained</option>
             </select><br>
 
@@ -122,6 +122,12 @@
                     reasonContainer.style.display = "none";
                     reasonInput.required = false;
                     reasonInput.value = "";
+                }
+            }
+            
+            window.onload = function () {
+                if (document.getElementById("seatStatus").value === "Booked") {
+                    document.getElementById("maintainReason").disabled = true;
                 }
             }
         </script>
