@@ -18,7 +18,6 @@
                 background: #ffffff;
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
                 padding: 1rem 2rem;
-                position: sticky;
                 top: 0;
                 z-index: 1000;
                 display: flex;
