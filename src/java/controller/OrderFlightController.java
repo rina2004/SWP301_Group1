@@ -2,6 +2,7 @@ package controller;
 import dal.*;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.util.*;
 import model.*;
@@ -20,7 +21,7 @@ public class OrderFlightController extends HttpServlet {
         request.setAttribute("locations", locations); 
         
         CompartmentTypeDAO ctd = new CompartmentTypeDAO();
-        ArrayList<CompartmentType> cts = ctd.list();
+        List<CompartmentType> cts = ctd.list();
         request.setAttribute("cts", cts);
         
         String departure = request.getParameter("departure");

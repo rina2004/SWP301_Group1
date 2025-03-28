@@ -4,13 +4,190 @@
         <param-name>webapp</param-name>
         <param-value>webapp</param-value>
     </context-param>
+    <servlet>
+        <servlet-name>HistoryBookingController</servlet-name>
+        <servlet-class>controller.HistoryBookingController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HistoryBookingController</servlet-name>
+        <url-pattern>/historyBooking</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListSeatsAdmin</servlet-name>
+        <url-pattern>/listSeatsAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListSeatsUser</servlet-name>
+        <url-pattern>/listSeatsUser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListOrders</servlet-name>
+        <url-pattern>/listOrders</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DetailSeats</servlet-name>
+        <url-pattern>/detailSeats</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateSeats</servlet-name>
+        <url-pattern>/updateSeats</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResetPassword</servlet-name>
+        <url-pattern>/resetPassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListOrderCheckIn</servlet-name>
+        <url-pattern>/listOrderCheckIn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListTicketCheckIn</servlet-name>
+        <url-pattern>/listTicketCheckIn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderPassengerCheckIn</servlet-name>
+        <url-pattern>/orderPassengerCheckIn</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>home.jsp</welcome-file>
+    </welcome-file-list>
+    <servlet>
+
+        <servlet-name>AirplaneUpdateSeatsController</servlet-name>
+        <servlet-class>controller.AirplaneUpdateSeatsController</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>AirplaneUpdateController</servlet-name>
+        <servlet-class>controller.AirplaneUpdateController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypeCreateController</servlet-name>
+        <servlet-class>controller.TypeCreateController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypeUpdateController</servlet-name>
+        <servlet-class>controller.TypeUpdateController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypeDeleteController</servlet-name>
+        <servlet-class>controller.TypeDeleteController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypeViewController</servlet-name>
+        <servlet-class>controller.TypeViewController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TypeSearchController</servlet-name>
+        <servlet-class>controller.TypeSearchController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>HistoryBookingDetailController</servlet-name>
+        <servlet-class>controller.HistoryBookingDetailController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StaffTicketProcessing</servlet-name>
+        <servlet-class>controller.StaffTicketProcessing</servlet-class>
+
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AirplaneUpdateSeatsController</servlet-name>
+        <url-pattern>/airplane/updateSeats</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>staffSidebarController</servlet-name>
+        <servlet-class>controller.staffSidebarController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>adminSidebarController</servlet-name>
+        <servlet-class>controller.adminSidebarController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>atcSidebarController</servlet-name>
+        <servlet-class>controller.atcSidebarController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>staffSidebarController</servlet-name>
+        <url-pattern>/staff-sidebar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>adminSidebarController</servlet-name>
+        <url-pattern>/admin-sidebar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>atcSidebarController</servlet-name>
+        <url-pattern>/atc-sidebar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeCreateController</servlet-name>
+        <url-pattern>/type/create</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeUpdateController</servlet-name>
+        <url-pattern>/type/update</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeDeleteController</servlet-name>
+        <url-pattern>/type/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeViewController</servlet-name>
+        <url-pattern>/type/list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TypeSearchController</servlet-name>
+        <url-pattern>/type/search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HistoryBookingDetailController</servlet-name>
+        <url-pattern>/historyBookingDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StaffTicketProcessing</servlet-name>
+        <url-pattern>/staffTicketProcessing</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
     </welcome-file-list>
-
     <servlet>
         <servlet-name>AccountListController</servlet-name>
         <servlet-class>controller.AccountListController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListSeatsAdmin</servlet-name>
+        <servlet-class>controller.ListSeatsAdmin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListSeatsUser</servlet-name>
+        <servlet-class>controller.ListSeatsUser</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListOrders</servlet-name>
+        <servlet-class>controller.ListOrders</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DetailSeats</servlet-name>
+        <servlet-class>controller.DetailSeats</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateSeats</servlet-name>
+        <servlet-class>controller.UpdateSeats</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ResetPassword</servlet-name>
+        <servlet-class>controller.ResetPassword</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListOrderCheckIn</servlet-name>
+        <servlet-class>controller.ListOrderCheckIn</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListTicketCheckIn</servlet-name>
+        <servlet-class>controller.ListTicketCheckIn</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OrderPassengerCheckIn</servlet-name>
+        <servlet-class>controller.OrderPassengerCheckIn</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AccountListController</servlet-name>
@@ -257,28 +434,12 @@
         <url-pattern>/changePasswordProfile</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>HistoryBookingController</servlet-name>
-        <servlet-class>controller.HistoryBookingController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>HistoryBookingController</servlet-name>
-        <url-pattern>/historyBooking</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>CancelTicketController</servlet-name>
         <servlet-class>controller.CancelTicketController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CancelTicketController</servlet-name>
         <url-pattern>/cancelTicket</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>DetailSeats</servlet-name>
-        <servlet-class>controller.DetailSeats</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>DetailSeats</servlet-name>
-        <url-pattern>/detailSeat</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>AirplaneViewDetailController</servlet-name>

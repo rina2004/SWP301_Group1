@@ -21,6 +21,17 @@ public class Airplane {
     
     private ArrayList<Compartment> compartments = new ArrayList<>();
 
+    public Airplane() {
+    }
+
+    public Airplane(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+    
+    
+
     public String getId() {
         return id;
     }
@@ -88,4 +99,11 @@ public class Airplane {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "Airplane{" + "id=" + id + ", name=" + name + ", status=" + status + ", numOfComs=" + numOfComs + ", maintainanceTime=" + maintainanceTime + ", usedTime=" + usedTime + ", compartments=" + compartments + '}';
+    }
+    
+    
 }

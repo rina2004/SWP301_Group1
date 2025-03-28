@@ -23,14 +23,14 @@ public class updateBlogController extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("id");
 
-//        Post post = postDAO.findById(id);
+        Post post = postDAO.findById(id);
         Blog blog = blogDAO.findByPostID(id);
 
         String description = blog.getDescription();
-//        String content = post.getContent();
+        String content = post.getContent();
         request.setAttribute("description", description);
-//        request.setAttribute("content", content);
-//        request.setAttribute("post", post);
+        request.setAttribute("content", content);
+        request.setAttribute("post", post);
         request.getRequestDispatcher("updateblog.jsp").forward(request, response);
     }
    @Override

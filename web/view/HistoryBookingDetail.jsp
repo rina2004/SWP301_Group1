@@ -3,9 +3,10 @@
 <%@page import="model.Ticket"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+
 <html>
     <head>
-        <title>Order Details</title>
+        <title>History Booking Detail</title>
         <style>
             body {
                 font-family: 'Arial', sans-serif;
@@ -105,62 +106,43 @@
     <body>
         <h2>Order Details</h2>
 
-        <c:if test="${empty tickets}">
+        <c:if test="${empty ticketList}">
             <p style="text-align: center; font-size: 18px;">No tickets found for this order.</p>
         </c:if>
 
-        <c:if test="${not empty tickets}">
+        <c:if test="${not empty ticketList}">
             <div class="ticket-container">
-                <c:forEach var="ticket" items="${tickets}">
+                <c:forEach var="ticket" items="${ticketList}">
                     <div class="ticket-card">
                         <div class="ticket-header">
-                            ✈️ Flight: ${ticket.flightCode} - ${ticket.flightName}
+                            ✈️ Flight: ${ticket.flight.code} - ${ticket.flight.name}
                         </div>
                         <div class="ticket-body">
                             <div class="ticket-label">From:</div>
-                            <div>${ticket.departureName}</div>
+                            <div>${ticket.flight.departure.name}</div>
                             <div class="ticket-label">To:</div>
-                            <div>${ticket.destinationName}</div>
-                            <div class="ticket-label">Start:</div>
-                            <div>${ticket.startingTime}</div>
-                            <div class="ticket-label">Landing:</div>
-                            <div>${ticket.landingTime}</div>
-                            <div class="ticket-label">Seat:</div>
-                            <div>${ticket.seatCode} (${ticket.compartmentName})</div>
-                            <div class="ticket-label">Type:</div>
-                            <div>${ticket.ticketType.type}</div>
+                            <div>${ticket.flight.destination.name}</div>
+                            <div class="ticket-label">Starting time:</div>
+                            <div>${ticket.flight.startingTime}</div>
+                            <div class="ticket-label">Landing time:</div>
+                            <div>${ticket.flight.landingTime}</div>
                             <div class="ticket-label">Price:</div>
-                            <div>$${ticket.price}</div>
-                            <div class="ticket-label">Status:</div>
+                            <div id="ticket-price" data-price="${ticket.flight.price}"></div>                            <div class="ticket-label">Seat:</div>
+                            <div>${ticket.seat.id}</div>
+                            <div class="ticket-label">Ticket Status:</div>
                             <div>${ticket.status}</div>
 
-                            <!-- NEW FIELDS (Lấy từ ticket.ticketType) -->
-                            <c:if test="${not empty ticket.ticketType}">
-                               
-                                <div class="ticket-label">Hand Luggage:</div>
-                                <div>${ticket.ticketType.handLuggageWeight} kg</div>
-                                <div class="ticket-label">Checked Luggage:</div>
-                                <div>${ticket.ticketType.checkedLuggageWeight} kg</div>
-                                <div class="ticket-label">Luggage Quantity:</div>
-                                <div>${ticket.ticketType.luggageQuantity}</div>
-                                <div class="ticket-label">Services:</div>
-                                <div>${ticket.ticketType.additionalServices}</div>
-                            </c:if>
+                            <div class="ticket-label">Ticket type:</div>
+                            <div>${ticket.orderP.order.tt.type}</div>
+                            <div class="ticket-label">Ticket checked weight:</div>
+                            <div>${ticket.orderP.order.tt.checkedweightneed}kg</div>
+                            <div class="ticket-label">Ticket handed weight:</div>
+                            <div>${ticket.orderP.order.tt.handedweightneed}kg</div>
 
                             <div class="ticket-label">Airplane:</div>
-                            <div>${ticket.airplaneName}</div>
+                            <div>${ticket.flight.airplane.name}</div>
 
-                            <!-- Passengers -->
-                            <c:if test="${not empty ticket.passengers}">
-                                <div class="passenger-list">
-                                    <strong>Passengers:</strong>
-                                    <c:forEach var="p" items="${ticket.passengers}">
-                                        <div class="passenger-item">
-                                            ${p.fullName} (${p.nation.name})
-                                        </div>
-                                    </c:forEach>
-                                </div>
-                            </c:if>
+
                         </div>
 
                         <div class="ticket-footer">
@@ -170,6 +152,18 @@
                 </c:forEach>
             </div>
         </c:if>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let priceElement = document.getElementById("ticket-price");
+                let price = parseFloat(priceElement.getAttribute("data-price")) || 0;
+                priceElement.innerText = price.toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+            });
+        </script>
 
 
         <div style="text-align: center;">

@@ -51,22 +51,17 @@ public class Login extends HttpServlet {
 
         switch (acc.getRole().getId()) {
             case 1: //admin -> ve trang quan ly account
-                response.sendRedirect(request.getContextPath()  + "/account-list");
+                response.sendRedirect(request.getContextPath()  + "/admin-sidebar.jsp");
                 break;
-            case 2: //user -> ve trang dat ve
-                response.sendRedirect(request.getContextPath() + "/view/order");
+            case 3: //staff 
+                response.sendRedirect(request.getContextPath() + "/staff-sidebar.jsp");
                 break;
-//            case 3: //staff 
-//                response.sendRedirect(request.getContextPath() + "/view/order");
-//                break;
             case 4: // atc -> manage flight
-//                if (requestedUrl != null) {
-//                    response.sendRedirect(requestedUrl);
-//                } else {
-                response.sendRedirect(request.getContextPath() + "/view/list-flight");
+                
+                response.sendRedirect(request.getContextPath() + "/atc-sidebar.jsp");
                 break;
             default:
-                response.sendRedirect("view/Home.jsp");
+                response.sendRedirect(request.getContextPath() + "/home");
 //                throw new AssertionError();
         }
     }

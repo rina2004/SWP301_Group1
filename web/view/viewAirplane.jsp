@@ -18,7 +18,6 @@
                 background: #ffffff;
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
                 padding: 1rem 2rem;
-                position: sticky;
                 top: 0;
                 z-index: 1000;
                 display: flex;
@@ -108,7 +107,7 @@
             <div class="title">
                 <h2>Airline Management</h2>
             </div>
-            <a href="create" class="btn">
+            <a href="${pageContext.request.contextPath}/airplane/create" class="btn">
                 <i class="fas fa-plus"></i> Add New Airplane
             </a>
         </div>
@@ -132,9 +131,9 @@
                         <td>${pl.id}</td>
                         <td>${pl.name}</td>
                         <td>${pl.status.name}</td>
-                        <td>${pl.numOfComs}</td>
-                        <td>${pl.maintainanceTime}</td>
-                        <td>${pl.usedTime}</td>
+                        <td class="comps">${pl.numOfComs}</td>
+                        <td>${pl.maintainanceTime.toString().replace('T', ' ')}</td>
+                        <td>${pl.usedTime.toString().replace('T', ' ')}</td>
                         <td>
                             <a href="${pageContext.request.contextPath}/airplane/view/detail?id=${pl.id}" class="btn btn-warning btn-sm">
                                 <i class="fas fa-edit"></i> View Detail

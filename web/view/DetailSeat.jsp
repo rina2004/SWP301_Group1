@@ -90,12 +90,18 @@
 
         <p>Status</p>
         <input name="status" value="${seat.status}" disabled>
-
         <c:if test="${seat.status eq 'Maintained'}">
             <p>Maintain Reason</p>
             <input name="reason" value="${seat.reason}" disabled>
         </c:if>
-      
+
+        <c:if test="${seat.status eq 'Booked'}">
+            <p>Ticket ID</p>
+            <input name="reason" value="${ticket.id}" disabled>         
+            <p>Status</p>
+            <input name="reason" value="${ticket.status}" disabled>
+        </c:if>
+
         <a href="javascript:history.back()" class="button">Back</a>
     </div>
 </body>

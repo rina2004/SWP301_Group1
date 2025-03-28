@@ -28,17 +28,6 @@
                 background-color: #007bff;
                 color: white;
             }
-            .btn-list {
-                text-decoration: none;
-                padding: 5px 10px;
-                border-radius: 5px;
-                background-color: #28a745;
-                color: white;
-            }
-            .btn-list:hover {
-                background-color: #218838;
-                color: white;
-            }
         </style>
     </head>
     <body>
@@ -50,6 +39,9 @@
                         <th>ID</th>
                         <th>Status</th>
                         <th>Time</th>
+                        <th>Final Price</th>
+                        <th>Final Number</th>
+                        <th>Type</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -59,8 +51,11 @@
                             <td>${l.id}</td>
                             <td>${l.status}</td>
                             <td>${l.time}</td>
+                            <td>${l.finalPrice}</td>
+                            <td>${l.finalNum}</td>
+                            <td>${l.tt.type}</td>
                             <td>
-                                <a href="<%= request.getContextPath() %>/listTickets?orderID=${l.id}" class="btn-list">List Ticket</a>
+                                <a href="${pageContext.request.contextPath}/orderPassengerCheckIn?id=${l.id}" class="btn btn-success btn-sm">List Order Passenger</a>
                             </td>
                         </tr>
                     </c:forEach>

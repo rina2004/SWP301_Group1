@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Account;
 
 /**
@@ -52,7 +53,7 @@ public class AccountUpdateController extends HttpServlet {
 
         request.setAttribute("updateAccount", u);
         request.getRequestDispatcher("view/Editaccount.jsp").forward(request, response);
-       
+
     }
 
     /**
@@ -67,11 +68,20 @@ public class AccountUpdateController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-         String id = request.getParameter("id");
+        String id = request.getParameter("id");
         String password = request.getParameter("password");
 
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
 
+        HttpSession session = request.getSession();
+
+        // Kiểm tra password hợp lệ
+        if (password == null || password.length() < 6 || password.length() > 50 || !password.matches("^(?=.*[A-Za-z])(?=.*\\d).{6,50}$")) {
+            session.setAttribute("errorMessage", "Invalid password! Must be 6-50 characters, include at least one letter and one number.");
+            response.sendRedirect("account-list");
+            return;
+        }
+        
         AccountDAO dao = new AccountDAO();
         dao.updateAccount(id, password, status);
         response.sendRedirect("account-list");

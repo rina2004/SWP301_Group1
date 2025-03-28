@@ -8,13 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Airplane;
 import model.Compartment;
 import model.Seat;
-import model.TicketType;
 
 /**
  *
@@ -40,27 +40,31 @@ public class SeatDAO extends DBContext {
         return null;
     }
 
-    public void updateSeatStatus(String id, String status, String reason) {
-        PreparedStatement stm;
-        ResultSet rs;
+    public boolean updateSeats(List<Seat> seats) {
+        String query = "UPDATE seat SET status = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query);) {
+            
 
-        String sql = "Update Seat Set status = ? , reason = ? Where id = ? ";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, status);
-            stm.setString(2, reason);
-            stm.setString(3, id);
-            stm.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e);
+            for (Seat seat : seats) {
+                ps.setString(1, seat.getStatus());
+                ps.setString(2, seat.getId());
+                ps.addBatch();
+            }
+
+            int[] results = ps.executeBatch();
+            return Arrays.stream(results).allMatch(r -> r > 0);
+        } catch (SQLException ex) {
+            Logger.getLogger(SeatDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return false;
     }
 
     public Seat getSeatByID(String seatID) {
         Seat seat = null;
-        String sql = "SELECT s.id, c.id AS compartmentID, c.type AS compartmentType, s.status, s.reason, c.airplaneID "
+        String sql = "SELECT s.id, c.id AS compartmentID, ct.id AS compartmentType, s.status, s.reason, c.airplaneID "
                 + "FROM Seat s "
                 + "JOIN Compartment c ON c.id = s.compartmentID "
+                + "JOIN CompartmentType ct ON c.typeId = ct.id "
                 + "WHERE s.id = ?";
 
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
@@ -70,7 +74,7 @@ public class SeatDAO extends DBContext {
                     String compartmentID = rs.getString("compartmentID");
                     String status = rs.getString("status");
                     String reason = rs.getString("reason");
-                    String airplaneID = rs.getString("airplaneID"); // Lấy airplaneID
+                    String airplaneID = rs.getString("airplaneID");
 
                     Airplane airplane = new Airplane();
                     airplane.setId(airplaneID);
@@ -101,15 +105,16 @@ public class SeatDAO extends DBContext {
 
     public ArrayList<Seat> showAllSeatByTypeID(String airplaneID) {
         ArrayList<Seat> seats = new ArrayList<>();
-        String sql = "SELECT s.id, c.id AS compartmentID, c.type AS compartmentType, s.status, c.airplaneID "
+        String sql = "SELECT s.id, c.id AS compartmentID, s.status, c.airplaneID, ct.id AS typeID "
                 + "FROM Seat s "
                 + "JOIN Compartment c ON c.id = s.compartmentID "
+                + "JOIN CompartmentType ct ON c.typeId = ct.id "
                 + "WHERE c.airplaneID = ? "
                 + "ORDER BY "
                 + "  CASE "
-                + "    WHEN LEFT(c.type, 1) = 'B' THEN 1 "
-                + "    WHEN LEFT(c.type, 1) = 'F' THEN 2 "
-                + "    WHEN LEFT(c.type, 1) = 'E' THEN 3 "
+                + "    WHEN LEFT(ct.id, 1) = 'B' THEN 1 "
+                + "    WHEN LEFT(ct.id, 1) = 'F' THEN 2 "
+                + "    WHEN LEFT(ct.id, 1) = 'E' THEN 3 "
                 + "    ELSE 4 "
                 + "  END, "
                 + "  CAST(SUBSTRING_INDEX(s.id, '-', -1) AS UNSIGNED);";
@@ -120,7 +125,6 @@ public class SeatDAO extends DBContext {
             try (ResultSet rs = stm.executeQuery()) {
                 while (rs.next()) {
                     String seatID = rs.getString("id");
-
                     String status = rs.getString("status");
                     String airplaneIDFromDB = rs.getString("airplaneID");
 
@@ -138,15 +142,29 @@ public class SeatDAO extends DBContext {
         }
         return seats;
     }
+    
+    public void updateSeatStatus(String id, String status, String reason) {
+        PreparedStatement stm;
+        ResultSet rs;
+
+        String sql = "Update Seat Set status = ? , reason = ? Where id = ? ";
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, status);
+            stm.setString(2, reason);
+            stm.setString(3, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
 
     public static void main(String[] args) {
-        SeatDAO seatDAO = new SeatDAO(); 
-        String testAirplaneID = "VN-A001"; 
+        SeatDAO seatDAO = new SeatDAO();
+        String testAirplaneID = "VN-A001";
 
-        List<Seat> list = seatDAO.showAllSeatByTypeID(testAirplaneID);
-        for (Seat seat : list) {
-            System.out.println(seat.toString());
-        }
+       Seat s = seatDAO.getSeatByID(testAirplaneID);
+        System.out.println(s.toString());
     }
 
 }

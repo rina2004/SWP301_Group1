@@ -47,7 +47,7 @@ public class CompartmentDAO extends DBContext{
                 Compartment compartment = new Compartment();
                 compartment.setId(rs.getString("id"));
                 CompartmentType ct = ctd.get(rs.getString("cType"));
-                compartment.setCt(ct);
+                compartment.setType(ct);
                 
                 Airplane airplane = new Airplane();
                 airplane.setId(rs.getString("airplaneID"));

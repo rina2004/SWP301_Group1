@@ -35,5 +35,10 @@ public class Nation {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Nation{" + "id=" + id + ", name=" + name + '}';
+    }
     
 }

@@ -254,7 +254,7 @@
                 seatElement.classList.remove('available');
                 seatElement.classList.add('selected');
                 selectedSeat = seatElement;
-                selectedSeatId = seatId; // Gán seatId khi chọn ghế
+                selectedSeatId = seatId; 
 
                 document.getElementById("selectedSeats").innerText = seatId;
             }
