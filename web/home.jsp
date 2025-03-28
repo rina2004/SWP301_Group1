@@ -317,7 +317,7 @@
             <c:choose>
                 <c:when test="${not empty session}">
                     <div class="auth-buttons">
-                        <a href="#" class="register" id="userDropdown">${username}</a>
+                        <a href="#" class="register" id="userDropdown">${user}</a>
                         <div class="dropdown-content" id="dropdownMenu">
                             <a href="profile">Profile</a>
                             <form action="logout" method="GET">

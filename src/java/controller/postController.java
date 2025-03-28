@@ -29,12 +29,12 @@ public class postController extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("id");
         
-//        Post post = postDAO.findById(id);
-//        
-//        List<Comment> listCmt = postDAO.findCmt(id);
-//        
-//        request.setAttribute("post", post);
-//        request.setAttribute("listCmt", listCmt);
+        Post post = postDAO.findById(id);
+        
+        List<Comment> listCmt = postDAO.findCmt(id);
+        
+        request.setAttribute("post", post);
+        request.setAttribute("listCmt", listCmt);
         request.getRequestDispatcher("post.jsp").forward(request, response);
     }
     @Override
@@ -45,16 +45,17 @@ public class postController extends HttpServlet {
         Account acc = (Account) session.getAttribute("acc");
 
         if (acc == null) {
+            request.setAttribute("error", "You need log in to comment");
             response.sendRedirect("view/Login.jsp");
             return;
         }
 
-        // String accID = acc.getId();
-        // String content = request.getParameter("content");
-        // String postID = request.getParameter("postID");
+        String accID = acc.getId();
+        String content = request.getParameter("content");
+        String postID = request.getParameter("postID");
 
-        // postDAO.addComment(new Comment(accID, content, postID));
+        postDAO.addComment(new Comment(accID, content, postID));
 
-        // response.sendRedirect("post?id=" + postID);
+        response.sendRedirect("post?id=" + postID);
     }
 }
