@@ -4,6 +4,7 @@
  */
 package dal;
 import java.sql.*;
+import java.util.ArrayList;
 import model.*;
 import java.util.logging.*;
 /**
@@ -22,11 +23,29 @@ public class PassengerTypeDAO extends DBContext{
                         rs.getString("name"),
                         rs.getInt("ageMin"),
                         rs.getInt("ageMax"),
-                        rs.getDouble("discount"));
+                        rs.getDouble("discountPercentage"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(PassengerTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    public ArrayList<PassengerType> list() {
+        ArrayList<PassengerType> list = new ArrayList<>();
+        String sql = "SELECT * FROM swp301.passengertype";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(new PassengerType(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getInt("ageMin"),
+                        rs.getInt("ageMax"),
+                        rs.getDouble("discountPercentage")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PassengerTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
     }
 }
