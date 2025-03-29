@@ -4,8 +4,8 @@
 <html>
     <head>
         <title>Processing Orders</title>
-        <link rel="stylesheet" href="styles.css"> <!-- Link CSS nếu có -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
+        <link rel="stylesheet" href="styles.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -54,27 +54,34 @@
                 cursor: pointer;
             }
             .btn-accept {
-                background-color: #28a745; /* Xanh lá */
+                background-color: #28a745;
             }
             .btn-reject {
-                background-color: #dc3545; /* Đỏ */
+                background-color: #dc3545;
             }
             .btn:hover {
                 opacity: 0.8;
             }
-            .cancelled {
-                color: gray;
-                font-weight: bold;
+            .pagination {
+                margin-top: 20px;
+                text-align: center;
             }
-            .rejected {
-                color: red;
-                font-weight: bold;
+            .pagination a {
+                margin: 0 5px;
+                padding: 8px 12px;
+                text-decoration: none;
+                color: white;
+                background-color: #007bff;
+                border-radius: 5px;
+            }
+            .pagination a.disabled {
+                background-color: #ccc;
+                pointer-events: none;
             }
         </style>
         <script>
             function confirmReject(orderPassengerId) {
                 if (!orderPassengerId || orderPassengerId.trim() === '') return;
-
                 Swal.fire({
                     title: "Are you sure you want to reject this order?",
                     text: "This action cannot be undone!",
@@ -94,7 +101,6 @@
 
             function confirmAccept(orderPassengerId) {
                 if (!orderPassengerId || orderPassengerId.trim() === '') return;
-
                 Swal.fire({
                     title: "Are you sure you want to accept this order?",
                     text: "This will change status to 'Cancelled'!",
@@ -151,12 +157,9 @@
                                 <td>${ticket.compartment.id}</td>
                                 <td>
                                     <c:if test="${ticket.status eq 'Processing'}">
-                                        <!-- Accept Button with SweetAlert2 -->
                                         <button type="button" class="btn btn-accept" onclick="confirmAccept('${ticket.orderP.id}')">
                                             Accept
                                         </button>
-
-                                        <!-- Reject Button with SweetAlert2 -->
                                         <button type="button" class="btn btn-reject" onclick="confirmReject('${ticket.orderP.id}')">
                                             Reject
                                         </button>
@@ -165,6 +168,24 @@
                             </tr>
                         </c:forEach>
                     </table>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <c:if test="${currentPage > 1}">
+                            <a href="staffTicketProcessing?page=${currentPage - 1}">Previous</a>
+                        </c:if>
+
+                        <c:forEach var="i" begin="1" end="${totalPages}">
+                            <a href="staffTicketProcessing?page=${i}" 
+                               class="${i == currentPage ? 'disabled' : ''}">
+                                ${i}
+                            </a>
+                        </c:forEach>
+
+                        <c:if test="${currentPage < totalPages}">
+                            <a href="staffTicketProcessing?page=${currentPage + 1}">Next</a>
+                        </c:if>
+                    </div>
                 </c:when>
                 <c:otherwise>
                     <p style="text-align: center; color: red;">No processing orders found.</p>
@@ -173,13 +194,11 @@
 
             <a class="btn" href="${pageContext.request.contextPath}/view/Home.jsp">Back to Home</a>
 
-            <!-- Hidden Accept Form -->
             <form id="acceptForm" action="staffTicketProcessing" method="post" style="display: none;">
                 <input type="hidden" id="orderPassengerIdAcceptInput" name="orderID">
                 <input type="hidden" name="action" value="accept">
             </form>
 
-            <!-- Hidden Reject Form -->
             <form id="rejectForm" action="staffTicketProcessing" method="post" style="display: none;">
                 <input type="hidden" id="orderPassengerIdRejectInput" name="orderID">
                 <input type="hidden" name="action" value="reject">

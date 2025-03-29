@@ -359,55 +359,61 @@ public class TicketDAO extends DBContext {
         return tickets;
     }
 
-    public List<Ticket> getCancelledOrProcessingTickets() {
-        String sql = "SELECT t.id, t.status, t.orderPID, t.flightID, t.comID, t.seatID, "
-                + "o.id AS orderPassengerID, "
-                + "f.id AS flightID, "
-                + "c.id AS compartmentID, "
-                + "s.id AS seatID "
+    public List<Ticket> getCancelledOrProcessingTickets(int page, int recordsPerPage) {
+        List<Ticket> tickets = new ArrayList<>();
+        String sql = "SELECT t.id, t.status, o.id AS orderPassengerID, "
+                + "f.id AS flightID, c.id AS compartmentID, s.id AS seatID "
                 + "FROM Ticket t "
                 + "LEFT JOIN OrderPassenger o ON t.orderPID = o.id "
                 + "LEFT JOIN Flight f ON t.flightID = f.id "
                 + "LEFT JOIN Compartment c ON t.comID = c.id "
                 + "LEFT JOIN Seat s ON t.seatID = s.id "
-                + "WHERE t.status = 'Cancelled' OR t.status = 'Processing' OR t.status = 'Rejected'";
+                + "WHERE t.status IN ('Cancelled', 'Processing', 'Rejected') "
+                + "LIMIT ?, ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, (page - 1) * recordsPerPage);
+            stm.setInt(2, recordsPerPage);
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Ticket ticket = new Ticket();
+                    ticket.setId(rs.getString("id"));
+                    ticket.setStatus(rs.getString("status"));
 
-        List<Ticket> tickets = new ArrayList<>();
+                    OrderPassenger orderPassenger = new OrderPassenger();
+                    orderPassenger.setId(rs.getString("orderPassengerID"));
+                    ticket.setOrderP(orderPassenger);
 
-        try (PreparedStatement stm = connection.prepareStatement(sql); ResultSet rs = stm.executeQuery()) {
+                    Flight flight = new Flight();
+                    flight.setId(rs.getString("flightID"));
+                    ticket.setFlight(flight);
 
-            while (rs.next()) {
-                Ticket ticket = new Ticket();
-                ticket.setId(rs.getString("id"));
-                ticket.setStatus(rs.getString("status"));
+                    Compartment compartment = new Compartment();
+                    compartment.setId(rs.getString("compartmentID"));
+                    ticket.setCompartment(compartment);
 
-                // Lấy thông tin OrderPassenger
-                OrderPassenger orderPassenger = new OrderPassenger();
-                orderPassenger.setId(rs.getString("orderPassengerID"));
-                ticket.setOrderP(orderPassenger);
+                    Seat seat = new Seat();
+                    seat.setId(rs.getString("seatID"));
+                    ticket.setSeat(seat);
 
-                // Lấy thông tin Flight
-                Flight flight = new Flight();
-                flight.setId(rs.getString("flightID"));
-                ticket.setFlight(flight);
-
-                // Lấy thông tin Compartment
-                Compartment compartment = new Compartment();
-                compartment.setId(rs.getString("compartmentID"));
-                ticket.setCompartment(compartment);
-
-                // Lấy thông tin Seat
-                Seat seat = new Seat();
-                seat.setId(rs.getString("seatID"));
-                ticket.setSeat(seat);
-
-                tickets.add(ticket);
+                    tickets.add(ticket);
+                }
             }
         } catch (SQLException e) {
-            System.out.println("Error fetching cancelled or processing tickets: " + e.getMessage());
+            e.printStackTrace();
         }
-
         return tickets;
+    }
+
+    public int getTotalCancelledOrProcessingTickets() {
+        String sql = "SELECT COUNT(*) FROM Ticket WHERE status IN ('Cancelled', 'Processing', 'Rejected')";
+        try (PreparedStatement stm = connection.prepareStatement(sql); ResultSet rs = stm.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public int updateTicketStatusByOrderPID(String orderPID, String newStatus) {
