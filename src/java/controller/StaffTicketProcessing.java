@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 import model.Ticket;
 
 /**
@@ -63,6 +64,7 @@ public class StaffTicketProcessing extends HttpServlet {
         int page = 1;
         int recordsPerPage = 5;
         String pageParam = request.getParameter("page");
+        String searchOrderPassengerId = request.getParameter("search");
 
         if (pageParam != null) {
             try {
@@ -73,12 +75,24 @@ public class StaffTicketProcessing extends HttpServlet {
 
         TicketDAO ticketDAO = new TicketDAO();
         List<Ticket> processingOrders = ticketDAO.getCancelledOrProcessingTickets(page, recordsPerPage);
+
+        // Kiểm tra nếu search có giá trị hợp lệ thì mới lọc
+        if (searchOrderPassengerId != null && !searchOrderPassengerId.trim().isEmpty()) {
+            processingOrders = processingOrders.stream()
+                    .filter(ticket -> ticket.getOrderP().getId().equals(searchOrderPassengerId))
+                    .collect(Collectors.toList());
+            request.setAttribute("search", searchOrderPassengerId);
+        } else {
+            request.setAttribute("search", ""); // Đặt về rỗng để không lưu trạng thái tìm kiếm
+        }
+
         int totalRecords = ticketDAO.getTotalCancelledOrProcessingTickets();
         int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
 
         request.setAttribute("processingOrders", processingOrders);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+
         request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
     }
 

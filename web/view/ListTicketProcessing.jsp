@@ -77,11 +77,35 @@
             .pagination a.disabled {
                 background-color: #ccc;
                 pointer-events: none;
+
+                .btn-search, .btn-reset {
+                    padding: 8px 15px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 14px;
+                }
+
+                .btn-search {
+                    background-color: #007bff;
+                    color: white;
+                }
+
+                .btn-reset {
+                    background-color: #dc3545;
+                    color: white;
+                }
+
+                .btn-search:hover, .btn-reset:hover {
+                    opacity: 0.8;
+                }
+
             }
         </style>
         <script>
             function confirmReject(orderPassengerId) {
-                if (!orderPassengerId || orderPassengerId.trim() === '') return;
+                if (!orderPassengerId || orderPassengerId.trim() === '')
+                    return;
                 Swal.fire({
                     title: "Are you sure you want to reject this order?",
                     text: "This action cannot be undone!",
@@ -100,7 +124,8 @@
             }
 
             function confirmAccept(orderPassengerId) {
-                if (!orderPassengerId || orderPassengerId.trim() === '') return;
+                if (!orderPassengerId || orderPassengerId.trim() === '')
+                    return;
                 Swal.fire({
                     title: "Are you sure you want to accept this order?",
                     text: "This will change status to 'Cancelled'!",
@@ -122,6 +147,13 @@
     <body>
         <div class="container">
             <h2>Processing Orders</h2>
+            <form action="staffTicketProcessing" method="get" style="display: flex; gap: 10px; align-items: center;">
+                <input type="text" name="search" placeholder="Enter OrderPassenger ID" value="${search}" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                <button type="submit" class="btn-search">Search</button>
+                <button type="button" class="btn-reset" onclick="window.location.href = 'staffTicketProcessing'">Reset</button>
+            </form>
+
+
 
             <c:choose>
                 <c:when test="${not empty processingOrders}">
@@ -193,6 +225,9 @@
             </c:choose>
 
             <a class="btn" href="${pageContext.request.contextPath}/view/Home.jsp">Back to Home</a>
+
+
+
 
             <form id="acceptForm" action="staffTicketProcessing" method="post" style="display: none;">
                 <input type="hidden" id="orderPassengerIdAcceptInput" name="orderID">
