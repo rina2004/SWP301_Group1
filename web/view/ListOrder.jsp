@@ -61,7 +61,12 @@
                     </c:forEach>
                 </tbody>
             </table>
+            <button onclick="goBack()" class="btn btn-back">Go Back</button>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+              function goBack() {
+                window.history.back();  // Quay lại trang trước đó
+            }
+        </script>
     </body>
 </html>

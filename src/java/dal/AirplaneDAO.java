@@ -272,22 +272,4 @@ public class AirplaneDAO extends DBContext {
         }
     }
 
-    public String getIdbyID(String id) {
-        PreparedStatement stm;
-        ResultSet rs;
-
-        String sql = "Select id From Airplane where id = ?";
-        try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, id);
-            rs = stm.executeQuery();
-
-            if (rs.next()) {
-                return rs.getString("id");
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return null;
-    }
 }

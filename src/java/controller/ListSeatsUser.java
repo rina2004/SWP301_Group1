@@ -66,8 +66,7 @@ public class ListSeatsUser extends HttpServlet {
         SeatDAO dao = new SeatDAO();
         AirplaneDAO airDao = new AirplaneDAO();
         String id = request.getParameter("id");
-        String typeID = airDao.getIdbyID(id);
-        ArrayList<Seat> seat = dao.showAllSeatByTypeID(typeID);
+        ArrayList<Seat> seat = dao.showAllSeatByTypeID(id);
         request.setAttribute("seat", seat);
         request.setAttribute("id", id);
         request.getRequestDispatcher("view/ListSeatUser.jsp").forward(request, response);
@@ -124,7 +123,6 @@ public class ListSeatsUser extends HttpServlet {
 
             daot.updateTicketbySeatID(ticketId, seatId);
             daos.updateBookedSeat(seatId);
-            response.sendRedirect(".jsp");
         } catch (IOException | JSONException e) {
             System.out.println("❌ Lỗi xử lý JSON: " + e.getMessage());
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Lỗi xử lý JSON");

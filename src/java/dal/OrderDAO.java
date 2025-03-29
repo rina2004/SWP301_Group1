@@ -61,6 +61,8 @@ public class OrderDAO extends DBContext {
                 order.setId(rs.getString("id"));
                 order.setTime(rs.getTimestamp("time").toLocalDateTime());
                 order.setStatus(rs.getString("status"));
+                order.setFinalPrice(rs.getDouble("finalPrice"));
+                order.setFinalNum(rs.getInt("finalNum"));
                 order.setCustomer(acc);
                 order.setTt(type);
                 list.add(order);
