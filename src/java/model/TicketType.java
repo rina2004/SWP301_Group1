@@ -11,17 +11,17 @@ package model;
 public class TicketType {
     private String type;
     private String description;
-    private double percent;
+    private double price;
     private double checkedweightneed;
     private double handedweightneed;
 
     public TicketType() {
     }
 
-    public TicketType(String type, String description, double percent, double checkedweightneed, double handedweightneed) {
+    public TicketType(String type, String description, double price, double checkedweightneed, double handedweightneed) {
         this.type = type;
         this.description = description;
-        this.percent = percent;
+        this.price = price;
         this.checkedweightneed = checkedweightneed;
         this.handedweightneed = handedweightneed;
     }
@@ -43,11 +43,11 @@ public class TicketType {
     }
 
     public double getPrice() {
-        return percent;
+        return price;
     }
 
-    public void setPrice(double percent) {
-        this.percent = percent;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public double getCheckedweightneed() {
