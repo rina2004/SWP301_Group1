@@ -195,7 +195,7 @@
                                         <br><br>
                                         <a href="order-confirm?flightId=${flight.getId()}&ticketClass=${ticket.type}&passengers=${passengers}&adult=${param.adult}&child=${param.child}&baby=${param.baby}" 
                                            class="btn btn-primary rounded-3 px-4 py-2 w-100" title="Đặt vé ngay">
-                                            Đặt vé
+                                            Book
                                         </a>
                                     </div>
                                 </div>

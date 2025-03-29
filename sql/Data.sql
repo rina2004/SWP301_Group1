@@ -82,7 +82,7 @@ CREATE TABLE `Airplane` (
 );
 
 CREATE TABLE `CompartmentType` (
-	`id` char,
+	`id` varchar(1),
     `name` varchar(20),
     
     PRIMARY KEY(`id`)
@@ -90,7 +90,7 @@ CREATE TABLE `CompartmentType` (
 
 CREATE TABLE `Compartment` (
     `id` VARCHAR(20),
-    `typeId` char,
+    `typeId` varchar(1),
     `airplaneID` VARCHAR(10),
     `capacity` INT,
     
@@ -295,14 +295,14 @@ INSERT INTO AirplaneStatus (name) VALUES
 ('Active'), ('Maintenance'), ('Retired'), ('In Use'), ('Under Repair');
 
 INSERT INTO PassengerType (name, ageMin, ageMax, discountPercentage) VALUES
-('Người lớn', 12, 100, 0),
-('Trẻ em', 2, 11, 25),
-('Em bé', 0, 1, 90);
+('Adult', 12, 100, 0),
+('Children', 2, 11, 25),
+('Baby', 0, 1, 90);
 
 INSERT INTO `TicketType` (`type`, `description`, `percent`, `checkedweightneed`, `handedweightneed` ) VALUES
-('Basic', 'Standard seating and basic amenities. Additional services: Priority boarding, extra legroom, complimentary beverage service.', 100, 23.0, 7.0),
-('Extra', 'Full business class experience. Additional services: Lie-flat seats, lounge access, premium meals and beverages.', 105, 25.0, 10.0),
-('First Class', 'Luxury air travel experience. Additional services: Private suites, personalized service, gourmet dining, exclusive lounge access.', 150, 50.0, 10.0);
+('Basic', 'Standard seating and basic amenities. Additional services: Priority boarding, extra legroom, complimentary beverage service.', 1, 23.0, 7.0),
+('Extra', 'Full business class experience. Additional services: Lie-flat seats, lounge access, premium meals and beverages.', 1.05, 25.0, 10.0),
+('First Class', 'Luxury air travel experience. Additional services: Private suites, personalized service, gourmet dining, exclusive lounge access.', 1.5, 50.0, 10.0);
 
 -- Account table (10 records)
 INSERT INTO Account (username, password, roleID, status, citizenID, name, dob, phone, address, email) VALUES
@@ -413,10 +413,10 @@ INSERT INTO Seat (id, compartmentID, status, reason) VALUES
 ('VN-A003-F-9', 'VN-A003-F', 'Active', 'SUPANIGA');
 
 INSERT INTO `Order` (id, customerID, staffID, status, time, finalPrice, finalNum, type) VALUES
-('ORD001', (SELECT id FROM Account WHERE username = 'user1'), (SELECT id FROM Account WHERE username = 'staff1'), 'Confirmed', '2024-03-15 09:30:00', 0.0, 1, 'Extra'),
-('ORD002', (SELECT id FROM Account WHERE username = 'user2'), (SELECT id FROM Account WHERE username = 'staff1'), 'Processing', '2024-03-16 11:45:00', 0.0, 3, 'Basic'),
-('ORD003', (SELECT id FROM Account WHERE username = 'user3'), (SELECT id FROM Account WHERE username = 'staff1'), 'Confirmed', '2024-03-17 14:20:00', 0.0, 1, 'Extra'),
-('ORD004', (SELECT id FROM Account WHERE username = 'user4'), (SELECT id FROM Account WHERE username = 'staff1'), 'Cancelled', '2024-03-18 16:35:00', 0.0, 1, 'First Class');
+('ORD001', (SELECT id FROM Account WHERE username = 'user1'), (SELECT id FROM Account WHERE username = 'staff1'), 'Confirmed', '2024-03-15 09:30:00', 5000000.0, 1, 'Extra'),
+('ORD002', (SELECT id FROM Account WHERE username = 'user2'), (SELECT id FROM Account WHERE username = 'staff1'), 'Processing', '2024-03-16 11:45:00', 3500000.0, 3, 'Basic'),
+('ORD003', (SELECT id FROM Account WHERE username = 'user3'), (SELECT id FROM Account WHERE username = 'staff1'), 'Confirmed', '2024-03-17 14:20:00', 5210000.0, 1, 'Extra'),
+('ORD004', (SELECT id FROM Account WHERE username = 'user4'), (SELECT id FROM Account WHERE username = 'staff1'), 'Cancelled', '2024-03-18 16:35:00', 10000000.0, 1, 'First Class');
 
 INSERT INTO OrderPassenger (id, orderID, passengerTypeID, fullName, dob, nationID)
 VALUES
@@ -483,8 +483,4 @@ INSERT INTO ChatMessage (senderAccountID, receiverAccountID, message, timestamp,
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user2'), 'Sure John, how can I help you?', '2024-03-15 10:18:00', TRUE),
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user3'), 'Sarah, could you check if there are any window seats available on flight VN303?', '2024-03-16 14:30:00', TRUE),
 ((SELECT id FROM Account WHERE username = 'staff1'), (SELECT id FROM Account WHERE username = 'user4'), 'I just checked and there are 3 window seats available. Would you like me to book one for you?', '2024-03-16 14:45:00', TRUE);
-
-INSERT INTO `swp301`.`compartment`
-(`id`, `typeId`, `airplaneID`, `capacity`)
-VALUES (?, ?, ?, ?);
 

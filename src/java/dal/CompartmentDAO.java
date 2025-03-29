@@ -61,4 +61,31 @@ public class CompartmentDAO extends DBContext{
         }
         return compartments;
     } 
+    public Compartment getCompartmentByTypeAndAirplaneId(String typeId, String airplaneId) {
+        String sql = "SELECT * FROM Compartment WHERE typeId = ? AND airplaneID = ? LIMIT 1";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, typeId);
+            ps.setString(2, airplaneId);
+            ResultSet rs = ps.executeQuery();
+
+            CompartmentTypeDAO ctd = new CompartmentTypeDAO();
+            AirplaneDAO ad = new AirplaneDAO();
+
+            if (rs.next()) {
+                Compartment compartment = new Compartment();
+                compartment.setId(rs.getString("id"));
+                compartment.setType(ctd.get(rs.getString("typeId")));
+                compartment.setAirplane(ad.get(rs.getString("airplaneID")));
+                compartment.setCapacity(rs.getInt("capacity"));
+
+                return compartment;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return null;
+    }
+
 }

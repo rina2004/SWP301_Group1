@@ -65,5 +65,5 @@ public class TicketType {
     public void setHandedweightneed(double handedweightneed) {
         this.handedweightneed = handedweightneed;
     }
-
+   
 }

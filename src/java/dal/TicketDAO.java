@@ -509,18 +509,69 @@ public class TicketDAO extends DBContext {
         }
         return list;
     }
-
-    public static void main(String[] args) {
-        TicketDAO dao = new TicketDAO();
-        List<Ticket> list = dao.getTicketsByOrderPassID("ORD001-1");
-
-        for (Ticket ticket : list) {
-            System.out.println(ticket.toString());
+    
+    public void insert(Ticket ticket){
+        String sql = "INSERT INTO swp301.ticket (orderPID, flightID, comID, status) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, ticket.getOrderP().getId());
+            stm.setString(2, ticket.getFlight().getId());
+            stm.setString(3, ticket.getCompartment().getId());
+            stm.setString(4, ticket.getStatus());
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-
+    }
+    /**
+ * Inserts a new ticket into the database with auto-generated ID.
+ * 
+ * @param ticket The Ticket object to be inserted
+ */
+public void insert1(Ticket ticket) {
+    String sql = "INSERT INTO Ticket (orderPID, flightID, comID, status) VALUES (?, ?, ?, ?)";
+    
+    try (PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        // Set OrderPassenger ID
+        if (ticket.getOrderP() != null) {
+            stm.setString(1, ticket.getOrderP().getId());
+        } else {
+            stm.setNull(1, java.sql.Types.VARCHAR);
+        }
+        
+        // Set Flight ID
+        if (ticket.getFlight() != null) {
+            stm.setString(2, ticket.getFlight().getId());
+        } else {
+            stm.setNull(2, java.sql.Types.VARCHAR);
+        }
+        
+        // Set Compartment ID
+        if (ticket.getCompartment() != null) {
+            stm.setString(3, ticket.getCompartment().getId());
+        } else {
+            stm.setNull(3, java.sql.Types.VARCHAR);
+        }
+        
+        // Set Status (with default if not provided)
+        if (ticket.getStatus() != null && !ticket.getStatus().isEmpty()) {
+            stm.setString(4, ticket.getStatus());
+        } else {
+            stm.setString(4, "Pending"); // Default status
+        }
+        
+        stm.executeUpdate();
+        
+        // Retrieve the generated ID if needed
+        try (ResultSet generatedKeys = stm.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                ticket.setId(generatedKeys.getString(1));
+            }
+        }
+        
+    } catch (SQLException e) {
+        Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, "Error inserting ticket", e);
     }
     
     
-    
-    
+    }
 }
