@@ -19,107 +19,93 @@
                 padding: 0;
             }
 
-            /* Căn giữa nội dung */
             body {
                 font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
+                background-color: #f0f2f5;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 min-height: 100vh;
+                padding: 20px;
             }
 
-            /* Khung chứa bảng */
             .container {
                 width: 90%;
                 max-width: 1000px;
                 background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+                text-align: center;
             }
 
             h2 {
-                text-align: center;
-                color: #333;
+                color: #007bff;
+                font-size: 24px;
                 margin-bottom: 20px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
             }
 
-            /* Bảng */
             table {
                 width: 100%;
                 border-collapse: collapse;
-                text-align: center;
+                margin-top: 10px;
             }
 
-            /* Tiêu đề */
+            th, td {
+                padding: 12px;
+                border: 1px solid #ddd;
+                font-size: 14px;
+            }
+
             th {
                 background-color: #007bff;
                 color: white;
-                padding: 12px;
                 font-size: 16px;
-                border: 1px solid #ddd;
             }
 
-            /* Dòng dữ liệu */
-            td {
-                padding: 10px;
-                border: 1px solid #ddd;
-                font-size: 14px;
-                background: #fff;
-            }
-
-            /* Dòng xen kẽ */
             tr:nth-child(even) {
-                background: #f9f9f9;
+                background-color: #f9f9f9;
             }
 
-            /* Hiệu ứng hover */
             tr:hover {
-                background-color: #e9ecef;
-                transition: 0.2s ease-in-out;
+                background-color: #e0f7fa;
+                transition: 0.3s;
             }
 
-            /* Nút hành động */
             .btn {
                 display: inline-block;
-                padding: 8px 12px;
+                padding: 10px 14px;
                 background: #28a745;
                 color: white;
                 text-decoration: none;
-                border-radius: 4px;
+                border-radius: 6px;
                 font-size: 14px;
                 transition: 0.3s;
+                font-weight: bold;
             }
 
             .btn:hover {
                 background: #218838;
+                transform: scale(1.05);
             }
 
-            /* Responsive cho màn hình nhỏ */
             @media (max-width: 768px) {
-                .container {
-                    width: 100%;
-                    padding: 15px;
-                }
-
                 table {
                     font-size: 12px;
                 }
-
                 th, td {
                     padding: 8px;
                 }
-
                 .btn {
-                    padding: 6px 10px;
+                    padding: 8px 12px;
                     font-size: 12px;
                 }
             }
         </style>
     </head>
     <body>
-
         <div class="container">
             <h2>Danh Sách Vé</h2>
             <table>
@@ -127,7 +113,7 @@
                     <th>ID</th>
                     <th>Flight ID</th>
                     <th>Status</th>
-                    <th>Action</th>  
+                    <th>Action</th>
                 </tr>
                 <c:forEach var="l" items="${list}">
                     <tr>
@@ -135,16 +121,16 @@
                         <td>${l.flight.id}</td>
                         <td>${l.status}</td>
                         <td>
-                            <c:if test="${l.status != 'Checked'}">
+                            <c:if test="${l.status == 'Confirmed'}">
                                 <a href="<%= request.getContextPath() %>/listSeatsUser?id=${l.flight.airplane.id}&ticketId=${l.id}" class="btn">
                                     Check - in
                                 </a>
-                            </c:if>                        
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>
             </table>
         </div>
-
     </body>
+</html>
 </html>

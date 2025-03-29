@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>List Order Passenger</title>
+       <title>List Order Passenger</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -67,8 +67,29 @@
             .btn-success:hover {
                 background-color: #218838;
             }
-        </style>
 
+            .btn-edit {
+                background-color: #ffc107;
+            }
+
+            .btn-edit:hover {
+                background-color: #e0a800;
+            }
+
+            .btn-back {
+                background-color: #dc3545;
+                padding: 8px 15px;
+                display: block;
+                width: 120px;
+                text-align: center;
+                margin-top: 15px;
+            }
+
+            .btn-back:hover {
+                background-color: #c82333;
+            }
+        </style>
+    </head>
     <body>
         <div class="table-container">
             <h2 style="text-align: center;">Order Passenger List</h2>
@@ -84,16 +105,23 @@
                 <c:forEach var="l" items="${list}">
                     <tr>
                         <td>${l.id}</td>
-                        <td>${l.passengerType.id}</td>
+                        <td>${l.passengerType.name}</td>
                         <td>${l.name}</td>
                         <td>${l.dob}</td>
-                        <td>${l.nation.id}</td>
+                        <td>${l.nation.name}</td>
                         <td>
                             <a href="${pageContext.request.contextPath}/listTicketCheckIn?id=${l.id}" class="btn btn-success">List Ticket</a>
                         </td>
                     </tr>
                 </c:forEach>
             </table>
+             <button onclick="goBack()" class="btn btn-back">Go Back</button>
         </div>
+        <script>
+             function goBack() {
+                window.history.back();  // Quay lại trang trước đó
+            }
+        </script>
+            
     </body>
 </html>

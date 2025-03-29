@@ -209,7 +209,7 @@
     </head>
     <body>
 
-        <h2>Sơ Đồ Ghế Máy Bay</h2>
+        <h2>Sơ Đồ Ghế Máy Bay ${id}</h2>
 
         <div class="plane-container">
             <div class="plane-header">
@@ -269,7 +269,7 @@
 
             function redirectTo(action) {
                 if (selectedSeatID) {
-                    closeModal(); // Ẩn modal trước khi chuyển hướng
+                    closeModal();
                     window.location.href = action + "?id=" + selectedSeatID;
                 } else {
                     alert("Vui lòng chọn một ghế trước!");

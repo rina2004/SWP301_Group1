@@ -40,7 +40,7 @@ public class JavaMail {
             message.setFrom(new InternetAddress(fromEmail));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
             message.setSubject("Mã OTP xác thực tài khoản");
-            message.setText("Mã OTP của bạn là: " + otp + "\nVui lòng không chia sẻ mã này với ai. Thời hạn OTP trong vòng 2 phút.");
+            message.setText("Your otp code is: " + otp + "Please do not share the code with anyone.");
 
             Transport.send(message);
         } catch (MessagingException e) {
