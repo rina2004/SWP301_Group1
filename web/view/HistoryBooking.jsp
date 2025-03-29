@@ -122,7 +122,7 @@
                                                     <th>Ticket ID</th>
                                                     <th>Flight</th>
                                                     <th>Seat</th>
-                                                    <th>Status</th>                                                  
+                                                    <th>Ticket Status</th>                                                  
                                                     <th>Actions</th>
                                                 </tr>
                                                 <c:forEach var="ticket" items="${tickets}">

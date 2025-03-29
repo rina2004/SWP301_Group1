@@ -129,6 +129,8 @@
                             <div class="ticket-label">Price:</div>
                             <div id="ticket-price" data-price="${ticket.flight.price}"></div>                            <div class="ticket-label">Seat:</div>
                             <div>${ticket.seat.id}</div>
+                            <div class="ticket-label">Seat Status:</div>
+                            <div>${ticket.seat.status}</div>
                             <div class="ticket-label">Ticket Status:</div>
                             <div>${ticket.status}</div>
 
