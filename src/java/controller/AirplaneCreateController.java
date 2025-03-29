@@ -65,7 +65,7 @@ public class AirplaneCreateController extends HttpServlet {
                 Compartment compartment = new Compartment();
                 compartment.setId(compId);
 
-                compartment.setCt(compartmentTypeDAO.get(compType));
+                compartment.setType(compartmentTypeDAO.get(compType));
 
                 compartment.setCapacity(capacity);
 

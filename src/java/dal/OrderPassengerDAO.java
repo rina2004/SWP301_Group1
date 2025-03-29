@@ -68,13 +68,19 @@ public class OrderPassengerDAO extends DBContext {
         return list;
     }
     
-    public static void main(String[] args) {
-        OrderPassengerDAO dao = new OrderPassengerDAO();
-        List<OrderPassenger> list = dao.getAllByOrderID("ORD001");
-        
-        for (OrderPassenger orderPassenger : list) {
-            System.out.println(orderPassenger.toString());
+    public void insert(OrderPassenger op) {
+        String sql = "INSERT INTO swp301.orderpassenger (id, orderID, passengerTypeID, fullName, dob, nationID) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, op.getId());
+            ps.setString(2, op.getOrder().getId());
+            ps.setInt(3, op.getPassengerType().getId());
+            ps.setString(4, op.getName());
+            ps.setDate(5, op.getDob()); 
+            ps.setInt(6, op.getNation().getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(OrderPassengerDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        
+
     }
 }

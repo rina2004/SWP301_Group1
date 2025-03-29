@@ -4,12 +4,11 @@
  */
 package dal;
 import java.sql.*;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.logging.*;
-import model.Account;
-import model.Order;
-import model.OrderPassenger;
+import model.*;
 
 /**
  *
@@ -39,7 +38,7 @@ public class OrderDAO extends DBContext{
         }
         return null;
     }
-    
+  
     public List<Order> getAllbyCustomerID(String cusID) {
         String sql = "Select * From `Order` where customerID = ?";
         List<Order> list = new ArrayList<>();
@@ -151,8 +150,6 @@ public class OrderDAO extends DBContext{
         return -1; // Lỗi xảy ra
     }
 
-   
-
     public int updateOrderStatus(String orderId, String status) {
         String sql = "UPDATE `Order` SET status = ? WHERE id = ?";
 
@@ -183,5 +180,41 @@ public class OrderDAO extends DBContext{
 
         return null; // Không tìm thấy OrderID hoặc lỗi xảy ra
     }
-
+    public boolean updateStatus(Order order) {
+        String sql = "UPDATE swp301.order SET status = ? WHERE id = ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, order.getStatus());
+            stm.setString(2, order.getId());
+            return stm.executeUpdate() > 0; 
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+    
+    public void insert(Order order) {
+        AccountDAO ad = new AccountDAO();
+        Account staff1 = ad.getAccountByUsername("staff1");
+        String sql = "INSERT INTO swp301.order (id, customerID, staffID, status, time, finalPrice, finalNum, type) "
+               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, order.getId());
+            stm.setString(2, order.getCustomer().getId());
+            stm.setString(3, staff1.getId());
+            stm.setString(4, order.getStatus());
+            stm.setTimestamp(5, Timestamp.valueOf(order.getTime()));
+            stm.setDouble(6, order.getFinalPrice());
+            stm.setInt(7, order.getFinalNum());
+            if (order.getTt() != null) {
+            stm.setString(8, order.getTt().getType());
+            } else {
+                stm.setNull(8, java.sql.Types.VARCHAR);
+            }
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
 }
