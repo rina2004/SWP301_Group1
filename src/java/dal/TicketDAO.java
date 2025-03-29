@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dal;
+
 import java.sql.*;
 import java.util.*;
 import java.util.logging.*;
 import model.*;
+
 /**
  *
  * @author A A
@@ -142,7 +144,7 @@ public class TicketDAO extends DBContext {
 
     public Ticket getInfor(String ticketId) {
         String sql = "Select * From Ticket where id = ?";
-        try (PreparedStatement stm = connection.prepareStatement(sql);){
+        try (PreparedStatement stm = connection.prepareStatement(sql);) {
             stm.setString(1, ticketId);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
@@ -357,68 +359,96 @@ public class TicketDAO extends DBContext {
         return tickets;
     }
 
-    public List<Ticket> getCancelledOrProcessingTickets() {
-        String sql = "SELECT t.id, t.status, t.orderPID, t.flightID, t.comID, t.seatID, "
-                + "o.id AS orderPassengerID, "
-                + "f.id AS flightID, "
-                + "c.id AS compartmentID, "
-                + "s.id AS seatID "
+    public List<Ticket> getCancelledOrProcessingTickets(int page, int recordsPerPage) {
+        List<Ticket> tickets = new ArrayList<>();
+        String sql = "SELECT t.id, t.status, o.id AS orderPassengerID, "
+                + "f.id AS flightID, c.id AS compartmentID, s.id AS seatID "
                 + "FROM Ticket t "
                 + "LEFT JOIN OrderPassenger o ON t.orderPID = o.id "
                 + "LEFT JOIN Flight f ON t.flightID = f.id "
                 + "LEFT JOIN Compartment c ON t.comID = c.id "
                 + "LEFT JOIN Seat s ON t.seatID = s.id "
-                + "WHERE t.status = 'Cancelled' OR t.status = 'Processing' OR t.status = 'Rejected'";
+                + "WHERE t.status IN ('Cancelled', 'Processing', 'Rejected') "
+                + "LIMIT ?, ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, (page - 1) * recordsPerPage);
+            stm.setInt(2, recordsPerPage);
+            try (ResultSet rs = stm.executeQuery()) {
+                while (rs.next()) {
+                    Ticket ticket = new Ticket();
+                    ticket.setId(rs.getString("id"));
+                    ticket.setStatus(rs.getString("status"));
 
-        List<Ticket> tickets = new ArrayList<>();
+                    OrderPassenger orderPassenger = new OrderPassenger();
+                    orderPassenger.setId(rs.getString("orderPassengerID"));
+                    ticket.setOrderP(orderPassenger);
 
-        try (PreparedStatement stm = connection.prepareStatement(sql); ResultSet rs = stm.executeQuery()) {
+                    Flight flight = new Flight();
+                    flight.setId(rs.getString("flightID"));
+                    ticket.setFlight(flight);
 
-            while (rs.next()) {
-                Ticket ticket = new Ticket();
-                ticket.setId(rs.getString("id"));
-                ticket.setStatus(rs.getString("status"));
+                    Compartment compartment = new Compartment();
+                    compartment.setId(rs.getString("compartmentID"));
+                    ticket.setCompartment(compartment);
 
-                // Lấy thông tin OrderPassenger
-                OrderPassenger orderPassenger = new OrderPassenger();
-                orderPassenger.setId(rs.getString("orderPassengerID"));
-                ticket.setOrderP(orderPassenger);
+                    Seat seat = new Seat();
+                    seat.setId(rs.getString("seatID"));
+                    ticket.setSeat(seat);
 
-                // Lấy thông tin Flight
-                Flight flight = new Flight();
-                flight.setId(rs.getString("flightID"));
-                ticket.setFlight(flight);
-
-                // Lấy thông tin Compartment
-                Compartment compartment = new Compartment();
-                compartment.setId(rs.getString("compartmentID"));
-                ticket.setCompartment(compartment);
-
-                // Lấy thông tin Seat
-                Seat seat = new Seat();
-                seat.setId(rs.getString("seatID"));
-                ticket.setSeat(seat);
-
-                tickets.add(ticket);
+                    tickets.add(ticket);
+                }
             }
         } catch (SQLException e) {
-            System.out.println("Error fetching cancelled or processing tickets: " + e.getMessage());
+            e.printStackTrace();
         }
-
         return tickets;
     }
 
-    public int updateTicketStatusByOrderPID(String orderPID, String newStatus) {
-        String sql = "UPDATE Ticket SET status = ? WHERE orderPID = ? AND status != 'Cancelled'";
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setString(1, newStatus);
-            stm.setString(2, orderPID);
-
-            return stm.executeUpdate(); // Trả về số dòng được cập nhật
+    public int getTotalCancelledOrProcessingTickets() {
+        String sql = "SELECT COUNT(*) FROM Ticket WHERE status IN ('Cancelled', 'Processing', 'Rejected')";
+        try (PreparedStatement stm = connection.prepareStatement(sql); ResultSet rs = stm.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
         } catch (SQLException e) {
-            System.out.println("Error updating ticket status: " + e.getMessage());
-            return 0; // Trả về 0 nếu có lỗi xảy ra
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int updateTicketStatusByOrderPID(String orderPID, String newStatus) {
+        String sqlTicket = "UPDATE Ticket SET status = ? WHERE orderPID = ? AND status != 'Cancelled'";
+        String sqlSeat = "UPDATE Seat SET status = 'Retired' WHERE id IN (SELECT seatID FROM Ticket WHERE orderPID = ?)";
+
+        try {
+            connection.setAutoCommit(false); // Bắt đầu transaction
+
+            // Cập nhật trạng thái vé
+            try (PreparedStatement stmTicket = connection.prepareStatement(sqlTicket)) {
+                stmTicket.setString(1, newStatus);
+                stmTicket.setString(2, orderPID);
+                int rowsUpdated = stmTicket.executeUpdate();
+
+                // Nếu trạng thái mới là "Cancelled", cập nhật trạng thái ghế về "Available"
+                if ("Cancelled".equalsIgnoreCase(newStatus)) {
+                    try (PreparedStatement stmSeat = connection.prepareStatement(sqlSeat)) {
+                        stmSeat.setString(1, orderPID);
+                        stmSeat.executeUpdate();
+                    }
+                }
+
+                connection.commit(); // Xác nhận transaction
+                return rowsUpdated;
+            } catch (SQLException e) {
+                connection.rollback(); // Hoàn tác nếu có lỗi
+                System.out.println("Error updating ticket status: " + e.getMessage());
+                return -1;
+            } finally {
+                connection.setAutoCommit(true); // Bật lại AutoCommit
+            }
+        } catch (SQLException e) {
+            System.out.println("Transaction error: " + e.getMessage());
+            return -1;
         }
     }
 
@@ -434,7 +464,7 @@ public class TicketDAO extends DBContext {
             stm.setString(1, orderId);
             try (ResultSet rs = stm.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt(1) == 0; 
+                    return rs.getInt(1) == 0;
                 }
             }
         } catch (SQLException e) {
@@ -444,13 +474,12 @@ public class TicketDAO extends DBContext {
         return false; // Nếu lỗi hoặc còn vé chưa hủy
     }
 
-    
-     public List<Ticket> getTicketsByOrderPassID(String orderID) {
+    public List<Ticket> getTicketsByOrderPassID(String orderID) {
         List<Ticket> list = new ArrayList<>();
         String sql = "SELECT t.id, t.status, f.airplaneID, t.flightID "
                 + "FROM Ticket t "
                 + "JOIN Flight f ON t.flightID = f.id "
-                + "WHERE t.orderPID = ? " ;
+                + "WHERE t.orderPID = ? ";
 
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, orderID);
@@ -480,14 +509,18 @@ public class TicketDAO extends DBContext {
         }
         return list;
     }
-    
+
     public static void main(String[] args) {
         TicketDAO dao = new TicketDAO();
         List<Ticket> list = dao.getTicketsByOrderPassID("ORD001-1");
-        
+
         for (Ticket ticket : list) {
             System.out.println(ticket.toString());
         }
-        
+
     }
+    
+    
+    
+    
 }
