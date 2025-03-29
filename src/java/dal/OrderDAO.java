@@ -54,6 +54,10 @@ public class OrderDAO extends DBContext{
                 Order order = new Order();
                 order.setId(rs.getString("id"));
                 order.setStatus(rs.getString("status"));
+                order.setFinalPrice(rs.getDouble("finalPrice"));
+                order.setFinalNum(rs.getInt("finalNum"));
+                order.setCustomer(acc);
+                order.setTt(type);
                 list.add(order);
             }
         } catch (SQLException e) {

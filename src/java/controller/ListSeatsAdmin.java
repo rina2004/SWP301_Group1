@@ -60,8 +60,7 @@ public class ListSeatsAdmin extends HttpServlet {
          SeatDAO dao = new SeatDAO();
         AirplaneDAO airDao = new AirplaneDAO();
         String id = request.getParameter("id");
-        String typeID = airDao.getIdbyID(id);
-        ArrayList<Seat> seat = dao.showAllSeatByTypeID(typeID);
+        ArrayList<Seat> seat = dao.showAllSeatByTypeID(id);
         request.setAttribute("seat", seat);
         request.setAttribute("id", id);
         request.getRequestDispatcher("view/ListSeatAdmin.jsp").forward(request, response);
