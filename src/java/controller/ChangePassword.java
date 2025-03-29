@@ -72,7 +72,7 @@ public class ChangePassword extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String username = (String) session.getAttribute("username");
+        String username = (String) session.getAttribute("user");
         String pass = request.getParameter("oldpass");
         String newpass = request.getParameter("newpass");
         String confirm = request.getParameter("confirm");

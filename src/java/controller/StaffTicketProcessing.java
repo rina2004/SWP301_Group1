@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 import model.Ticket;
 
 /**
@@ -60,10 +61,38 @@ public class StaffTicketProcessing extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-        TicketDAO dao = new TicketDAO();
-        List<Ticket> processingOrders = dao.getCancelledOrProcessingTickets();
+        int page = 1;
+        int recordsPerPage = 5;
+        String pageParam = request.getParameter("page");
+        String searchOrderPassengerId = request.getParameter("search");
+
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+
+        TicketDAO ticketDAO = new TicketDAO();
+        List<Ticket> processingOrders = ticketDAO.getCancelledOrProcessingTickets(page, recordsPerPage);
+
+        // Kiểm tra nếu search có giá trị hợp lệ thì mới lọc
+        if (searchOrderPassengerId != null && !searchOrderPassengerId.trim().isEmpty()) {
+            processingOrders = processingOrders.stream()
+                    .filter(ticket -> ticket.getOrderP().getId().equals(searchOrderPassengerId))
+                    .collect(Collectors.toList());
+            request.setAttribute("search", searchOrderPassengerId);
+        } else {
+            request.setAttribute("search", ""); // Đặt về rỗng để không lưu trạng thái tìm kiếm
+        }
+
+        int totalRecords = ticketDAO.getTotalCancelledOrProcessingTickets();
+        int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
 
         request.setAttribute("processingOrders", processingOrders);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
         request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
     }
 
@@ -81,9 +110,10 @@ public class StaffTicketProcessing extends HttpServlet {
         //processRequest(request, response);
         String orderPID = request.getParameter("orderID");
         String action = request.getParameter("action");
+        String page = request.getParameter("page");
 
         if (orderPID == null || action == null) {
-            response.sendRedirect("view/ListTicketProcessing.jsp");
+            response.sendRedirect("staffTicketProcessing?page=" + page);
             return;
         }
 
@@ -91,22 +121,28 @@ public class StaffTicketProcessing extends HttpServlet {
         OrderDAO orderDAO = new OrderDAO();
 
         if ("accept".equals(action)) {
-            // Chấp nhận vé
             ticketDAO.updateTicketStatusByOrderPID(orderPID, "Cancelled");
         } else if ("reject".equals(action)) {
-            // Hủy vé
             ticketDAO.updateTicketStatusByOrderPID(orderPID, "Rejected");
 
-            // Lấy OrderID từ OrderPassengerID
             String orderId = orderDAO.getOrderIdByOrderPassengerId(orderPID);
             if (orderId != null && ticketDAO.hasOnlyCancelledTickets(orderId)) {
                 orderDAO.updateOrderStatus(orderId, "Cancelled");
             }
         }
 
-        // Load lại danh sách đơn hàng và chuyển hướng
-        List<Ticket> processingOrders = ticketDAO.getCancelledOrProcessingTickets();
+        // Load lại danh sách đơn hàng và hiển thị trang JSP
+        int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+        int recordsPerPage = 5;
+
+        List<Ticket> processingOrders = ticketDAO.getCancelledOrProcessingTickets(currentPage, recordsPerPage);
+        int totalRecords = ticketDAO.getTotalCancelledOrProcessingTickets();
+        int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
+
         request.setAttribute("processingOrders", processingOrders);
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
+
         request.getRequestDispatcher("view/ListTicketProcessing.jsp").forward(request, response);
     }
 

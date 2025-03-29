@@ -42,7 +42,11 @@ public class OrderPassengerDAO extends DBContext {
     public List<OrderPassenger> getAllByOrderID(String orderID) {
         PreparedStatement stm;
         ResultSet rs;
-        String sql = "Select * From OrderPassenger where orderID = ? ";
+       String sql = "SELECT op.*, n.name, pt.name as name "
+               + "FROM OrderPassenger op "
+               + "JOIN Nation n ON op.nationID = n.id "
+               + "JOIN PassengerType pt ON op.passengerTypeID = pt.id "
+               + "WHERE op.orderID = ?";
         List<OrderPassenger> list = new ArrayList<>();
         try {
             stm = connection.prepareStatement(sql);
@@ -52,8 +56,10 @@ public class OrderPassengerDAO extends DBContext {
             while (rs.next()) {
                 Nation nation = new Nation();
                 nation.setId(rs.getInt("nationID"));
+                nation.setName(rs.getString("name"));
                 PassengerType type = new PassengerType();
                 type.setId(rs.getInt("passengerTypeID"));
+                type.setName(rs.getString("pt.name"));
                 OrderPassenger pass = new OrderPassenger();
                 pass.setId(rs.getString("id"));
                 pass.setName(rs.getString("fullname"));

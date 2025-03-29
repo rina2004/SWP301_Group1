@@ -122,7 +122,7 @@
                                                     <th>Ticket ID</th>
                                                     <th>Flight</th>
                                                     <th>Seat</th>
-                                                    <th>Status</th>                                                  
+                                                    <th>Ticket Status</th>                                                  
                                                     <th>Actions</th>
                                                 </tr>
                                                 <c:forEach var="ticket" items="${tickets}">
@@ -150,7 +150,7 @@
             </c:if>
         </div>
 
-        <a class="btn" href="${pageContext.request.contextPath}/view/Home.jsp">Back to Home</a>
+        <a class="btn" href="${pageContext.request.contextPath}/home">Back to Home</a>
 
         <!-- Form ẩn để gửi yêu cầu hủy vé -->
         <form id="cancelForm" method="POST" action="${pageContext.request.contextPath}/cancelTicket">

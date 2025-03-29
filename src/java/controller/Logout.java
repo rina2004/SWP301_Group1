@@ -16,7 +16,7 @@ public class Logout extends HttpServlet {
             session.removeAttribute("acc");
             session.invalidate();
         }
-        response.sendRedirect(request.getContextPath() + "/view/Login.jsp");
+        response.sendRedirect(request.getContextPath() + "/home");
     } 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

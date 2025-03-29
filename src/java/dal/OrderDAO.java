@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dal;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,8 +15,8 @@ import model.*;
  *
  * @author A A
  */
-public class OrderDAO extends DBContext{
-    
+public class OrderDAO extends DBContext {
+
     public Order get(String id) {
         AccountDAO ad = new AccountDAO();
         TicketTypeDAO ttd = new TicketTypeDAO();
@@ -38,29 +39,38 @@ public class OrderDAO extends DBContext{
         }
         return null;
     }
-  
+
     public List<Order> getAllbyCustomerID(String cusID) {
         String sql = "Select * From `Order` where customerID = ?";
         List<Order> list = new ArrayList<>();
         PreparedStatement stm;
         ResultSet rs;
-       
+
         try {
             stm = connection.prepareStatement(sql);
             stm.setString(1, cusID);
             rs = stm.executeQuery();
             while (rs.next()) {
+                Account acc = new Account();
+                acc.setId(rs.getString("customerID"));
+                TicketType type = new TicketType();
+                type.setType(rs.getString("type"));
                 Order order = new Order();
                 order.setId(rs.getString("id"));
+                order.setTime(rs.getTimestamp("time").toLocalDateTime());
                 order.setStatus(rs.getString("status"));
+                order.setFinalPrice(rs.getDouble("finalPrice"));
+                order.setFinalNum(rs.getInt("finalNum"));
+                order.setCustomer(acc);
+                order.setTt(type);
                 list.add(order);
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println(e);;
         }
         return list;
     }
-    
+
     public int cancelOrderById(String orderId) {
         String sql = "UPDATE `Order` SET status = 'Processing' WHERE id = ? AND status != 'Cancelled'";
 
@@ -71,9 +81,8 @@ public class OrderDAO extends DBContext{
             System.out.println("Error cancelling order: " + e.getMessage());
         }
 
-        return -1; 
+        return -1;
     }
-
 
     public List<Order> getOrderHistory(String accountId) {
         List<Order> list = new ArrayList<>();
@@ -180,24 +189,25 @@ public class OrderDAO extends DBContext{
 
         return null; // Không tìm thấy OrderID hoặc lỗi xảy ra
     }
+
     public boolean updateStatus(Order order) {
         String sql = "UPDATE swp301.order SET status = ? WHERE id = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, order.getStatus());
             stm.setString(2, order.getId());
-            return stm.executeUpdate() > 0; 
+            return stm.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println(e);
         }
         return false;
     }
-    
+
     public void insert(Order order) {
         AccountDAO ad = new AccountDAO();
         Account staff1 = ad.getAccountByUsername("staff1");
         String sql = "INSERT INTO swp301.order (id, customerID, staffID, status, time, finalPrice, finalNum, type) "
-               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, order.getId());
             stm.setString(2, order.getCustomer().getId());
@@ -207,7 +217,7 @@ public class OrderDAO extends DBContext{
             stm.setDouble(6, order.getFinalPrice());
             stm.setInt(7, order.getFinalNum());
             if (order.getTt() != null) {
-            stm.setString(8, order.getTt().getType());
+                stm.setString(8, order.getTt().getType());
             } else {
                 stm.setNull(8, java.sql.Types.VARCHAR);
             }
@@ -216,5 +226,5 @@ public class OrderDAO extends DBContext{
             System.out.println(e);
         }
     }
-    
+
 }

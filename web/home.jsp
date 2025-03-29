@@ -320,6 +320,8 @@
                         <a href="#" class="register" id="userDropdown">${user}</a>
                         <div class="dropdown-content" id="dropdownMenu">
                             <a href="profile">Profile</a>
+                            <a href="<%= request.getContextPath() %>/historyBooking">History Booking</a>
+                            <a href="listOrderCheckIn">List of Orders</a>
                             <form action="logout" method="GET">
                                 <button type="submit">Log out</button>
                             </form>

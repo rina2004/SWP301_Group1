@@ -225,6 +225,7 @@
                     <p id="selectedSeats">Không có</p>
                     <button onclick="confirmSelection()">✅ Xác nhận ghế</button>
                     <button onclick="cancelSelection()" class="cancel-btn">❌ Hủy chọn</button>
+                    <button onclick="goBack()" class="back-btn">⬅️ Quay lại</button>
                 </div>
             </div>
         </div>
@@ -254,7 +255,7 @@
                 seatElement.classList.remove('available');
                 seatElement.classList.add('selected');
                 selectedSeat = seatElement;
-                selectedSeatId = seatId; 
+                selectedSeatId = seatId;
 
                 document.getElementById("selectedSeats").innerText = seatId;
             }
@@ -276,7 +277,7 @@
                 const ticketId = urlParams.get("ticketId");
 
                 let requestData = {seatId: selectedSeatId, ticketId: ticketId};
-                console.log("📤 Gửi request: ", requestData); 
+                console.log("📤 Gửi request: ", requestData);
 
                 fetch("<%= request.getContextPath() %>/listSeatsUser", {
                     method: "POST",
@@ -288,6 +289,7 @@
                             console.log("📥 Nhận response: ", data); // Log response
                             if (data.success) {
                                 alert("Đặt ghế thành công!");
+                                window.location.href = "<%= request.getContextPath() %>/home";
                             } else {
                                 alert("Lỗi: " + data.message);
                             }
@@ -301,6 +303,9 @@
                     selectedSeat = null;
                 }
                 updateSelectedSeat(null);
+            }
+            function goBack() {
+                window.history.back();  // Quay lại trang trước đó
             }
         </script>
     </body>
