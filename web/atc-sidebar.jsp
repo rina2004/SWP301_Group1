@@ -240,8 +240,8 @@
                     </div>
                 </div>-->
         <div class="container">
-            <a href="/airplane/view" class="link-box">Manage Airplane</a>
-            <a href="/view/list-flight" class="link-box">Manage Flight</a>
+            <a href="${pageContext.request.contextPath}/airplane/view" class="link-box">Manage Airplane</a>
+            <a href="${pageContext.request.contextPath}/view/list-flight" class="link-box">Manage Flight</a>
         </div>
     </body>
 </html>
