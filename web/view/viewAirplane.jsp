@@ -138,6 +138,9 @@
                             <a href="${pageContext.request.contextPath}/airplane/view/detail?id=${pl.id}" class="btn btn-warning btn-sm">
                                 <i class="fas fa-edit"></i> View Detail
                             </a>
+                            <a href="${pageContext.request.contextPath}/listSeatsAdmin?id=${pl.id}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> List Seat
+                            </a>
                         </td>
 
                     </tr> 

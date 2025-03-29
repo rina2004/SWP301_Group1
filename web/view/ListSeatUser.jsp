@@ -289,7 +289,7 @@
                             console.log("📥 Nhận response: ", data); // Log response
                             if (data.success) {
                                 alert("Đặt ghế thành công!");
-                                window.location.href = "<%= request.getContextPath() %>/view/order";
+                                window.location.href = "<%= request.getContextPath() %>/home";
                             } else {
                                 alert("Lỗi: " + data.message);
                             }

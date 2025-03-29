@@ -14,8 +14,7 @@
             <nav class="nav nav-borders">
                 <a class="nav-link active ms-0" href="profile">Profile</a>
                 <a class="nav-link" href="#">Billing</a>
-                <a class="nav-link" href="view/changePasswordProfile.jsp">Security</a>
-                <a class="nav-link" href="#">Notifications</a>
+                <a class="nav-link" href="change">Security</a>
             </nav>
             <hr class="mt-0 mb-4">
 
