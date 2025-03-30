@@ -35,7 +35,7 @@ public class ajaxServlet extends HttpServlet {
         
         String compartmentType = request.getParameter("compartmentType");
         String ticketType = request.getParameter("ticketType");
-        int finalPrice = Integer.parseInt(request.getParameter("finalPrice"));
+        double finalPrice = Double.parseDouble(request.getParameter("finalPrice"));
         
         AccountDAO ad = new AccountDAO();
         String username = (String) request.getSession().getAttribute("user");
@@ -104,6 +104,7 @@ public class ajaxServlet extends HttpServlet {
         String vnp_Command = "pay";
         String orderType = "other";
         
+        long amount = (long) (finalPrice * 100);
         String vnp_TxnRef = orderID;
         String vnp_IpAddr = Config.getIpAddress(request);
         String vnp_TmnCode = Config.vnp_TmnCode;
@@ -112,7 +113,7 @@ public class ajaxServlet extends HttpServlet {
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(finalPrice));
+        vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
         
         if (bankCode != null && !bankCode.isEmpty()) {

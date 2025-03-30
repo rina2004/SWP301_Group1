@@ -13,6 +13,169 @@
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            body {
+                background: linear-gradient(to bottom, #f0f7ff 0%, #ffffff 100%);
+                min-height: 100vh;
+            }
+            .card {
+                border: none;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                transition: box-shadow 0.3s ease;
+                margin-bottom: 1rem;
+            }
+            .card:hover {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+            .header-section {
+                background: white;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                padding: 1rem 0;
+                margin-bottom: 2rem;
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+            }
+            .flight-details-modal .modal-dialog {
+                max-width: 800px;
+            }
+            .assigned-airplanes {
+                margin-top: 20px;
+                border-top: 1px solid #dee2e6;
+                padding-top: 20px;
+            }
+
+            .airplane-card {
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 10px;
+            }
+
+            .search-section {
+                background: white;
+                border-radius: 8px;
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+            }
+            .flight-card {
+                padding: 1.5rem;
+            }
+            .flight-info {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 1rem;
+            }
+            .time-display {
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: #2563eb;
+            }
+            .location-display {
+                font-size: 0.875rem;
+                color: #6b7280;
+            }
+            .duration-line {
+                position: relative;
+                height: 2px;
+                background: #e5e7eb;
+                flex: 1;
+                margin: 0 1rem;
+            }
+            .duration-text {
+                position: absolute;
+                top: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: white;
+                padding: 0 0.5rem;
+                color: #6b7280;
+                font-size: 1rem;
+            }
+            .action-buttons .btn {
+                padding: 0.5rem;
+                margin: 0 0.25rem;
+                border-radius: 50%;
+                width: 38px;
+                height: 38px;
+            }
+            .btn-next {
+                background-color: #2563eb;
+                color: white;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+            }
+            .btn-next:hover {
+                background-color: #1d4ed8;
+                color: white;
+            }
+            .price-display {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #2563eb;
+            }
+            .search-box {
+                position: relative;
+            }
+            .search-box .form-control {
+                padding-left: 2.5rem;
+            }
+            .search-icon {
+                position: absolute;
+                left: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #6b7280;
+            }
+            .date-display {
+                font-size: 2rem;
+                font-weight: bold;
+                color: #333;
+            }
+            .time-display {
+                font-size: 1.7rem;
+                color: #2563eb;
+                margin-top: 3px;
+            }
+            .btn-filter.active {
+                background-color: #2563eb;
+                color: white;
+            }
+            .no-flights {
+                padding: 2rem;
+                text-align: center;
+                background: white;
+                border-radius: 8px;
+                margin-top: 2rem;
+            }
+            .toast-notification {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background-color: #28a745;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 4px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: translateY(100px);
+                opacity: 0;
+                transition: all 0.3s ease;
+                z-index: 9999;
+            }
+            .toast-notification.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            .toast-content {
+                display: flex;
+                align-items: center;
+            }
+            .cart-count {
+                font-size: 0.65rem;
+                transform: translate(-50%, -50%) !important;
+            }
+        </style>
     </head>
     <body>
         <c:if test="${not empty sessionScope.successMessage}">
@@ -193,10 +356,18 @@
                                             <i class="fas fa-eye text-primary align-items-center"></i>
                                         </a>
                                         <br><br>
-                                        <a href="order-confirm?flightId=${flight.getId()}&ticketClass=${ticket.type}&passengers=${passengers}&adult=${param.adult}&child=${param.child}&baby=${param.baby}" 
-                                           class="btn btn-primary rounded-3 px-4 py-2 w-100" title="Đặt vé ngay">
+                                        <!-- Change the link to a form with POST method -->
+                                    <form action="order-confirm" method="post" style="display:inline;">
+                                        <input type="hidden" name="flightId" value="${flight.getId()}">
+                                        <input type="hidden" name="ticketClass" value="${ticket.type}">
+                                        <input type="hidden" name="passengers" value="${passengers}">
+                                        <input type="hidden" name="adult" value="${param.adult}">
+                                        <input type="hidden" name="child" value="${param.child}">
+                                        <input type="hidden" name="baby" value="${param.baby}">
+                                        <button type="submit" class="btn btn-primary rounded-3 px-4 py-2 w-100" title="Đặt vé ngay">
                                             Book
-                                        </a>
+                                        </button>
+                                    </form>
                                     </div>
                                 </div>
                             </div>
@@ -206,5 +377,79 @@
             </c:choose>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+                                            function addToCart(id, name, price, ticketType) {
+                                                let cart = JSON.parse(localStorage.getItem('flightCart')) || [];
+                                                const existingItem = cart.find(item => item.id === id && item.ticketType === ticketType);
+                                                if (existingItem) {
+                                                    showNotification('This flight is already in your cart');
+                                                } else {
+                                                    cart.push({
+                                                        id: id,
+                                                        name: name,
+                                                        price: formatCurrency(price),
+                                                        ticketType: ticketType
+                                                    });
+                                                    localStorage.setItem('flightCart', JSON.stringify(cart));
+                                                    updateCartCount();
+                                                    showNotification('Flight added to cart successfully');
+                                                }
+                                            }
+                                            function formatCurrency(value) {
+                                                return new Intl.NumberFormat('vi-VN').format(value);
+                                            }
+        </script>
+        <script>
+            if (!localStorage.getItem('flightCart')) {
+                localStorage.setItem('flightCart', JSON.stringify([]));
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                updateCartCount();
+            });
+            function updateCartCount() {
+                const cart = JSON.parse(localStorage.getItem('flightCart')) || [];
+                const countElement = document.querySelector('.cart-count');
+                if (countElement) {
+                    countElement.textContent = cart.length;
+                }
+            }
+            function addToCart(id, name, price, ticketType) {
+                let cart = JSON.parse(localStorage.getItem('flightCart')) || [];
+                const existingItem = cart.find(item => item.id === id && item.ticketType === ticketType);
+                if (existingItem) {
+                    showNotification('This flight is already in your cart');
+                } else {
+                    cart.push({
+                        id: id,
+                        name: name,
+                        price: formatCurrency(price),
+                        ticketType: ticketType
+                    });
+                    localStorage.setItem('flightCart', JSON.stringify(cart));
+                    updateCartCount();
+                    showNotification('Flight added to cart successfully');
+                }
+            }
+            function showNotification(message) {
+                const notification = document.createElement('div');
+                notification.classList.add('toast-notification');
+                notification.innerHTML = `
+                    <div class="toast-content"><i class="fas fa-check-circle me-2"></i>${message}</div>
+                `;
+                document.body.appendChild(notification);
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 100);
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('vi-VN').format(value);
+            }
+        </script>
     </body>
 </html>

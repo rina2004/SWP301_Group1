@@ -49,14 +49,14 @@ public class VnpayReturn extends HttpServlet {
                 boolean transSuccess = false;
                 if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
                     //update banking system
-                    order.setStatus("Completed");
+                    order.setStatus("Comfirmed");
                     transSuccess = true;
                 } else {
-                     order.setStatus("Failed");
+                     order.setStatus("Cancelled");
                 }
                 od.updateStatus(order);
                 request.setAttribute("transResult", transSuccess);
-                request.getRequestDispatcher("paymentResult.jsp").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/paymentResult.jsp");
             } else {
                 //RETURN PAGE ERROR
                 System.out.println("GD KO HOP LE (invalid signature)");
