@@ -378,26 +378,26 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-                                            function addToCart(id, name, price, ticketType) {
-                                                let cart = JSON.parse(localStorage.getItem('flightCart')) || [];
-                                                const existingItem = cart.find(item => item.id === id && item.ticketType === ticketType);
-                                                if (existingItem) {
-                                                    showNotification('This flight is already in your cart');
-                                                } else {
-                                                    cart.push({
-                                                        id: id,
-                                                        name: name,
-                                                        price: formatCurrency(price),
-                                                        ticketType: ticketType
-                                                    });
-                                                    localStorage.setItem('flightCart', JSON.stringify(cart));
-                                                    updateCartCount();
-                                                    showNotification('Flight added to cart successfully');
-                                                }
-                                            }
-                                            function formatCurrency(value) {
-                                                return new Intl.NumberFormat('vi-VN').format(value);
-                                            }
+            function addToCart(id, name, price, ticketType) {
+                let cart = JSON.parse(localStorage.getItem('flightCart')) || [];
+                const existingItem = cart.find(item => item.id === id && item.ticketType === ticketType);
+                if (existingItem) {
+                    showNotification('This flight is already in your cart');
+                } else {
+                    cart.push({
+                        id: id,
+                        name: name,
+                        price: formatCurrency(price),
+                        ticketType: ticketType
+                    });
+                    localStorage.setItem('flightCart', JSON.stringify(cart));
+                    updateCartCount();
+                    showNotification('Flight added to cart successfully');
+                }
+            }
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('vi-VN').format(value);
+            }
         </script>
         <script>
             if (!localStorage.getItem('flightCart')) {
